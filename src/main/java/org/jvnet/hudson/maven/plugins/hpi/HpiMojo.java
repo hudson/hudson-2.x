@@ -25,15 +25,25 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.jar.Manifest;
+import org.codehaus.plexus.archiver.jar.Manifest.Section;
+import org.codehaus.plexus.archiver.jar.Manifest.Attribute;
+import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.JavaDocBuilder;
 
 /**
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 989 2006-11-06 01:35:57Z kohsuke $
+ * @version $Id: HpiMojo.java 991 2006-11-06 01:46:28Z kohsuke $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
@@ -150,6 +160,9 @@ public class HpiMojo extends AbstractHpiMojo {
 
         archiver.setOutputFile(hpiFile);
 
+        File manifestFile = new File(getWebappDirectory(), "META-INF/MANIFEST.MF");
+        generateManifest(manifestFile);
+
         jarArchiver.addDirectory(getWebappDirectory(), getIncludes(), getExcludes());
 
         // create archive
@@ -166,5 +179,66 @@ public class HpiMojo extends AbstractHpiMojo {
                 artifact.setFile(hpiFile);
             }
         }
+    }
+
+    /**
+     * Generates a manifest file to be included in the .hpi file
+     */
+    private void generateManifest(File manifestFile) throws MojoExecutionException {
+        // since this involves scanning the source code, don't do it unless necessary
+        if(manifestFile.exists())
+            return;
+
+        // create directory if it doesn't exist yet
+        if(!manifestFile.getParentFile().exists())
+            manifestFile.getParentFile().mkdirs();
+
+        getLog().info("Generating "+manifestFile);
+
+        MavenArchiver ma = new MavenArchiver();
+        ma.setOutputFile(manifestFile);
+
+        JavaClass javaClass = findPluginClass();
+        if(javaClass==null)
+            throw new MojoExecutionException("Unable to find a plugin class");
+
+
+
+        PrintWriter printWriter = null;
+        try {
+            Manifest mf = ma.getManifest(project, archive.getManifest());
+            Section mainSection = mf.getMainSection();
+            mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",
+                javaClass.getPackage()+"."+javaClass.getName()));
+            mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
+
+            printWriter = new PrintWriter(new FileWriter(manifestFile));
+            mf.write(printWriter);
+        } catch (ManifestException e) {
+            throw new MojoExecutionException("Error preparing the manifest: " + e.getMessage(), e);
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoExecutionException("Error preparing the manifest: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error preparing the manifest: " + e.getMessage(), e);
+        } finally {
+            IOUtil.close(printWriter);
+        }
+    }
+
+    /**
+     * Find a class that has "@plugin" marker.
+     */
+    private JavaClass findPluginClass() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        for (Object o : project.getCompileSourceRoots())
+            builder.addSourceTree(new File((String) o));
+
+        // look for a class that extends Plugin
+        for( JavaSource js : builder.getSources() ) {
+            JavaClass jc = js.getClasses()[0];
+            if(jc.getTagByName("plugin")!=null)
+                return jc;
+        }
+        return null;
     }
 }
