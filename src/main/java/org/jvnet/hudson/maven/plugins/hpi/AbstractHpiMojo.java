@@ -113,7 +113,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * @parameter expression="${project.build.filters}"
      */
-    private List filters;
+    private List<String> filters;
 
     /**
      * The path to the context.xml file to use.
@@ -310,16 +310,14 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         // Project properties
         filterProperties.putAll(project.getProperties());
 
-        for (Iterator i = filters.iterator(); i.hasNext();) {
-            String filtersfile = (String) i.next();
-
+        for (String filter : filters) {
             try {
-                Properties properties = PropertyUtils.loadPropertyFile(new File(filtersfile), true, true);
+                Properties properties = PropertyUtils.loadPropertyFile(new File(filter), true, true);
 
                 filterProperties.putAll(properties);
             }
             catch (IOException e) {
-                throw new MojoExecutionException("Error loading property file '" + filtersfile + "'", e);
+                throw new MojoExecutionException("Error loading property file '" + filter + "'", e);
             }
         }
         return filterProperties;
@@ -344,14 +342,14 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             getLog().info("Copy webapp webResources to " + webappDirectory.getAbsolutePath());
             if (webappDirectory.exists()) {
                 String[] fileNames = getWarFiles(resource);
-                for (int i = 0; i < fileNames.length; i++) {
+                for (String fileName : fileNames) {
                     if (resource.isFiltering()) {
-                        copyFilteredFile(new File(resource.getDirectory(), fileNames[i]),
-                            new File(webappDirectory, fileNames[i]), null, getFilterWrappers(),
+                        copyFilteredFile(new File(resource.getDirectory(), fileName),
+                            new File(webappDirectory, fileName), null, getFilterWrappers(),
                             filterProperties);
                     } else {
-                        copyFileIfModified(new File(resource.getDirectory(), fileNames[i]),
-                            new File(webappDirectory, fileNames[i]));
+                        copyFileIfModified(new File(resource.getDirectory(), fileName),
+                            new File(webappDirectory, fileName));
                     }
                 }
             }
@@ -376,9 +374,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             getLog().info("Copy webapp webResources to " + webappDirectory.getAbsolutePath());
             if (warSourceDirectory.exists()) {
                 String[] fileNames = getWarFiles(sourceDirectory);
-                for (int i = 0; i < fileNames.length; i++) {
-                    copyFileIfModified(new File(sourceDirectory, fileNames[i]),
-                        new File(webappDirectory, fileNames[i]));
+                for (String fileName : fileNames) {
+                    copyFileIfModified(new File(sourceDirectory, fileName),
+                        new File(webappDirectory, fileName));
                 }
             }
         }
@@ -408,14 +406,13 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             copyDirectoryStructureIfModified(classesDirectory, webappClassesDirectory);
         }
 
-        Set artifacts = project.getArtifacts();
+        Set<Artifact> artifacts = project.getArtifacts();
 
         List duplicates = findDuplicates(artifacts);
 
-        List dependentWarDirectories = new ArrayList();
+        List<File> dependentWarDirectories = new ArrayList<File>();
 
-        for (Iterator iter = artifacts.iterator(); iter.hasNext();) {
-            Artifact artifact = (Artifact) iter.next();
+        for (Artifact artifact : artifacts) {
             String targetFileName = getDefaultFinalName(artifact);
 
             getLog().debug("Processing: " + targetFileName);
@@ -471,11 +468,10 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @param artifacts set of artifacts
      * @return List of duplicated artifacts
      */
-    private List findDuplicates(Set artifacts) {
-        List duplicates = new ArrayList();
-        List identifiers = new ArrayList();
-        for (Iterator iter = artifacts.iterator(); iter.hasNext();) {
-            Artifact artifact = (Artifact) iter.next();
+    private List<String> findDuplicates(Set<Artifact> artifacts) {
+        List<String> duplicates = new ArrayList<String>();
+        List<String> identifiers = new ArrayList<String>();
+        for (Artifact artifact : artifacts) {
             String candidate = getDefaultFinalName(artifact);
             if (identifiers.contains(candidate)) {
                 duplicates.add(candidate);
@@ -562,24 +558,21 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
         scanner.scan();
 
-        String[] dirs = scanner.getIncludedDirectories();
-        for (int j = 0; j < dirs.length; j++) {
-            new File(targetDir, dirs[j]).mkdirs();
+        for (String dir : scanner.getIncludedDirectories()) {
+            new File(targetDir, dir).mkdirs();
         }
 
-        String[] files = scanner.getIncludedFiles();
-
-        for (int j = 0; j < files.length; j++) {
-            File targetFile = new File(targetDir, files[j]);
+        for (String file : scanner.getIncludedFiles()) {
+            File targetFile = new File(targetDir, file);
 
             // Do not overwrite existing files.
             if (!targetFile.exists()) {
                 try {
                     targetFile.getParentFile().mkdirs();
-                    copyFileIfModified(new File(srcDir, files[j]), targetFile);
+                    copyFileIfModified(new File(srcDir, file), targetFile);
                 }
                 catch (IOException e) {
-                    throw new MojoExecutionException("Error copying file '" + files[j] + "' to '" + targetFile + "'",
+                    throw new MojoExecutionException("Error copying file '" + file + "' to '" + targetFile + "'",
                         e);
                 }
             }
@@ -706,8 +699,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             }
 
             Reader reader = fileReader;
-            for (int i = 0; i < wrappers.length; i++) {
-                FilterWrapper wrapper = wrappers[i];
+            for (FilterWrapper wrapper : wrappers) {
                 reader = wrapper.getReader(reader, filterProperties);
             }
 
@@ -761,13 +753,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             throw new IOException("Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ").");
         }
 
-        File[] files = sourceDirectory.listFiles();
-
         String sourcePath = sourceDirectory.getAbsolutePath();
 
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-
+        for (File file : sourceDirectory.listFiles()) {
             String dest = file.getAbsolutePath();
 
             dest = dest.substring(sourcePath.length() + 1);
