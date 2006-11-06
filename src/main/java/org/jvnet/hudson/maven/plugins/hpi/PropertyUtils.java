@@ -27,13 +27,11 @@ import java.util.Properties;
 
 /**
  * @author <a href="mailto:kenney@neonics.com">Kenney Westerhof</a>
- * @version $Id: PropertyUtils.java 969 2006-11-05 21:16:01Z kohsuke $
+ * @version $Id: PropertyUtils.java 993 2006-11-06 03:24:31Z kohsuke $
  * @todo this is duplicated from the resources plugin - migrate to plexus-utils
  */
-public final class PropertyUtils
-{
-    private PropertyUtils()
-    {
+public final class PropertyUtils {
+    private PropertyUtils() {
         // prevent instantiation
     }
 
@@ -45,37 +43,29 @@ public final class PropertyUtils
      * @param useSystemProps wheter to incorporate System.getProperties settings into the returned Properties object.
      * @return the loaded and fully resolved Properties object
      */
-    public static Properties loadPropertyFile( File propfile, boolean fail, boolean useSystemProps )
-        throws IOException
-    {
+    public static Properties loadPropertyFile(File propfile, boolean fail, boolean useSystemProps)
+        throws IOException {
         Properties props = new Properties();
 
-        if ( useSystemProps )
-        {
-            props = new Properties( System.getProperties() );
+        if (useSystemProps) {
+            props = new Properties(System.getProperties());
         }
 
-        if ( propfile.exists() )
-        {
-            FileInputStream inStream = new FileInputStream( propfile );
-            try
-            {
-                props.load( inStream );
+        if (propfile.exists()) {
+            FileInputStream inStream = new FileInputStream(propfile);
+            try {
+                props.load(inStream);
             }
-            finally
-            {
-                IOUtil.close( inStream );
+            finally {
+                IOUtil.close(inStream);
             }
-        }
-        else if ( fail )
-        {
-            throw new FileNotFoundException( propfile.toString() );
+        } else if (fail) {
+            throw new FileNotFoundException(propfile.toString());
         }
 
-        for ( Enumeration n = props.propertyNames(); n.hasMoreElements(); )
-        {
+        for (Enumeration n = props.propertyNames(); n.hasMoreElements();) {
             String k = (String) n.nextElement();
-            props.setProperty( k, PropertyUtils.getPropertyValue( k, props ) );
+            props.setProperty(k, PropertyUtils.getPropertyValue(k, props));
         }
 
         return props;
@@ -92,40 +82,36 @@ public final class PropertyUtils
      * not loop endlessly on a pair like
      * test = ${test}.
      */
-    private static String getPropertyValue( String k, Properties p )
-    {
+    private static String getPropertyValue(String k, Properties p) {
         // This can also be done using InterpolationFilterReader,
         // but it requires reparsing the file over and over until
         // it doesn't change.
 
-        String v = p.getProperty( k );
+        String v = p.getProperty(k);
         String ret = "";
         int idx, idx2;
 
-        while ( ( idx = v.indexOf( "${" ) ) >= 0 )
-        {
+        while ((idx = v.indexOf("${")) >= 0) {
             // append prefix to result
-            ret += v.substring( 0, idx );
+            ret += v.substring(0, idx);
 
             // strip prefix from original
-            v = v.substring( idx + 2 );
+            v = v.substring(idx + 2);
 
             // if no matching } then bail
-            if ( ( idx2 = v.indexOf( '}' ) ) < 0 )
-            {
+            if ((idx2 = v.indexOf('}')) < 0) {
                 break;
             }
 
             // strip out the key and resolve it
             // resolve the key/value for the ${statement}
-            String nk = v.substring( 0, idx2 );
-            v = v.substring( idx2 + 1 );
-            String nv = p.getProperty( nk );
+            String nk = v.substring(0, idx2);
+            v = v.substring(idx2 + 1);
+            String nv = p.getProperty(nk);
 
             // try global environment..
-            if ( nv == null )
-            {
-                nv = System.getProperty( nk );
+            if (nv == null) {
+                nv = System.getProperty(nk);
             }
 
             // if the key cannot be resolved,
@@ -133,12 +119,9 @@ public final class PropertyUtils
             // else prefix the original string with the
             // resolved property ( so it can be parsed further )
             // taking recursion into account.
-            if ( nv == null || nv.equals( k ) )
-            {
+            if (nv == null || nv.equals(k)) {
                 ret += "${" + nk + "}";
-            }
-            else
-            {
+            } else {
                 v = nv + v;
             }
         }
