@@ -50,9 +50,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-public abstract class AbstractHpiMojo
-    extends AbstractMojo
-{
+public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * The maven project.
      *
@@ -162,53 +160,43 @@ public abstract class AbstractHpiMojo
 
     private static final String[] EMPTY_STRING_ARRAY = {};
 
-    public MavenProject getProject()
-    {
+    public MavenProject getProject() {
         return project;
     }
 
-    public void setProject( MavenProject project )
-    {
+    public void setProject(MavenProject project) {
         this.project = project;
     }
 
-    public File getClassesDirectory()
-    {
+    public File getClassesDirectory() {
         return classesDirectory;
     }
 
-    public void setClassesDirectory( File classesDirectory )
-    {
+    public void setClassesDirectory(File classesDirectory) {
         this.classesDirectory = classesDirectory;
     }
 
-    public File getWebappDirectory()
-    {
+    public File getWebappDirectory() {
         return webappDirectory;
     }
 
-    public void setWebappDirectory( File webappDirectory )
-    {
+    public void setWebappDirectory(File webappDirectory) {
         this.webappDirectory = webappDirectory;
     }
 
-    public File getWarSourceDirectory()
-    {
+    public File getWarSourceDirectory() {
         return warSourceDirectory;
     }
 
-    public void setWarSourceDirectory( File warSourceDirectory )
-    {
+    public void setWarSourceDirectory(File warSourceDirectory) {
         this.warSourceDirectory = warSourceDirectory;
     }
 
-    public File getContainerConfigXML()
-    {
+    public File getContainerConfigXML() {
         return containerConfigXML;
     }
 
-    public void setContainerConfigXML( File containerConfigXML )
-    {
+    public void setContainerConfigXML(File containerConfigXML) {
         this.containerConfigXML = containerConfigXML;
     }
 
@@ -218,21 +206,18 @@ public abstract class AbstractHpiMojo
      *
      * @return an array of tokens to exclude
      */
-    protected String[] getExcludes()
-    {
+    protected String[] getExcludes() {
         List excludeList = new ArrayList();
-        if ( StringUtils.isNotEmpty( warSourceExcludes ) )
-        {
-            excludeList.addAll( Arrays.asList( StringUtils.split( warSourceExcludes, "," ) ) );
+        if (StringUtils.isNotEmpty(warSourceExcludes)) {
+            excludeList.addAll(Arrays.asList(StringUtils.split(warSourceExcludes, ",")));
         }
 
         // if contextXML is specified, omit the one in the source directory
-        if ( containerConfigXML != null && StringUtils.isNotEmpty( containerConfigXML.getName() ) )
-        {
-            excludeList.add( "**/" + META_INF + "/" + containerConfigXML.getName() );
+        if (containerConfigXML != null && StringUtils.isNotEmpty(containerConfigXML.getName())) {
+            excludeList.add("**/" + META_INF + "/" + containerConfigXML.getName());
         }
 
-        return (String[]) excludeList.toArray( EMPTY_STRING_ARRAY );
+        return (String[]) excludeList.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -241,9 +226,8 @@ public abstract class AbstractHpiMojo
      *
      * @return an array of tokens to include
      */
-    protected String[] getIncludes()
-    {
-        return StringUtils.split( StringUtils.defaultString( warSourceIncludes ), "," );
+    protected String[] getIncludes() {
+        return StringUtils.split(StringUtils.defaultString(warSourceIncludes), ",");
     }
 
     /**
@@ -252,15 +236,11 @@ public abstract class AbstractHpiMojo
      *
      * @return an array of tokens to exclude
      */
-    protected String[] getDependentWarExcludes()
-    {
+    protected String[] getDependentWarExcludes() {
         String[] excludes;
-        if ( StringUtils.isNotEmpty( dependentWarExcludes ) )
-        {
-            excludes = StringUtils.split( dependentWarExcludes, "," );
-        }
-        else
-        {
+        if (StringUtils.isNotEmpty(dependentWarExcludes)) {
+            excludes = StringUtils.split(dependentWarExcludes, ",");
+        } else {
             excludes = EMPTY_STRING_ARRAY;
         }
         return excludes;
@@ -272,76 +252,65 @@ public abstract class AbstractHpiMojo
      *
      * @return an array of tokens to include
      */
-    protected String[] getDependentWarIncludes()
-    {
-        return StringUtils.split( StringUtils.defaultString( dependentWarIncludes ), "," );
+    protected String[] getDependentWarIncludes() {
+        return StringUtils.split(StringUtils.defaultString(dependentWarIncludes), ",");
     }
 
-    public void buildExplodedWebapp( File webappDirectory )
-        throws MojoExecutionException
-    {
-        getLog().info( "Exploding webapp..." );
+    public void buildExplodedWebapp(File webappDirectory)
+        throws MojoExecutionException {
+        getLog().info("Exploding webapp...");
 
         webappDirectory.mkdirs();
 
-        File webinfDir = new File( webappDirectory, WEB_INF );
+        File webinfDir = new File(webappDirectory, WEB_INF);
         webinfDir.mkdirs();
 
-        File metainfDir = new File( webappDirectory, META_INF );
+        File metainfDir = new File(webappDirectory, META_INF);
         metainfDir.mkdirs();
 
-        try
-        {
-            List webResources = this.webResources != null ? Arrays.asList( this.webResources ) : null;
-            if ( webResources != null && webResources.size() > 0 )
-            {
+        try {
+            List webResources = this.webResources != null ? Arrays.asList(this.webResources) : null;
+            if (webResources != null && webResources.size() > 0) {
                 Properties filterProperties = getBuildFilterProperties();
-                for ( Iterator it = webResources.iterator(); it.hasNext(); )
-                {
+                for (Iterator it = webResources.iterator(); it.hasNext();) {
                     Resource resource = (Resource) it.next();
-                    copyResources( resource, webappDirectory, filterProperties );
+                    copyResources(resource, webappDirectory, filterProperties);
                 }
             }
 
-            copyResources( warSourceDirectory, webappDirectory );
+            copyResources(warSourceDirectory, webappDirectory);
 
-            if ( containerConfigXML != null && StringUtils.isNotEmpty( containerConfigXML.getName() ) )
-            {
-                metainfDir = new File( webappDirectory, META_INF );
+            if (containerConfigXML != null && StringUtils.isNotEmpty(containerConfigXML.getName())) {
+                metainfDir = new File(webappDirectory, META_INF);
                 String xmlFileName = containerConfigXML.getName();
-                copyFileIfModified( containerConfigXML, new File( metainfDir, xmlFileName ) );
+                copyFileIfModified(containerConfigXML, new File(metainfDir, xmlFileName));
             }
 
-            buildWebapp( project, webappDirectory );
+            buildWebapp(project, webappDirectory);
         }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Could not explode webapp...", e );
+        catch (IOException e) {
+            throw new MojoExecutionException("Could not explode webapp...", e);
         }
     }
 
     private Properties getBuildFilterProperties()
-        throws MojoExecutionException
-    {
+        throws MojoExecutionException {
         // System properties
-        Properties filterProperties = new Properties( System.getProperties() );
+        Properties filterProperties = new Properties(System.getProperties());
 
         // Project properties
-        filterProperties.putAll( project.getProperties() );
+        filterProperties.putAll(project.getProperties());
 
-        for ( Iterator i = filters.iterator(); i.hasNext(); )
-        {
+        for (Iterator i = filters.iterator(); i.hasNext();) {
             String filtersfile = (String) i.next();
 
-            try
-            {
-                Properties properties = PropertyUtils.loadPropertyFile( new File( filtersfile ), true, true );
+            try {
+                Properties properties = PropertyUtils.loadPropertyFile(new File(filtersfile), true, true);
 
-                filterProperties.putAll( properties );
+                filterProperties.putAll(properties);
             }
-            catch ( IOException e )
-            {
-                throw new MojoExecutionException( "Error loading property file '" + filtersfile + "'", e );
+            catch (IOException e) {
+                throw new MojoExecutionException("Error loading property file '" + filtersfile + "'", e);
             }
         }
         return filterProperties;
@@ -360,27 +329,20 @@ public abstract class AbstractHpiMojo
      * @param filterProperties
      * @throws java.io.IOException if an error occured while copying webResources
      */
-    public void copyResources( Resource resource, File webappDirectory, Properties filterProperties )
-        throws IOException
-    {
-        if ( !resource.getDirectory().equals( webappDirectory.getPath() ) )
-        {
-            getLog().info( "Copy webapp webResources to " + webappDirectory.getAbsolutePath() );
-            if ( webappDirectory.exists() )
-            {
-                String[] fileNames = getWarFiles( resource );
-                for ( int i = 0; i < fileNames.length; i++ )
-                {
-                    if ( resource.isFiltering() )
-                    {
-                        copyFilteredFile( new File( resource.getDirectory(), fileNames[i] ),
-                                          new File( webappDirectory, fileNames[i] ), null, getFilterWrappers(),
-                                          filterProperties );
-                    }
-                    else
-                    {
-                        copyFileIfModified( new File( resource.getDirectory(), fileNames[i] ),
-                                            new File( webappDirectory, fileNames[i] ) );
+    public void copyResources(Resource resource, File webappDirectory, Properties filterProperties)
+        throws IOException {
+        if (!resource.getDirectory().equals(webappDirectory.getPath())) {
+            getLog().info("Copy webapp webResources to " + webappDirectory.getAbsolutePath());
+            if (webappDirectory.exists()) {
+                String[] fileNames = getWarFiles(resource);
+                for (int i = 0; i < fileNames.length; i++) {
+                    if (resource.isFiltering()) {
+                        copyFilteredFile(new File(resource.getDirectory(), fileNames[i]),
+                            new File(webappDirectory, fileNames[i]), null, getFilterWrappers(),
+                            filterProperties);
+                    } else {
+                        copyFileIfModified(new File(resource.getDirectory(), fileNames[i]),
+                            new File(webappDirectory, fileNames[i]));
                     }
                 }
             }
@@ -399,19 +361,15 @@ public abstract class AbstractHpiMojo
      * @param webappDirectory the target directory
      * @throws java.io.IOException if an error occured while copying webResources
      */
-    public void copyResources( File sourceDirectory, File webappDirectory )
-        throws IOException
-    {
-        if ( !sourceDirectory.equals( webappDirectory ) )
-        {
-            getLog().info( "Copy webapp webResources to " + webappDirectory.getAbsolutePath() );
-            if ( warSourceDirectory.exists() )
-            {
-                String[] fileNames = getWarFiles( sourceDirectory );
-                for ( int i = 0; i < fileNames.length; i++ )
-                {
-                    copyFileIfModified( new File( sourceDirectory, fileNames[i] ),
-                                        new File( webappDirectory, fileNames[i] ) );
+    public void copyResources(File sourceDirectory, File webappDirectory)
+        throws IOException {
+        if (!sourceDirectory.equals(webappDirectory)) {
+            getLog().info("Copy webapp webResources to " + webappDirectory.getAbsolutePath());
+            if (warSourceDirectory.exists()) {
+                String[] fileNames = getWarFiles(sourceDirectory);
+                for (int i = 0; i < fileNames.length; i++) {
+                    copyFileIfModified(new File(sourceDirectory, fileNames[i]),
+                        new File(webappDirectory, fileNames[i]));
                 }
             }
         }
@@ -427,77 +385,60 @@ public abstract class AbstractHpiMojo
      * @param webappDirectory
      * @throws java.io.IOException if an error occured while building the webapp
      */
-    public void buildWebapp( MavenProject project, File webappDirectory )
-        throws MojoExecutionException, IOException
-    {
-        getLog().info( "Assembling webapp " + project.getArtifactId() + " in " + webappDirectory );
+    public void buildWebapp(MavenProject project, File webappDirectory)
+        throws MojoExecutionException, IOException {
+        getLog().info("Assembling webapp " + project.getArtifactId() + " in " + webappDirectory);
 
-        File libDirectory = new File( webappDirectory, WEB_INF + "/lib" );
+        File libDirectory = new File(webappDirectory, WEB_INF + "/lib");
 
-        File tldDirectory = new File( webappDirectory, WEB_INF + "/tld" );
+        File tldDirectory = new File(webappDirectory, WEB_INF + "/tld");
 
-        File webappClassesDirectory = new File( webappDirectory, WEB_INF + "/classes" );
+        File webappClassesDirectory = new File(webappDirectory, WEB_INF + "/classes");
 
-        if ( classesDirectory.exists() && !classesDirectory.equals( webappClassesDirectory ) )
-        {
-            copyDirectoryStructureIfModified( classesDirectory, webappClassesDirectory );
+        if (classesDirectory.exists() && !classesDirectory.equals(webappClassesDirectory)) {
+            copyDirectoryStructureIfModified(classesDirectory, webappClassesDirectory);
         }
 
         Set artifacts = project.getArtifacts();
 
-        List duplicates = findDuplicates( artifacts );
+        List duplicates = findDuplicates(artifacts);
 
         List dependentWarDirectories = new ArrayList();
 
-        for ( Iterator iter = artifacts.iterator(); iter.hasNext(); )
-        {
+        for (Iterator iter = artifacts.iterator(); iter.hasNext();) {
             Artifact artifact = (Artifact) iter.next();
-            String targetFileName = getDefaultFinalName( artifact );
+            String targetFileName = getDefaultFinalName(artifact);
 
-            getLog().debug( "Processing: " + targetFileName );
+            getLog().debug("Processing: " + targetFileName);
 
-            if ( duplicates.contains( targetFileName ) )
-            {
-                getLog().debug( "Duplicate found: " + targetFileName );
+            if (duplicates.contains(targetFileName)) {
+                getLog().debug("Duplicate found: " + targetFileName);
                 targetFileName = artifact.getGroupId() + "-" + targetFileName;
-                getLog().debug( "Renamed to: " + targetFileName );
+                getLog().debug("Renamed to: " + targetFileName);
             }
 
             // TODO: utilise appropriate methods from project builder
-            ScopeArtifactFilter filter = new ScopeArtifactFilter( Artifact.SCOPE_RUNTIME );
-            if ( !artifact.isOptional() && filter.include( artifact ) )
-            {
+            ScopeArtifactFilter filter = new ScopeArtifactFilter(Artifact.SCOPE_RUNTIME);
+            if (!artifact.isOptional() && filter.include(artifact)) {
                 String type = artifact.getType();
-                if ( "tld".equals( type ) )
-                {
-                    copyFileIfModified( artifact.getFile(), new File( tldDirectory, targetFileName ) );
-                }
-                else
-                {
-                    if ( "jar".equals( type ) || "ejb".equals( type ) || "ejb-client".equals( type ) )
-                    {
-                        copyFileIfModified( artifact.getFile(), new File( libDirectory, targetFileName ) );
-                    }
-                    else
-                    {
-                        if ( "par".equals( type ) )
-                        {
-                            targetFileName = targetFileName.substring( 0, targetFileName.lastIndexOf( '.' ) ) + ".jar";
+                if ("tld".equals(type)) {
+                    copyFileIfModified(artifact.getFile(), new File(tldDirectory, targetFileName));
+                } else {
+                    if ("jar".equals(type) || "ejb".equals(type) || "ejb-client".equals(type)) {
+                        copyFileIfModified(artifact.getFile(), new File(libDirectory, targetFileName));
+                    } else {
+                        if ("par".equals(type)) {
+                            targetFileName = targetFileName.substring(0, targetFileName.lastIndexOf('.')) + ".jar";
 
                             getLog().debug(
-                                "Copying " + artifact.getFile() + " to " + new File( libDirectory, targetFileName ) );
+                                "Copying " + artifact.getFile() + " to " + new File(libDirectory, targetFileName));
 
-                            copyFileIfModified( artifact.getFile(), new File( libDirectory, targetFileName ) );
-                        }
-                        else
-                        {
-                            if ( "war".equals( type ) )
-                            {
-                                dependentWarDirectories.add( unpackWarToTempDirectory( artifact ) );
-                            }
-                            else
-                            {
-                                getLog().debug( "Skipping artifact of type " + type + " for WEB-INF/lib" );
+                            copyFileIfModified(artifact.getFile(), new File(libDirectory, targetFileName));
+                        } else {
+                            if ("war".equals(type)) {
+                                dependentWarDirectories.add(unpackWarToTempDirectory(artifact));
+                            } else {
+                                getLog().debug("Skipping artifact of type " + type + " for WEB-INF/lib");
                             }
                         }
                     }
@@ -505,14 +446,12 @@ public abstract class AbstractHpiMojo
             }
         }
 
-        if ( dependentWarDirectories.size() > 0 )
-        {
-            getLog().info( "Overlaying " + dependentWarDirectories.size() + " war(s)." );
+        if (dependentWarDirectories.size() > 0) {
+            getLog().info("Overlaying " + dependentWarDirectories.size() + " war(s).");
 
             // overlay dependent wars
-            for ( Iterator iter = dependentWarDirectories.iterator(); iter.hasNext(); )
-            {
-                copyDependentWarContents( (File) iter.next(), webappDirectory );
+            for (Iterator iter = dependentWarDirectories.iterator(); iter.hasNext();) {
+                copyDependentWarContents((File) iter.next(), webappDirectory);
             }
         }
     }
@@ -523,21 +462,16 @@ public abstract class AbstractHpiMojo
      * @param artifacts set of artifacts
      * @return List of duplicated artifacts
      */
-    private List findDuplicates( Set artifacts )
-    {
+    private List findDuplicates(Set artifacts) {
         List duplicates = new ArrayList();
         List identifiers = new ArrayList();
-        for ( Iterator iter = artifacts.iterator(); iter.hasNext(); )
-        {
+        for (Iterator iter = artifacts.iterator(); iter.hasNext();) {
             Artifact artifact = (Artifact) iter.next();
-            String candidate = getDefaultFinalName( artifact );
-            if ( identifiers.contains( candidate ) )
-            {
-                duplicates.add( candidate );
-            }
-            else
-            {
-                identifiers.add( candidate );
+            String candidate = getDefaultFinalName(artifact);
+            if (identifiers.contains(candidate)) {
+                duplicates.add(candidate);
+            } else {
+                identifiers.add(candidate);
             }
         }
         return duplicates;
@@ -551,33 +485,26 @@ public abstract class AbstractHpiMojo
      * @return Directory containing the unpacked war.
      * @throws MojoExecutionException
      */
-    private File unpackWarToTempDirectory( Artifact artifact )
-        throws MojoExecutionException
-    {
+    private File unpackWarToTempDirectory(Artifact artifact)
+        throws MojoExecutionException {
         String name = artifact.getFile().getName();
-        File tempLocation = new File( workDirectory, name.substring( 0, name.length() - 4 ) );
+        File tempLocation = new File(workDirectory, name.substring(0, name.length() - 4));
 
         boolean process = false;
-        if ( !tempLocation.exists() )
-        {
+        if (!tempLocation.exists()) {
             tempLocation.mkdirs();
             process = true;
-        }
-        else if ( artifact.getFile().lastModified() > tempLocation.lastModified() )
-        {
+        } else if (artifact.getFile().lastModified() > tempLocation.lastModified()) {
             process = true;
         }
 
-        if ( process )
-        {
+        if (process) {
             File file = artifact.getFile();
-            try
-            {
-                unpack( file, tempLocation );
+            try {
+                unpack(file, tempLocation);
             }
-            catch ( NoSuchArchiverException e )
-            {
-                this.getLog().info( "Skip unpacking dependency file with unknown extension: " + file.getPath() );
+            catch (NoSuchArchiverException e) {
+                this.getLog().info("Skip unpacking dependency file with unknown extension: " + file.getPath());
             }
         }
 
@@ -590,25 +517,21 @@ public abstract class AbstractHpiMojo
      * @param file     File to be unpacked.
      * @param location Location where to put the unpacked files.
      */
-    private void unpack( File file, File location )
-        throws MojoExecutionException, NoSuchArchiverException
-    {
-        String archiveExt = FileUtils.getExtension( file.getAbsolutePath() ).toLowerCase();
+    private void unpack(File file, File location)
+        throws MojoExecutionException, NoSuchArchiverException {
+        String archiveExt = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase();
 
-        try
-        {
-            UnArchiver unArchiver = archiverManager.getUnArchiver( archiveExt );
-            unArchiver.setSourceFile( file );
-            unArchiver.setDestDirectory( location );
+        try {
+            UnArchiver unArchiver = archiverManager.getUnArchiver(archiveExt);
+            unArchiver.setSourceFile(file);
+            unArchiver.setDestDirectory(location);
             unArchiver.extract();
         }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Error unpacking file: " + file + "to: " + location, e );
+        catch (IOException e) {
+            throw new MojoExecutionException("Error unpacking file: " + file + "to: " + location, e);
         }
-        catch ( ArchiverException e )
-        {
-            throw new MojoExecutionException( "Error unpacking file: " + file + "to: " + location, e );
+        catch (ArchiverException e) {
+            throw new MojoExecutionException("Error unpacking file: " + file + "to: " + location, e);
         }
     }
 
@@ -619,42 +542,36 @@ public abstract class AbstractHpiMojo
      * @param srcDir    Directory containing unpacked dependent war contents
      * @param targetDir Directory to overlay srcDir into
      */
-    private void copyDependentWarContents( File srcDir, File targetDir )
-        throws MojoExecutionException
-    {
+    private void copyDependentWarContents(File srcDir, File targetDir)
+        throws MojoExecutionException {
         DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( srcDir );
-        scanner.setExcludes( getDependentWarExcludes() );
+        scanner.setBasedir(srcDir);
+        scanner.setExcludes(getDependentWarExcludes());
         scanner.addDefaultExcludes();
 
-        scanner.setIncludes( getDependentWarIncludes() );
+        scanner.setIncludes(getDependentWarIncludes());
 
         scanner.scan();
 
         String[] dirs = scanner.getIncludedDirectories();
-        for ( int j = 0; j < dirs.length; j++ )
-        {
-            new File( targetDir, dirs[j] ).mkdirs();
+        for (int j = 0; j < dirs.length; j++) {
+            new File(targetDir, dirs[j]).mkdirs();
         }
 
         String[] files = scanner.getIncludedFiles();
 
-        for ( int j = 0; j < files.length; j++ )
-        {
-            File targetFile = new File( targetDir, files[j] );
+        for (int j = 0; j < files.length; j++) {
+            File targetFile = new File(targetDir, files[j]);
 
             // Do not overwrite existing files.
-            if ( !targetFile.exists() )
-            {
-                try
-                {
+            if (!targetFile.exists()) {
+                try {
                     targetFile.getParentFile().mkdirs();
-                    copyFileIfModified( new File( srcDir, files[j] ), targetFile );
+                    copyFileIfModified(new File(srcDir, files[j]), targetFile);
                 }
-                catch ( IOException e )
-                {
-                    throw new MojoExecutionException( "Error copying file '" + files[j] + "' to '" + targetFile + "'",
-                                                      e );
+                catch (IOException e) {
+                    throw new MojoExecutionException("Error copying file '" + files[j] + "' to '" + targetFile + "'",
+                        e);
                 }
             }
         }
@@ -667,14 +584,13 @@ public abstract class AbstractHpiMojo
      * @param sourceDir the directory to be scanned
      * @return the array of filenames, relative to the sourceDir
      */
-    private String[] getWarFiles( File sourceDir )
-    {
+    private String[] getWarFiles(File sourceDir) {
         DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( sourceDir );
-        scanner.setExcludes( getExcludes() );
+        scanner.setBasedir(sourceDir);
+        scanner.setExcludes(getExcludes());
         scanner.addDefaultExcludes();
 
-        scanner.setIncludes( getIncludes() );
+        scanner.setIncludes(getIncludes());
 
         scanner.scan();
 
@@ -688,21 +604,16 @@ public abstract class AbstractHpiMojo
      * @param resource the resource to be scanned
      * @return the array of filenames, relative to the sourceDir
      */
-    private String[] getWarFiles( Resource resource )
-    {
+    private String[] getWarFiles(Resource resource) {
         DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setBasedir( resource.getDirectory() );
-        if ( resource.getIncludes() != null && !resource.getIncludes().isEmpty() )
-        {
-            scanner.setIncludes( (String[]) resource.getIncludes().toArray( EMPTY_STRING_ARRAY ) );
+        scanner.setBasedir(resource.getDirectory());
+        if (resource.getIncludes() != null && !resource.getIncludes().isEmpty()) {
+            scanner.setIncludes((String[]) resource.getIncludes().toArray(EMPTY_STRING_ARRAY));
+        } else {
+            scanner.setIncludes(DEFAULT_INCLUDES);
         }
-        else
-        {
-            scanner.setIncludes( DEFAULT_INCLUDES );
-        }
-        if ( resource.getExcludes() != null && !resource.getExcludes().isEmpty() )
-        {
-            scanner.setExcludes( (String[]) resource.getExcludes().toArray( EMPTY_STRING_ARRAY ) );
+        if (resource.getExcludes() != null && !resource.getExcludes().isEmpty()) {
+            scanner.setExcludes((String[]) resource.getExcludes().toArray(EMPTY_STRING_ARRAY));
         }
 
         scanner.addDefaultExcludes();
@@ -727,36 +638,29 @@ public abstract class AbstractHpiMojo
      *                                       <p/>
      *                                       TO DO: Remove this method when Maven moves to plexus-utils version 1.4
      */
-    private static void copyFileToDirectoryIfModified( File source, File destinationDirectory )
-        throws IOException
-    {
+    private static void copyFileToDirectoryIfModified(File source, File destinationDirectory)
+        throws IOException {
         // TO DO: Remove this method and use the method in WarFileUtils when Maven 2 changes
         // to plexus-utils 1.2.
-        if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
-        {
-            throw new IllegalArgumentException( "Destination is not a directory" );
+        if (destinationDirectory.exists() && !destinationDirectory.isDirectory()) {
+            throw new IllegalArgumentException("Destination is not a directory");
         }
 
-        copyFileIfModified( source, new File( destinationDirectory, source.getName() ) );
+        copyFileIfModified(source, new File(destinationDirectory, source.getName()));
     }
 
-    private FilterWrapper[] getFilterWrappers()
-    {
+    private FilterWrapper[] getFilterWrappers() {
         return new FilterWrapper[]{
             // support ${token}
-            new FilterWrapper()
-            {
-                public Reader getReader( Reader fileReader, Properties filterProperties )
-                {
-                    return new InterpolationFilterReader( fileReader, filterProperties, "${", "}" );
+            new FilterWrapper() {
+                public Reader getReader(Reader fileReader, Properties filterProperties) {
+                    return new InterpolationFilterReader(fileReader, filterProperties, "${", "}");
                 }
             },
             // support @token@
-            new FilterWrapper()
-            {
-                public Reader getReader( Reader fileReader, Properties filterProperties )
-                {
-                    return new InterpolationFilterReader( fileReader, filterProperties, "@", "@" );
+            new FilterWrapper() {
+                public Reader getReader(Reader fileReader, Properties filterProperties) {
+                    return new InterpolationFilterReader(fileReader, filterProperties, "@", "@");
                 }
             }};
     }
@@ -769,47 +673,40 @@ public abstract class AbstractHpiMojo
      * @param filterProperties
      * @throws IOException TO DO: Remove this method when Maven moves to plexus-utils version 1.4
      */
-    private static void copyFilteredFile( File from, File to, String encoding, FilterWrapper[] wrappers,
-                                          Properties filterProperties )
-        throws IOException
-    {
+    private static void copyFilteredFile(File from, File to, String encoding, FilterWrapper[] wrappers,
+                                         Properties filterProperties)
+        throws IOException {
         // buffer so it isn't reading a byte at a time!
         Reader fileReader = null;
         Writer fileWriter = null;
-        try
-        {
+        try {
             // fix for MWAR-36, ensures that the parent dir are created first
             to.getParentFile().mkdirs();
 
-            if ( encoding == null || encoding.length() < 1 )
-            {
-                fileReader = new BufferedReader( new FileReader( from ) );
-                fileWriter = new FileWriter( to );
-            }
-            else
-            {
-                FileInputStream instream = new FileInputStream( from );
+            if (encoding == null || encoding.length() < 1) {
+                fileReader = new BufferedReader(new FileReader(from));
+                fileWriter = new FileWriter(to);
+            } else {
+                FileInputStream instream = new FileInputStream(from);
 
-                FileOutputStream outstream = new FileOutputStream( to );
+                FileOutputStream outstream = new FileOutputStream(to);
 
-                fileReader = new BufferedReader( new InputStreamReader( instream, encoding ) );
+                fileReader = new BufferedReader(new InputStreamReader(instream, encoding));
 
-                fileWriter = new OutputStreamWriter( outstream, encoding );
+                fileWriter = new OutputStreamWriter(outstream, encoding);
             }
 
             Reader reader = fileReader;
-            for ( int i = 0; i < wrappers.length; i++ )
-            {
+            for (int i = 0; i < wrappers.length; i++) {
                 FilterWrapper wrapper = wrappers[i];
-                reader = wrapper.getReader( reader, filterProperties );
+                reader = wrapper.getReader(reader, filterProperties);
             }
 
-            IOUtil.copy( reader, fileWriter );
+            IOUtil.copy(reader, fileWriter);
         }
-        finally
-        {
-            IOUtil.close( fileReader );
-            IOUtil.close( fileWriter );
+        finally {
+            IOUtil.close(fileReader);
+            IOUtil.close(fileWriter);
         }
     }
 
@@ -827,14 +724,12 @@ public abstract class AbstractHpiMojo
      *                                       <p/>
      *                                       TO DO: Remove this method when Maven moves to plexus-utils version 1.4
      */
-    private static void copyFileIfModified( File source, File destination )
-        throws IOException
-    {
+    private static void copyFileIfModified(File source, File destination)
+        throws IOException {
         // TO DO: Remove this method and use the method in WarFileUtils when Maven 2 changes
         // to plexus-utils 1.2.
-        if ( destination.lastModified() < source.lastModified() )
-        {
-            FileUtils.copyFile( source, destination );
+        if (destination.lastModified() < source.lastModified()) {
+            FileUtils.copyFile(source, destination);
         }
     }
 
@@ -851,47 +746,38 @@ public abstract class AbstractHpiMojo
      * @param destinationDirectory
      * @throws IOException TO DO: Remove this method when Maven moves to plexus-utils version 1.4
      */
-    private static void copyDirectoryStructureIfModified( File sourceDirectory, File destinationDirectory )
-        throws IOException
-    {
-        if ( !sourceDirectory.exists() )
-        {
-            throw new IOException( "Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ")." );
+    private static void copyDirectoryStructureIfModified(File sourceDirectory, File destinationDirectory)
+        throws IOException {
+        if (!sourceDirectory.exists()) {
+            throw new IOException("Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ").");
         }
 
         File[] files = sourceDirectory.listFiles();
 
         String sourcePath = sourceDirectory.getAbsolutePath();
 
-        for ( int i = 0; i < files.length; i++ )
-        {
+        for (int i = 0; i < files.length; i++) {
             File file = files[i];
 
             String dest = file.getAbsolutePath();
 
-            dest = dest.substring( sourcePath.length() + 1 );
+            dest = dest.substring(sourcePath.length() + 1);
 
-            File destination = new File( destinationDirectory, dest );
+            File destination = new File(destinationDirectory, dest);
 
-            if ( file.isFile() )
-            {
+            if (file.isFile()) {
                 destination = destination.getParentFile();
 
-                copyFileToDirectoryIfModified( file, destination );
-            }
-            else if ( file.isDirectory() )
-            {
-                if ( !destination.exists() && !destination.mkdirs() )
-                {
+                copyFileToDirectoryIfModified(file, destination);
+            } else if (file.isDirectory()) {
+                if (!destination.exists() && !destination.mkdirs()) {
                     throw new IOException(
-                        "Could not create destination directory '" + destination.getAbsolutePath() + "'." );
+                        "Could not create destination directory '" + destination.getAbsolutePath() + "'.");
                 }
 
-                copyDirectoryStructureIfModified( file, destination );
-            }
-            else
-            {
-                throw new IOException( "Unknown file type: " + file.getAbsolutePath() );
+                copyDirectoryStructureIfModified(file, destination);
+            } else {
+                throw new IOException("Unknown file type: " + file.getAbsolutePath());
             }
         }
     }
@@ -899,9 +785,8 @@ public abstract class AbstractHpiMojo
     /**
      * TO DO: Remove this interface when Maven moves to plexus-utils version 1.4
      */
-    private interface FilterWrapper
-    {
-        Reader getReader( Reader fileReader, Properties filterProperties );
+    private interface FilterWrapper {
+        Reader getReader(Reader fileReader, Properties filterProperties);
     }
 
     /**
@@ -910,8 +795,7 @@ public abstract class AbstractHpiMojo
      * @param artifact
      * @return converted filename of the artifact
      */
-    private String getDefaultFinalName( Artifact artifact )
-    {
+    private String getDefaultFinalName(Artifact artifact) {
         return artifact.getArtifactId() + "-" + artifact.getVersion() + "." +
             artifact.getArtifactHandler().getExtension();
     }
