@@ -35,10 +35,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Generate a manifest for this WAR.
+ * Generate a manifest for a Hudson plugin.
  *
- * @author Mike Perham
- * @version $Id: HpiManifestMojo.java 989 2006-11-06 01:35:57Z kohsuke $
  * @goal manifest
  * @phase process-resources
  * @requiresDependencyResolution runtime
