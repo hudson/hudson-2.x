@@ -39,6 +39,12 @@ public class HplMojo extends AbstractHpiMojo {
             );
         }
 
+        if(!project.getPackaging().equals("hpi")) {
+            getLog().info("Skipping "+project.getName()+" because it's not <packaging>hpi</packaging>");
+            return;
+        }
+
+
         File hplFile = new File(hudsonHome, "plugins/" + project.getBuild().getFinalName() + ".hpl");
         getLog().info("Generating "+hplFile);
 
