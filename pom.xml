@@ -11,7 +11,7 @@
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
 
   <dependencies>
     <dependency>
@@ -40,4 +40,8 @@
       <version>1.6.1</version>
     </dependency>
   </dependencies>
+
+  <scm>
+    <tag>maven-hpi-plugin-1_0</tag>
+  </scm>
 </project>
