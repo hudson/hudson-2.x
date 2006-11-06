@@ -2,3 +2,6 @@ target
 maven-war-plugin.iws
 maven-war-plugin.ipr
 maven-hpi-plugin.iml
+.classpath
+.project
+.settings
