@@ -17,13 +17,19 @@ package org.jvnet.hudson.maven.plugins.hpi;
  */
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.archiver.MavenArchiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
+import org.codehaus.plexus.archiver.jar.Manifest;
+import org.codehaus.plexus.archiver.jar.ManifestException;
+import org.codehaus.plexus.archiver.jar.Manifest.Section;
+import org.codehaus.plexus.archiver.jar.Manifest.Attribute;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -43,12 +49,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.JavaDocBuilder;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -101,7 +112,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @parameter expression="${basedir}/src/main/webapp"
      * @required
      */
-    private File warSourceDirectory;
+    protected File warSourceDirectory;
 
     /**
      * The list of webResources we want to transfer.
@@ -192,10 +203,6 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
     public void setWebappDirectory(File webappDirectory) {
         this.webappDirectory = webappDirectory;
-    }
-
-    public File getWarSourceDirectory() {
-        return warSourceDirectory;
     }
 
     public void setWarSourceDirectory(File warSourceDirectory) {
@@ -797,4 +804,30 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             artifact.getArtifactHandler().getExtension();
     }
 
+    protected void setAttributes(Section mainSection) throws MojoExecutionException, ManifestException {
+        JavaClass javaClass = findPluginClass();
+        if(javaClass==null)
+                throw new MojoExecutionException("Unable to find a plugin class. Did you put @plugin in javadoc?");
+
+        mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",
+            javaClass.getPackage()+"."+javaClass.getName()));
+        mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
+    }
+
+    /**
+     * Find a class that has "@plugin" marker.
+     */
+    private JavaClass findPluginClass() {
+        JavaDocBuilder builder = new JavaDocBuilder();
+        for (Object o : project.getCompileSourceRoots())
+            builder.addSourceTree(new File((String) o));
+
+        // look for a class that extends Plugin
+        for( JavaSource js : builder.getSources() ) {
+            JavaClass jc = js.getClasses()[0];
+            if(jc.getTagByName("plugin")!=null)
+                return jc;
+        }
+        return null;
+    }
 }
