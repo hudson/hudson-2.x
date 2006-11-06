@@ -33,19 +33,12 @@ import java.io.IOException;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 969 2006-11-05 21:16:01Z kohsuke $
+ * @version $Id: HpiMojo.java 989 2006-11-06 01:35:57Z kohsuke $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
  */
 public class HpiMojo extends AbstractHpiMojo {
-    /**
-     * The directory for the generated WAR.
-     *
-     * @parameter expression="${project.build.directory}"
-     * @required
-     */
-    private String outputDirectory;
 
     /**
      * The name of the generated hpi.
@@ -160,13 +153,13 @@ public class HpiMojo extends AbstractHpiMojo {
         jarArchiver.addDirectory(getWebappDirectory(), getIncludes(), getExcludes());
 
         // create archive
-        archiver.createArchive(getProject(), archive);
+        archiver.createArchive(project, archive);
 
         String classifier = this.classifier;
         if (classifier != null) {
-            projectHelper.attachArtifact(getProject(), "hpi", classifier, hpiFile);
+            projectHelper.attachArtifact(project, "hpi", classifier, hpiFile);
         } else {
-            Artifact artifact = getProject().getArtifact();
+            Artifact artifact = project.getArtifact();
             if (primaryArtifact) {
                 artifact.setFile(hpiFile);
             } else if (artifact.getFile() == null || artifact.getFile().isDirectory()) {

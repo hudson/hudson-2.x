@@ -52,13 +52,21 @@ import java.util.Set;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
+     * The directory for the generated WAR.
+     *
+     * @parameter expression="${project.build.directory}"
+     * @required
+     */
+    protected String outputDirectory;
+
+    /**
      * The maven project.
      *
      * @parameter expression="${project}"
      * @required
      * @readonly
      */
-    private MavenProject project;
+    protected MavenProject project;
 
     /**
      * The directory containing generated classes.
@@ -68,6 +76,16 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @readonly
      */
     private File classesDirectory;
+
+    /**
+     * Name of the plugin that Hudson uses for display purpose.
+     * It should be one line text.
+     *
+     * @parameter expression="${project.name}"
+     * @required
+     * @readonly 
+     */
+    protected String pluginName;
 
     /**
      * The directory where the webapp is built.
@@ -160,14 +178,6 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
     private static final String[] EMPTY_STRING_ARRAY = {};
 
-    public MavenProject getProject() {
-        return project;
-    }
-
-    public void setProject(MavenProject project) {
-        this.project = project;
-    }
-
     public File getClassesDirectory() {
         return classesDirectory;
     }
@@ -207,7 +217,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @return an array of tokens to exclude
      */
     protected String[] getExcludes() {
-        List excludeList = new ArrayList();
+        List<String> excludeList = new ArrayList<String>();
         if (StringUtils.isNotEmpty(warSourceExcludes)) {
             excludeList.addAll(Arrays.asList(StringUtils.split(warSourceExcludes, ",")));
         }
@@ -217,7 +227,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             excludeList.add("**/" + META_INF + "/" + containerConfigXML.getName());
         }
 
-        return (String[]) excludeList.toArray(EMPTY_STRING_ARRAY);
+        return excludeList.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -269,11 +279,10 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         metainfDir.mkdirs();
 
         try {
-            List webResources = this.webResources != null ? Arrays.asList(this.webResources) : null;
+            List<Resource> webResources = this.webResources != null ? Arrays.asList(this.webResources) : null;
             if (webResources != null && webResources.size() > 0) {
                 Properties filterProperties = getBuildFilterProperties();
-                for (Iterator it = webResources.iterator(); it.hasNext();) {
-                    Resource resource = (Resource) it.next();
+                for (Resource resource : webResources) {
                     copyResources(resource, webappDirectory, filterProperties);
                 }
             }
