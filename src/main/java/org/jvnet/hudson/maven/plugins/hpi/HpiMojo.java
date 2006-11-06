@@ -43,7 +43,7 @@ import com.thoughtworks.qdox.JavaDocBuilder;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 995 2006-11-06 04:47:17Z kohsuke $
+ * @version $Id: HpiMojo.java 1000 2006-11-06 13:25:21Z kohsuke $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
@@ -163,6 +163,7 @@ public class HpiMojo extends AbstractHpiMojo {
         File manifestFile = new File(getWebappDirectory(), "META-INF/MANIFEST.MF");
         generateManifest(manifestFile);
 
+        jarArchiver.setManifest(manifestFile);
         jarArchiver.addDirectory(getWebappDirectory(), getIncludes(), getExcludes());
 
         // create archive
