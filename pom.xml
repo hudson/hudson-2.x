@@ -45,5 +45,17 @@
       <type>maven-plugin</type>
       <version>6.0.1</version>
     </dependency>
+    <!-- for the create goal -->
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-archetype-plugin</artifactId>
+      <type>maven-plugin</type>
+      <version>1.0-alpha-4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interactivity-api</artifactId>
+      <version>1.0-alpha-4</version>
+    </dependency>
   </dependencies>
 </project>
