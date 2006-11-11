@@ -13,6 +13,48 @@
   <name>Maven Hudson Plugin</name>
   <version>1.2-SNAPSHOT</version>
 
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>archetype-resources/**/*</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <configuration>
+              <tasks>
+                <copy todir="target/classes">
+                  <fileset dir="src/main/resources" includes="archetype-resources/**/*" />
+                  <filterset>
+                    <filter token="PLUGIN_VERSION" value="${project.version}"/>
+                  </filterset>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <!-- used for escape -->
+    <begin>${${$}}{</begin>
+    <end>$}</end>
+    <dollar>$</dollar>
+    <openbracket>{</openbracket>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>

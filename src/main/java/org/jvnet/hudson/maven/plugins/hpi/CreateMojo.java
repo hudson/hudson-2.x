@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.io.IOException;
 
 /**
  * Builds a new plugin template.
@@ -113,7 +115,7 @@ public class CreateMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-// ----------------------------------------------------------------------
+            // ----------------------------------------------------------------------
             // archetypeGroupId
             // archetypeArtifactId
             // archetypeVersion
@@ -167,18 +169,16 @@ public class CreateMojo extends AbstractMojo {
                 }
             }
 
-            try {
-                // TODO: how do I determine the current plugin version?
-                archetype.createArchetype("org.jvnet.hudson.tools", "maven-hpi-plugin", "1.2-SNAPSHOT", localRepository,
-                    archetypeRemoteRepositories, map);
-            } catch (ArchetypeNotFoundException e) {
-                throw new MojoExecutionException("Error creating from archetype", e);
-            } catch (ArchetypeDescriptorException e) {
-                throw new MojoExecutionException("Error creating from archetype", e);
-            } catch (ArchetypeTemplateProcessingException e) {
-                throw new MojoExecutionException("Error creating from archetype", e);
-            }
-        } catch (PrompterException e) {
+            Properties props = new Properties();
+            props.load(getClass().getResourceAsStream("plugin.properties"));
+
+            // TODO: how do I determine the current plugin version?
+            archetype.createArchetype(
+                props.getProperty("groupId"),
+                props.getProperty("artifactId"),
+                props.getProperty("version"), localRepository,
+                archetypeRemoteRepositories, map);
+        } catch (Exception e) {
             throw new MojoExecutionException("Failed to create a new Hudson plugin",e);
         }
     }
