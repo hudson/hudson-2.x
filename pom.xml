@@ -11,7 +11,7 @@
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
 
   <build>
     <resources>
@@ -35,7 +35,7 @@
                 <copy todir="target/classes">
                   <fileset dir="src/main/resources" includes="archetype-resources/**/*" />
                   <filterset>
-                    <filter token="PLUGIN_VERSION" value="${project.version}"/>
+                    <filter token="PLUGIN_VERSION" value="${project.version}" />
                   </filterset>
                 </copy>
               </tasks>
@@ -102,4 +102,8 @@
       <version>1.0-alpha-4</version>
     </dependency>
   </dependencies>
+
+  <scm>
+    <tag>maven-hpi-plugin-1_2</tag>
+  </scm>
 </project>
