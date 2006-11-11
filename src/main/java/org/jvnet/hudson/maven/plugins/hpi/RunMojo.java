@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 1076 2006-11-11 02:13:41Z kohsuke $
+//$Id: RunMojo.java 1077 2006-11-11 02:16:06Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,7 +94,7 @@ public class RunMojo extends AbstractJetty6Mojo {
         sp.setName("HUDSON_HOME");
         sp.setValue(hudsonHome.getAbsolutePath());
         sp.setIfNotSetAlready();
-        hudsonHome.mkdirs();
+        new File(hudsonHome,"plugins").mkdirs();        
 
         generateHpl();
 
