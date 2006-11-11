@@ -28,6 +28,7 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <!-- maven resources plugin can't handle escapes, so we need to fall back to Ant to get the job done -->
             <phase>process-resources</phase>
             <configuration>
               <tasks>
