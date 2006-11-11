@@ -24,12 +24,15 @@ import java.util.Set;
  */
 public class HplMojo extends AbstractHpiMojo {
     /**
-     * Classifier to add to the artifact generated. If given, the artifact will be an attachment instead.
+     * Path to <tt>$HUDSON_HOME</tt>. A .hpl file will be generated to this location.
      *
      * @parameter expression="${hudsonHome}
      */
     private File hudsonHome;
 
+    public void setHudsonHome(File hudsonHome) {
+        this.hudsonHome = hudsonHome;
+    }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if(hudsonHome==null) {
