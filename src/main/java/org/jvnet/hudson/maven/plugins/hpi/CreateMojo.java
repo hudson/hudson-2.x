@@ -19,6 +19,7 @@ import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.ArchetypeDescriptorException;
 import org.apache.maven.archetype.ArchetypeNotFoundException;
 import org.apache.maven.archetype.ArchetypeTemplateProcessingException;
+import org.apache.maven.archetype.FileUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
@@ -27,6 +28,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
@@ -36,6 +38,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileOutputStream;
 
 /**
  * Builds a new plugin template.
@@ -172,12 +177,27 @@ public class CreateMojo extends AbstractMojo {
             Properties props = new Properties();
             props.load(getClass().getResourceAsStream("plugin.properties"));
 
-            // TODO: how do I determine the current plugin version?
             archetype.createArchetype(
                 props.getProperty("groupId"),
                 props.getProperty("artifactId"),
                 props.getProperty("version"), localRepository,
                 archetypeRemoteRepositories, map);
+
+            // copy view resource files. So far maven archetype doesn't seem to be able to handle it.
+            File outDir = new File( basedir, artifactId );
+            File viewDir = new File( outDir, "src/main/resources/"+groupId.replace('.','/')+"/HelloWorldBuilder" );
+            viewDir.mkdirs();
+
+            for( String s : new String[]{"config.jelly","global.jelly"} ) {
+                InputStream in = getClass().getResourceAsStream("/archetype-resources/src/main/resources/HelloWorldBuilder/"+s);
+                FileOutputStream out = new FileOutputStream(new File(viewDir, s));
+                IOUtil.copy(in, out);
+                in.close();
+                out.close();
+            }
+
+
+
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to create a new Hudson plugin",e);
         }

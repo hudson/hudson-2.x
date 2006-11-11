@@ -20,6 +20,7 @@
         <excludes>
           <exclude>archetype-resources/**/*</exclude>
         </excludes>
+        <filtering>true</filtering>
       </resource>
     </resources>
     <plugins>
