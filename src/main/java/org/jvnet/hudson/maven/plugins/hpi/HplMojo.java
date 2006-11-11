@@ -3,6 +3,7 @@ package org.jvnet.hudson.maven.plugins.hpi;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.model.Resource;
 import org.codehaus.plexus.archiver.jar.Manifest;
 import org.codehaus.plexus.archiver.jar.Manifest.Section;
 import org.codehaus.plexus.archiver.jar.Manifest.Attribute;
@@ -14,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
+import java.util.List;
 
 /**
  * Generate .hpl file.
@@ -59,6 +61,16 @@ public class HplMojo extends AbstractHpiMojo {
 
             // compute Libraries entry
             StringBuffer buf = new StringBuffer();
+
+            // we want resources to be picked up before target/classes,
+            // so that the original (not in the copy) will be picked up first.
+            for (Resource r : (List<Resource>) project.getBuild().getResources()) {
+                if(buf.length()>0)
+                    buf.append(',');
+                buf.append(r.getDirectory());
+            }
+            if(buf.length()>0)
+                buf.append(',');
             buf.append(new File(project.getBuild().getOutputDirectory()).getAbsoluteFile());
             for (Artifact a : (Set<Artifact>) project.getArtifacts()) {
                 buf.append(',').append(a.getFile());
