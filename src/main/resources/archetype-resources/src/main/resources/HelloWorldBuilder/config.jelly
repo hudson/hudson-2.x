@@ -1,0 +1,16 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <!--
+    This jelly script is used for per-project configuration.
+
+    See global.jelly for a general discussion about jelly script.
+  -->
+  <f:entry title="Name" help="${rootURL}/plugin/hello-world/help-projectConfig.html">
+    <!--
+      ${builder.name} is EL-like (JEXL) expression that calls "builder.getName()" on our builder instance.
+      builder is set to null if the project is not configured with HelloWorldBuilder when
+      the form is rendered, but since this is EL, in that case this expression
+      evaluates to null, and you'll get an empty text box, which is just what we want.
+    -->
+    <f:textbox name="hello_world.name" value="${builder.name}" />
+	</f:entry>
+</j:jelly>

@@ -1,0 +1,16 @@
+<archetype>
+  <id>hudson-plugin</id>
+  <sources>
+    <source>src/main/java/PluginImpl.java</source>
+    <source>src/main/java/HelloWorldBuilder.java</source>
+  </sources>
+  <resources>
+    <resource>pom.xml</resource>
+    <resource>readme.txt</resource>
+    <resource>src/main/resources/HelloWorldBuilder/config.jelly</resource>
+    <resource>src/main/resources/HelloWorldBuilder/global.jelly</resource>
+    <resource>src/main/resources/index.jelly</resource>
+    <resource>src/main/webapp/help-globalConfig.html</resource>
+    <resource>src/main/webapp/help-projectConfig.html</resource>
+  </resources>
+</archetype>
