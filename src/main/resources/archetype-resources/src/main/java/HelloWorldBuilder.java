@@ -72,6 +72,15 @@ public class HelloWorldBuilder extends Builder {
      * for the actual HTML fragment for the configuration screen.
      */
     public static final class DescriptorImpl extends Descriptor<Builder> {
+        /**
+         * To persist global configuration information,
+         * simply store it in a field and call save().
+         *
+         * <p>
+         * If you don't want fields to be persisted, use <tt>transient</tt>.
+         */
+        private boolean useFrench;
+
         DescriptorImpl() {
             super(HelloWorldBuilder.class);
         }
@@ -86,7 +95,7 @@ public class HelloWorldBuilder extends Builder {
         public boolean configure(HttpServletRequest req) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
-            getProperties().put("useFrench",req.getParameter("hello_world.useFrench"));
+            useFrench = req.getParameter("hello_world.useFrench")!=null;
             save();
             return super.configure(req);
         }
@@ -95,7 +104,7 @@ public class HelloWorldBuilder extends Builder {
          * This method returns true if the global configuration says we should speak French.
          */
         public boolean useFrench() {
-            return getProperties().get("useFrench")!=null;
+            return useFrench;
         }
 
         /**
