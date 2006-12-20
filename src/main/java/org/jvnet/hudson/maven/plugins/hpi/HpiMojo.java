@@ -43,7 +43,7 @@ import com.thoughtworks.qdox.JavaDocBuilder;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 1000 2006-11-06 13:25:21Z kohsuke $
+ * @version $Id: HpiMojo.java 1395 2006-12-20 19:00:58Z kohsuke $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
@@ -117,7 +117,7 @@ public class HpiMojo extends AbstractHpiMojo {
     /**
      * Executes the WarMojo on the current project.
      *
-     * @throws MojoExecutionException if an error occured while building the webapp
+     * @throws MojoExecutionException if an error occurred while building the webapp
      */
     public void execute()
         throws MojoExecutionException {
