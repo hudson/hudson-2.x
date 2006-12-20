@@ -27,7 +27,7 @@ import java.util.Properties;
 
 /**
  * @author <a href="mailto:kenney@neonics.com">Kenney Westerhof</a>
- * @version $Id: PropertyUtils.java 993 2006-11-06 03:24:31Z kohsuke $
+ * @version $Id: PropertyUtils.java 1396 2006-12-20 19:20:31Z kohsuke $
  * @todo this is duplicated from the resources plugin - migrate to plexus-utils
  */
 public final class PropertyUtils {
@@ -39,8 +39,8 @@ public final class PropertyUtils {
      * Reads a property file, resolving all internal variables.
      *
      * @param propfile       The property file to load
-     * @param fail           wheter to throw an exception when the file cannot be loaded or to return null
-     * @param useSystemProps wheter to incorporate System.getProperties settings into the returned Properties object.
+     * @param fail           whether to throw an exception when the file cannot be loaded or to return null
+     * @param useSystemProps whether to incorporate System.getProperties settings into the returned Properties object.
      * @return the loaded and fully resolved Properties object
      */
     public static Properties loadPropertyFile(File propfile, boolean fail, boolean useSystemProps)

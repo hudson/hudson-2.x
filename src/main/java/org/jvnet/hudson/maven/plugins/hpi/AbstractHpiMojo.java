@@ -341,7 +341,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @param resource         the resource to copy
      * @param webappDirectory  the target directory
      * @param filterProperties
-     * @throws java.io.IOException if an error occured while copying webResources
+     * @throws java.io.IOException if an error occurred while copying webResources
      */
     public void copyResources(Resource resource, File webappDirectory, Properties filterProperties)
         throws IOException {
@@ -373,7 +373,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      *
      * @param sourceDirectory the source directory
      * @param webappDirectory the target directory
-     * @throws java.io.IOException if an error occured while copying webResources
+     * @throws java.io.IOException if an error occurred while copying webResources
      */
     public void copyResources(File sourceDirectory, File webappDirectory)
         throws IOException {
@@ -397,7 +397,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      *
      * @param project         the maven project
      * @param webappDirectory
-     * @throws java.io.IOException if an error occured while building the webapp
+     * @throws java.io.IOException if an error occurred while building the webapp
      */
     public void buildWebapp(MavenProject project, File webappDirectory)
         throws MojoExecutionException, IOException {

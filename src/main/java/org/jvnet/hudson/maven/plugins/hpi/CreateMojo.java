@@ -204,7 +204,7 @@ public class CreateMojo extends AbstractMojo {
     }
 
     //TODO: this should be put in John's artifact utils and used from there instead of being repeated here. Creating
-    // artifact repositories is someowhat cumbersome atm.
+    // artifact repositories is somewhat cumbersome atm.
     public ArtifactRepository createRepository(String url, String repositoryId) {
         // snapshots vs releases
         // offline = to turning the update policy off
