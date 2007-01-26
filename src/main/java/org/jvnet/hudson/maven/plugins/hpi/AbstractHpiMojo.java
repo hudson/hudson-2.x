@@ -56,6 +56,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaSource;
@@ -812,6 +814,15 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",
             javaClass.getPackage()+"."+javaClass.getName()));
         mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
+
+        String v = project.getVersion();
+        if(v.endsWith("-SNAPSHOT")) {
+            String dt = new SimpleDateFormat("MM/dd/yyyy hh:mm").format(new Date());
+            v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
+        }
+
+        mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
+
     }
 
     /**
