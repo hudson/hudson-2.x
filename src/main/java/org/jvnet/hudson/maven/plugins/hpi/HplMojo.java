@@ -67,7 +67,8 @@ public class HplMojo extends AbstractHpiMojo {
             for (Resource r : (List<Resource>) project.getBuild().getResources()) {
                 if(buf.length()>0)
                     buf.append(',');
-                buf.append(r.getDirectory());
+                if(new File(project.getBasedir(),r.getDirectory()).exists())
+                    buf.append(r.getDirectory());
             }
             if(buf.length()>0)
                 buf.append(',');
