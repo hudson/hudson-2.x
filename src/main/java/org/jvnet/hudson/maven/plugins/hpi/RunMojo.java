@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 1078 2006-11-11 03:15:51Z kohsuke $
+//$Id: RunMojo.java 2313 2007-03-03 16:18:15Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,7 +82,7 @@ public class RunMojo extends AbstractJetty6Mojo {
                 "  <groupId>org.jvnet.hudson.main</groupId>\n" +
                 "  <artifactId>hudson-war</artifactId>\n" +
                 "  <type>war</type>\n" +
-                "  <version>1.60<!-- replace this with the version you want--></version>\n" +
+                "  <version>1.83<!-- replace this with the version you want--></version>\n" +
                 "  <scope>test</scope>\n" +
                 "</dependency>"
             );
