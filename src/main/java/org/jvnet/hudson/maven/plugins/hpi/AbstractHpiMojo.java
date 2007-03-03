@@ -16,20 +16,20 @@ package org.jvnet.hudson.maven.plugins.hpi;
  * limitations under the License.
  */
 
+import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaSource;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.archiver.MavenArchiver;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
-import org.codehaus.plexus.archiver.jar.Manifest;
-import org.codehaus.plexus.archiver.jar.ManifestException;
-import org.codehaus.plexus.archiver.jar.Manifest.Section;
 import org.codehaus.plexus.archiver.jar.Manifest.Attribute;
+import org.codehaus.plexus.archiver.jar.Manifest.Section;
+import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -49,19 +49,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaSource;
-import com.thoughtworks.qdox.JavaDocBuilder;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -820,9 +815,11 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             String dt = new SimpleDateFormat("MM/dd/yyyy hh:mm").format(new Date());
             v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
         }
-
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
 
+        String dep = findDependencyProjects();
+        if(dep.length()>0)
+            mainSection.addAttributeAndCheck(new Attribute("Plugin-Dependencies",dep));
     }
 
     /**
@@ -840,5 +837,23 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
                 return jc;
         }
         return null;
+    }
+
+    /**
+     * Finds and lists dependency plugins.
+     */
+    private String findDependencyProjects() {
+        StringBuilder buf = new StringBuilder();
+        for(Object o : project.getArtifacts()) {
+            Artifact a = (Artifact)o;
+            if(a.getType().equals("hpi")) {
+                if(buf.length()>0)
+                    buf.append(' ');
+                buf.append(a.getArtifactId());
+                buf.append(':');
+                buf.append(a.getVersion());
+            }
+        }
+        return buf.toString();
     }
 }
