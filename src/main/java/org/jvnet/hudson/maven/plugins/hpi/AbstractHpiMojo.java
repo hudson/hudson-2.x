@@ -848,7 +848,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             Artifact a = (Artifact)o;
             if(a.getType().equals("hpi")) {
                 if(buf.length()>0)
-                    buf.append(' ');
+                    buf.append(',');
                 buf.append(a.getArtifactId());
                 buf.append(':');
                 buf.append(a.getVersion());
