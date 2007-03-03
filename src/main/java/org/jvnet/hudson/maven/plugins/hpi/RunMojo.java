@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 2313 2007-03-03 16:18:15Z kohsuke $
+//$Id: RunMojo.java 2314 2007-03-03 16:29:01Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,14 @@
 //========================================================================
 package org.jvnet.hudson.maven.plugins.hpi;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.artifact.Artifact;
+import org.apache.tools.ant.taskdefs.Copy;
+import org.apache.tools.ant.Project;
 import org.mortbay.jetty.plugin.util.Scanner;
-import org.mortbay.jetty.plugin.util.SystemProperty;
 import org.mortbay.jetty.plugin.util.Scanner.Listener;
+import org.mortbay.jetty.plugin.util.SystemProperty;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,7 +96,8 @@ public class RunMojo extends AbstractJetty6Mojo {
         sp.setName("HUDSON_HOME");
         sp.setValue(hudsonHome.getAbsolutePath());
         sp.setIfNotSetAlready();
-        new File(hudsonHome,"plugins").mkdirs();
+        File pluginsDir = new File(hudsonHome, "plugins");
+        pluginsDir.mkdirs();
 
         // enable view auto refreshing via stapler
         sp = new SystemProperty();
@@ -104,7 +107,23 @@ public class RunMojo extends AbstractJetty6Mojo {
 
         generateHpl();
 
+        // copy other dependency hudson plugins
+        for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
+            if(!a.getType().equals("hpi"))
+                continue;
+            getLog().info("Copying dependency hudson plugin "+a.getFile());
+            copyFile(a.getFile(),new File(pluginsDir,a.getArtifactId()+".hpi"));
+        }
+
         super.execute();
+    }
+
+    private void copyFile(File src, File dst) {
+        Copy cp = new Copy();
+        cp.setProject(new Project());
+        cp.setFile(src);
+        cp.setTofile(dst);
+        cp.execute();
     }
 
     /**
