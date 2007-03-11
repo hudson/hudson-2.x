@@ -57,6 +57,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.jar.JarFile;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -416,7 +418,19 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
         List<File> dependentWarDirectories = new ArrayList<File>();
 
+        // list up IDs of hudson plugin dependencies
+        Set<String> hudsonPlugins = new HashSet<String>();
         for (Artifact artifact : artifacts) {
+            if(isPlugin(artifact))
+                hudsonPlugins.add(artifact.getId());
+        }
+
+        for (Artifact artifact : artifacts) {
+            if(hudsonPlugins.contains(artifact.getId()))
+                continue;   // plugin dependency need not be WEB-INF/lib
+            if(hudsonPlugins.contains(artifact.getDependencyTrail().get(1)))
+                continue;   // no need to have transitive dependencies through plugins in WEB-INF/lib.
+
             String targetFileName = getDefaultFinalName(artifact);
 
             getLog().debug("Processing: " + targetFileName);
@@ -463,6 +477,15 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             for (Iterator iter = dependentWarDirectories.iterator(); iter.hasNext();) {
                 copyDependentWarContents((File) iter.next(), webappDirectory);
             }
+        }
+    }
+
+    private boolean isPlugin(Artifact artifact) throws IOException {
+        JarFile jar = new JarFile(artifact.getFile());
+        try {
+            return jar.getManifest().getMainAttributes().getValue("Plugin-Class")!=null;
+        } finally {
+            jar.close();
         }
     }
 
@@ -801,7 +824,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             artifact.getArtifactHandler().getExtension();
     }
 
-    protected void setAttributes(Section mainSection) throws MojoExecutionException, ManifestException {
+    protected void setAttributes(Section mainSection) throws MojoExecutionException, ManifestException, IOException {
         JavaClass javaClass = findPluginClass();
         if(javaClass==null)
                 throw new MojoExecutionException("Unable to find a plugin class. Did you put @plugin in javadoc?");
@@ -842,11 +865,11 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * Finds and lists dependency plugins.
      */
-    private String findDependencyProjects() {
+    private String findDependencyProjects() throws IOException {
         StringBuilder buf = new StringBuilder();
         for(Object o : project.getArtifacts()) {
             Artifact a = (Artifact)o;
-            if(a.getType().equals("hpi")) {
+            if(isPlugin(a)) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());
