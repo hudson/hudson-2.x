@@ -16,10 +16,6 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
 import org.apache.maven.archetype.Archetype;
-import org.apache.maven.archetype.ArchetypeDescriptorException;
-import org.apache.maven.archetype.ArchetypeNotFoundException;
-import org.apache.maven.archetype.ArchetypeTemplateProcessingException;
-import org.apache.maven.archetype.FileUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
@@ -27,20 +23,18 @@ import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.components.interactivity.Prompter;
-import org.codehaus.plexus.components.interactivity.PrompterException;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.io.IOException;
-import java.io.File;
-import java.io.InputStream;
-import java.io.FileOutputStream;
 
 /**
  * Builds a new plugin template.

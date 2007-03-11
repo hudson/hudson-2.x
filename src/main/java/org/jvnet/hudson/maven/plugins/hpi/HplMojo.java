@@ -1,12 +1,12 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.model.Resource;
 import org.codehaus.plexus.archiver.jar.Manifest;
-import org.codehaus.plexus.archiver.jar.Manifest.Section;
 import org.codehaus.plexus.archiver.jar.Manifest.Attribute;
+import org.codehaus.plexus.archiver.jar.Manifest.Section;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -14,8 +14,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Generate .hpl file.

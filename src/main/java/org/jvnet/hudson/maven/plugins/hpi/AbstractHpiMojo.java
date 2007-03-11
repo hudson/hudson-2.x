@@ -53,12 +53,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.jar.JarFile;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -421,7 +420,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         // list up IDs of hudson plugin dependencies
         Set<String> hudsonPlugins = new HashSet<String>();
         for (Artifact artifact : artifacts) {
-            if(isPlugin(artifact))
+            if(HpiUtil.isPlugin(artifact))
                 hudsonPlugins.add(artifact.getId());
         }
 
@@ -477,15 +476,6 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             for (Iterator iter = dependentWarDirectories.iterator(); iter.hasNext();) {
                 copyDependentWarContents((File) iter.next(), webappDirectory);
             }
-        }
-    }
-
-    private boolean isPlugin(Artifact artifact) throws IOException {
-        JarFile jar = new JarFile(artifact.getFile());
-        try {
-            return jar.getManifest().getMainAttributes().getValue("Plugin-Class")!=null;
-        } finally {
-            jar.close();
         }
     }
 
@@ -869,7 +859,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         StringBuilder buf = new StringBuilder();
         for(Object o : project.getArtifacts()) {
             Artifact a = (Artifact)o;
-            if(isPlugin(a)) {
+            if(HpiUtil.isPlugin(a)) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());

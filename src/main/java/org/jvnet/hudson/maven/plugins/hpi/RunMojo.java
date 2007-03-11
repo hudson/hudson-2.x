@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 2314 2007-03-03 16:29:01Z kohsuke $
+//$Id: RunMojo.java 2439 2007-03-11 23:45:10Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,22 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.tools.ant.taskdefs.Copy;
+import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Copy;
 import org.mortbay.jetty.plugin.util.Scanner;
 import org.mortbay.jetty.plugin.util.Scanner.Listener;
 import org.mortbay.jetty.plugin.util.SystemProperty;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +75,22 @@ public class RunMojo extends AbstractJetty6Mojo {
      */
     protected File warSourceDirectory;
 
+    /**
+     * @component
+     */
+    protected ArtifactResolver artifactResolver;
+
+    /**
+     * @component
+     */
+    protected ArtifactFactory artifactFactory;
+
+    /**
+     * @parameter expression="${localRepository}"
+     * @required
+     */
+    protected ArtifactRepository localRepository;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         // look for hudson.war
         for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
@@ -108,11 +131,24 @@ public class RunMojo extends AbstractJetty6Mojo {
         generateHpl();
 
         // copy other dependency hudson plugins
-        for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
-            if(!a.getType().equals("hpi"))
-                continue;
-            getLog().info("Copying dependency hudson plugin "+a.getFile());
-            copyFile(a.getFile(),new File(pluginsDir,a.getArtifactId()+".hpi"));
+        try {
+            for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
+                if(!HpiUtil.isPlugin(a))
+                    continue;
+                getLog().info("Copying dependency hudson plugin "+a.getFile());
+
+                // find corresponding .hpi file
+                Artifact hpi = artifactFactory.createArtifact(a.getGroupId(),a.getArtifactId(),a.getVersion(),null,"hpi");
+                artifactResolver.resolve(hpi,getProject().getRemoteArtifactRepositories(), localRepository);
+
+                copyFile(hpi.getFile(),new File(pluginsDir,a.getArtifactId()+".hpi"));
+            }
+        } catch (IOException e) {
+            throw new MojoExecutionException("Unable to copy dependency plugin",e);
+        } catch (ArtifactNotFoundException e) {
+            throw new MojoExecutionException("Unable to copy dependency plugin",e);
+        } catch (ArtifactResolutionException e) {
+            throw new MojoExecutionException("Unable to copy dependency plugin",e);
         }
 
         super.execute();

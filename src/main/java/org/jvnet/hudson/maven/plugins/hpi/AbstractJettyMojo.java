@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: AbstractJettyMojo.java 1076 2006-11-11 02:13:41Z kohsuke $
+//$Id: AbstractJettyMojo.java 2439 2007-03-11 23:45:10Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,11 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.mortbay.jetty.plugin.util.JettyPluginWebApplication;
 import org.mortbay.jetty.plugin.util.JettyPluginServer;
-import org.mortbay.jetty.plugin.util.SystemProperty;
+import org.mortbay.jetty.plugin.util.JettyPluginWebApplication;
 import org.mortbay.jetty.plugin.util.PluginLog;
 import org.mortbay.jetty.plugin.util.Scanner;
+import org.mortbay.jetty.plugin.util.SystemProperty;
 
 import java.io.File;
 import java.util.ArrayList;
