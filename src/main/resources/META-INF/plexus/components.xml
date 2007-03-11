@@ -10,6 +10,7 @@
           <lifecycle>
             <id>default</id>
             <phases>
+              <generate-resources>org.kohsuke.stapler:maven-stapler-plugin:stapler</generate-resources>
               <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
               <compile>org.apache.maven.plugins:maven-compiler-plugin:compile</compile>
               <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
