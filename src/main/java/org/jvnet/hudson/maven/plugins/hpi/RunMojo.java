@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 2439 2007-03-11 23:45:10Z kohsuke $
+//$Id: RunMojo.java 2815 2007-03-31 07:44:43Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,9 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.mortbay.jetty.plugin.util.Scanner;
@@ -127,6 +127,17 @@ public class RunMojo extends AbstractJetty6Mojo {
         sp.setName("stapler.jelly.noCache");
         sp.setValue("true");
         sp.setIfNotSetAlready();
+
+        List res = getProject().getBuild().getResources();
+        if(!res.isEmpty()) {
+            // pick up the first one and use it
+            Resource r = (Resource) res.get(0);
+            sp = new SystemProperty();
+            sp.setName("stapler.resourcePath");
+            sp.setValue(r.getDirectory());
+            sp.setIfNotSetAlready();
+        }
+
 
         generateHpl();
 
