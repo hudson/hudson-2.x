@@ -11,7 +11,7 @@
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
-  <version>1.10</version>
+  <version>1.11-SNAPSHOT</version>
   <description>Maven2 plugin for developing Hudson plugins</description>
   
   <licenses>
@@ -148,8 +148,4 @@
       <version>0.9.5</version>
     </dependency>
   </dependencies>
-
-  <scm>
-    <tag>maven-hpi-plugin-1_10</tag>
-  </scm>
 </project>
