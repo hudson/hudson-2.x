@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 4051 2007-08-04 16:42:57Z kohsuke $
+//$Id: RunMojo.java 4052 2007-08-04 16:51:53Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,7 +60,8 @@ public class RunMojo extends AbstractJetty6Mojo {
      * <p>
      * Normally this should be left empty, in which case the plugin loads it from the repository.
      * But this parameter allows that to be overwritten.
-     *
+     * </p>
+     * 
      * @parameter
      */
     private File webApp;
