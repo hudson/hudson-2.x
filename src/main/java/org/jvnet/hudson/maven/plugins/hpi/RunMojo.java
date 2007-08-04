@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 2815 2007-03-31 07:44:43Z kohsuke $
+//$Id: RunMojo.java 4050 2007-08-04 16:41:43Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ import java.util.Set;
  *
  * <p>
  * This only needs the source files to be compiled, so run in the compile phase.
- * 
+ * </p>
  * @goal run
  * @requiresDependencyResolution test
  * @execute phase=compile
