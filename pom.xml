@@ -171,4 +171,10 @@
       </plugin>
     </plugins>
   </reporting>
+  
+  <distributionManagement>
+    <site>
+      <url>file:../../../www/maven-hpi-plugin/</url>
+    </site>
+  </distributionManagement>
 </project>
