@@ -162,6 +162,12 @@
       <artifactId>nekohtml</artifactId>
       <version>0.9.5</version>
     </dependency>
+    <!-- for using annotation processor -->
+    <dependency>
+      <groupId>org.kohsuke.stapler</groupId>
+      <artifactId>maven-stapler-plugin</artifactId>
+      <version>1.3</version>
+    </dependency>
   </dependencies>
 
   <reporting>
@@ -177,4 +183,5 @@
       <url>file:../../../www/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
+
 </project>

@@ -11,7 +11,7 @@
             <id>default</id>
             <phases>
               <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
-              <compile>org.kohsuke.stapler:maven-stapler-plugin:apt-compile</compile>
+              <compile>org.jvnet.hudson.tools:maven-hpi-plugin:apt-compile</compile>
               <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
               <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile</test-compile>
               <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>
@@ -34,6 +34,12 @@
         <language>java</language>
         <addedToClasspath>true</addedToClasspath>
       </configuration>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.compiler.Compiler</role>
+      <role-hint>hpi-apt</role-hint>
+      <implementation>org.jvnet.hudson.maven.plugins.hpi.AptCompiler</implementation>
+      <description />
     </component>
   </components>
 </component-set>
