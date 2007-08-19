@@ -16,9 +16,6 @@ package org.jvnet.hudson.maven.plugins.hpi;
  * limitations under the License.
  */
 
-import com.thoughtworks.qdox.JavaDocBuilder;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaSource;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
@@ -815,12 +812,15 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     }
 
     protected void setAttributes(Section mainSection) throws MojoExecutionException, ManifestException, IOException {
-        JavaClass javaClass = findPluginClass();
-        if(javaClass==null)
+        File pluginImpl = new File(project.getBuild().getOutputDirectory(), "META-INF/services/hudson.Plugin");
+        if(!pluginImpl.exists())
                 throw new MojoExecutionException("Unable to find a plugin class. Did you put @plugin in javadoc?");
 
-        mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",
-            javaClass.getPackage()+"."+javaClass.getName()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pluginImpl),"UTF-8"));
+        String pluginClassName = in.readLine();
+        in.close();
+
+        mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",pluginClassName));
         mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
 
         String v = project.getVersion();
@@ -833,23 +833,6 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         String dep = findDependencyProjects();
         if(dep.length()>0)
             mainSection.addAttributeAndCheck(new Attribute("Plugin-Dependencies",dep));
-    }
-
-    /**
-     * Find a class that has "@plugin" marker.
-     */
-    private JavaClass findPluginClass() {
-        JavaDocBuilder builder = new JavaDocBuilder();
-        for (Object o : project.getCompileSourceRoots())
-            builder.addSourceTree(new File((String) o));
-
-        // look for a class that extends Plugin
-        for( JavaSource js : builder.getSources() ) {
-            JavaClass jc = js.getClasses()[0];
-            if(jc.getTagByName("plugin")!=null)
-                return jc;
-        }
-        return null;
     }
 
     /**

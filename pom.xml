@@ -109,11 +109,6 @@
       <version>2.0.1</version>
     </dependency>
     <dependency>
-      <groupId>qdox</groupId>
-      <artifactId>qdox</artifactId>
-      <version>1.6.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>maven-jetty-plugin</artifactId>
       <type>maven-plugin</type>
