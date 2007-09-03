@@ -829,10 +829,12 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
         }
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
+        mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",findHudsonVersion()));
 
         String dep = findDependencyProjects();
         if(dep.length()>0)
             mainSection.addAttributeAndCheck(new Attribute("Plugin-Dependencies",dep));
+
     }
 
     /**
@@ -851,5 +853,16 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             }
         }
         return buf.toString();
+    }
+
+    private String findHudsonVersion() throws IOException {
+        StringBuilder buf = new StringBuilder();
+        for(Object o : project.getArtifacts()) {
+            Artifact a = (Artifact)o;
+            if(a.getGroupId().equals("org.jvnet.hudson.main") && a.getArtifactId().equals("hudson-core")) {
+                return a.getVersion();
+            }
+        }
+        return null;
     }
 }
