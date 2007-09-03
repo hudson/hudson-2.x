@@ -1,0 +1,24 @@
+  ------
+  Maven Hudson Plugin
+  ------
+  ------
+
+Maven Hudson Plugin
+
+  This maven2 plugin provides various goals for developing Hudson plugins.
+
+
+* Goals Overview
+
+  * {{{create-mojo.html}hpi:create}} Creates a skeleton of a new plugin.
+
+  * {{{hpi-mojo.html}hpi:hpi}} Builds the .hpi file
+
+  * {{{hpl-mojo.html}hpi:hpl}} Generates the .hpl file
+
+  * {{{run-mojo.html}hpi:run}} Runs Hudson with the current plugin project
+
+  * {{{upload-mojo.html}hpi:upload}} Posts the hpi file to java.net. Used during the release.
+
+
+  For more information about how to develop Hudson plugins, refer to {{{http://hudson.gotdns.com/wiki/display/HUDSON/Extend+Hudson}Wiki}}
