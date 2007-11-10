@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 4052 2007-08-04 16:51:53Z kohsuke $
+//$Id: RunMojo.java 5813 2007-11-10 02:34:13Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -168,7 +168,13 @@ public class RunMojo extends AbstractJetty6Mojo {
             throw new MojoExecutionException("Unable to copy dependency plugin",e);
         }
 
-        super.execute();
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(new MaskingClassLoader(ccl));
+        try {
+            super.execute();
+        } finally {
+            Thread.currentThread().setContextClassLoader(ccl);
+        }
     }
 
     private void copyFile(File src, File dst) {
