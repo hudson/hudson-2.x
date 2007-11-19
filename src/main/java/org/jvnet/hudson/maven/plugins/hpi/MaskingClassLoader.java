@@ -16,7 +16,7 @@ final class MaskingClassLoader extends ClassLoader {
         super(parent);
     }
 
-    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         if(name.startsWith("org.kohsuke") || name.startsWith("org.apache.maven"))
             throw new ClassNotFoundException(name);
         return super.loadClass(name, resolve);
@@ -35,18 +35,18 @@ final class MaskingClassLoader extends ClassLoader {
             || name.startsWith("META-INF/maven");
     }
 
-    public Enumeration<URL> getResources(String name) throws IOException {
+    public Enumeration getResources(String name) throws IOException {
         if(isMaskedResourcePrefix(name))
             return EMPTY_ENUMERATION;
         return super.getResources(name);
     }
 
-    private static final Enumeration<URL> EMPTY_ENUMERATION = new Enumeration<URL>() {
+    private static final Enumeration EMPTY_ENUMERATION = new Enumeration() {
         public boolean hasMoreElements() {
             return false;
         }
 
-        public URL nextElement() {
+        public Object nextElement() {
             throw new NoSuchElementException();
         }
     };
