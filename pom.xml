@@ -34,9 +34,20 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>java.net2</id>
+      <url>http://download.java.net/maven/2/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
   
-  <pluginRepositories>
+  <!--pluginRepositories>
     <pluginRepository>
       <id>java.net2</id>
       <url>http://download.java.net/maven/2/</url>
@@ -48,7 +59,7 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
-  </pluginRepositories>
+  </pluginRepositories-->
 
   <build>
     <resources>
