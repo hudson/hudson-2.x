@@ -1,20 +1,17 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
-import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.artifact.Artifact;
-import org.kohsuke.jnt.JavaNet;
+import org.kohsuke.jnt.FileStatus;
 import org.kohsuke.jnt.JNFileFolder;
 import org.kohsuke.jnt.JNProject;
-import org.kohsuke.jnt.FileStatus;
 import org.kohsuke.jnt.ProcessingException;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -25,23 +22,7 @@ import java.util.Set;
  * @requiresDependencyResolution compile
  * @author Kohsuke Kawaguchi
  */
-public class UploadMojo extends AbstractMojo {
-    /**
-     * @parameter expression="${project}"
-     */
-    private MavenProject project;
-
-    /**
-     * @parameter expression="${userName}"
-     */
-    private String userName;
-
-    /**
-     * @parameter expression="${password}"
-     */
-    private String password;
-
-
+public class UploadMojo extends AbstractJavaNetMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         Artifact artifact = project.getArtifact();
         if(artifact==null)
@@ -56,15 +37,7 @@ public class UploadMojo extends AbstractMojo {
         }
 
         try {
-            JavaNet jn;
-
-            if(userName!=null && password!=null)
-                jn = JavaNet.connect(userName,password);
-            else {
-                getLog().debug("Loading "+new File(new File(System.getProperty("user.home")),".java.net"));
-                jn = JavaNet.connect();
-            }
-            JNProject p = jn.getProject("hudson");
+            JNProject p = connect().getProject("hudson");
             JNFileFolder f = p.getFolder("/plugins/" + project.getArtifactId());
             if(f==null) {
                 getLog().info("Creating folder");
