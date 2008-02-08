@@ -173,9 +173,9 @@
       <version>4aug2000r7-dev</version>
     </dependency>
     <dependency>
-      <groupId>dom4j</groupId>
+      <groupId>org.jvnet.hudson.dom4j</groupId>
       <artifactId>dom4j</artifactId>
-      <version>1.4</version>
+      <version>1.6.1-hudson-1</version>
     </dependency>
     <dependency>
       <groupId>nekohtml</groupId>
