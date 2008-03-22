@@ -5,3 +5,4 @@ maven-hpi-plugin.iml
 .classpath
 .project
 .settings
+maven-hpi-plugin.ipr maven-hpi-plugin.iws
