@@ -19,6 +19,7 @@ package org.jvnet.hudson.maven.plugins.hpi;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -857,8 +858,8 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
     private String findHudsonVersion() throws IOException {
         StringBuilder buf = new StringBuilder();
-        for(Object o : project.getArtifacts()) {
-            Artifact a = (Artifact)o;
+        for(Object o : project.getDependencies()) {
+            Dependency a = (Dependency)o;
             if(a.getGroupId().equals("org.jvnet.hudson.main") && a.getArtifactId().equals("hudson-core")) {
                 return a.getVersion();
             }
