@@ -11,7 +11,7 @@
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
-  <version>1.19</version>
+  <version>1.20-SNAPSHOT</version>
   <description>Maven2 plugin for developing Hudson plugins</description>
   
   <licenses>
@@ -185,8 +185,4 @@
       <url>file:../../../www/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
-
-  <scm>
-    <tag>maven-hpi-plugin-1_19</tag>
-  </scm>
 </project>
