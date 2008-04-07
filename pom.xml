@@ -182,7 +182,8 @@
   
   <distributionManagement>
     <site>
-      <url>file:../../../www/maven-hpi-plugin/</url>
+      <id>hudson-www</id>
+      <url>java-net:/hudson/trunk/www/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
 </project>
