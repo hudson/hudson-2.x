@@ -852,6 +852,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
                 buf.append(a.getArtifactId());
                 buf.append(':');
                 buf.append(a.getVersion());
+                if (a.isOptional()) {
+                    buf.append(";resolution:=optional");
+                }
             }
         }
         return buf.toString();
