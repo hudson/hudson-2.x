@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: AbstractJettyMojo.java 2439 2007-03-11 23:45:10Z kohsuke $
+//$Id: AbstractJettyMojo.java 10807 2008-07-14 18:56:05Z btosabre $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");

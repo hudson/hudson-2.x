@@ -34,7 +34,7 @@ import java.util.Set;
  * Compiles application sources
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl </a>
- * @version $Id: CompilerMojo.java 4343 2007-08-19 18:00:10Z kohsuke $
+ * @version $Id: CompilerMojo.java 10807 2008-07-14 18:56:05Z btosabre $
  * @phase compile
  * @requiresDependencyResolution compile
  */

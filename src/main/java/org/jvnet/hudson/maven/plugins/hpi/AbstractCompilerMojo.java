@@ -51,7 +51,7 @@ import java.util.Set;
  *
  * @author others
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractCompilerMojo.java 4343 2007-08-19 18:00:10Z kohsuke $
+ * @version $Id: AbstractCompilerMojo.java 10807 2008-07-14 18:56:05Z btosabre $
  */
 public abstract class AbstractCompilerMojo
     extends AbstractMojo {

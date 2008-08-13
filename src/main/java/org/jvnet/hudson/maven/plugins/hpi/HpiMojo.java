@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 2439 2007-03-11 23:45:10Z kohsuke $
+ * @version $Id: HpiMojo.java 10807 2008-07-14 18:56:05Z btosabre $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
