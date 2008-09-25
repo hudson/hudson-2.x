@@ -8,6 +8,7 @@ import com.sun.mirror.apt.Filer.Location;
 import com.sun.mirror.declaration.AnnotationTypeDeclaration;
 import com.sun.mirror.declaration.ClassDeclaration;
 import com.sun.mirror.declaration.TypeDeclaration;
+import com.sun.mirror.type.ClassType;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +47,11 @@ public class AnnotationProcessorFactoryImpl implements AnnotationProcessorFactor
                             //if(cd.getModifiers().contains(Modifier.ABSTRACT))
                             //    continue;   // ignore abstract classes from indices
 
-                            if(cd.getSuperclass().getDeclaration().getQualifiedName().equals("hudson.Plugin")) {
+                            ClassType sc = cd.getSuperclass();
+                            if(sc==null)    continue;   // be robust against compile errors
+                            ClassDeclaration sd = sc.getDeclaration();
+                            if(sd==null)    continue;
+                            if(sd.getQualifiedName().equals("hudson.Plugin")) {
                                 write(cd);
                             }
                         }
