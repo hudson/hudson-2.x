@@ -1,16 +1,19 @@
 package ${groupId};
 
-import org.apache.maven.model.Build;
-
 import hudson.Launcher;
+import hudson.util.FormFieldValidator;
 import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.tasks.Builder;
+import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.QueryParameter;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 /**
  * Sample {@link Builder}.
@@ -90,16 +93,41 @@ public class HelloWorldBuilder extends Builder {
         }
 
         /**
+         * Performs on-the-fly validation of the form field 'name'.
+         *
+         * @param value
+         *      This receives the current value of the field.
+         */
+        public void doCheckName(StaplerRequest req, StaplerResponse rsp, @QueryParameter final String value) throws IOException, ServletException {
+            new FormFieldValidator(req,rsp,null) {
+                /**
+                 * The real check goes here. In the end, depending on which
+                 * method you call, the browser shows text differently.
+                 */
+                protected void check() throws IOException, ServletException {
+                    if(value.length()==0)
+                        error("Please set a name");
+                    else
+                    if(value.length()<4)
+                        warning("Isn't the name too short?");
+                    else
+                        ok();
+
+                }
+            }.process();
+        }
+
+        /**
          * This human readable name is used in the configuration screen.
          */
         public String getDisplayName() {
             return "Say hello world";
         }
 
-        public boolean configure(HttpServletRequest req) throws FormException {
+        public boolean configure(StaplerRequest req, JSONObject o) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
-            useFrench = req.getParameter("hello_world.useFrench")!=null;
+            useFrench = o.getBoolean("useFrench");
             save();
             return super.configure(req);
         }
@@ -112,3 +140,4 @@ public class HelloWorldBuilder extends Builder {
         }
     }
 }
+
