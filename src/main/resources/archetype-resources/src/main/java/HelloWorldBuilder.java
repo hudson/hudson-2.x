@@ -1,10 +1,13 @@
-package ${groupId};
+package $
+
+import org.apache.maven.model.Build;{groupId};
 
 import hudson.Launcher;
 import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import hudson.tasks.Builder;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +33,7 @@ public class HelloWorldBuilder extends Builder {
 
     private final String name;
 
+    @DataBoundConstructor
     HelloWorldBuilder(String name) {
         this.name = name;
     }
@@ -105,14 +109,6 @@ public class HelloWorldBuilder extends Builder {
          */
         public boolean useFrench() {
             return useFrench;
-        }
-
-        /**
-         * Creates a new instance of {@link HelloWorldBuilder} from a submitted form.
-         */
-        public HelloWorldBuilder newInstance(StaplerRequest req) throws FormException {
-            // see config.jelly and you'll find "hello_world.name" form entry.
-            return new HelloWorldBuilder(req.getParameter("hello_world.name"));
         }
     }
 }
