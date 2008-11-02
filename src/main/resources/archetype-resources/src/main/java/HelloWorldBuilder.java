@@ -1,6 +1,6 @@
-package $
+package ${groupId};
 
-import org.apache.maven.model.Build;{groupId};
+import org.apache.maven.model.Build;
 
 import hudson.Launcher;
 import hudson.model.Build;
