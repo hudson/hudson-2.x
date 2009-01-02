@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 10807 2008-07-14 18:56:05Z btosabre $
+//$Id: RunMojo.java 14109 2009-01-02 21:21:24Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,6 +106,10 @@ public class RunMojo extends AbstractJetty6Mojo {
             else
                 hudsonHome = new File("./work");
         }
+
+        // auto-enable stapler trace, unless otherwise configured already.
+        if(System.getProperty("stapler.trace")==null)
+            System.setProperty("stapler.trace","true");
 
         // look for hudson.war
         for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
