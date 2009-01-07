@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
   <groupId>${groupId}</groupId>
@@ -7,20 +7,17 @@
   <version>${version}</version>
   
   <dependencies>
-    <!--
-      Replace 1.153 with any version of Hudson that you'd like to develop against.
-    -->
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-core</artifactId>
-      <version>1.258</version>
+      <version>${hudson.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-war</artifactId>
       <type>war</type>
-      <version>1.258</version>
+      <version>${hudson.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -139,4 +136,9 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
+  <properties>
+    <!-- which version of Hudson is this plugin built against? -->
+    <hudson.version>1.270</hudson.version>
+  </properties>
 </project>
