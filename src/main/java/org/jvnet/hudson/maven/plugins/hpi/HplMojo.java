@@ -37,20 +37,12 @@ public class HplMojo extends AbstractHpiMojo {
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if(hudsonHome==null) {
-            throw new MojoExecutionException(
-                "Property hudsonHome needs to be set to $HUDSON_HOME. Please use 'mvn -DhudsonHome=...' or" +
-                "put <settings><profiles><profile><properties><property><hudsonHome>...</...>"
-            );
-        }
-
         if(!project.getPackaging().equals("hpi")) {
             getLog().info("Skipping "+project.getName()+" because it's not <packaging>hpi</packaging>");
             return;
         }
 
-
-        File hplFile = new File(hudsonHome, "plugins/" + project.getBuild().getFinalName() + ".hpl");
+        File hplFile = computeHplFile();
         getLog().info("Generating "+hplFile);
 
         PrintWriter printWriter = null;
@@ -90,5 +82,20 @@ public class HplMojo extends AbstractHpiMojo {
         } finally {
             IOUtil.close(printWriter);
         }
+    }
+
+    /**
+     * Determine where to produce the .hpl file.
+     */
+    protected File computeHplFile() throws MojoExecutionException {
+        if(hudsonHome==null) {
+            throw new MojoExecutionException(
+                "Property hudsonHome needs to be set to $HUDSON_HOME. Please use 'mvn -DhudsonHome=...' or" +
+                "put <settings><profiles><profile><properties><property><hudsonHome>...</...>"
+            );
+        }
+
+        File hplFile = new File(hudsonHome, "plugins/" + project.getBuild().getFinalName() + ".hpl");
+        return hplFile;
     }
 }
