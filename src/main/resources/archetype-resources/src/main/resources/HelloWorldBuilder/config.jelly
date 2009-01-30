@@ -4,11 +4,11 @@
 
     See global.jelly for a general discussion about jelly script.
   -->
-  <f:entry title="Name" help="${rootURL}/plugin/hello-world/help-projectConfig.html">
+  <f:entry title="Name" help="${rootURL}/plugin/@artifactId@/help-projectConfig.html">
     <!--
-      Creates an text field that shows the value of the "name" property.
+      Creates a text field that shows the value of the "name" property.
       When submitted, it will be passed to the corresponding constructor parameter.
     -->
     <f:textbox field="name" />
-	</f:entry>
+  </f:entry>
 </j:jelly>

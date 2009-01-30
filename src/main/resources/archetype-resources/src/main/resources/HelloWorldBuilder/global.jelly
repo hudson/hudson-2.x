@@ -13,13 +13,13 @@
   -->
   <f:section title="Hello World Builder">
     <!--
-      optional @help points to the help document HTML. ${rootURL}/plugin/hello-world
+      optional @help points to the help document HTML. ${rootURL}/plugin/@artifactId@
       is mapped to our resources/ directory, so this is a convenient way to serve
       static resources.
     -->
     <f:entry title="French"
       description="Check if we should say hello in French"
-      help="${rootURL}/plugin/hello-world/help-globalConfig.html">
+      help="${rootURL}/plugin/@artifactId@/help-globalConfig.html">
       <!--
         we'll have on input field. In HTML, single "namespace" is shared between
         all form components in one <form>, so we need to choose a name that doesn't

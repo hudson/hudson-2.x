@@ -28,7 +28,7 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -184,12 +184,11 @@ public class CreateMojo extends AbstractMojo {
 
             for( String s : new String[]{"config.jelly","global.jelly"} ) {
                 InputStream in = getClass().getResourceAsStream("/archetype-resources/src/main/resources/HelloWorldBuilder/"+s);
-                FileOutputStream out = new FileOutputStream(new File(viewDir, s));
-                IOUtil.copy(in, out);
+                FileWriter out = new FileWriter(new File(viewDir, s));
+                out.write(IOUtil.toString(in).replace("@artifactId@", props.getProperty("artifactId")));
                 in.close();
                 out.close();
             }
-
 
 
         } catch (Exception e) {
