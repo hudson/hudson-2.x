@@ -185,7 +185,7 @@ public class CreateMojo extends AbstractMojo {
             for( String s : new String[]{"config.jelly","global.jelly"} ) {
                 InputStream in = getClass().getResourceAsStream("/archetype-resources/src/main/resources/HelloWorldBuilder/"+s);
                 FileWriter out = new FileWriter(new File(viewDir, s));
-                out.write(IOUtil.toString(in).replace("@artifactId@", props.getProperty("artifactId")));
+                out.write(IOUtil.toString(in).replace("@artifactId@", artifactId));
                 in.close();
                 out.close();
             }

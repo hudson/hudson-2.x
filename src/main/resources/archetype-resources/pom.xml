@@ -8,21 +8,22 @@
   
   <properties>
     <!-- which version of Hudson is this plugin built against? -->
-    <hudson.version>1.270</hudson.version>
+    <hudson.version>1.279</hudson.version>
   </properties>
 
+#set( $D = '$' )
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-core</artifactId>
-      <version>${hudson.version}</version>
+      <version>${D}{hudson.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-war</artifactId>
       <type>war</type>
-      <version>${hudson.version}</version>
+      <version>${D}{hudson.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -32,7 +33,7 @@
       Since new versions need to overwrite old versions, it's better
       not to have version number in the .hpi file name.
     -->
-    <finalName>${project.artifactId}</finalName>
+    <finalName>${D}{project.artifactId}</finalName>
     <defaultGoal>package</defaultGoal>
     <plugins>
       <plugin>
