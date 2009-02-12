@@ -825,6 +825,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",pluginClassName));
         mainSection.addAttributeAndCheck(new Attribute("Short-Name",project.getArtifactId()));
+        mainSection.addAttributeAndCheck(new Attribute("Url",project.getUrl()));
         mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
 
         String v = project.getVersion();
