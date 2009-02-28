@@ -814,16 +814,13 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
     protected void setAttributes(Section mainSection) throws MojoExecutionException, ManifestException, IOException {
         File pluginImpl = new File(project.getBuild().getOutputDirectory(), "META-INF/services/hudson.Plugin");
-        if(!pluginImpl.exists())
-                throw new MojoExecutionException("Unable to find a plugin class. " +
-                        "You either didn't have any class that extends from hudson.Plugin, " +
-                        "or you need to run 'mvn clean compile' once for annotation processing.");
+        if(pluginImpl.exists()) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pluginImpl),"UTF-8"));
+            String pluginClassName = in.readLine();
+            in.close();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pluginImpl),"UTF-8"));
-        String pluginClassName = in.readLine();
-        in.close();
-
-        mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",pluginClassName));
+            mainSection.addAttributeAndCheck(new Attribute("Plugin-Class",pluginClassName));
+        }
         mainSection.addAttributeAndCheck(new Attribute("Short-Name",project.getArtifactId()));
         mainSection.addAttributeAndCheck(new Attribute("Long-Name",pluginName));
         String url = project.getUrl();
