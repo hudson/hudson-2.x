@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 16189 2009-03-12 07:01:20Z kohsuke $
+//$Id: RunMojo.java 16191 2009-03-12 07:04:18Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@ import java.util.Set;
  * </p>
  * 
  * @goal run
- * @requiresDependencyResolution runtime
+ * @requiresDependencyResolution test
  * @execute phase=compile
  * @description Runs Hudson with the current plugin
  * @author Kohsuke Kawaguchi
