@@ -27,7 +27,7 @@ class HpiUtil {
                 jar.close();
             }
         } catch (IOException e) {
-            throw new IOException2("Failed to open artifact "+artifact.toString(),e);
+            throw new IOException2("Failed to open artifact "+artifact.toString()+" at "+artifact.getFile(),e);
         }
     }
 }
