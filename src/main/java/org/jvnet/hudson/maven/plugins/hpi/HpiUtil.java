@@ -8,12 +8,16 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.Arrays;
 
+import sun.tools.jar.resources.jar;
+
 /**
  * @author Kohsuke Kawaguchi
  */
 class HpiUtil {
     static boolean isPlugin(Artifact artifact) throws IOException {
         try {
+            // some artifacts aren't even Java, so ignore those.
+            if(!artifact.getType().equals("jar"))    return false;
             JarFile jar = new JarFile(artifact.getFile());
             try {
                 Manifest manifest = jar.getManifest();
