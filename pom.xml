@@ -136,14 +136,12 @@
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>maven-jetty-plugin</artifactId>
-      <type>maven-plugin</type>
       <version>6.1.1</version>
     </dependency>
     <!-- for the create goal -->
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-archetype-plugin</artifactId>
-      <type>maven-plugin</type>
       <version>1.0-alpha-4</version>
     </dependency>
     <dependency>
