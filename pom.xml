@@ -159,7 +159,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>maven-stapler-plugin</artifactId>
-      <version>1.7</version>
+      <version>1.12</version>
       <!-- make sure to exclude servlet so that the one in Jetty (which has different groupId) will win -->
       <exclusions>
         <exclusion>
