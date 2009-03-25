@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 16546 2009-03-25 19:08:09Z kohsuke $
+//$Id: RunMojo.java 16552 2009-03-25 19:33:52Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Copy;
+import org.apache.commons.io.FileUtils;
 import org.mortbay.jetty.plugin.util.Scanner;
 import org.mortbay.jetty.plugin.util.Scanner.Listener;
 import org.mortbay.jetty.plugin.util.SystemProperty;
@@ -220,6 +221,11 @@ public class RunMojo extends AbstractJetty6Mojo {
     }
 
     public void configureWebApplication() throws Exception {
+        // Jetty tries to do this in WebAppContext.resolveWebApp but it failed to delete the directory.
+        File extractedWebAppDir= new File(getTmpDirectory(), "webapp");
+        if(extractedWebAppDir.lastModified() < webApp.lastModified())
+            FileUtils.deleteDirectory(extractedWebAppDir);
+        
         super.configureWebApplication();
         getWebApplication().setWebAppSrcDir(webApp);
     }
