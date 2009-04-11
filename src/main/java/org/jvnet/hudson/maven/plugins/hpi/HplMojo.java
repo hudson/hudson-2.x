@@ -52,7 +52,7 @@ public class HplMojo extends AbstractHpiMojo {
             setAttributes(mainSection);
 
             // compute Libraries entry
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
 
             // we want resources to be picked up before target/classes,
             // so that the original (not in the copy) will be picked up first.
