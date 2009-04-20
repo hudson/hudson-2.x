@@ -80,7 +80,6 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      *
      * @parameter expression="${project.build.outputDirectory}"
      * @required
-     * @readonly
      */
     private File classesDirectory;
 
