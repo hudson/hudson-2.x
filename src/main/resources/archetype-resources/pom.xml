@@ -52,66 +52,27 @@
     </plugins>
   </build>
 
+  <!--
+    Get everything from http://maven.glassfish.org/content/groups/public/ ,
+    which aggregates everything we need, including central.
+  -->
   <repositories>
-    <!-- We put the central repository first, as most artifacts will be
-         found there
-    -->
     <repository>
       <id>central</id>
       <url>http://repo1.maven.org/maven2</url>
       <releases>
-        <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
+        <enabled>false</enabled>
       </releases>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
 
-    <!-- We put the java.net2 repository second, as it's a Maven2 format
-         and therefore _should_ be faster for Maven2. Hopefully, people
-         will stop pushing their artifacts to java.net and push to java.net2
-         or somebody will put a synchronizer in place to require
-         only the java.net2 repository.
-    -->
     <repository>
-      <id>java.net2</id>
-      <url>http://download.java.net/maven/2</url>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
       <releases>
         <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-
-    <!-- Now for the java.net repository (legacy layout) -->
-    <repository>
-      <id>java.net</id>
-      <url>http://download.java.net/maven/1</url>
-      <layout>legacy</layout>
-      <releases>
-        <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-
-    <!-- Finally, the slowest repository of them all -->
-    <repository>
-      <id>hudson-libs</id>
-      <url>https://hudson.dev.java.net/source/browse/*checkout*/hudson/hudson/main/lib</url>
-      <layout>legacy</layout>
-      <releases>
-        <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
       </releases>
       <snapshots>
         <enabled>false</enabled>
@@ -120,16 +81,11 @@
   </repositories>
 
   <pluginRepositories>
-    <!-- We put the central repository first, as most artifacts will be
-         found there
-    -->
     <pluginRepository>
       <id>central</id>
       <url>http://repo1.maven.org/maven2</url>
       <releases>
-        <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
+        <enabled>false</enabled>
       </releases>
       <snapshots>
         <enabled>false</enabled>
@@ -137,12 +93,10 @@
     </pluginRepository>
 
     <pluginRepository>
-      <id>java.net2</id>
-      <url>http://download.java.net/maven/2</url>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
       <releases>
         <enabled>true</enabled>
-        <!-- only look for jars here when they are not present locally -->
-        <updatePolicy>never</updatePolicy>
       </releases>
       <snapshots>
         <enabled>false</enabled>
