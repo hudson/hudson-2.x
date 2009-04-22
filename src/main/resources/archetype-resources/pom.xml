@@ -8,7 +8,7 @@
   
   <properties>
     <!-- which version of Hudson is this plugin built against? -->
-    <hudson.version>1.279</hudson.version>
+    <hudson.version>1.300</hudson.version>
   </properties>
 
 #set( $D = '$' )
