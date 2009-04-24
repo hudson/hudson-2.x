@@ -8,8 +8,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.Arrays;
 
-import sun.tools.jar.resources.jar;
-
 /**
  * @author Kohsuke Kawaguchi
  */
