@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 16552 2009-03-25 19:33:52Z kohsuke $
+//$Id: RunMojo.java 17636 2009-04-30 22:59:30Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,6 +111,9 @@ public class RunMojo extends AbstractJetty6Mojo {
         // auto-enable stapler trace, unless otherwise configured already.
         if(System.getProperty("stapler.trace")==null)
             System.setProperty("stapler.trace","true");
+        // run YUI in the debug mode, unless otherwise configured
+        if(System.getProperty("debug.YUI")==null)
+            System.setProperty("debug.YUI","true");
 
         // look for hudson.war
         for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
