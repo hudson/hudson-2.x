@@ -18,7 +18,22 @@ public class AptMojo extends CompilerMojo {
         //do so without touching the copied files.
         setField("compilerId", "hpi-apt");
 
+        if(!isMustangOrAbove())
+            throw new MojoExecutionException("JDK6 or later is necessary to build a Hudson plugin");
+
         super.execute();
+    }
+
+    /**
+     * Are we running on JDK6 or above?
+     */
+    private static boolean isMustangOrAbove() {
+        try {
+            System.console();
+            return true;
+        } catch(LinkageError e) {
+            return false;
+        }
     }
 
     private void setField(String name, String value) {
