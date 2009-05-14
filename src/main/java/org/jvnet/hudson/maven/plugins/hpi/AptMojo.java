@@ -29,9 +29,9 @@ public class AptMojo extends CompilerMojo {
      */
     private static boolean isMustangOrAbove() {
         try {
-            System.console();
+            Class.forName("javax.annotation.processing.Processor");
             return true;
-        } catch(LinkageError e) {
+        } catch(ClassNotFoundException e) {
             return false;
         }
     }
