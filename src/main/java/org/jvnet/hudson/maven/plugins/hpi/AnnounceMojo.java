@@ -21,6 +21,11 @@ public class AnnounceMojo extends AbstractJavaNetMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
+            if(!project.getPackaging().equals("hpi")) {
+                getLog().warn("Skipping hpi:announce because this is not an hpi project");
+                return;
+            }
+
             if(contents==null && project.getUrl()!=null)
                 contents = String.format("<a href='%s'>see webpage for more details</a>",project.getUrl());
 

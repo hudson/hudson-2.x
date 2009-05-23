@@ -24,17 +24,17 @@ import java.util.Set;
  */
 public class UploadMojo extends AbstractJavaNetMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if(!project.getPackaging().equals("hpi")) {
+            getLog().warn("Skipping hpi:upload because this is not an hpi project");
+            return;
+        }
+
         Artifact artifact = project.getArtifact();
         if(artifact==null)
             throw new MojoExecutionException("Project has no artifact, whereas an .hpi artifact was expected");
         File archive = artifact.getFile();
         if(archive==null || !archive.exists())
             throw new MojoExecutionException("Project has no artifact, whereas an .hpi artifact was expected");
-
-        if(!project.getPackaging().equals("hpi")) {
-            getLog().warn("Skipping hpi:upload because this is not an hpi project");
-            return;
-        }
 
         try {
             JNProject p = connect().getProject("hudson");
