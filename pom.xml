@@ -11,7 +11,7 @@
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
-  <version>1.40</version>
+  <version>1.41-SNAPSHOT</version>
   <description>Maven2 plugin for developing Hudson plugins</description>
   
   <licenses>
@@ -184,10 +184,4 @@
       <url>java-net:/hudson/trunk/www/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
-
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/maven-hpi-plugin-1.40</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/maven-hpi-plugin-1.40</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/tags/maven-hpi-plugin-1.40</url>
-  </scm>
 </project>
