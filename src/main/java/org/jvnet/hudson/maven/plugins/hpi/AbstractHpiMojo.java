@@ -182,6 +182,18 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      */
     private String dependentWarExcludes;
 
+    /**
+     * [ws|tab|CR|LF]+ separated list of package prefixes that your plugin doesn't want to see
+     * from the core.
+     *
+     * <p>
+     * Tokens in this list is prefix-matched against the fully-qualified class name, so add
+     * "." to the end of each package name, like "com.foo. com.bar."
+     *
+     * @parameter
+     */
+    private String maskClasses;
+
     private static final String[] EMPTY_STRING_ARRAY = {};
 
     public File getClassesDirectory() {
@@ -833,6 +845,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         }
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
         mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",findHudsonVersion()));
+
+        if(maskClasses!=null)
+            mainSection.addAttributeAndCheck(new Attribute("Mask-Classes",maskClasses));
 
         String dep = findDependencyProjects();
         if(dep.length()>0)
