@@ -65,9 +65,6 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>archetype-resources/**/*</exclude>
-        </excludes>
         <filtering>true</filtering>
       </resource>
     </resources>
@@ -87,12 +84,7 @@
             <phase>process-resources</phase>
             <configuration>
               <tasks>
-                <copy todir="target/classes">
-                  <fileset dir="src/main/resources" includes="archetype-resources/**/*" />
-                  <filterset>
-                    <filter token="PLUGIN_VERSION" value="${project.version}" />
-                  </filterset>
-                </copy>
+                <exec executable="${basedir}/copyArchetype.sh" />
               </tasks>
             </configuration>
             <goals>
