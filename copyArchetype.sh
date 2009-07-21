@@ -3,12 +3,13 @@
 dst=target/classes/archetype-resources
 rm -rf $dst
 cp -R hpi-archetype $dst
+rm -rf $(find $dst -name .svn) $dst/target $dst/hpi-archetype.*
 
 # inject the package statement
 for f in $(find $dst -name '*.java')
 do
   mv $f $f.tmp
-  echo 'package ${groupId}' > $f
+  echo 'package ${groupId};' > $f
   cat $f.tmp >> $f
   rm $f.tmp
 done
@@ -16,4 +17,4 @@ done
 # modify POM
 perl -pi -e 's|<!-- \$ --><([^>]+)>.+<!-- /\$ -->|<$1>\$\{$1\}</$1>|g' $dst/pom.xml
 
-perl -pi -e 's|hpi-archetype|@artifactId@|g' $dst/**/*
+perl -pi -e 's|hpi-archetype|\@artifactId\@|g' $(find $dst -type f)
