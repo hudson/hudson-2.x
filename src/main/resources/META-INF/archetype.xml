@@ -1,7 +1,6 @@
 <archetype>
   <id>hudson-plugin</id>
   <sources>
-    <source>src/main/java/PluginImpl.java</source>
     <source>src/main/java/HelloWorldBuilder.java</source>
     <!-- these files are copied inside CreateMojo -->
     <!--source>src/main/resources/HelloWorldBuilder/config.jelly</source>
@@ -11,6 +10,5 @@
     <resource>pom.xml</resource>
     <resource>src/main/resources/index.jelly</resource>
     <resource>src/main/webapp/help-globalConfig.html</resource>
-    <resource>src/main/webapp/help-projectConfig.html</resource>
   </resources>
 </archetype>

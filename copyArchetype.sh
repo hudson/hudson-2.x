@@ -15,3 +15,5 @@ done
 
 # modify POM
 perl -pi -e 's|<!-- \$ --><([^>]+)>.+<!-- /\$ -->|<$1>\$\{$1\}</$1>|g' $dst/pom.xml
+
+perl -pi -e 's|hpi-archetype|@artifactId@|g' $dst/**/*

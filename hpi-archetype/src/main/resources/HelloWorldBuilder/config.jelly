@@ -4,11 +4,12 @@
 
     See global.jelly for a general discussion about jelly script.
   -->
-  <f:entry title="Name" help="${rootURL}/plugin/hpi-archetype/help-projectConfig.html">
-    <!--
-      Creates a text field that shows the value of the "name" property.
-      When submitted, it will be passed to the corresponding constructor parameter.
-    -->
+
+  <!--
+    Creates a text field that shows the value of the "name" property.
+    When submitted, it will be passed to the corresponding constructor parameter.
+  -->
+  <f:entry title="Name" field="name">
     <f:textbox field="name" />
   </f:entry>
 </j:jelly>

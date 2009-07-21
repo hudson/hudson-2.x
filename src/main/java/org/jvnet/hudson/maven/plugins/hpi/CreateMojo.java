@@ -182,7 +182,7 @@ public class CreateMojo extends AbstractMojo {
             File viewDir = new File( outDir, "src/main/resources/"+groupId.replace('.','/')+"/HelloWorldBuilder" );
             viewDir.mkdirs();
 
-            for( String s : new String[]{"config.jelly","global.jelly"} ) {
+            for( String s : new String[]{"config.jelly","global.jelly","help-name.html"} ) {
                 InputStream in = getClass().getResourceAsStream("/archetype-resources/src/main/resources/HelloWorldBuilder/"+s);
                 FileWriter out = new FileWriter(new File(viewDir, s));
                 out.write(IOUtil.toString(in).replace("@artifactId@", artifactId));

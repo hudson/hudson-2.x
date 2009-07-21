@@ -1,15 +1,14 @@
-package org.jvnet.hudson.tools;
-
 import hudson.Launcher;
-import hudson.util.FormFieldValidator;
+import hudson.Extension;
+import hudson.util.FormValidation;
 import hudson.model.Build;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
+import hudson.model.AbstractProject;
 import hudson.tasks.Builder;
+import hudson.tasks.BuildStepDescriptor;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
@@ -53,22 +52,19 @@ public class HelloWorldBuilder extends Builder {
         // since this is a dummy, we just say 'hello world' and call that a build
 
         // this also shows how you can consult the global configuration of the builder
-        if(DESCRIPTOR.useFrench())
+        if(getDescriptor().useFrench())
             listener.getLogger().println("Bonjour, "+name+"!");
         else
             listener.getLogger().println("Hello, "+name+"!");
         return true;
     }
 
-    public Descriptor<Builder> getDescriptor() {
-        // see Descriptor javadoc for more about what a descriptor is.
-        return DESCRIPTOR;
+    // overrided for better type safety.
+    // if your plugin doesn't really define any property on Descriptor,
+    // you don't have to do this.
+    public DescriptorImpl getDescriptor() {
+        return (DescriptorImpl)super.getDescriptor();
     }
-
-    /**
-     * Descriptor should be singleton.
-     */
-    public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
     /**
      * Descriptor for {@link HelloWorldBuilder}. Used as a singleton.
@@ -78,7 +74,8 @@ public class HelloWorldBuilder extends Builder {
      * See <tt>views/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt>
      * for the actual HTML fragment for the configuration screen.
      */
-    public static final class DescriptorImpl extends Descriptor<Builder> {
+    @Extension // this marker indicates Hudson that this is an implementation of an extension point.
+    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
         /**
          * To persist global configuration information,
          * simply store it in a field and call save().
@@ -88,33 +85,25 @@ public class HelloWorldBuilder extends Builder {
          */
         private boolean useFrench;
 
-        DescriptorImpl() {
-            super(HelloWorldBuilder.class);
-        }
-
         /**
          * Performs on-the-fly validation of the form field 'name'.
          *
          * @param value
-         *      This receives the current value of the field.
+         *      This parameter receives the value that the user has typed.
+         * @return
+         *      Indicates the outcome of the validation. This is sent to the browser.
          */
-        public void doCheckName(StaplerRequest req, StaplerResponse rsp, @QueryParameter final String value) throws IOException, ServletException {
-            new FormFieldValidator(req,rsp,null) {
-                /**
-                 * The real check goes here. In the end, depending on which
-                 * method you call, the browser shows text differently.
-                 */
-                protected void check() throws IOException, ServletException {
-                    if(value.length()==0)
-                        error("Please set a name");
-                    else
-                    if(value.length()<4)
-                        warning("Isn't the name too short?");
-                    else
-                        ok();
+        public FormValidation doCheckName(@QueryParameter String value) throws IOException, ServletException {
+            if(value.length()==0)
+                return FormValidation.error("Please set a name");
+            if(value.length()<4)
+                return FormValidation.warning("Isn't the name too short?");
+            return FormValidation.ok();
+        }
 
-                }
-            }.process();
+        public boolean isApplicable(Class<? extends AbstractProject> aClass) {
+            // indicates that this builder can be used with all kinds of project types 
+            return true;
         }
 
         /**
@@ -129,7 +118,7 @@ public class HelloWorldBuilder extends Builder {
             // set that to properties and call save().
             useFrench = o.getBoolean("useFrench");
             save();
-            return super.configure(req);
+            return super.configure(req,o);
         }
 
         /**
