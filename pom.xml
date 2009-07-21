@@ -153,7 +153,7 @@
     <dependency>
       <groupId>javanettasks</groupId>
       <artifactId>javanettasks</artifactId>
-      <version>1.0.20</version>
+      <version>1.0.23</version>
     </dependency>
     <!-- for using annotation processor -->
     <dependency>
