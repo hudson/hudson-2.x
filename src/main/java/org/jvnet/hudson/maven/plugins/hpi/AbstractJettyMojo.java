@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: AbstractJettyMojo.java 17245 2009-04-17 20:37:20Z kohsuke $
+//$Id: AbstractJettyMojo.java 21118 2009-08-27 18:34:18Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -280,7 +280,7 @@ public abstract class AbstractJettyMojo extends AbstractMojo {
             if (configuredConnectors == null|| configuredConnectors.length == 0)
             {
                 //if a SystemProperty -Djetty.port=<portnum> has been supplied, use that as the default port
-                configuredConnectors = new Object[] { plugin.createDefaultConnector(System.getProperty(PORT_SYSPROPERTY, null)) };
+                configuredConnectors = new Object[] { plugin.createDefaultConnector(getDefaultHttpPort()) };
             }
 
             plugin.setConnectors(configuredConnectors);
@@ -330,6 +330,9 @@ public abstract class AbstractJettyMojo extends AbstractMojo {
 
     }
 
+    protected String getDefaultHttpPort() {
+        return System.getProperty(PORT_SYSPROPERTY, null);
+    }
 
 
     /**

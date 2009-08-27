@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 17636 2009-04-30 22:59:30Z kohsuke $
+//$Id: RunMojo.java 21118 2009-08-27 18:34:18Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,6 +97,15 @@ public class RunMojo extends AbstractJetty6Mojo {
      * @required
      */
     protected ArtifactRepository localRepository;
+
+    /**
+     * Specifies the HTTP port number.
+     *
+     * If connectors are configured in the Mojo, that'll take precedence.
+     *
+     * @parameter expression="${port}"
+     */
+    protected String defaultPort;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         // compute hudsonHome
@@ -281,5 +290,12 @@ public class RunMojo extends AbstractJetty6Mojo {
     }
 
     public void finishConfigurationBeforeStart() {
+    }
+
+    @Override
+    protected String getDefaultHttpPort() {
+        if (defaultPort!=null)
+            return defaultPort;
+        return super.getDefaultHttpPort();
     }
 }
