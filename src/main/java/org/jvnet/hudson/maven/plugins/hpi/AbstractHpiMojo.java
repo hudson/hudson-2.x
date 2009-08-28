@@ -20,6 +20,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -54,8 +55,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -108,6 +111,13 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @parameter
      */
     private String compatibleSinceVersion;
+
+    /**
+     * Optional - sandbox status of this plugin. 
+     *
+     * @parameter
+     */
+    private String sandboxStatus;
 
     /**
      * Single directory for extra files to include in the WAR.
@@ -848,7 +858,10 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
 	if (compatibleSinceVersion!=null)
 	    mainSection.addAttributeAndCheck(new Attribute("Compatible-Since-Version", compatibleSinceVersion));
-						     
+
+	if (sandboxStatus!=null)
+	    mainSection.addAttributeAndCheck(new Attribute("Sandbox-Status", sandboxStatus));
+	    
         String v = project.getVersion();
         if(v.endsWith("-SNAPSHOT")) {
             String dt = new SimpleDateFormat("MM/dd/yyyy hh:mm").format(new Date());
@@ -864,7 +877,32 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         if(dep.length()>0)
             mainSection.addAttributeAndCheck(new Attribute("Plugin-Dependencies",dep));
 
+	if (project.getDevelopers() != null) {
+	    mainSection.addAttributeAndCheck(new Attribute("Plugin-Developers",getDevelopersForManifest()));
+	}
     }
+
+    /**
+     * Finds and lists developers specified in POM.
+     */
+    private String getDevelopersForManifest() throws IOException {
+	StringBuilder buf = new StringBuilder();
+	
+	for (Object o : project.getDevelopers()) {
+	    Developer d = (Developer) o;
+	    if (buf.length() > 0) {
+		buf.append(',');
+	    }
+	    buf.append(d.getName() != null ? d.getName() : "");
+	    buf.append(':');
+	    buf.append(d.getId() != null ? d.getId() : "");
+	    buf.append(':');
+	    buf.append(d.getEmail() != null ? d.getEmail() : "");
+	}
+
+	return buf.toString();
+    }
+
 
     /**
      * Finds and lists dependency plugins.
