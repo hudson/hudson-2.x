@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 21118 2009-08-27 18:34:18Z kohsuke $
+//$Id: RunMojo.java 21166 2009-08-28 18:50:24Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -124,11 +124,15 @@ public class RunMojo extends AbstractJetty6Mojo {
         if(System.getProperty("debug.YUI")==null)
             System.setProperty("debug.YUI","true");
 
+        List<Artifact> hudsonArtifacts = new ArrayList<Artifact>();
+
         // look for hudson.war
         for( Artifact a : (Set<Artifact>)getProject().getArtifacts() ) {
             if(a.getArtifactId().equals("hudson-war") && a.getType().equals("war")) {
                 webApp = a.getFile();
             }
+            if(a.getGroupId().equals("org.jvnet.hudson.main"))
+                hudsonArtifacts.add(a);
         }
 
         if(webApp==null) {
@@ -144,6 +148,13 @@ public class RunMojo extends AbstractJetty6Mojo {
                 "</dependency>"
             );
             throw new MojoExecutionException("Unable to find hudson.war");
+        }
+
+        // make sure all the relevant Hudson artifacts have the same version
+        for (Artifact a : hudsonArtifacts) {
+            Artifact ba = hudsonArtifacts.get(0);
+            if(!a.getVersion().equals(ba.getVersion()))
+                throw new MojoExecutionException("Version of "+a.getId()+" is inconsistent with "+ba.getId());
         }
 
         // set HUDSON_HOME
