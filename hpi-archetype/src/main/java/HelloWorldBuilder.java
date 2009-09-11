@@ -1,7 +1,7 @@
 import hudson.Launcher;
 import hudson.Extension;
 import hudson.util.FormValidation;
-import hudson.model.Build;
+import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.AbstractProject;
 import hudson.tasks.Builder;
@@ -47,7 +47,8 @@ public class HelloWorldBuilder extends Builder {
         return name;
     }
 
-    public boolean perform(Build build, Launcher launcher, BuildListener listener) {
+    @Override
+    public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
         // this is where you 'build' the project
         // since this is a dummy, we just say 'hello world' and call that a build
 
@@ -62,6 +63,7 @@ public class HelloWorldBuilder extends Builder {
     // overrided for better type safety.
     // if your plugin doesn't really define any property on Descriptor,
     // you don't have to do this.
+    @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl)super.getDescriptor();
     }
@@ -113,6 +115,7 @@ public class HelloWorldBuilder extends Builder {
             return "Say hello world";
         }
 
+        @Override
         public boolean configure(StaplerRequest req, JSONObject o) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
