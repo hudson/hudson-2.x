@@ -57,6 +57,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Collection;
 
 public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
@@ -905,10 +906,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * Finds and lists dependency plugins.
      */
-    private String findDependencyProjects() throws IOException {
+    private String findDependencyProjects() throws IOException, MojoExecutionException {
         StringBuilder buf = new StringBuilder();
-        for(Object o : project.getArtifacts()) {
-            Artifact a = (Artifact)o;
+        for (Artifact a : (Collection<Artifact>)project.getArtifacts()) {
             if(HpiUtil.isPlugin(a)) {
                 if(buf.length()>0)
                     buf.append(',');
@@ -920,6 +920,14 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
                 }
             }
         }
+
+        // check any "provided" scope plugin dependencies that are probably not what the user intended.
+        // see http://www.nabble.com/Classloading-problem-when-referencing-classes-from-another-plugin-during-the-initialization-phase-of-a-plugin-%28ClassicPluginStrategy%29-td25426117.html
+        for (Artifact a : (Collection<Artifact>)project.getDependencyArtifacts())
+            if ("provided".equals(a.getScope()) && HpiUtil.isPlugin(a))
+                throw new MojoExecutionException(a.getId()+" is marked as 'provided' scope dependency, but it should be the 'compile' scope.");
+
+
         return buf.toString();
     }
 
