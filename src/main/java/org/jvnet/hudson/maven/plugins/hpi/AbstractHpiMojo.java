@@ -867,7 +867,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
         }
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
-        mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",findHudsonVersion()));
+        mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",HpiUtil.findHudsonVersion(project)));
 
         if(maskClasses!=null)
             mainSection.addAttributeAndCheck(new Attribute("Mask-Classes",maskClasses));
@@ -929,14 +929,5 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
 
         return buf.toString();
-    }
-
-    private String findHudsonVersion() throws IOException {
-        for(Dependency a : (List<Dependency>)project.getDependencies()) {
-            if(a.getGroupId().equals("org.jvnet.hudson.main") && a.getArtifactId().equals("hudson-core")) {
-                return a.getVersion();
-            }
-        }
-        return null;
     }
 }
