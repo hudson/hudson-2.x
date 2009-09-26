@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 10807 2008-07-14 18:56:05Z btosabre $
+ * @version $Id: HpiMojo.java 22210 2009-09-26 00:52:45Z kohsuke $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
@@ -155,10 +155,6 @@ public class HpiMojo extends AbstractHpiMojo {
      * Generates a manifest file to be included in the .hpi file
      */
     private void generateManifest(File manifestFile) throws MojoExecutionException {
-        // since this involves scanning the source code, don't do it unless necessary
-        if(manifestFile.exists())
-            return;
-
         // create directory if it doesn't exist yet
         if(!manifestFile.getParentFile().exists())
             manifestFile.getParentFile().mkdirs();
