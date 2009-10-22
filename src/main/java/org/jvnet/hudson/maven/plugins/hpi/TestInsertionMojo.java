@@ -32,7 +32,7 @@ public class TestInsertionMojo extends AbstractMojo {
     private boolean disabledTestInjection;
 
     private static String quote(String s) {
-        return '"'+s+'"';
+        return '"'+s.replace("\\", "\\\\")+'"';
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
