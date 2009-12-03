@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 21166 2009-08-28 18:50:24Z kohsuke $
+//$Id: RunMojo.java 24378 2009-12-03 18:04:09Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -118,11 +118,11 @@ public class RunMojo extends AbstractJetty6Mojo {
         }
 
         // auto-enable stapler trace, unless otherwise configured already.
-        if(System.getProperty("stapler.trace")==null)
-            System.setProperty("stapler.trace","true");
+        setSystemPropertyIfEmpty("stapler.trace", "true");
         // run YUI in the debug mode, unless otherwise configured
-        if(System.getProperty("debug.YUI")==null)
-            System.setProperty("debug.YUI","true");
+        setSystemPropertyIfEmpty("debug.YUI","true");
+        // allow Jetty to accept a bigger form so that it can handle update center JSON post
+        setSystemPropertyIfEmpty("org.mortbay.jetty.Request.maxFormContentSize","-1");
 
         List<Artifact> hudsonArtifacts = new ArrayList<Artifact>();
 
@@ -212,6 +212,11 @@ public class RunMojo extends AbstractJetty6Mojo {
         } finally {
             Thread.currentThread().setContextClassLoader(ccl);
         }
+    }
+
+    private void setSystemPropertyIfEmpty(String name, String value) {
+        if(System.getProperty(name)==null)
+            System.setProperty(name, value);
     }
 
     private void copyFile(File src, File dst) {
