@@ -909,7 +909,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     private String findDependencyProjects() throws IOException, MojoExecutionException {
         StringBuilder buf = new StringBuilder();
         for (Artifact a : (Collection<Artifact>)project.getArtifacts()) {
-            if(HpiUtil.isPlugin(a)) {
+            if(HpiUtil.isPlugin(a) && !"test".equals(a.getScope())) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());
