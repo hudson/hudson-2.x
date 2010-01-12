@@ -36,23 +36,6 @@
           <goalPrefix>hpi</goalPrefix>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <!-- maven resources plugin can't handle escapes, so we need to fall back to Ant to get the job done -->
-            <phase>process-resources</phase>
-            <configuration>
-              <tasks>
-                <exec executable="${basedir}/copyArchetype.sh" />
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
@@ -136,4 +119,37 @@
       <url>scp://hudson-ci.org/home/kohsuke/www/hudson-ci.org/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
+  
+  <profiles>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>!windows</family>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <!-- maven resources plugin can't handle escapes, so we need to fall back to Ant to get the job done -->
+                <phase>process-resources</phase>
+                <configuration>
+                  <tasks>
+                    <exec executable="${basedir}/copyArchetype.sh" />
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>        
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
 </project>
