@@ -19,6 +19,8 @@ class HpiUtil {
         try {
             // some artifacts aren't even Java, so ignore those.
             if(!artifact.getType().equals("jar"))    return false;
+            // ignore directory : artifacts in reactors can be a directory in maven 3
+            if(artifact.getFile().isDirectory()) return false;
             JarFile jar = new JarFile(artifact.getFile());
             try {
                 Manifest manifest = jar.getManifest();
