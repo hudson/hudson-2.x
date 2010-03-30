@@ -50,6 +50,9 @@ public class UploadMojo extends AbstractJavaNetMojo {
                 project.getVersion().endsWith("SNAPSHOT") ? FileStatus.DRAFT : FileStatus.STABLE,
                 archive);
         } catch (ProcessingException e) {
+            // because Maven fail to properly report a chained exception,
+            // I'm reporting the stack trace here to assist trouble-shooting.
+            e.printStackTrace();
             throw new MojoExecutionException("Failed to upload the artifact",e);
         }
     }
