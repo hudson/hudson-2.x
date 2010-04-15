@@ -35,6 +35,7 @@ public class HelloWorldBuilder extends Builder {
 
     private final String name;
 
+    // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
     public HelloWorldBuilder(String name) {
         this.name = name;
@@ -116,12 +117,14 @@ public class HelloWorldBuilder extends Builder {
         }
 
         @Override
-        public boolean configure(StaplerRequest req, JSONObject o) throws FormException {
-            // to persist global configuration information,
+        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
+            // To persist global configuration information,
             // set that to properties and call save().
-            useFrench = o.getBoolean("useFrench");
+            useFrench = formData.getBoolean("useFrench");
+            // ^Can also use req.bindJSON(this, formData);
+            //  (easier when there are many fields; need set* methods for this, like setUseFrench)
             save();
-            return super.configure(req,o);
+            return super.configure(req,formData);
         }
 
         /**
