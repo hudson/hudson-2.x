@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 24378 2009-12-03 18:04:09Z kohsuke $
+//$Id: RunMojo.java 30951 2010-05-11 20:33:05Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,12 @@ import org.apache.commons.io.FileUtils;
 import org.mortbay.jetty.plugin.util.Scanner;
 import org.mortbay.jetty.plugin.util.Scanner.Listener;
 import org.mortbay.jetty.plugin.util.SystemProperty;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -306,6 +308,11 @@ public class RunMojo extends AbstractJetty6Mojo {
     }
 
     public void finishConfigurationBeforeStart() {
+        // working around JETTY-1226. This bug affects those who use Axis from plugins, for example.
+        WebAppContext wac = (WebAppContext)getWebApplication().getProxiedObject();
+        List<String> sc = new ArrayList<String>(Arrays.asList(wac.getSystemClasses()));
+        sc.add("javax.activation.");
+        wac.setSystemClasses(sc.toArray(new String[sc.size()]));
     }
 
     @Override
