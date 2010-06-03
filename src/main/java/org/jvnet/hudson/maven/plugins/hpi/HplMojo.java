@@ -66,8 +66,10 @@ public class HplMojo extends AbstractHpiMojo {
                 buf.append(',');
             buf.append(new File(project.getBuild().getOutputDirectory()).getAbsoluteFile());
             for (Artifact a : (Set<Artifact>) project.getArtifacts()) {
-                if("provided".equals(a.getScope()))
+                if ("provided".equals(a.getScope()))
                     continue;   // to simulate the real environment, drop the "provided" scope dependencies from the list
+                if ("pom".equals(a.getType()))
+                    continue;   // pom dependency is sometimes used so that one can depend on its transitive dependencies
                 buf.append(',').append(a.getFile());
             }
             mainSection.addAttributeAndCheck(new Attribute("Libraries",buf.toString()));
