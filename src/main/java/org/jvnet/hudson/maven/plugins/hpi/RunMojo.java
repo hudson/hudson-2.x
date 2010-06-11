@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 30951 2010-05-11 20:33:05Z kohsuke $
+//$Id: RunMojo.java 31937 2010-06-11 00:30:31Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -198,6 +198,9 @@ public class RunMojo extends AbstractJetty6Mojo {
                 artifactResolver.resolve(hpi,getProject().getRemoteArtifactRepositories(), localRepository);
 
                 copyFile(hpi.getFile(),new File(pluginsDir,a.getArtifactId()+".hpi"));
+                // pin the dependency plugin, so that even if a different version of the same plugin is bundled to Hudson,
+                // we still use the plugin as specified by the POM of the plugin.
+                FileUtils.writeStringToFile(new File(pluginsDir,a.getArtifactId()+".hpi.pinned"),"pinned");
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to copy dependency plugin",e);
