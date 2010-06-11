@@ -145,8 +145,8 @@
   
   <distributionManagement>
     <site>
-      <id>hudson-www</id>
-      <url>scp://hudson-labs.org/home/kohsuke/www/hudson-labs.org/maven-hpi-plugin/</url>
+      <id>hudson-labs.org</id>
+      <url>scp://hudson-labs.org/var/www/hudson-labs.org/maven-hpi-plugin/</url>
     </site>
   </distributionManagement>
 </project>
