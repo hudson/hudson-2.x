@@ -864,7 +864,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
         String v = project.getVersion();
         if(v.endsWith("-SNAPSHOT")) {
-            String dt = new SimpleDateFormat("MM/dd/yyyy hh:mm").format(new Date());
+            String dt = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(new Date());
             v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
         }
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
