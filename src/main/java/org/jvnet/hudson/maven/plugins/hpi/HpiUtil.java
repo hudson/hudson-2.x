@@ -19,9 +19,10 @@ class HpiUtil {
         try {
             // some artifacts aren't even Java, so ignore those.
             if(!artifact.getType().equals("jar"))    return false;
-            // this "fix" breaks compilation in core for maven-plugin 
-            // ignore directory : artifacts in reactors can be a directory in maven 3
-            //if(artifact.getFile().isDirectory()) return false;
+
+            // this can happened with maven 3 and doesn't have any side effect here
+            if(artifact.getFile() == null ) return false;
+            
             JarFile jar = new JarFile(artifact.getFile());
             try {
                 Manifest manifest = jar.getManifest();
