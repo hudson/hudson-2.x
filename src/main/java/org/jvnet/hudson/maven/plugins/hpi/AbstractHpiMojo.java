@@ -210,6 +210,13 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @parameter
      */
     private String maskClasses;
+    
+    /**
+     * @since 1.53
+     * @parameter
+     */
+    private boolean pluginFirstClassLoader = false;
+    
 
     private static final String[] EMPTY_STRING_ARRAY = {};
 
@@ -872,6 +879,9 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
 
         if(maskClasses!=null)
             mainSection.addAttributeAndCheck(new Attribute("Mask-Classes",maskClasses));
+        
+        if(pluginFirstClassLoader)
+            mainSection.addAttributeAndCheck( new Attribute( "PluginFirstClassLoader", "true" ) );
 
         String dep = findDependencyProjects();
         if(dep.length()>0)
