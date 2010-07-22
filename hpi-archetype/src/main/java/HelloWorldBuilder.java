@@ -26,7 +26,7 @@ import java.io.IOException;
  * to remember the configuration.
  *
  * <p>
- * When a build is performed, the {@link #perform(Build, Launcher, BuildListener)} method
+ * When a build is performed, the {@link #perform(AbstractBuild, Launcher, BuildListener)} method
  * will be invoked. 
  *
  * @author Kohsuke Kawaguchi
