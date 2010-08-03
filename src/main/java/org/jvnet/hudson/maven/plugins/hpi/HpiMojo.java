@@ -37,7 +37,7 @@ import java.io.PrintWriter;
  * Build a war/webapp.
  *
  * @author <a href="evenisse@apache.org">Emmanuel Venisse</a>
- * @version $Id: HpiMojo.java 22210 2009-09-26 00:52:45Z kohsuke $
+ * @version $Id: HpiMojo.java 33552 2010-08-03 23:28:55Z olamy $
  * @goal hpi
  * @phase package
  * @requiresDependencyResolution runtime
@@ -55,7 +55,7 @@ public class HpiMojo extends AbstractHpiMojo {
     /**
      * Used to create .jar archive.
      *
-     * @parameter expression="${component.org.codehaus.plexus.archiver.Archiver#jar}"
+     * @component role="org.codehaus.plexus.archiver.Archiver" role-hint="jar"
      * @required
      */
     private JarArchiver jarArchiver;
@@ -63,7 +63,7 @@ public class HpiMojo extends AbstractHpiMojo {
     /**
      * Used to create .hpi archive.
      *
-     * @parameter expression="${component.org.codehaus.plexus.archiver.Archiver#jar}"
+     * @component role="org.codehaus.plexus.archiver.Archiver" role-hint="jar"
      * @required
      */
     private JarArchiver hpiArchiver;

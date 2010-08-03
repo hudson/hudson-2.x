@@ -156,7 +156,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * To look up Archiver/UnArchiver implementations
      *
-     * @parameter expression="${component.org.codehaus.plexus.archiver.manager.ArchiverManager}"
+     * @component role="org.codehaus.plexus.archiver.manager.ArchiverManager"
      * @required
      */
     protected ArchiverManager archiverManager;
@@ -460,7 +460,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         for (Artifact artifact : artifacts) {
             if(hudsonPlugins.contains(artifact.getId()))
                 continue;   // plugin dependency need not be WEB-INF/lib
-            if(hudsonPlugins.contains(artifact.getDependencyTrail().get(1)))
+            if(artifact.getDependencyTrail().size() >= 1 && hudsonPlugins.contains(artifact.getDependencyTrail().get(1)))
                 continue;   // no need to have transitive dependencies through plugins in WEB-INF/lib.
 
             String targetFileName = getDefaultFinalName(artifact);
