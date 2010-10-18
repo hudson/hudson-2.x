@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: AbstractJettyMojo.java 21118 2009-08-27 18:34:18Z kohsuke $
+//$Id: AbstractJettyMojo.java 36037 2010-10-18 09:48:58Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -363,7 +363,7 @@ public abstract class AbstractJettyMojo extends AbstractMojo {
      * files change.
      *
      */
-    private void startScanner()
+    protected void startScanner()
     {
         // check if scanning is enabled
         if (getScanIntervalSeconds() <= 0) return;

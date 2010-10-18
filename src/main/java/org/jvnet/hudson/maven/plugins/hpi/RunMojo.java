@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: RunMojo.java 31937 2010-06-11 00:30:31Z kohsuke $
+//$Id: RunMojo.java 36037 2010-10-18 09:48:58Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -108,6 +108,14 @@ public class RunMojo extends AbstractJetty6Mojo {
      * @parameter expression="${port}"
      */
     protected String defaultPort;
+
+    /**
+     * If true, the context will be restarted after a line feed on
+     * the input console. Disabled by default.
+     *
+     * @parameter expression="${jetty.consoleForceReload}" default-value="false"
+     */
+    protected boolean consoleForceReload;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         // compute hudsonHome
@@ -305,6 +313,16 @@ public class RunMojo extends AbstractJetty6Mojo {
         scanList.add(webApp);
         scanList.add(new File(getProject().getBuild().getOutputDirectory()));
         setScanList(scanList);
+    }
+
+    @Override
+    protected void startScanner() {
+        super.startScanner();
+
+        if (consoleForceReload) {
+            getLog().info("Console reloading is ENABLED. Hit ENTER on the console to restart the context.");
+            new ConsoleScanner(this).start();
+        }
     }
 
     public void checkPomConfiguration() throws MojoExecutionException {
