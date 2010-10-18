@@ -1,5 +1,5 @@
 //========================================================================
-//$Id: AbstractJettyMojo.java 36037 2010-10-18 09:48:58Z kohsuke $
+//$Id: AbstractJettyMojo.java 36040 2010-10-18 11:24:56Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
 //------------------------------------------------------------------------
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,7 +91,7 @@ public abstract class AbstractJettyMojo extends AbstractMojo {
      * The interval in seconds to scan the webapp for changes
      * and restart the context if necessary. Disabled by default.
      *
-     * @parameter expression="${scanIntervalSeconds}" default-value="1"
+     * @parameter expression="${scanIntervalSeconds}" default-value="0"
      * @required
      */
     private int scanIntervalSeconds;
