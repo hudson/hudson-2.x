@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
  * @author Kohsuke Kawaguchi
  * @goal insert-test
  * @phase generate-test-sources
+ * @requiresDependencyResolution test
  */
 public class TestInsertionMojo extends AbstractMojo {
     /**
@@ -36,16 +37,18 @@ public class TestInsertionMojo extends AbstractMojo {
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        String target = HpiUtil.findHudsonVersion(project);
-        if (new VersionNumber(target).compareTo(new VersionNumber("1.327"))<0) {
-            getLog().info("Skipping auto-test generation because we are targeting Hudson "+target+" (at least 1.327 is required).");
-            return;
-        }
         if (disabledTestInjection) {
             getLog().info("Skipping auto-test generation");
             return;
         }
+        
+        String target = HpiUtil.findHudsonVersion(project);
 
+        if (new VersionNumber(target).compareTo(new VersionNumber("1.327"))<0) {
+            getLog().info("Skipping auto-test generation because we are targeting Hudson "+target+" (at least 1.327 is required).");
+            return;
+        }
+        
         try {
             File f = new File(project.getBasedir(), "target/inject-tests");
             f.mkdirs();
