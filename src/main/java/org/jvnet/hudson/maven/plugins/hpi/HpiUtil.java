@@ -6,6 +6,7 @@ import org.apache.maven.project.MavenProject;
 import org.kohsuke.stapler.framework.io.IOException2;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ class HpiUtil {
     }
 
     static String findHudsonVersion(MavenProject project) {
-        for(Dependency a : (List<Dependency>)project.getDependencies()) {
+        for(Artifact a : (Set<Artifact>)project.getArtifacts()) {
             if(a.getGroupId().equals("org.jvnet.hudson.main") && a.getArtifactId().equals("hudson-core")) {
                 return a.getVersion();
             }
