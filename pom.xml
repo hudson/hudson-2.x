@@ -150,6 +150,12 @@
     </plugins>
   </reporting>
   
+  <scm>
+    <connection>scm:git:git://github.com/hudson/maven-hpi-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hudson/maven-hpi-plugin.git</developerConnection>
+    <url>https://github.com/hudson/maven-hpi-plugin</url>
+  </scm>
+
   <distributionManagement>
     <site>
       <id>hudson-labs.org</id>
