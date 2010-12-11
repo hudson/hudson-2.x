@@ -17,7 +17,10 @@ final class MaskingClassLoader extends ClassLoader {
     }
 
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        if(name.startsWith("org.kohsuke") || name.startsWith("org.apache.maven") || name.startsWith("org.codehaus.plexus"))
+        if(name.startsWith("org.kohsuke")
+        || name.startsWith("org.apache.maven")
+        || name.startsWith("org.cyberneko")
+        || name.startsWith("org.codehaus.plexus"))
             throw new ClassNotFoundException(name);
         return super.loadClass(name, resolve);
     }
