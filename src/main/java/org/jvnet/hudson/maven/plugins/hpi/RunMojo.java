@@ -135,6 +135,8 @@ public class RunMojo extends AbstractJetty6Mojo {
         setSystemPropertyIfEmpty("org.mortbay.jetty.Request.maxFormContentSize","-1");
         // general-purpose system property so that we can tell from Hudson if we are running in the hpi:run mode.
         setSystemPropertyIfEmpty("hudson.hpi.run","true");
+        // this adds 3 secs to the shutdown time. Skip it.
+        setSystemPropertyIfEmpty("hudson.DNSMultiCast.disabled","true");
 
         List<Artifact> hudsonArtifacts = new ArrayList<Artifact>();
 
