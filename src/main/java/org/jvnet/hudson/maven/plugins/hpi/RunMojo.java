@@ -133,6 +133,8 @@ public class RunMojo extends AbstractJetty6Mojo {
         setSystemPropertyIfEmpty("debug.YUI","true");
         // allow Jetty to accept a bigger form so that it can handle update center JSON post
         setSystemPropertyIfEmpty("org.mortbay.jetty.Request.maxFormContentSize","-1");
+        // general-purpose system property so that we can tell from Hudson if we are running in the hpi:run mode.
+        setSystemPropertyIfEmpty("hudson.hpi.run","true");
 
         List<Artifact> hudsonArtifacts = new ArrayList<Artifact>();
 
