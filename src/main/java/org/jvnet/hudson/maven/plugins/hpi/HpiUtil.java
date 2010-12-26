@@ -1,16 +1,14 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.project.MavenProject;
-import org.kohsuke.stapler.framework.io.IOException2;
-
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.Arrays;
-import java.util.List;
+
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.project.MavenProject;
+import org.kohsuke.stapler.framework.io.IOException2;
 
 /**
  * @author Kohsuke Kawaguchi
