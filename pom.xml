@@ -156,5 +156,9 @@
       <id>hudson-labs.org</id>
       <url>scp://hudson-labs.org/var/www/hudson-labs.org/maven-hpi-plugin/</url>
     </site>
+    <repository>
+      <id>maven.hudson-labs.org</id>
+      <url>http://maven.hudson-labs.org/content/repositories/releases</url>
+    </repository>
   </distributionManagement>
 </project>
