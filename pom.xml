@@ -86,12 +86,6 @@
   </properties>
 
   <dependencies>
-    <dependency><!-- otherwise javanettasks bring in a very old version of Xerces -->
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.9.1</version>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
@@ -128,17 +122,11 @@
       <artifactId>plexus-interactivity-api</artifactId>
       <version>1.0-alpha-4</version>
     </dependency>
-    <!-- for the upload goal -->
-    <dependency>
-      <groupId>javanettasks</groupId>
-      <artifactId>javanettasks</artifactId>
-      <version>1.0.24</version>
-    </dependency>
     <!-- for using annotation processor -->
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>maven-stapler-plugin</artifactId>
-      <version>1.12</version>
+      <version>1.15</version>
       <!-- make sure to exclude servlet so that the one in Jetty (which has different groupId) will win -->
       <exclusions>
         <exclusion>
