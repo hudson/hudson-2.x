@@ -93,11 +93,13 @@ public class VersionNumber implements Comparable<VersionNumber> {
                 else
                     digits[i++] = -1000 + Integer.parseInt(token.substring(2)); // "eaNNN"
             } else {
+                int n =0;
                 try {
-                    digits[i++] = Integer.parseInt(token);
+                    n = Integer.parseInt(token);
                 } catch (NumberFormatException e) {
-                    digits[i++] = 0;
+                    // ignore
                 }
+                digits[i++] = n;
             }
         }
     }
