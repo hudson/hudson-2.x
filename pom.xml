@@ -158,7 +158,7 @@
     </site>
     <repository>
       <id>maven.hudson-labs.org</id>
-      <url>http://maven.hudson-labs.org/content/repositories/releases</url>
+      <url>http://maven.hudson-labs.org:8081/content/repositories/releases</url>
     </repository>
   </distributionManagement>
 </project>
