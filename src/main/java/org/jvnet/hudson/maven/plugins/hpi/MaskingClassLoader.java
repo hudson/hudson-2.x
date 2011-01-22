@@ -19,6 +19,7 @@ final class MaskingClassLoader extends ClassLoader {
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         if(name.startsWith("org.kohsuke")
         || name.startsWith("org.apache.maven")
+        || name.startsWith("org.sonatype")
         || name.startsWith("org.cyberneko")
         || name.startsWith("org.codehaus.plexus"))
             throw new ClassNotFoundException(name);
@@ -34,6 +35,7 @@ final class MaskingClassLoader extends ClassLoader {
     private boolean isMaskedResourcePrefix(String name) {
         return name.startsWith("org/kohsuke")
             || name.startsWith("org/apache/maven")
+            || name.startsWith("org/sonatype")
             || name.startsWith("org/codehaus/plexus")
             || name.startsWith("META-INF/plexus")
             || name.startsWith("META-INF/maven");
