@@ -262,6 +262,7 @@ public class RunMojo extends AbstractJetty6Mojo {
         hpl.setLog(getLog());
         hpl.pluginName = getProject().getName();
         hpl.warSourceDirectory = warSourceDirectory;
+        hpl.includeTestScope = true;
         hpl.execute();
     }
 

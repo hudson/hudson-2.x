@@ -216,7 +216,13 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
      * @parameter
      */
     private boolean pluginFirstClassLoader = false;
-    
+
+    /**
+     * If true, test scope dependencies count as if they are normal dependencies.
+     * This is only useful during hpi:run, so not exposing it as a configurable parameter.
+     */
+    boolean includeTestScope;
+
 
     private static final String[] EMPTY_STRING_ARRAY = {};
 
@@ -920,7 +926,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     private String findDependencyProjects() throws IOException, MojoExecutionException {
         StringBuilder buf = new StringBuilder();
         for (Artifact a : (Collection<Artifact>)project.getArtifacts()) {
-            if(HpiUtil.isPlugin(a) && !"test".equals(a.getScope())) {
+            if(HpiUtil.isPlugin(a) && (includeTestScope || !"test".equals(a.getScope()))) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());
