@@ -5,6 +5,7 @@
     <artifactId>pom</artifactId>
     <groupId>org.jvnet.hudson.main</groupId>
     <version>1.396-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>        
   </parent>
   <artifactId>cli</artifactId>
   <name>Hudson CLI</name>

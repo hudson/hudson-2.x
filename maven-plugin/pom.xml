@@ -28,6 +28,7 @@ THE SOFTWARE.
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>pom</artifactId>
     <version>1.396-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>        
   </parent>
 
   <artifactId>maven-plugin</artifactId>
