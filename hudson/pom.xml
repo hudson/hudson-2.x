@@ -30,24 +30,24 @@
   
       <mailingList>
           <name>Hudson developer discussion list</name>
-          <subscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20dev</subscribe>
-          <unsubscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20dev</unsubscribe>
+          <subscribe>sympa@hudson.java.net?subject=unsubscribe%20dev</subscribe>
+          <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20dev</unsubscribe>
           <post>dev@hudson.java.net</post>
           <archive>http://java.net/projects/hudson/lists/dev/archive</archive>
       </mailingList>
       
       <mailingList>
           <name>Hudson user discussion list</name>
-          <subscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20users</subscribe>
-          <unsubscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20users</unsubscribe>
+          <subscribe>sympa@hudson.java.net?subject=unsubscribe%20users</subscribe>
+          <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20users</unsubscribe>
           <post>users@hudson.java.net</post>
           <archive>http://java.net/projects/hudson/lists/users/archive</archive>
       </mailingList>
       
       <mailingList>
           <name>Hudson Japanese user discussion list</name>
-          <subscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20ja</subscribe>
-          <unsubscribe>sympa@hudson-plugins.java.net?subject=unsubscribe%20ja</unsubscribe>
+          <subscribe>sympa@hudson.java.net?subject=unsubscribe%20ja</subscribe>
+          <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20ja</unsubscribe>
           <post>ja@hudson.java.net</post>
           <archive>http://java.net/projects/hudson/lists/ja/archive</archive>
       </mailingList>
