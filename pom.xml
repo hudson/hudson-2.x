@@ -527,31 +527,6 @@ THE SOFTWARE.
     </profile>
   </profiles>
   
-  <repositories>
-    <repository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
 
   <licenses>
     <license>
@@ -561,14 +536,4 @@ THE SOFTWARE.
     </license>
   </licenses>
 
-  <distributionManagement>
-    <site>
-      <id>hudson-www</id>
-      <url>scp://hudson-labs.org/home/kohsuke/www/hudson-labs.org/maven-site/</url>
-    </site>
-    <snapshotRepository>
-      <id>maven.hudson-labs.org</id>
-      <url>http://maven.hudson-labs.org:8081/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>
