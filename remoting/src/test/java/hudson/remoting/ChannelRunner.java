@@ -27,8 +27,6 @@ import hudson.remoting.Channel.Mode;
 import junit.framework.Assert;
 
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
@@ -36,6 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.net.URLClassLoader;
 import java.net.URL;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.io.output.TeeOutputStream;
 import org.apache.commons.io.FileUtils;
@@ -46,14 +45,18 @@ import org.apache.commons.io.FileUtils;
  * @author Kohsuke Kawaguchi
  */
 interface ChannelRunner {
+
     Channel start() throws Exception;
+
     void stop(Channel channel) throws Exception;
+
     String getName();
 
     /**
      * Runs a channel in the same JVM.
      */
     static class InProcess implements ChannelRunner {
+
         private ExecutorService executor;
         /**
          * failure occurred in the other {@link Channel}.
@@ -67,9 +70,25 @@ interface ChannelRunner {
             final FastPipedInputStream in2 = new FastPipedInputStream();
             final FastPipedOutputStream out2 = new FastPipedOutputStream(in2);
 
-            executor = Executors.newCachedThreadPool();
+            executor = Executors.newCachedThreadPool(new ThreadFactory() {
+
+                private final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
+
+                public Thread newThread(final Runnable r) {
+                    System.out.println("Creating New Thread");
+                    return defaultFactory.newThread(new Runnable() {
+
+                        public void run() {
+                            r.run();
+                        }
+                    });
+                }
+            });
+
+            //executor = Executors.newCachedThreadPool();
 
             Thread t = new Thread("south bridge runner") {
+
                 public void run() {
                     try {
                         Channel s = new Channel("south", executor, Mode.BINARY, in2, out1, null, false, createCapability());
@@ -96,8 +115,9 @@ interface ChannelRunner {
 
             executor.shutdown();
 
-            if(failure!=null)
+            if (failure != null) {
                 throw failure;  // report a failure in the south side
+            }
         }
 
         public String getName() {
@@ -110,6 +130,7 @@ interface ChannelRunner {
     }
 
     static class InProcessCompatibilityMode extends InProcess {
+
         public String getName() {
             return "local-compatibility";
         }
@@ -124,6 +145,7 @@ interface ChannelRunner {
      * Runs a channel in a separate JVM by launching a new JVM.
      */
     static class Fork implements ChannelRunner {
+
         private Process proc;
         private ExecutorService executor;
         private Copier copier;
@@ -133,24 +155,24 @@ interface ChannelRunner {
             // proc = Runtime.getRuntime().exec("java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000 hudson.remoting.Launcher");
 
             System.out.println(getClasspath());
-            proc = Runtime.getRuntime().exec(new String[]{"java","-cp",getClasspath(),"hudson.remoting.Launcher"});
+            proc = Runtime.getRuntime().exec(new String[]{"java", "-cp", getClasspath(), "hudson.remoting.Launcher"});
 
-            copier = new Copier("copier",proc.getErrorStream(),System.out);
+            copier = new Copier("copier", proc.getErrorStream(), System.out);
             copier.start();
 
             executor = Executors.newCachedThreadPool();
             OutputStream out = proc.getOutputStream();
             if (RECORD_OUTPUT) {
-                File f = File.createTempFile("remoting",".log");
-                System.out.println("Recording to "+f);
-                out = new TeeOutputStream(out,new FileOutputStream(f));
+                File f = File.createTempFile("remoting", ".log");
+                System.out.println("Recording to " + f);
+                out = new TeeOutputStream(out, new FileOutputStream(f));
             }
             return new Channel("north", executor, proc.getInputStream(), out);
         }
 
         public void stop(Channel channel) throws Exception {
             channel.close();
-            channel.join(10*1000);
+            channel.join(10 * 1000);
 
 //            System.out.println("north completed");
 
@@ -160,7 +182,7 @@ interface ChannelRunner {
             int r = proc.waitFor();
 //            System.out.println("south completed");
 
-            Assert.assertEquals("exit code should have been 0",0,r);
+            Assert.assertEquals("exit code should have been 0", 0, r);
         }
 
         public String getName() {
@@ -170,14 +192,15 @@ interface ChannelRunner {
         public String getClasspath() {
             // this assumes we run in Maven
             StringBuilder buf = new StringBuilder();
-            URLClassLoader ucl = (URLClassLoader)getClass().getClassLoader();
+            URLClassLoader ucl = (URLClassLoader) getClass().getClassLoader();
             for (URL url : ucl.getURLs()) {
-                if (buf.length()>0) buf.append(File.pathSeparatorChar);
+                if (buf.length() > 0) {
+                    buf.append(File.pathSeparatorChar);
+                }
                 buf.append(FileUtils.toFile(url)); // assume all of them are file URLs
             }
             return buf.toString();
         }
-
         /**
          * Record the communication to the remote node. Used during debugging.
          */
