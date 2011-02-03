@@ -145,6 +145,11 @@ THE SOFTWARE.
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cli</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.jvnet.hudson.plugins</groupId>
       <artifactId>subversion</artifactId>
       <version>1.11</version>
