@@ -48,9 +48,9 @@ THE SOFTWARE.
     <module>maven3-agent</module>
     <module>maven3-interceptor</module>
     <module>war</module>
+    <module>cli</module>
     <module>test</module>
     <module>ui-samples-plugin</module>
-    <module>cli</module>
   </modules>
   
   <ciManagement>
