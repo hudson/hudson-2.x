@@ -820,6 +820,11 @@ THE SOFTWARE.
       <scope>system</scope>
       <systemPath>/usr/local/yjp/lib/yjp.jar</systemPath>
     </dependency-->
+    <dependency>
+      <groupId>jline</groupId>
+      <artifactId>jline</artifactId>
+      <version>0.9.94</version>
+    </dependency>
   </dependencies>
 
   <reporting>
