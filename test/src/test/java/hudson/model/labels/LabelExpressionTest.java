@@ -152,7 +152,7 @@ public class LabelExpressionTest extends HudsonTestCase {
     }
 
     public void testDataCompatibilityWithHostNameWithWhitespace() throws Exception {
-        DumbSlave slave = new DumbSlave("abc def (xyz) : test", "dummy",
+        DumbSlave slave = new DumbSlave("abc def (xyz) - test", "dummy",
                 createTmpDir().getPath(), "1", Mode.NORMAL, "", createComputerLauncher(null), RetentionStrategy.NOOP, Collections.EMPTY_LIST);
         hudson.addNode(slave);
 
