@@ -48,7 +48,10 @@ THE SOFTWARE.
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <skip>true</skip><!-- tests now run by maven-junit-plugin -->
+            <!--
+          <skip>true</skip>
+          -->
+          <!-- tests now run by maven-junit-plugin -->
         </configuration>
       </plugin>
       <plugin>
@@ -221,7 +224,9 @@ THE SOFTWARE.
     <profile>
       <id>light-test</id>
       <properties>
+          <!--
         <skipTests>true</skipTests>
+        -->
       </properties>
     </profile>
     <profile>
@@ -256,7 +261,9 @@ THE SOFTWARE.
             <groupId>com.sun.maven</groupId>
             <artifactId>maven-junit-plugin</artifactId>
             <configuration>
+                <!--
               <skipTests>true</skipTests>
+              -->
             </configuration>
           </plugin>
         </plugins>
