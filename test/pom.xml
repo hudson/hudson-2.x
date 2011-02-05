@@ -59,6 +59,9 @@ THE SOFTWARE.
         <groupId>com.sun.maven</groupId>
         <artifactId>maven-junit-plugin</artifactId>
         <version>1.6</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
         <executions>
           <execution>
             <goals>
