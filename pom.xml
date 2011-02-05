@@ -49,6 +49,7 @@ THE SOFTWARE.
     <module>maven3-interceptor</module>
     <module>war</module>
     <module>cli</module>
+    <module>hudson</module>
     <!--
     
     We will move the ITs out so that the product can be built without taking an hour
