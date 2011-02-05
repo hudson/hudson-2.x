@@ -49,8 +49,13 @@ THE SOFTWARE.
     <module>maven3-interceptor</module>
     <module>war</module>
     <module>cli</module>
+    <!--
+    
+    We will move the ITs out so that the product can be built without taking an hour
+    
     <module>test</module>
     <module>ui-samples-plugin</module>
+    -->
   </modules>
   
   <ciManagement>
