@@ -181,7 +181,7 @@ THE SOFTWARE.
         <configuration>
           <!-- enable release profile during the release, create IPS package, and sign bits. -->
           <prepareVerifyArgs>-P release,sign</prepareVerifyArgs>
-          <goals>-DskipTests javadoc:javadoc animal-sniffer:check deploy javadoc:aggregate</goals>
+          <goals>-DskipTests javadoc:javadoc deploy javadoc:aggregate</goals>
           <pushChanges>false</pushChanges>
           <localCheckout>true</localCheckout>
         </configuration>
@@ -201,19 +201,6 @@ THE SOFTWARE.
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <!-- make sure our code doesn't have 1.6 dependencies except where we know it -->
-        <groupId>org.jvnet</groupId>
-        <artifactId>animal-sniffer</artifactId>
-        <version>1.2</version>
-        <configuration>
-          <signature>
-            <groupId>org.jvnet.animal-sniffer</groupId>
-            <artifactId>java1.5</artifactId>
-            <version>1.0</version>
-          </signature>
-        </configuration>
       </plugin>
 
       <plugin>
