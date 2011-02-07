@@ -1,30 +1,20 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 
-<!--
+<!-- Process this file with docbook-to-man to generate an nroff manual
+     page: `docbook-to-man manpage.sgml > manpage.1'.  You may view
+     the manual page with: `docbook-to-man manpage.sgml | nroff -man |
+     less'.  A typical entry in a Makefile or Makefile.am is:
 
-Process this file with an XSLT processor: `xsltproc \
--''-nonet /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
-manpages/docbook.xsl manpage.dbk'.  A manual page
-<package>.<section> will be generated.  You may view the
-manual page with: nroff -man <package>.<section> | less'.  A
-typical entry in a Makefile or Makefile.am is:
+manpage.1: manpage.sgml
+	docbook-to-man $< > $@
 
-DB2MAN=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
-manpages/docbook.xsl
-XP=xsltproc -''-nonet
-
-manpage.1: manpage.dbk
-        $(XP) $(DB2MAN) $<
     
-The xsltproc binary is found in the xsltproc package.  The
-XSL files are in docbook-xsl.  Please remember that if you
-create the nroff version in one of the debian/rules file
-targets (such as build), you will need to include xsltproc
-and docbook-xsl in your Build-Depends control field.
+	The docbook-to-man binary is found in the docbook-to-man package.
+	Please remember that if you create the nroff version in one of the
+	debian/rules file targets (such as build), you will need to include
+	docbook-to-man in your Build-Depends control field.
 
--->
+  -->
 
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
   <!ENTITY dhfirstname "<firstname>FIRSTNAME</firstname>">
@@ -34,8 +24,8 @@ and docbook-xsl in your Build-Depends control field.
   <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
        allowed: see man(7), man(1). -->
   <!ENTITY dhsection   "<manvolnum>SECTION</manvolnum>">
-  <!ENTITY dhemail     "<email>kk@kohsuke.org</email>">
-  <!ENTITY dhusername  "Kohsuke Kawaguchi">
+  <!ENTITY dhemail     "<email>dev@hudson.java.net</email>">
+  <!ENTITY dhusername  "Hudson Community">
   <!ENTITY dhucpackage "<refentrytitle>HUDSON</refentrytitle>">
   <!ENTITY dhpackage   "hudson">
 
@@ -49,8 +39,12 @@ and docbook-xsl in your Build-Depends control field.
     <address>
       &dhemail;
     </address>
+    <author>
+      &dhfirstname;
+      &dhsurname;
+    </author>
     <copyright>
-      <year>2007</year>
+      <year>2003</year>
       <holder>&dhusername;</holder>
     </copyright>
     &dhdate;
@@ -141,4 +135,22 @@ and docbook-xsl in your Build-Depends control field.
 
   </refsect1>
 </refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->
+
 

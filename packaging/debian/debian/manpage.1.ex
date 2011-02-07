@@ -55,5 +55,5 @@ available via the Info system.
 .SH AUTHOR
 hudson was written by <upstream author>.
 .PP
-This manual page was written by Kohsuke Kawaguchi <kk@kohsuke.org>,
+This manual page was written by Hudson Community (dev@hudson.java.net),
 for the Debian project (but may be used by others).

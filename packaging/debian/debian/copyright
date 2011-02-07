@@ -1,4 +1,4 @@
-This package was debianized by Kohsuke Kawaguchi <kk@kohsuke.org> on
+This package was debianized by Hudson Community (dev@hudson.java.net) on
 Thu, 24 Apr 2008 23:38:55 -0700.
 
 It was downloaded from <url://example.com>
@@ -32,8 +32,7 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
-The Debian packaging is (C) 2008, Kohsuke Kawaguchi <kk@kohsuke.org> and
-is licensed under the GPL, see above.
+The Debian packaging is (C) 2008, Hudson Community (dev@hudson.java.net) and is licensed under the GPL, see above.
 
 
 # Please also look if there are files or directories which have a
