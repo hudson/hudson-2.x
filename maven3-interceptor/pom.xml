@@ -8,7 +8,7 @@
     <relativePath>../pom.xml</relativePath>    
   </parent>
   <artifactId>maven3-interceptor</artifactId>
-  <name>Hudson Maven3 Interceptor</name>
+  <name>Hudson :: Maven3 Interceptor</name>
 
   <dependencies>
     <dependency>

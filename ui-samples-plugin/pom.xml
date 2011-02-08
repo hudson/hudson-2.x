@@ -33,7 +33,7 @@ THE SOFTWARE.
 
   <artifactId>ui-samples-plugin</artifactId>
   <packaging>hpi</packaging>
-  <name>Hudson UI sample plugin</name>
+  <name>Hudson :: UI Sample Plugin</name>
 
   <dependencies>
     <dependency>

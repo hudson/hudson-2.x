@@ -34,7 +34,7 @@ THE SOFTWARE.
 
   <artifactId>hudson-core</artifactId>
   <packaging>stapler-jar</packaging>
-  <name>Hudson core</name>
+  <name>Hudson :: Core</name>
   <description>
     Contains the core Hudson code and view files to render HTML.
   </description>

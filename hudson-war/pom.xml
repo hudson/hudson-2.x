@@ -33,7 +33,7 @@ THE SOFTWARE.
   
   <artifactId>hudson-war</artifactId>
   <packaging>war</packaging>
-  <name>Hudson war</name>
+  <name>Hudson :: Webapp</name>
   <description>
     Creates a war file. Also includes additional static web resources, such as images, CSS, JavaScript, and
     some HTML files.

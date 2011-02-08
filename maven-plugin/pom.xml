@@ -33,7 +33,7 @@ THE SOFTWARE.
 
   <artifactId>maven-plugin</artifactId>
   <packaging>hpi</packaging>
-  <name>Maven Integration plugin</name>
+  <name>Hudson :: Maven Integration Plugin</name>
   <description>This plug-in provides deep integration of Hudson and Maven. This functionality used to be part of the Hudson core.
   Now it is a plug-in that is installed by default, but can be disabled.</description>
   <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+2+Project+Plugin</url>

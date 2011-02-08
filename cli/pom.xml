@@ -8,7 +8,7 @@
     <relativePath>../pom.xml</relativePath>        
   </parent>
   <artifactId>cli</artifactId>
-  <name>Hudson CLI</name>
+  <name>Hudson :: CLI</name>
 
   <build>
     <plugins>

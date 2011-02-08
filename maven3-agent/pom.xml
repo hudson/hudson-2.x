@@ -8,7 +8,7 @@
     <relativePath>../pom.xml</relativePath>        
   </parent>
   <artifactId>maven3-agent</artifactId>
-  <name>Hudson Maven3 CLI Agent</name>
+  <name>Hudson :: Maven3 CLI Agent</name>
   
   <dependencies>
     <dependency>

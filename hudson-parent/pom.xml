@@ -11,7 +11,7 @@
   <version>1.11-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Hudson</name>
+  <name>Hudson :: Parent</name>
   <description>Hudson Continuous Integration Server</description>
   <url>http://hudson-ci.org/</url>
   <inceptionYear>2004</inceptionYear>
