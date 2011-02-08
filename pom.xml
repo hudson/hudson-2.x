@@ -28,7 +28,7 @@ THE SOFTWARE.
     <groupId>org.jvnet.hudson</groupId>
     <artifactId>hudson</artifactId>
     <version>1.11-SNAPSHOT</version>
-    <relativePath>hudson/pom.xml</relativePath>
+    <relativePath>hudson-parent/pom.xml</relativePath>
   </parent>
   
   <groupId>org.jvnet.hudson.main</groupId>
@@ -49,7 +49,7 @@ THE SOFTWARE.
     <module>maven3-interceptor</module>
     <module>war</module>
     <module>cli</module>
-    <module>hudson</module>
+    <module>hudson-parent</module>
     <!--
     
     We will move the ITs out so that the product can be built without taking an hour
