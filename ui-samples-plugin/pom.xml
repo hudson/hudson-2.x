@@ -26,7 +26,7 @@ THE SOFTWARE.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
-    <artifactId>pom</artifactId>
+    <artifactId>hudson</artifactId>
     <version>1.396-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>    
   </parent>

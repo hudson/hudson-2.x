@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jvnet.hudson</groupId>
-    <artifactId>hudson</artifactId>
-    <version>1.11</version>
-    <relativePath>../hudson/pom.xml</relativePath>
+    <artifactId>hudson-parent</artifactId>
+    <version>1.11-SNAPSHOT</version>
+    <relativePath>../hudson-parent/pom.xml</relativePath>
   </parent>
 
   <groupId>org.jvnet.hudson.plugins</groupId>
