@@ -27,7 +27,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>1.396-SNAPSHOT</version>
+    <version>1.396</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   

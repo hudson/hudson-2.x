@@ -8,7 +8,7 @@
   </parent>  
   <groupId>org.jvnet.hudson</groupId>
   <artifactId>hudson-parent</artifactId>
-  <version>1.11-SNAPSHOT</version>
+  <version>1.11</version>
   <packaging>pom</packaging>
 
   <name>Hudson :: Parent</name>
