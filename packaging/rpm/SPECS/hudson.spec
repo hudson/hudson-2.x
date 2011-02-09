@@ -58,7 +58,7 @@ following two jobs:
 
 Authors:
 --------
-    Kohsuke Kawaguchi <Kohsuke.Kawaguchi@sun.com>
+    Hudson Community <dev@hudson.java.net>
 
 %prep
 %setup -q -T -c

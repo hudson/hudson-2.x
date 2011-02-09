@@ -13,7 +13,7 @@ Source1:	hudson.init.in
 Source2:	hudson.sysconfig.in
 Source3:	hudson.logrotate
 Source4:    hudson.repo
-URL:		https://hudson.dev.java.net/
+URL:		https://hudson-ci.org/
 Group:		Development/Tools/Building
 License:	MIT/X License, GPL/CDDL, ASL2
 BuildRoot:	%{_tmppath}/build-%{name}-%{version}
@@ -29,7 +29,7 @@ BuildRoot:	%{_tmppath}/build-%{name}-%{version}
 # provides >= 1.6.0 must specify the epoch, "java >= 1:1.6.0".
 #
 # java-1_6_0-sun provides this at least
-Requires:	java-sun >= 1.6.0
+Requires:	java >= 1.6.0
 PreReq:		/usr/sbin/groupadd /usr/sbin/useradd
 #PreReq:		%{fillup_prereq}
 BuildArch:	noarch
@@ -54,7 +54,7 @@ following two jobs:
 
 Authors:
 --------
-    Kohsuke Kawaguchi <Kohsuke.Kawaguchi@sun.com>
+    Hudson Community <dev@hudson.java.net>
 
 %prep
 %setup -q -T -c
