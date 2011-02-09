@@ -43,8 +43,8 @@ THE SOFTWARE.
     <module>hudson-parent</module>
     <module>hudson-core</module>
     <module>hudson-war</module>
-    <module>cli</module>
-    <module>remoting</module>
+    <module>hudson-cli</module>
+    <module>hudson-remoting</module>
     <module>maven-plugin</module>
     <module>maven-agent</module>
     <module>maven-interceptor</module>

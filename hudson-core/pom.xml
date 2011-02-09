@@ -44,6 +44,12 @@ THE SOFTWARE.
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>    
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
@@ -141,6 +147,7 @@ THE SOFTWARE.
           </execution>
         </executions>
       </plugin>
+      <!--  Use the maven-dependency-plugin -->
       <plugin>
         <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
         <artifactId>maven-antrun-extended-plugin</artifactId>
@@ -149,26 +156,6 @@ THE SOFTWARE.
             <phase>generate-resources</phase>
             <configuration>
               <tasks>
-                <tstamp>
-                  <format property="now" pattern="MM/dd/yyyy HH:mm" unit="hour" />
-                </tstamp>
-                <property name="build.type" value="private" /> <!-- override for "rc" build -->
-                <pathconvert property="version.rc">
-                  <path path="${project.version}" />
-                  <chainedmapper><flattenmapper /><globmapper from="*-SNAPSHOT" to="*-RC" /></chainedmapper>
-                </pathconvert>
-                <condition property="build.version" value="${version.rc} (${now})">
-                  <equals arg1="${build.type}" arg2="rc" />
-                </condition>
-                <property name="build.version" value="${project.version} (${build.type}-${now}-${user.name})" />
-                <!-- default to release version -->
-                <!-- put the version file -->
-                <echo message="The build id is: ${build.version}" />
-                <mkdir dir="target/classes/hudson/model" />
-                <echo file="target/classes/hudson/model/hudson-version.properties">version=${build.version}
-                </echo>
-
-                <!-- download winsw.exe -->
                 <mkdir dir="target/classes/windows-service" />
                 <resolveArtifact artifactId="winsw" tofile="target/classes/windows-service/hudson.exe" />
               </tasks>
@@ -339,12 +326,13 @@ THE SOFTWARE.
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>remoting</artifactId>
+      <artifactId>hudson-remoting</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <!-- Why does the core depend on the CLI? -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cli</artifactId>
+      <artifactId>hudson-cli</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

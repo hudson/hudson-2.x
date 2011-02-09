@@ -116,9 +116,9 @@ THE SOFTWARE.
                 </unjar>
 
                 <!-- dependencies that goes to unusual locations -->
-                <resolveArtifact artifactId="remoting" tofile="${basedir}/target/generated-resources/WEB-INF/remoting.jar" />
-                <resolveArtifact artifactId="remoting" tofile="${basedir}/target/generated-resources/WEB-INF/slave.jar" />
-                <resolveArtifact groupId="${project.groupId}" artifactId="cli" classifier="jar-with-dependencies" version="${project.version}" type="jar" tofile="${basedir}/target/generated-resources/WEB-INF/hudson-cli.jar" />
+                <resolveArtifact artifactId="hudson-remoting" tofile="${basedir}/target/generated-resources/WEB-INF/remoting.jar" />
+                <resolveArtifact artifactId="hudson-remoting" tofile="${basedir}/target/generated-resources/WEB-INF/slave.jar" />
+                <resolveArtifact groupId="${project.groupId}" artifactId="hudson-cli" classifier="jar-with-dependencies" version="${project.version}" type="jar" tofile="${basedir}/target/generated-resources/WEB-INF/hudson-cli.jar" />
                 <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
                 
                 <!-- bundled plugins -->
@@ -247,12 +247,12 @@ THE SOFTWARE.
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>remoting</artifactId>
+      <artifactId>hudson-remoting</artifactId>
       <version>${project.version}</version>
     </dependency>    
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>cli</artifactId>
+      <artifactId>hudson-cli</artifactId>
       <classifier>jar-with-dependencies</classifier>
       <version>${project.version}</version>
       <scope>provided</scope>
