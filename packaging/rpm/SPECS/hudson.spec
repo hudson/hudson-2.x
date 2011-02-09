@@ -13,7 +13,7 @@ Source1:	hudson.init.in
 Source2:	hudson.sysconfig.in
 Source3:	hudson.logrotate
 Source4:    hudson.repo
-URL:		https://hudson.dev.java.net/
+URL:		https://hudson-ci.org/
 Group:		Development/Tools/Building
 License:	MIT/X License, GPL/CDDL, ASL2
 BuildRoot:	%{_tmppath}/build-%{name}-%{version}
