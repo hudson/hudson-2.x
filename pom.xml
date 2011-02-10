@@ -42,14 +42,10 @@ THE SOFTWARE.
   <modules>
     <module>hudson-parent</module>
     <module>hudson-core</module>
+    <module>hudson-maven</module>
     <module>hudson-war</module>
     <module>hudson-cli</module>
     <module>hudson-remoting</module>
-    <module>maven-plugin</module>
-    <module>maven-agent</module>
-    <module>maven-interceptor</module>
-    <module>maven3-agent</module>
-    <module>maven3-interceptor</module>
     <!--
     
     We will move the ITs out so that the product can be built without taking an hour
