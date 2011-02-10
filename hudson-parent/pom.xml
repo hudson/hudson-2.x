@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>6</version>
-  </parent>  
+  </parent>
   <groupId>org.jvnet.hudson</groupId>
   <artifactId>hudson-parent</artifactId>
   <version>1.11-SNAPSHOT</version>
@@ -15,41 +16,41 @@
   <description>Hudson Continuous Integration Server</description>
   <url>http://hudson-ci.org/</url>
   <inceptionYear>2004</inceptionYear>
-  
+
   <issueManagement>
     <system>JIRA</system>
     <url>http://issues.hudson-ci.org/secure/Dashboard.jspa</url>
   </issueManagement>
-  
+
   <ciManagement>
     <system>Hudson</system>
     <url>http://ci.hudson-ci.org/job/hudson_main_trunk</url>
   </ciManagement>
-  
-  <mailingLists>  
+
+  <mailingLists>
     <mailingList>
       <name>Hudson developer discussion list</name>
       <subscribe>sympa@hudson.java.net?subject=unsubscribe%20dev</subscribe>
       <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20dev</unsubscribe>
       <post>dev@hudson.java.net</post>
       <archive>http://java.net/projects/hudson/lists/dev/archive</archive>
-    </mailingList>      
+    </mailingList>
     <mailingList>
       <name>Hudson user discussion list</name>
       <subscribe>sympa@hudson.java.net?subject=unsubscribe%20users</subscribe>
       <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20users</unsubscribe>
       <post>users@hudson.java.net</post>
       <archive>http://java.net/projects/hudson/lists/users/archive</archive>
-    </mailingList>      
+    </mailingList>
     <mailingList>
       <name>Hudson Japanese user discussion list</name>
       <subscribe>sympa@hudson.java.net?subject=unsubscribe%20ja</subscribe>
       <unsubscribe>sympa@hudson.java.net?subject=unsubscribe%20ja</unsubscribe>
       <post>ja@hudson.java.net</post>
       <archive>http://java.net/projects/hudson/lists/ja/archive</archive>
-    </mailingList>      
+    </mailingList>
   </mailingLists>
- 
+
   <scm>
     <connection>scm:git:git://java.net/hudson~git</connection>
     <developerConnection>scm:git:ssh://${jvnet.user}@java.net/hudson~git</developerConnection>
@@ -93,15 +94,15 @@
   </dependencies>
 
   <organization>
-  	<name>Hudson</name>
-  	<url>http://hudson-ci.org/</url>
+    <name>Hudson</name>
+    <url>http://hudson-ci.org/</url>
   </organization>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-	      <version>1.0-beta-1</version>
+        <version>1.0-beta-1</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -119,12 +120,80 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      
+
       <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.1</version>
-        </plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--TODO TEXT. This plugin's configuration is used in m2e only. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.jvnet.localizer</groupId>
+                    <artifactId>maven-localizer-plugin</artifactId>
+                    <versionRange>[1.10,)</versionRange>
+                    <goals>
+                      <goal>generate</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>display-info</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
+                    <artifactId>maven-antrun-extended-plugin</artifactId>
+                    <versionRange>[1.39,)</versionRange>
+                    <goals>
+                      <goal>run</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.1,)</versionRange>
+                    <goals>
+                      <goal>list</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <profiles>

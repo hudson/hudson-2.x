@@ -1,28 +1,14 @@
-<!--
-The MIT License
+<!-- The MIT License Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Daniel Dyer, Stephen Connolly Permission is hereby granted, 
+  free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software 
+  without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
+  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice 
+  and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT 
+  WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Daniel Dyer, Stephen Connolly
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
--->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
@@ -30,7 +16,7 @@ THE SOFTWARE.
     <version>1.396-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  
+
   <artifactId>hudson-remoting</artifactId>
   <packaging>jar</packaging>
   <name>Hudson :: Remoting Layer</name>
@@ -38,7 +24,7 @@ THE SOFTWARE.
     Contains the bootstrap code to bridge separate JVMs into a single semi-shared space.
     Reusable outside Hudson.
   </description>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -54,9 +40,7 @@ THE SOFTWARE.
         <artifactId>maven-pmd-plugin</artifactId>
         <version>2.5</version>
         <configuration>
-          <!--rulesets>
-            <ruleset>ruleset.xml</ruleset>
-          </rulesets-->
+          <!--rulesets> <ruleset>ruleset.xml</ruleset> </rulesets -->
           <targetJdk>1.5</targetJdk>
         </configuration>
       </plugin>
@@ -75,12 +59,8 @@ THE SOFTWARE.
               <goal>sign</goal>
             </goals>
             <configuration>
-              <!--
-                during the development, debug profile defined in ../pom.xml will cause
-                the jars to be signed by a self-certified dummy public key.
-                
-                For release, you should define the real values in ~/.m2/settings.xml
-              -->
+              <!-- during the development, debug profile defined in ../pom.xml will cause the jars to be signed by a self-certified dummy public 
+                key. For release, you should define the real values in ~/.m2/settings.xml -->
               <alias>${hudson.sign.alias}</alias>
               <storepass>${hudson.sign.storepass}</storepass>
               <keystore>${hudson.sign.keystore}</keystore>
@@ -88,6 +68,7 @@ THE SOFTWARE.
           </execution>
         </executions>
       </plugin>
+      <!-- TODO: Remove this and use standard resource filtering -->
       <plugin>
         <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
         <artifactId>maven-antrun-extended-plugin</artifactId>
@@ -106,7 +87,10 @@ THE SOFTWARE.
                 <property name="build.type" value="private" /> <!-- override for "rc" build -->
                 <pathconvert property="version.rc">
                   <path path="${project.version}" />
-                  <chainedmapper><flattenmapper /><globmapper from="*-SNAPSHOT" to="*-RC" /></chainedmapper>
+                  <chainedmapper>
+                    <flattenmapper />
+                    <globmapper from="*-SNAPSHOT" to="*-RC" />
+                  </chainedmapper>
                 </pathconvert>
                 <condition property="build.version" value="${version.rc} (${now})">
                   <equals arg1="${build.type}" arg2="rc" />

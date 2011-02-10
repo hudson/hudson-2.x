@@ -62,7 +62,6 @@ THE SOFTWARE.
               <Hudson-Version>${project.version}</Hudson-Version>
             </manifestEntries>
           </archive>
-          <!--outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping-->
         </configuration>
       </plugin>
       <plugin>
@@ -73,6 +72,7 @@ THE SOFTWARE.
             <goals>
               <goal>list</goal>
             </goals>
+            <!--  TODO: what is actually using this file? -->
             <configuration>
               <outputFile>${basedir}/target/classes/dependencies.txt</outputFile>
             </configuration>
