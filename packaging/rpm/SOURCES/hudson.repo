@@ -1,4 +1,4 @@
 [hudson]
 name=Hudson
-baseurl=http://pkg.hudson-ci.org/redhat/
+baseurl=http://hudson-ci.org/redhat/
 gpgcheck=1

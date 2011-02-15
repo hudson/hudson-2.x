@@ -46,6 +46,8 @@ test -r "$HUDSON_CONFIG" || { echo "$HUDSON_CONFIG not readable. Perhaps you for
 	else exit 6; fi; }
 
 HUDSON_PID_FILE="/var/run/hudson.pid"
+HUDSON_USER="hudson"
+HUDSON_GROUP="hudson"
 
 # Source function library.
 . /etc/init.d/functions
@@ -72,7 +74,7 @@ do
 done
 
 JAVA_CMD="$HUDSON_JAVA_CMD $HUDSON_JAVA_OPTIONS -DHUDSON_HOME=$HUDSON_HOME -jar $HUDSON_WAR"
-PARAMS="--logfile=/var/log/hudson/hudson.log --daemon"
+PARAMS="--logfile=/var/log/hudson/hudson.log"
 [ -n "$HUDSON_PORT" ] && PARAMS="$PARAMS --httpPort=$HUDSON_PORT"
 [ -n "$HUDSON_DEBUG_LEVEL" ] && PARAMS="$PARAMS --debug=$HUDSON_DEBUG_LEVEL"
 [ -n "$HUDSON_HANDLER_STARTUP" ] && PARAMS="$PARAMS --handlerCountStartup=$HUDSON_HANDLER_STARTUP"
