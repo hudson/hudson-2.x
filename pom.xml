@@ -42,6 +42,7 @@ THE SOFTWARE.
   <modules>
     <module>hudson-parent</module>
     <module>hudson-core</module>
+    <module>hudson-inject</module>
     <module>hudson-maven</module>
     <module>hudson-war</module>
     <module>hudson-cli</module>
@@ -342,8 +343,13 @@ THE SOFTWARE.
       </dependency>      
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
+        <artifactId>sisu-inject-bean</artifactId>
+        <version>${sisuInjectVersion}</version>
+      </dependency>  
+      <dependency>
+        <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-inject-plexus</artifactId>
-        <version>1.4.3.1</version>
+        <version>${sisuInjectVersion}</version>
       </dependency>  
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -375,6 +381,7 @@ THE SOFTWARE.
     <maven.version>${mavenVersion}</maven.version>
     <aetherVersion>1.9</aetherVersion>
     <wagonVersion>1.0-beta-7</wagonVersion>
+    <sisuInjectVersion>1.4.3.1</sisuInjectVersion>
     <!-- *.html files are in UTF-8, and *.properties are in iso-8859-1, so this configuration is acturally incorrect,
     but this suppresses a warning from Maven, and as long as we don't do filtering we should be OK. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
