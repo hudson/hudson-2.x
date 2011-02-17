@@ -39,6 +39,8 @@ import hudson.util.CyclicGraphDetector;
 import hudson.util.CyclicGraphDetector.CycleDetectedException;
 import hudson.util.PersistedList;
 import hudson.util.Service;
+
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -68,6 +70,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
@@ -349,7 +352,17 @@ public abstract class PluginManager extends AbstractModelObject {
      * Creates a hudson.PluginStrategy, looking at the corresponding system property. 
      */
     private PluginStrategy createPluginStrategy() {
+        // Allow the user to specify a the plugin strategy to use with a system property
 		String strategyName = System.getProperty(PluginStrategy.class.getName());
+		// Now let's check the default that's been set in the hudson-core.properties file
+		try {
+            Properties hudsonCoreProperties = new Properties();
+            hudsonCoreProperties.load( getClass().getResourceAsStream( "hudson-core.properties" ) );
+            strategyName = hudsonCoreProperties.getProperty( "hudson.PluginStrategy" );
+        } catch ( IOException e ) {
+            // Ignore
+        }
+        
 		if (strategyName != null) {
 			try {
 				Class<?> klazz = getClass().getClassLoader().loadClass(strategyName);
