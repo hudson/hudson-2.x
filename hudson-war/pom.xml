@@ -262,14 +262,6 @@ THE SOFTWARE.
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- offline profiler API when we need it -->
-    <!--dependency>
-      <groupId>com.yourkit.api</groupId>
-      <artifactId>yjp</artifactId>
-      <version>dontcare</version>
-      <scope>system</scope>
-      <systemPath>/usr/local/yjp/lib/yjp.jar</systemPath>
-    </dependency-->
   </dependencies>
   
   <properties>
