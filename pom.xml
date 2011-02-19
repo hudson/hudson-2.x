@@ -403,7 +403,33 @@ THE SOFTWARE.
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.8.1</version>
-      </dependency>  
+      </dependency>
+
+      <!-- INTERNAL -->
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-inject</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-remoting</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-cli</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

@@ -328,15 +328,13 @@ THE SOFTWARE.
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-remoting</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <!-- Why does the core depend on the CLI? -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-cli</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson</groupId>

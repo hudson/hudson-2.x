@@ -53,9 +53,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-remoting</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
