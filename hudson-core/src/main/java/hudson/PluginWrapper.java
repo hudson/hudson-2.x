@@ -133,7 +133,7 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
      */
     /*package*/ boolean isBundled;
 
-    static final class Dependency {
+    public static final class Dependency {
         public final String shortName;
         public final String version;
         public final boolean optional;
