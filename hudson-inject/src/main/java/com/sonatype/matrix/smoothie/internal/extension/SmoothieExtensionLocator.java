@@ -90,8 +90,10 @@ public class SmoothieExtensionLocator
             log.error("Extension discovery failed", e);
         }
 
-        if (components.isEmpty()) {
-            log.warn("No components of type '{}' discovered", type.getName());
+        if (log.isDebugEnabled()) {
+            if (components.isEmpty()) {
+                log.debug("No components of type '{}' discovered", type.getName());
+            }
         }
 
         return components;
