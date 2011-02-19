@@ -31,6 +31,7 @@ import hudson.ExtensionComponent;
 import hudson.Plugin;
 import hudson.PluginStrategy;
 import hudson.PluginWrapper;
+import hudson.PluginWrapper.Dependency;
 import hudson.model.Hudson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,10 +137,10 @@ public class SmoothiePluginStrategy
         }
 
         // Spit out some debug information about the plugin dependencies
-        List/*<PluginWrapper.Dependency>*/ dependencies = plugin.getDependencies();
+        List<Dependency> dependencies = plugin.getDependencies();
         if (dependencies != null && !dependencies.isEmpty()) {
             log.debug("  Dependencies:");
-            for (Object/*PluginWrapper.Dependency*/ dependency : dependencies) {
+            for (Dependency dependency : dependencies) {
                 log.debug("    {}", dependency);
             }
         }
@@ -147,7 +148,7 @@ public class SmoothiePluginStrategy
         dependencies = plugin.getOptionalDependencies();
         if (dependencies != null && !dependencies.isEmpty()) {
             log.debug("  Optional dependencies:");
-            for (Object/*PluginWrapper.Dependency*/ dependency : plugin.getOptionalDependencies()) {
+            for (Dependency dependency : plugin.getOptionalDependencies()) {
                 log.debug("    {}", dependency);
             }
         }
