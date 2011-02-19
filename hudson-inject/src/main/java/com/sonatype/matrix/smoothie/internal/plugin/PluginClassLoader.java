@@ -39,6 +39,9 @@ import java.util.List;
 public class PluginClassLoader
     extends URLClassLoader
 {
+    // FIXME: Re-implement AspectJ LTW here once 1.6.11 is released, previous release has bug with spaces in directory names.
+    // FIXME: ... https://bugs.eclipse.org/bugs/show_bug.cgi?id=282379
+
     private PluginWrapper plugin;
 
     public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
