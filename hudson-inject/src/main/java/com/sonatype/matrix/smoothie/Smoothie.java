@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Smoothie container access.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public class Smoothie
 {

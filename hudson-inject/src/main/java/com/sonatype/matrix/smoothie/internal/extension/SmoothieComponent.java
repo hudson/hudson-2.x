@@ -34,7 +34,7 @@ import java.lang.annotation.Annotation;
  * Smoothie component extension holder.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public class SmoothieComponent<T>
     extends ExtensionComponent<T>

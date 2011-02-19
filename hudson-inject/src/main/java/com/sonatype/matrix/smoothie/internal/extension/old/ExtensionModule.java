@@ -25,7 +25,7 @@ import javax.inject.Qualifier;
  *
  * This will not catch {@link Extension} on a method or field, use {@link com.sonatype.matrix.smoothie.internal.extension.SezPozExtensionModule} instead.
  *
- * @since 1.1
+ * @since 1.396
  */
 public final class ExtensionModule
     implements Module

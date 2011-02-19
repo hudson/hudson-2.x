@@ -49,7 +49,7 @@ import java.lang.reflect.Field;
  * Handles {@link com.sonatype.matrix.smoothie.injecto.Injectomatic} muck when unmarshalling components via XStream.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 @Named
 @EagerSingleton

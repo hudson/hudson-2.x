@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * Helper for the {@link Injectomatic} aspect.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.1
+ * @since 1.396
  */
 public class InjectomaticAspectHelper
 {

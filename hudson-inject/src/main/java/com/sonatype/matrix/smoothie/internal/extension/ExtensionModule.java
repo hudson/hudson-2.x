@@ -21,7 +21,7 @@ import org.sonatype.guice.bean.reflect.ClassSpace;
  * Configures modules to discover Hudson components.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.1
+ * @since 1.396
  */
 public final class ExtensionModule
     implements Module

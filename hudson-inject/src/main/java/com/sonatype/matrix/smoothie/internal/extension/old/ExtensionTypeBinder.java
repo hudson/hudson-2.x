@@ -23,7 +23,7 @@ import hudson.model.Descriptor;
 /**
  * Binds Hudson {@link ExtensionPoint} component types.
  *
- * @since 1.1
+ * @since 1.396
  */
 final class ExtensionTypeBinder
 {

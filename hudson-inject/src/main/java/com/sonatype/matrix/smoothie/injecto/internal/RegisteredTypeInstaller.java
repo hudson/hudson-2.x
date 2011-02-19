@@ -34,7 +34,7 @@ import javax.inject.Named;
  * Helper to register injectable types for Hudson.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 @Named
 @EagerSingleton

@@ -28,7 +28,7 @@ package com.sonatype.matrix.smoothie.injecto;
  * Marker interface which allows any object to get post-construction injection magically.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public interface Injectable
 {

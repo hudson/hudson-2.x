@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public privileged aspect InjectomaticAspect
 {

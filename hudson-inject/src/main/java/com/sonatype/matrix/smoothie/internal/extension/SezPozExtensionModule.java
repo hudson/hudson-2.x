@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
 /**
  * Guice {@link Module} that binds types based on SezPoz index.
  *
- * @since 1.1
+ * @since 1.396
  */
 @SuppressWarnings( { "unchecked", "rawtypes" } )
 public final class SezPozExtensionModule

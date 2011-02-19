@@ -30,7 +30,7 @@ import java.net.URL;
 /**
  * {@link ClassSpaceVisitor} that detects types annotated with {@link Qualifier} or {@link Extension} annotations.
  *
- * @since 1.1
+ * @since 1.396
  */
 public final class ExtensionTypeVisitor
     extends EmptyClassVisitor

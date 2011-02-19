@@ -28,7 +28,7 @@ package com.sonatype.matrix.smoothie.injecto;
  * Allows any object to become aware of the {@link Injectomatic} component w/o having to be injectable itself.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public interface InjectomaticAware
 {

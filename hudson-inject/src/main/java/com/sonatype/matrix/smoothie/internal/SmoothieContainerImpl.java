@@ -61,7 +61,7 @@ import java.util.Map;
  * {@link SmoothieContainer} implementation.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 0.2
+ * @since 1.396
  */
 public class SmoothieContainerImpl
     implements SmoothieContainer
@@ -91,7 +91,7 @@ public class SmoothieContainerImpl
     /**
      * Not officially part of {@link SmoothieContainer} API, exposed for {@link com.sonatype.matrix.smoothie.injecto.Injectomatic}.
      *
-     * @since 1.1
+     * @since 1.396
      */
     public Injector rootInjector() {
         return root;

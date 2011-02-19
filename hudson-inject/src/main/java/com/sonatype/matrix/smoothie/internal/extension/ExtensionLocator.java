@@ -30,6 +30,8 @@ import java.util.List;
 
 /**
  * Allows {@link hudson.PluginStrategy} complete control over how extensions are found.
+ *
+ * @since 1.396
  */
 public interface ExtensionLocator
 {
