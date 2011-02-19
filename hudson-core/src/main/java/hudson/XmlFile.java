@@ -281,7 +281,7 @@ public final class XmlFile {
     /**
      * {@link XStream} instance is supposed to be thread-safe.
      */
-    private static final XStream DEFAULT_XSTREAM = new XStream2();
+    public static final XStream DEFAULT_XSTREAM = new XStream2();
 
     private static final Logger LOGGER = Logger.getLogger(XmlFile.class.getName());
 
