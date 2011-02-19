@@ -43,7 +43,6 @@ import org.sonatype.inject.EagerSingleton;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.lang.reflect.Field;
 
 /**
  * Handles {@link com.sonatype.matrix.smoothie.injecto.Injectomatic} muck when unmarshalling components via XStream.
@@ -58,22 +57,6 @@ public class XStreamInjectoHandler
     private static final Logger log = LoggerFactory.getLogger(XStreamInjectoHandler.class);
 
     /**
-     * {@link XmlFile#DEFAULT_XSTREAM} is not public, so we have to use reflection to get a hold of it :-(
-     */
-    private static final XStream XmlFile_DEFAULT_XSTREAM;
-
-    static {
-        try {
-            Field field = XmlFile.class.getDeclaredField("DEFAULT_XSTREAM");
-            field.setAccessible(true);
-            XmlFile_DEFAULT_XSTREAM = (XStream) field.get(null);
-        }
-        catch (Exception e) {
-            throw new Error(e);
-        }
-    }
-
-    /**
      * Set of XStream instances which registration converters will be attached.
      */
     private static final XStream[] DEFAULT_XSTREAMS = {
@@ -82,7 +65,7 @@ public class XStreamInjectoHandler
         Queue.XSTREAM,
         Run.XSTREAM,
         UpdateCenter.XSTREAM,
-        XmlFile_DEFAULT_XSTREAM
+        XmlFile.DEFAULT_XSTREAM
     };
 
     private final Injectomatic injecto;
