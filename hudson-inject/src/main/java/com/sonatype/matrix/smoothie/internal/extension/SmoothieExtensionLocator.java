@@ -66,9 +66,9 @@ public class SmoothieExtensionLocator
     public <T> List<ExtensionComponent<T>> locate(final Class<T> type) {
         checkNotNull(type);
 
-//        if (log.isTraceEnabled()) {
-            log.info("Finding extensions: {}", type.getName());
-//        }
+        if (log.isDebugEnabled()) {
+            log.debug("Finding extensions: {}", type.getName());
+        }
 
         List<ExtensionComponent<T>> components = new ArrayList<ExtensionComponent<T>>();
         try {
@@ -76,15 +76,15 @@ public class SmoothieExtensionLocator
             for (QualifiedBean<Annotation,T> item : items) {
                 // Use our container for extendability and logging simplicity.
                 SmoothieComponent<T> component = new SmoothieComponent<T>(item);
-                log.info("Found: {}", component);
+                log.debug("Found: {}", component);
                 if (component.getInstance() != null) { // filter out null components (ie. uninitialized @Extension fields)
                     components.add(component);
                 }
             }
 
-//            if (log.isDebugEnabled()) {
-                log.info("Found {} {} components", components.size(), type.getName());
-//            }
+            if (log.isDebugEnabled()) {
+                log.debug("Found {} {} components", components.size(), type.getName());
+            }
         }
         catch (Exception e) {
             log.error("Extension discovery failed", e);

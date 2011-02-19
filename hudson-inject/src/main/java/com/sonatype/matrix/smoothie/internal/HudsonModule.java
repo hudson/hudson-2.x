@@ -26,6 +26,8 @@ package com.sonatype.matrix.smoothie.internal;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+import com.thoughtworks.xstream.core.JVM;
 import hudson.PluginManager;
 import hudson.TcpSlaveAgentListener;
 import hudson.model.FingerprintMap;
@@ -45,9 +47,11 @@ import javax.inject.Named;
 public class HudsonModule
     extends AbstractModule
 {
+    private static final ReflectionProvider reflection = new JVM().bestReflectionProvider();
+
     @Override
     protected void configure() {
-        // ???
+        bind(ReflectionProvider.class).toInstance(reflection);
     }
 
     @Provides

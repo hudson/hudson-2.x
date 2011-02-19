@@ -37,9 +37,6 @@ import com.sonatype.matrix.smoothie.internal.extension.SezPozExtensionModule;
 import com.sonatype.matrix.smoothie.internal.extension.SmoothieExtensionLocator;
 import com.sonatype.matrix.smoothie.internal.plugin.PluginClassLoader;
 import com.sonatype.matrix.smoothie.internal.plugin.SmoothiePluginStrategy;
-import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.core.JVM;
-import hudson.ClassicPluginStrategy;
 import hudson.PluginStrategy;
 import hudson.PluginWrapper;
 import org.slf4j.Logger;
@@ -74,18 +71,22 @@ public class SmoothieContainerImpl
 
     private final Map<PluginWrapper,Injector> injectors = new HashMap<PluginWrapper,Injector>();
 
-    private final ReflectionProvider reflection = new JVM().bestReflectionProvider();
-
     public SmoothieContainerImpl(final Module... modules) {
-        root = Guice.createInjector(new WireModule(new BootModule(modules)));
+        root = createInjector(new BootModule(modules));
+    }
 
-        // HACK:
-        log.info("Root bindings:");
-        for (Map.Entry<Key<?>,Binding<?>> entry : root.getAllBindings().entrySet()) {
-            log.info("  {} -> {}", entry.getKey(), entry.getValue());
+    private Injector createInjector(final Module... modules) {
+        assert modules != null;
+        Injector injector = Guice.createInjector(new WireModule(modules));
+
+        if (log.isTraceEnabled()) {
+            log.trace("Created injector: {} w/bindings:", OID.get(injector));
+            for (Map.Entry<Key<?>,Binding<?>> entry : injector.getAllBindings().entrySet()) {
+                log.trace("  {} -> {}", entry.getKey(), entry.getValue());
+            }
         }
 
-        locator.add(root);
+        return injector;
     }
 
     /**
@@ -98,27 +99,28 @@ public class SmoothieContainerImpl
     }
 
     /**
-     * Bindings for bootstrapping container bits.  Scan path needs to be configured as additional module.
+     * Common bindings.
      */
-    private class BootModule
+    private class CommonModule
         extends AbstractModule
     {
         private final Module[] modules;
 
-        private BootModule(final Module[] modules) {
+        private CommonModule(final Module[] modules) {
             assert modules != null;
             this.modules = modules;
+        }
+
+        private CommonModule() {
+            this(new Module[0]);
         }
 
         @Override
         protected void configure() {
             bind(MutableBeanLocator.class).toInstance(locator);
             bind(SmoothieContainer.class).toInstance(SmoothieContainerImpl.this);
-            bind(ReflectionProvider.class).toInstance(reflection);
-            bind(PluginStrategy.class).annotatedWith(Names.named("default")).to(SmoothiePluginStrategy.class);
-            bind(ExtensionLocator.class).annotatedWith(Names.named("default")).to(SmoothieExtensionLocator.class);
             install(new HudsonModule());
-            
+
             for (Module module : modules) {
                 install(module);
             }
@@ -126,10 +128,28 @@ public class SmoothieContainerImpl
     }
 
     /**
-     * Bindings and classspace for plugins.
+     * Bindings for bootstrapping container bits.  Scan path needs to be configured as additional module.
+     */
+    private class BootModule
+        extends CommonModule
+    {
+        private BootModule(final Module[] modules) {
+            super(modules);
+        }
+
+        @Override
+        protected void configure() {
+            bind(PluginStrategy.class).annotatedWith(Names.named("default")).to(SmoothiePluginStrategy.class);
+            bind(ExtensionLocator.class).annotatedWith(Names.named("default")).to(SmoothieExtensionLocator.class);
+            super.configure();
+        }
+    }
+
+    /**
+     * Bindings and class space for plugins.
      */
     private class PluginModule
-        extends AbstractModule
+        extends CommonModule
     {
         private final PluginWrapper plugin;
 
@@ -140,14 +160,10 @@ public class SmoothieContainerImpl
 
         @Override
         protected void configure() {
-            bind(MutableBeanLocator.class).toInstance(locator);
-            bind(SmoothieContainer.class).toInstance(SmoothieContainerImpl.this);
-            bind(ReflectionProvider.class).toInstance(reflection);
-
             ClassSpace space = createClassSpace();
             install(new SpaceModule(space));
             install(new SezPozExtensionModule(space));
-            install(new HudsonModule());
+            super.configure();
         }
 
         private ClassSpace createClassSpace() {
@@ -157,7 +173,6 @@ public class SmoothieContainerImpl
                 space = new URLClassSpace(cl, cl.getURLs()); // urls logged from PluginWrapperFactory
             }
             else {
-                // This should never happen with SmoothiePluginStrategy
                 log.warn("Expected plugin to have PluginClassLoader; instead found: {}", plugin.classLoader.getClass().getName());
                 space = new URLClassSpace(plugin.classLoader);
             }
@@ -178,8 +193,7 @@ public class SmoothieContainerImpl
             throw new IllegalStateException("Plugin already registered");
         }
 
-        Injector injector = Guice.createInjector(new WireModule(new PluginModule(plugin)));
-
+        Injector injector = createInjector(new PluginModule(plugin));
         locator.add(injector);
         injectors.put(plugin, injector);
     }
