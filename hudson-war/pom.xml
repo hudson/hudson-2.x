@@ -1,3 +1,4 @@
+
 <!--
 The MIT License
 
@@ -267,14 +268,6 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-    </dependency>
-
-    <!--
-    HACK: This should *NOT* be required here, it should be included via hudson-inject dependencies, but maven-plugin's provided scope is messing that up.
-    -->
-    <dependency>
-      <groupId>org.sonatype.sisu</groupId>
-      <artifactId>sisu-inject-bean</artifactId>
     </dependency>
   </dependencies>
   
