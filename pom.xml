@@ -27,13 +27,13 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson</groupId>
     <artifactId>hudson-parent</artifactId>
-    <version>1.11-SNAPSHOT</version>
+    <version>1.12-SNAPSHOT</version>
     <relativePath>hudson-parent/pom.xml</relativePath>
   </parent>
   
   <groupId>org.jvnet.hudson.main</groupId>
   <artifactId>hudson</artifactId>
-  <version>1.396-SNAPSHOT</version>
+  <version>1.397-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>Hudson :: Main</name>
