@@ -39,6 +39,8 @@ import java.lang.annotation.Annotation;
 public class SmoothieComponent<T>
     extends ExtensionComponent<T>
 {
+    // TODO: This can be removed if/once ExtensionComponent has a more sane toString() implementation.
+
     private final QualifiedBean<Annotation,T> bean;
 
     public SmoothieComponent(final QualifiedBean<Annotation,T> bean) {
