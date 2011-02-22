@@ -24,6 +24,7 @@
 
 package org.hudsonci.inject;
 
+import hudson.Extension;
 import org.hudsonci.inject.internal.SmoothieContainerBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,10 +79,17 @@ public class Smoothie
     public static <T> double priorityOf(final T component) {
         assert component != null;
 
+        Class<?> type = component.getClass();
         double value = 0;
-        Priority priority = component.getClass().getAnnotation(Priority.class);
+        Priority priority = type.getAnnotation(Priority.class);
         if (priority != null) {
             value = priority.value();
+        }
+        else {
+            Extension ext = type.getAnnotation(Extension.class);
+            if (ext != null) {
+                value = ext.ordinal();
+            }
         }
 
         return value;
