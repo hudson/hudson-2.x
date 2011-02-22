@@ -33,6 +33,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Guice {@link Module} that binds types based on SezPoz index.
  *
@@ -56,7 +58,7 @@ public final class SezPozExtensionModule
 
     public SezPozExtensionModule( final ClassSpace space )
     {
-        this.space = space;
+        this.space = checkNotNull(space);
     }
 
     // ----------------------------------------------------------------------
