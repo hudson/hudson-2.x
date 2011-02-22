@@ -3,7 +3,7 @@
 
     The MIT License
 
-    Copyright (c) 2010 Sonatype, Inc. All rights reserved.
+    Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 
 <aspectj>
     <aspects>
-        <aspect name="com.sonatype.matrix.smoothie.injecto.internal.InjectomaticAspect"/>
+        <aspect name="org.hudsonci.inject.injecto.internal.InjectomaticAspect"/>
     </aspects>
 
     <weaver options="-Xlint:ignore -warn:none -XaddSerialVersionUID"/>
