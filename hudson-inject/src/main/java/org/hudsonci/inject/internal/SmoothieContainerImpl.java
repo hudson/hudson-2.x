@@ -72,7 +72,7 @@ public class SmoothieContainerImpl
     private final Map<PluginWrapper,Injector> injectors = new HashMap<PluginWrapper,Injector>();
 
     public SmoothieContainerImpl(final Module... modules) {
-        root = createInjector(new BootModule(modules));
+        this.root = createInjector(new BootModule(modules));
     }
 
     private Injector createInjector(final Module... modules) {

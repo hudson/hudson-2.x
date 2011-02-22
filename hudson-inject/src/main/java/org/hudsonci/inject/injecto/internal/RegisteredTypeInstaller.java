@@ -30,6 +30,8 @@ import org.sonatype.inject.EagerSingleton;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Helper to register injectable types for Hudson when the container starts.
  *
@@ -42,7 +44,7 @@ public class RegisteredTypeInstaller
 {
     @Inject
     public RegisteredTypeInstaller(final Injectomatic injecto) {
-        assert injecto != null;
+        checkNotNull(injecto);
         injecto.register(hudson.model.Descriptor.class);
         injecto.register(hudson.model.Describable.class);
         injecto.register(hudson.Plugin.class);

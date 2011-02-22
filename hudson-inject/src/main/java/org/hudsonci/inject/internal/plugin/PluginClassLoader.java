@@ -30,6 +30,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Plugin class-loader.
  *
@@ -56,7 +58,7 @@ public class PluginClassLoader
     }
 
     void setPlugin(final PluginWrapper plugin) {
-        assert plugin != null;
+        checkNotNull(plugin);
         if (this.plugin != null) {
             throw new IllegalStateException();
         }

@@ -40,6 +40,8 @@ import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Default {@link org.hudsonci.inject.injecto.Injectomatic} implementation.
  *
@@ -67,8 +69,7 @@ public class InjectomaticImpl
 
     @Inject
     public InjectomaticImpl(final SmoothieContainer container) {
-        assert container != null;
-        this.container = container;
+        this.container = checkNotNull(container);
         register(Injectable.class);
     }
 

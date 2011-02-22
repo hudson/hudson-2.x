@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Provides {@link PluginWrapper} creation facilities.
  *
@@ -57,7 +59,7 @@ public class PluginWrapperFactory
 
     @Inject
     public PluginWrapperFactory(final PluginManager plugins) {
-        assert plugins != null;
+        checkNotNull(plugins);
 
         // Using the Classic strategy to build the wrapper, since its not easy to re-implement its logic
         this.delegate = new ClassicPluginStrategy(plugins)
@@ -75,8 +77,7 @@ public class PluginWrapperFactory
     }
 
     public PluginWrapper create(final File file) throws Exception {
-        assert file != null;
-
+        checkNotNull(file);
         log.trace("Creating plugin wrapper for: {}", file);
 
         PluginWrapper plugin = delegate.createPluginWrapper(file);

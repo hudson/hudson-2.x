@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Smoothie {@link PluginStrategy}.
  *
@@ -65,11 +67,9 @@ public class SmoothiePluginStrategy
 
     @Inject
     public SmoothiePluginStrategy(final SmoothieContainer container, final PluginWrapperFactory pluginFactory, final @Named("default") ExtensionLocator extensionLocator) {
-        assert container != null;
-        this.container = container;
-        assert pluginFactory != null;
-        this.pluginFactory = pluginFactory;
-        this.extensionLocator = extensionLocator;
+        this.container = checkNotNull(container);
+        this.pluginFactory = checkNotNull(pluginFactory);
+        this.extensionLocator = checkNotNull(extensionLocator);
     }
 
     private String basename(String name) {
@@ -88,8 +88,7 @@ public class SmoothiePluginStrategy
      * Load the plugins wrapper and inject it with the {@link SmoothieContainer}.
      */
     public PluginWrapper createPluginWrapper(final File archive) throws IOException {
-        assert archive != null;
-
+        checkNotNull(archive);
         PluginWrapper plugin;
         try {
             plugin = pluginFactory.create(archive);
@@ -158,8 +157,7 @@ public class SmoothiePluginStrategy
      * Loads the optional {@link hudson.Plugin} instance, configures and starts it.
      */
     public void load(final PluginWrapper plugin) throws IOException {
-        assert plugin != null;
-
+        checkNotNull(plugin);
         if (log.isDebugEnabled()) {
             log.debug("Configuring plugin: {}", plugin.getShortName());
         }
@@ -229,7 +227,6 @@ public class SmoothiePluginStrategy
      * This method of the PluginStrategy interface is completely unused.
      */
     public void initializeComponents(final PluginWrapper plugin) {
-        assert plugin != null;
         throw new Error("Unused operation");
     }
 

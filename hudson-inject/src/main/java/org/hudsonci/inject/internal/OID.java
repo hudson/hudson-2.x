@@ -29,6 +29,8 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 import java.util.Collection;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Provides a general identifier for objects.
  *
@@ -52,8 +54,7 @@ public class OID
     private final int hash;
 
     private OID(final String type, final int hash) {
-        assert type != null;
-        this.type = type;
+        this.type = checkNotNull(type);
         this.hash = hash;
     }
 

@@ -17,6 +17,8 @@ import com.google.inject.Module;
 import org.sonatype.guice.bean.binders.SpaceModule;
 import org.sonatype.guice.bean.reflect.ClassSpace;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Configures modules to discover Hudson components.
  *
@@ -29,8 +31,7 @@ public final class ExtensionModule
     private final ClassSpace space;
 
     public ExtensionModule(final ClassSpace space) {
-        assert space != null;
-        this.space = space;
+        this.space = checkNotNull(space);
     }
 
     public void configure(final Binder binder) {

@@ -44,6 +44,8 @@ import org.sonatype.inject.EagerSingleton;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Handles {@link Injectomatic} muck when unmarshalling components via XStream.
  *
@@ -74,10 +76,8 @@ public class XStreamInjectoHandler
 
     @Inject
     public XStreamInjectoHandler(final Injectomatic injecto, final ReflectionProvider reflection) {
-        assert injecto != null;
-        this.injecto = injecto;
-        assert reflection != null;
-        this.reflection = reflection;
+        this.injecto = checkNotNull(injecto);
+        this.reflection = checkNotNull(reflection);
 
         // Register converter for the default streams we know about
         for (XStream xs : DEFAULT_XSTREAMS) {
@@ -86,7 +86,7 @@ public class XStreamInjectoHandler
     }
 
     public void register(final XStream xs) {
-        assert xs != null;
+        checkNotNull(xs);
         log.trace("Registering converter for: {}", xs);
         xs.registerConverter(new InjectoConverter(xs.getMapper(), reflection), XStream.PRIORITY_VERY_LOW);
     }
