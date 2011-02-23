@@ -24,8 +24,9 @@
 
 package org.hudsonci.inject.internal.extension;
 
-import org.hudsonci.inject.Smoothie;
+import hudson.Extension;
 import hudson.ExtensionComponent;
+import org.hudsonci.inject.Priority;
 import org.sonatype.guice.bean.locators.QualifiedBean;
 
 import java.lang.annotation.Annotation;
@@ -39,13 +40,19 @@ import java.lang.annotation.Annotation;
 public class SmoothieComponent<T>
     extends ExtensionComponent<T>
 {
-    // TODO: This can be removed if/once ExtensionComponent has a more sane toString() implementation.
-
     private final QualifiedBean<Annotation,T> bean;
 
+    private final T value;
+
+    private final double priority;
+
     public SmoothieComponent(final QualifiedBean<Annotation,T> bean) {
-        super(bean.getValue(), Smoothie.priorityOf(bean));
+        super(null);
         this.bean = bean;
+        this.value = bean.getValue();
+
+        Double p = priorityOf(value);
+        this.priority = p != null ? p : DEFAULT_PRIORITY;
     }
 
     public QualifiedBean<Annotation,T> getBean() {
@@ -56,8 +63,18 @@ public class SmoothieComponent<T>
         return getBean().getImplementationClass();
     }
 
+    @Override
+    public T getInstance() {
+        return value;
+    }
+
     public double getPriority() {
-        return ordinal();
+        return priority;
+    }
+
+    @Override
+    public double ordinal() {
+        return getPriority();
     }
 
     @Override
@@ -67,5 +84,44 @@ public class SmoothieComponent<T>
             ", priority=" + getPriority() +
             ", bean=" + bean +
             '}';
+    }
+
+    //
+    // Priority helpers
+    //
+
+    public static final double DEFAULT_PRIORITY = 0;
+
+    public static Double priorityOf(final Object component) {
+        if (component == null) {
+            return null;
+        }
+        return priorityOf(component.getClass());
+    }
+
+    public static Double priorityOf(final Class<?> type) {
+        if (type != null) {
+            Priority priority = type.getAnnotation(Priority.class);
+            if (priority != null) {
+                return priority.value();
+            }
+            Extension ext = type.getAnnotation(Extension.class);
+            if (ext != null) {
+                return ext.ordinal();
+            }
+        }
+        return null;
+    }
+
+    public static Double priorityOf(final Annotation annotation) {
+        if (annotation != null) {
+            if (annotation instanceof Priority) {
+                return ((Priority)annotation).value();
+            }
+            else if (annotation instanceof Extension) {
+                return ((Extension)annotation).ordinal();
+            }
+        }
+        return null;
     }
 }
