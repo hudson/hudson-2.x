@@ -46,20 +46,20 @@ THE SOFTWARE.
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+            <argLine>-XX:MaxPermSize=192m -Xmx256m</argLine>
             <systemPropertyVariables>
+                <file.encoding>UTF-8</file.encoding>
                 <java.awt.headless>true</java.awt.headless>
                 <java.util.logging.config.file>${project.basedir}/target/test-classes/jul.properties</java.util.logging.config.file>
                 <buildDirectory>${project.build.directory}</buildDirectory>
                 <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
             </systemPropertyVariables>
-            <!--
-          <skip>true</skip>
-          -->
-          <!-- tests now run by maven-junit-plugin -->
         </configuration>
       </plugin>
+
       <!--<plugin>-->
         <!--&lt;!&ndash; see http://maven-junit-plugin.kenai.com/ for more info &ndash;&gt;-->
         <!--<groupId>com.sun.maven</groupId>-->
