@@ -39,7 +39,7 @@ public class SmoothieUtil
 {
     private static final Logger log = LoggerFactory.getLogger(SmoothieUtil.class);
 
-    public static void setField(Class type, String name, Object instance, Object value) throws NoSuchFieldException, IllegalAccessException {
+    private static void setField(Class type, String name, Object instance, Object value) throws NoSuchFieldException, IllegalAccessException {
         Field field = type.getDeclaredField(name);
         field.setAccessible(true);
         field.set(instance, value);
