@@ -48,52 +48,62 @@ THE SOFTWARE.
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+            <systemPropertyVariables>
+                <java.awt.headless>true</java.awt.headless>
+                <java.util.logging.config.file>${project.basedir}/target/test-classes/jul.properties</java.util.logging.config.file>
+                <buildDirectory>${project.build.directory}</buildDirectory>
+                <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+            </systemPropertyVariables>
             <!--
           <skip>true</skip>
           -->
           <!-- tests now run by maven-junit-plugin -->
         </configuration>
       </plugin>
-      <plugin>
-        <!-- see http://maven-junit-plugin.kenai.com/ for more info -->
-        <groupId>com.sun.maven</groupId>
-        <artifactId>maven-junit-plugin</artifactId>
-        <version>1.6</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>test</goal>
-            </goals>
-            <configuration>
-              <fork>true</fork>
-              <concurrency>${concurrency}</concurrency>
-              <argLine>-XX:MaxPermSize=192m -Xmx256m -Dfile.encoding=UTF-8</argLine>
-              <systemProperties>
-                <property>
-                  <!-- use AntClassLoader that supports predictable file handle release -->
-                  <name>hudson.ClassicPluginStrategy.useAntClassLoader</name>
-                  <value>true</value>
-                </property>
-                <property>
-                  <name>hudson.maven.debug</name>
-                  <value>${mavenDebug}</value>
-                </property>
-                <property>
-                  <name>java.io.tmpdir</name>
-                  <value>${project.build.directory}</value>
-                </property> 
-                <property>
-                  <name>buildDirectory</name>
-                  <value>${project.build.directory}</value>
-                </property>                               
-              </systemProperties>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      <!--<plugin>-->
+        <!--&lt;!&ndash; see http://maven-junit-plugin.kenai.com/ for more info &ndash;&gt;-->
+        <!--<groupId>com.sun.maven</groupId>-->
+        <!--<artifactId>maven-junit-plugin</artifactId>-->
+        <!--<version>1.6</version>-->
+        <!--<configuration>-->
+          <!--<skipTests>true</skipTests>-->
+        <!--</configuration>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<goals>-->
+              <!--<goal>test</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<fork>true</fork>-->
+              <!--<concurrency>${concurrency}</concurrency>-->
+              <!--<argLine>-XX:MaxPermSize=192m -Xmx256m -Dfile.encoding=UTF-8</argLine>-->
+              <!--<systemProperties>-->
+                <!--<property>-->
+                  <!--&lt;!&ndash; use AntClassLoader that supports predictable file handle release &ndash;&gt;-->
+                  <!--<name>hudson.ClassicPluginStrategy.useAntClassLoader</name>-->
+                  <!--<value>true</value>-->
+                <!--</property>-->
+                <!--<property>-->
+                  <!--<name>java.util.logging.config.file</name>-->
+                  <!--<value>${basedir}/target/test-classes/jul.properties</value>-->
+                <!--</property>-->
+                <!--<property>-->
+                  <!--<name>hudson.maven.debug</name>-->
+                  <!--<value>${mavenDebug}</value>-->
+                <!--</property>-->
+                <!--<property>-->
+                  <!--<name>java.io.tmpdir</name>-->
+                  <!--<value>${project.build.directory}</value>-->
+                <!--</property> -->
+                <!--<property>-->
+                  <!--<name>buildDirectory</name>-->
+                  <!--<value>${project.build.directory}</value>-->
+                <!--</property>                               -->
+              <!--</systemProperties>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
       <plugin>
         <groupId>org.kohsuke.gmaven</groupId>
         <artifactId>gmaven-plugin</artifactId>
@@ -140,18 +150,31 @@ THE SOFTWARE.
         put hudson.war in the classpath. we can't pull in the war artifact directly
         because Maven excludes all wars from classpath automatically. so we need a jar artifact.
       -->
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-war</artifactId>
       <version>${project.version}</version>
       <classifier>war-for-test</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-inject</artifactId>
+      <classifier>tests</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven-plugin</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-cli</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -204,6 +227,16 @@ THE SOFTWARE.
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>netx</artifactId>
       <version>0.5-hudson-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
