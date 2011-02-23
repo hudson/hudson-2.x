@@ -45,9 +45,9 @@ import org.sonatype.guice.bean.binders.SpaceModule;
 import org.sonatype.guice.bean.binders.WireModule;
 import org.sonatype.guice.bean.locators.DefaultBeanLocator;
 import org.sonatype.guice.bean.locators.MutableBeanLocator;
-import org.sonatype.guice.bean.locators.QualifiedBean;
 import org.sonatype.guice.bean.reflect.ClassSpace;
 import org.sonatype.guice.bean.reflect.URLClassSpace;
+import org.sonatype.inject.BeanEntry;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -194,7 +194,7 @@ public class SmoothieContainerImpl
         }
 
         Injector injector = createInjector(new PluginModule(plugin));
-        locator.add(injector);
+
         injectors.put(plugin, injector);
     }
 
@@ -210,16 +210,16 @@ public class SmoothieContainerImpl
         return injector;
     }
 
-    public <Q extends Annotation, T> Iterable<QualifiedBean<Q, T>> locate(final Key<T> key) {
-        return locator.locate(key, null);
+    public <Q extends Annotation, T> Iterable<BeanEntry<Q, T>> locate(final Key<T> key) {
+        return locator.locate(key);
     }
 
     public <T> T get(final Key<T> key) {
-        Iterator<QualifiedBean<Annotation,T>> iter = locate(key).iterator();
+        Iterator<BeanEntry<Annotation,T>> iter = locate(key).iterator();
         assert iter != null;
 
         if (iter.hasNext()) {
-            QualifiedBean<Annotation,T> bean = iter.next();
+            BeanEntry<Annotation,T> bean = iter.next();
             log.debug("Found: {}", bean);
 
             T value = bean.getValue();

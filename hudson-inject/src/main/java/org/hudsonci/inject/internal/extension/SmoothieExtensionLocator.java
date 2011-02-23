@@ -29,7 +29,7 @@ import org.hudsonci.inject.SmoothieContainer;
 import hudson.ExtensionComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.guice.bean.locators.QualifiedBean;
+import org.sonatype.inject.BeanEntry;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -72,8 +72,8 @@ public class SmoothieExtensionLocator
 
         List<ExtensionComponent<T>> components = new ArrayList<ExtensionComponent<T>>();
         try {
-            Iterable<QualifiedBean<Annotation,T>> items = container.locate(Key.get(type));
-            for (QualifiedBean<Annotation,T> item : items) {
+            Iterable<BeanEntry<Annotation,T>> items = container.locate(Key.get(type));
+            for (BeanEntry<Annotation,T> item : items) {
                 // Use our container for extendability and logging simplicity.
                 SmoothieComponent<T> component = new SmoothieComponent<T>(item);
                 log.debug("Found: {}", component);

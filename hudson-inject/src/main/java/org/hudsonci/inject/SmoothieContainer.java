@@ -27,7 +27,7 @@ package org.hudsonci.inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import hudson.PluginWrapper;
-import org.sonatype.guice.bean.locators.QualifiedBean;
+import org.sonatype.inject.BeanEntry;
 
 import java.lang.annotation.Annotation;
 
@@ -52,7 +52,7 @@ public interface SmoothieContainer
     /**
      * Locate components.
      */
-    <Q extends Annotation, T> Iterable<QualifiedBean<Q,T>> locate(Key<T> key);
+    <Q extends Annotation, T> Iterable<BeanEntry<Q,T>> locate(Key<T> key);
 
     /**
      * Get a component instance.

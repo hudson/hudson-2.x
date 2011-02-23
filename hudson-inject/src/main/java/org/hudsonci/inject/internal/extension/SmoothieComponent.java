@@ -26,7 +26,7 @@ package org.hudsonci.inject.internal.extension;
 
 import org.hudsonci.inject.Smoothie;
 import hudson.ExtensionComponent;
-import org.sonatype.guice.bean.locators.QualifiedBean;
+import org.sonatype.inject.BeanEntry;
 
 import java.lang.annotation.Annotation;
 
@@ -41,14 +41,14 @@ public class SmoothieComponent<T>
 {
     // TODO: This can be removed if/once ExtensionComponent has a more sane toString() implementation.
 
-    private final QualifiedBean<Annotation,T> bean;
+    private final BeanEntry<Annotation,T> bean;
 
-    public SmoothieComponent(final QualifiedBean<Annotation,T> bean) {
+    public SmoothieComponent(final BeanEntry<Annotation,T> bean) {
         super(bean.getValue(), Smoothie.priorityOf(bean));
         this.bean = bean;
     }
 
-    public QualifiedBean<Annotation,T> getBean() {
+    public BeanEntry<Annotation,T> getBean() {
         return bean;
     }
 
