@@ -31,7 +31,7 @@ import org.hudsonci.inject.injecto.internal.InjectomaticImpl;
  * Magically injection system.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 @ImplementedBy(InjectomaticImpl.class)
 public interface Injectomatic

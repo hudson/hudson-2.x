@@ -25,6 +25,6 @@
 /**
  * Provides injection support for Hudson extensions.
  *
- * @since 1.396
+ * @since 1.397
  */
 package org.hudsonci.inject.internal.extension;

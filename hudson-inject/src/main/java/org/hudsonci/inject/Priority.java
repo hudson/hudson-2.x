@@ -34,7 +34,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Allows components to be adorned with an optional priority.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 @Target(TYPE)
 @Retention(RUNTIME)

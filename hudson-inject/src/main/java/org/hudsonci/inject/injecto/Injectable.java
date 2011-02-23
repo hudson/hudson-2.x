@@ -28,7 +28,7 @@ package org.hudsonci.inject.injecto;
  * Marker interface which allows any object to get post-construction injection magically.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 public interface Injectable
 {

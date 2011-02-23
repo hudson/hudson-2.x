@@ -25,6 +25,6 @@
 /**
  * Magically injection system.
  *
- * @since 1.396
+ * @since 1.397
  */
 package org.hudsonci.inject.injecto;

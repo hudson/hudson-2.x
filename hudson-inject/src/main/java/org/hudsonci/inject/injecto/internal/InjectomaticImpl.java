@@ -46,7 +46,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Default {@link org.hudsonci.inject.injecto.Injectomatic} implementation.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 @Named
 @Singleton

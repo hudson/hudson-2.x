@@ -37,7 +37,7 @@ import java.util.List;
  * Helper to build {@link ClassSpace} instances.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 public class ClassSpaceFactory
 {

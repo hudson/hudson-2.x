@@ -44,7 +44,7 @@ import java.util.List;
  * Delegates to {@link PluginStrategy} implementation bound in Guice context.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 public class DelegatingPluginStrategy
     implements PluginStrategy

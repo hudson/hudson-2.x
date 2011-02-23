@@ -50,7 +50,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Handles {@link Injectomatic} muck when unmarshalling components via XStream.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 @Named
 @EagerSingleton

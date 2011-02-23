@@ -27,6 +27,6 @@
  *
  * What is Smoothie?  Smoothie is a blend of Guice and Hudson... a yummy treat.
  *
- * @since 1.396
+ * @since 1.397
  */
 package org.hudsonci.inject;

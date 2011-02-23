@@ -47,7 +47,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Provides {@link PluginWrapper} creation facilities.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.396
+ * @since 1.397
  */
 @Named
 @Singleton

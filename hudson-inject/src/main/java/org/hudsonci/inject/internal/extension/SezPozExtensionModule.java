@@ -38,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Guice {@link Module} that binds types based on SezPoz index.
  *
- * @since 1.396
+ * @since 1.397
  */
 @SuppressWarnings( { "unchecked", "rawtypes" } )
 public final class SezPozExtensionModule
