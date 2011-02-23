@@ -33,7 +33,7 @@ THE SOFTWARE.
   <groupId>org.jvnet.hudson.main</groupId>
   <artifactId>hudson-test-harness</artifactId>
   <packaging>stapler-jar</packaging>
-  <name>Hudson :: Plugin Test Harness</name>
+  <name>Hudson :: Test Harness</name>
   <description>
     Unit test harness (src/main) and Unit tests for Hudson core (src/test)
   </description>
@@ -211,11 +211,11 @@ THE SOFTWARE.
       <artifactId>htmlunit</artifactId>
       <version>2.6-hudson-2</version>
       <exclusions>
-      	<exclusion>
-	      	<!--  hides JDK DOM classes in Eclipse -->
-      		<groupId>xml-apis</groupId>
-      		<artifactId>xml-apis</artifactId>
-      	</exclusion>
+        <exclusion>
+          <!--  hides JDK DOM classes in Eclipse -->
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 
