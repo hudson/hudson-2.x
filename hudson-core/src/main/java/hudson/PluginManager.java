@@ -353,40 +353,42 @@ public abstract class PluginManager extends AbstractModelObject {
      */
     private PluginStrategy createPluginStrategy() {
         // Allow the user to specify a the plugin strategy to use with a system property
-		String strategyName = System.getProperty(PluginStrategy.class.getName());
-		// Now let's check the default that's been set in the hudson-core.properties file
-		try {
-            Properties hudsonCoreProperties = new Properties();
-            hudsonCoreProperties.load( getClass().getResourceAsStream( "hudson-core.properties" ) );
-            strategyName = hudsonCoreProperties.getProperty( "hudson.PluginStrategy" );
-        } catch ( IOException e ) {
-            // Ignore
+        String strategyName = System.getProperty(PluginStrategy.class.getName());
+
+        if (strategyName == null) {
+            // Now let's check the default that's been set in the hudson-core.properties file
+            try {
+                Properties hudsonCoreProperties = new Properties();
+                hudsonCoreProperties.load(getClass().getResourceAsStream("/hudson/hudson-core.properties"));
+                strategyName = hudsonCoreProperties.getProperty("hudson.PluginStrategy");
+            } catch (IOException ex) {
+                LOGGER.info("Plugin Manager: " + ex.getLocalizedMessage());
+            }
         }
-        
-		if (strategyName != null) {
-			try {
-				Class<?> klazz = getClass().getClassLoader().loadClass(strategyName);
-				Object strategy = klazz.getConstructor(PluginManager.class)
-						.newInstance(this);
-				if (strategy instanceof PluginStrategy) {
-					LOGGER.info("Plugin strategy: " + strategyName);
-					return (PluginStrategy) strategy;
-				} else {
-					LOGGER.warning("Plugin strategy (" + strategyName + 
-							") is not an instance of hudson.PluginStrategy");
-				}
-			} catch (ClassNotFoundException e) {
-				LOGGER.warning("Plugin strategy class not found: "
-						+ strategyName);
-			} catch (Exception e) {
-				LOGGER.log(Level.WARNING, "Could not instantiate plugin strategy: "
-						+ strategyName + ". Falling back to ClassicPluginStrategy", e);
-			}
-			LOGGER.info("Falling back to ClassicPluginStrategy");
-		}
-		
-		// default and fallback
-		return new ClassicPluginStrategy(this);
+
+        if (strategyName != null) {
+            try {
+                Class<?> klazz = getClass().getClassLoader().loadClass(strategyName);
+                Object strategy = klazz.getConstructor(PluginManager.class).newInstance(this);
+                if (strategy instanceof PluginStrategy) {
+                    LOGGER.info("Plugin strategy: " + strategyName);
+                    return (PluginStrategy) strategy;
+                } else {
+                    LOGGER.warning("Plugin strategy (" + strategyName
+                            + ") is not an instance of hudson.PluginStrategy");
+                }
+            } catch (ClassNotFoundException e) {
+                LOGGER.warning("Plugin strategy class not found: "
+                        + strategyName);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Could not instantiate plugin strategy: "
+                        + strategyName + ". Falling back to ClassicPluginStrategy", e);
+            }
+            LOGGER.info("Falling back to ClassicPluginStrategy");
+        }
+
+        // default and fallback
+        return new ClassicPluginStrategy(this);
     }
 
     public PluginStrategy getPluginStrategy() {
