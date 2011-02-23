@@ -24,6 +24,7 @@
 
 package org.hudsonci.inject;
 
+import org.hudsonci.inject.injecto.internal.InjectomaticAspectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,20 +39,34 @@ public class SmoothieUtil
 {
     private static final Logger log = LoggerFactory.getLogger(SmoothieUtil.class);
 
+    public static void setField(Class type, String name, Object instance, Object value) throws NoSuchFieldException, IllegalAccessException {
+        Field field = type.getDeclaredField(name);
+        field.setAccessible(true);
+        field.set(instance, value);
+    }
+
     /**
      * Uses reflection to install a container instance.  This allows the container instance to be reset.
      *
      * @param container     The container to install in {@link Smoothie} or null to reset to the default.
      */
     public static void installContainer(final SmoothieContainer container) throws NoSuchFieldException, IllegalAccessException {
-        Field field = Smoothie.class.getDeclaredField("container");
-        field.setAccessible(true);
-        field.set(null, container);
+        setField(Smoothie.class, "container", null, null);
         if (container == null) {
             log.info("Reset container");
         }
         else {
             log.info("Installed custom container: {}", container);
         }
+        resetInjectomaticAspectHelper();
+    }
+
+    private static void resetInjectomaticAspectHelper() throws NoSuchFieldException, IllegalAccessException {
+        setField(InjectomaticAspectHelper.class, "injecto", null, null);
+        log.info("Reset Injectomatic aspect helper");
+    }
+
+    public static void reset() throws NoSuchFieldException, IllegalAccessException {
+        installContainer(null);
     }
 }
