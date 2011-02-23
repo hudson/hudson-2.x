@@ -109,6 +109,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
+import org.hudsonci.inject.Smoothie;
+import org.hudsonci.inject.SmoothieUtil;
+import org.hudsonci.inject.internal.SmoothieContainerBootstrap;
 import org.jvnet.hudson.test.HudsonHomeLoader.CopyExisting;
 import org.jvnet.hudson.test.recipes.Recipe;
 import org.jvnet.hudson.test.recipes.Recipe.Runner;
@@ -204,7 +207,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
      * Leaving this to false enables the test harness to use a pre-loaded plugin manager,
      * which runs faster.
      */
-    public boolean useLocalPluginManager;
+    public boolean useLocalPluginManager = true; // FIXME: At the new smoothie container needs the real plugin manager
 
     public ComputerConnectorTester computerConnectorTester = new ComputerConnectorTester(this);
 
@@ -236,6 +239,9 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
         AbstractProject.WORKSPACE.toString();
         User.clear();
 
+        // Bootstrap the container with details about our testing classes, so it can figure out what to scan/include
+        SmoothieUtil.reset(); // force-reset, some tests may not properly hit the tear-down to reset so do it again here
+        new SmoothieContainerBootstrap().bootstrap(getClass().getClassLoader(), Hudson.class, Smoothie.class, HudsonTestCase.class, getClass());
 
         try {
             hudson = newHudson();
@@ -297,15 +303,20 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
                 c.getPage("about:blank");
             }
             clients.clear();
-        } finally {
+        }
+        finally {
             server.stop();
-            for (LenientRunnable r : tearDowns)
+            for (LenientRunnable r : tearDowns) {
                 r.run();
+            }
 
             hudson.cleanUp();
             env.dispose();
             ExtensionList.clearLegacyInstances();
             DescriptorExtensionList.clearLegacyInstances();
+
+            // Force the container bits to reset
+            SmoothieUtil.reset();
 
             // Hudson creates ClassLoaders for plugins that hold on to file descriptors of its jar files,
             // but because there's no explicit dispose method on ClassLoader, they won't get GC-ed until
@@ -317,10 +328,16 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
 
     @Override
     protected void runTest() throws Throwable {
-        System.out.println("=== Starting "+ getClass().getSimpleName() + "." + getName());
+        String testName = getClass().getSimpleName() + "." + getName();
+        System.out.println(">>> Starting " + testName + " >>>");
         // so that test code has all the access to the system
         SecurityContextHolder.getContext().setAuthentication(ACL.SYSTEM);
-        super.runTest();
+        try {
+            super.runTest();
+        }
+        finally {
+            System.out.println("<<< Finished " + testName + " <<<");
+        }
     }
 
     public String getIconFileName() {
