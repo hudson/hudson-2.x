@@ -51,7 +51,7 @@ public class SmoothieUtil
      * @param container     The container to install in {@link Smoothie} or null to reset to the default.
      */
     public static void installContainer(final SmoothieContainer container) throws NoSuchFieldException, IllegalAccessException {
-        setField(Smoothie.class, "container", null, null);
+        setField(Smoothie.class, "container", null, container);
         if (container == null) {
             log.info("Reset container");
         }
