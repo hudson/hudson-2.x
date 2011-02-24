@@ -251,6 +251,7 @@ THE SOFTWARE.
           <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-remote-resources-plugin</artifactId>
         <version>1.0</version>
@@ -338,6 +339,7 @@ THE SOFTWARE.
       <version>1.0</version>
       <optional>true</optional><!-- no need to have this at runtime -->
     </dependency>
+
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>test-annotations</artifactId>
@@ -480,6 +482,7 @@ THE SOFTWARE.
               <threshold>High</threshold>
             </configuration>
           </plugin>
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
@@ -491,6 +494,7 @@ THE SOFTWARE.
               <targetJdk>1.5</targetJdk>
             </configuration>
           </plugin>
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
@@ -559,6 +563,7 @@ THE SOFTWARE.
               </execution>
             </executions>
           </plugin>
+
           <plugin>
             <artifactId>maven-gpg-plugin</artifactId>
             <executions>
