@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  */
-public abstract class TestSupport
+public abstract class SmoothieTestSupport
     implements Module
 {
     protected final Logger log = LoggerFactory.getLogger(getClass());

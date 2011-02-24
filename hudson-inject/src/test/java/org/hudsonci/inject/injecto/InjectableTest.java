@@ -24,7 +24,7 @@
 
 package org.hudsonci.inject.injecto;
 
-import org.hudsonci.inject.TestSupport;
+import org.hudsonci.inject.SmoothieTestSupport;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
  * Tests for {@link Injectable} types.
  */
 public class InjectableTest
-    extends TestSupport
+    extends SmoothieTestSupport
 {
     @Test
     public void testInjectoAware() {

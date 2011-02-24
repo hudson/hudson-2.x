@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  */
 public class SmoothieTest
-    extends TestSupport
+    extends SmoothieTestSupport
 {
     @Test
     public void testGetContainer() {

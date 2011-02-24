@@ -26,7 +26,7 @@ package org.hudsonci.inject.injecto;
 
 import com.google.inject.Key;
 import org.hudsonci.inject.Smoothie;
-import org.hudsonci.inject.TestSupport;
+import org.hudsonci.inject.SmoothieTestSupport;
 import org.junit.Test;
 
 import javax.inject.Named;
@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  */
 public class InjectomaticAwareTest
-    extends TestSupport
+    extends SmoothieTestSupport
 {
     @Test
     public void testInjectoAware() {
