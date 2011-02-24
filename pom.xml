@@ -477,6 +477,13 @@ THE SOFTWARE.
 
       <dependency>
         <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-cli</artifactId>
+        <classifier>jar-with-dependencies</classifier>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
         <artifactId>hudson-war</artifactId>
         <type>war</type>
         <version>${project.version}</version>
