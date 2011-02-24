@@ -38,7 +38,43 @@ THE SOFTWARE.
   
   <name>Hudson :: Main</name>
   <description>The module that constitutes the main hudson.war</description>
-  
+
+  <licenses>
+    <license>
+      <name>The MIT license</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/hudson/hudson.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hudson/hudson.git</developerConnection>
+    <url>https://github.com/hudson/hudson</url>
+  </scm>
+
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://hudson-ci.org:58200/hudson</url>
+  </ciManagement>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://issues.hudson-ci.org</url>
+  </issueManagement>
+
+  <properties>
+    <aspectjVersion>1.6.10</aspectjVersion>
+    <mavenVersion>3.0.2</mavenVersion>
+    <maven.version>${mavenVersion}</maven.version>
+    <aetherVersion>1.9</aetherVersion>
+    <wagonVersion>1.0-beta-7</wagonVersion>
+    <sisuInjectVersion>2.1.1</sisuInjectVersion>
+    <!-- *.html files are in UTF-8, and *.properties are in iso-8859-1, so this configuration is acturally incorrect,
+    but this suppresses a warning from Maven, and as long as we don't do filtering we should be OK. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <modules>
     <module>hudson-parent</module>
     <module>hudson-core</module>
@@ -56,16 +92,6 @@ THE SOFTWARE.
     -->
   </modules>
   
-  <ciManagement>
-      <system>Hudson</system>
-      <url>http://hudson.glassfish.org/job/hudson-trunk</url>
-  </ciManagement>
-  <scm>
-    <connection>scm:git:git://github.com/hudson/hudson.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/hudson/hudson.git</developerConnection>
-    <url>https://github.com/hudson/hudson</url>
-  </scm>
-
   <build>
     <defaultGoal>install</defaultGoal>
 
@@ -501,18 +527,6 @@ THE SOFTWARE.
     </dependencies>
   </dependencyManagement>
 
-  <properties>
-    <aspectjVersion>1.6.10</aspectjVersion>
-    <mavenVersion>3.0.2</mavenVersion>
-    <maven.version>${mavenVersion}</maven.version>
-    <aetherVersion>1.9</aetherVersion>
-    <wagonVersion>1.0-beta-7</wagonVersion>
-    <sisuInjectVersion>2.1.1</sisuInjectVersion>
-    <!-- *.html files are in UTF-8, and *.properties are in iso-8859-1, so this configuration is acturally incorrect,
-    but this suppresses a warning from Maven, and as long as we don't do filtering we should be OK. -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <profiles>
     <profile>
       <id>metrics</id>
@@ -547,6 +561,7 @@ THE SOFTWARE.
         </plugins>
       </reporting>
     </profile>
+
     <profile>
       <!-- FIXME: This is crappy use of a default activated profile. -->
       <id>debug</id>
@@ -559,6 +574,7 @@ THE SOFTWARE.
         <hudson.sign.storepass>hudson</hudson.sign.storepass>
       </properties>
     </profile>
+
     <profile>
       <id>sorcerer</id>
       <reporting>
@@ -580,6 +596,7 @@ THE SOFTWARE.
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>release</id>
       <build>
@@ -617,6 +634,7 @@ THE SOFTWARE.
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>m2e</id>
       <properties>
@@ -661,14 +679,5 @@ THE SOFTWARE.
       </modules>
     </profile>
   </profiles>
-  
-
-  <licenses>
-    <license>
-      <name>The MIT license</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
 
 </project>
