@@ -397,81 +397,9 @@ THE SOFTWARE.
       </dependency>
 
       <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-core</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>    
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-compat</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>      
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-aether-provider</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>      
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-embedder</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>   
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-api</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-impl</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-spi</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-util</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>                                   
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-connector-wagon</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>      
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-http-lightweight</artifactId>
-        <version>${wagonVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-file</artifactId>
-        <version>${wagonVersion}</version>
-      </dependency>    
-  
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-provider-api</artifactId>
-        <version>${wagonVersion}</version>
-      </dependency>      
-      <dependency>
         <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-inject-bean</artifactId>
         <version>${sisuInjectVersion}</version>
-      </dependency>  
-      <dependency>
-        <groupId>org.sonatype.sisu</groupId>
-        <artifactId>sisu-inject-plexus</artifactId>
-        <version>${sisuInjectVersion}</version>
-      </dependency>  
-      
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-classworlds</artifactId>
-        <version>2.3</version>
       </dependency>
 
       <dependency>
@@ -522,6 +450,18 @@ THE SOFTWARE.
       <dependency>
         <groupId>org.jvnet.hudson.main</groupId>
         <artifactId>hudson-cli</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-war</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-test-harness</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
