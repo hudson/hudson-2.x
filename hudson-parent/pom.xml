@@ -85,15 +85,6 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
   <organization>
     <name>Hudson</name>
     <url>http://hudson-ci.org/</url>

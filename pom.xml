@@ -478,6 +478,7 @@ THE SOFTWARE.
       <dependency>
         <groupId>org.jvnet.hudson.main</groupId>
         <artifactId>hudson-war</artifactId>
+        <type>war</type>
         <version>${project.version}</version>
       </dependency>
 
