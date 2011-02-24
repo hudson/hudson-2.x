@@ -27,7 +27,7 @@ package org.hudsonci.inject.internal.extension;
 import hudson.Extension;
 import hudson.ExtensionComponent;
 import org.hudsonci.inject.Priority;
-import org.sonatype.guice.bean.locators.QualifiedBean;
+import org.sonatype.inject.BeanEntry;
 
 import java.lang.annotation.Annotation;
 
@@ -40,13 +40,13 @@ import java.lang.annotation.Annotation;
 public class SmoothieComponent<T>
     extends ExtensionComponent<T>
 {
-    private final QualifiedBean<Annotation,T> bean;
+    private final BeanEntry<Annotation,T> bean;
 
     private final T value;
 
     private final double priority;
 
-    public SmoothieComponent(final QualifiedBean<Annotation,T> bean) {
+    public SmoothieComponent(final BeanEntry<Annotation,T> bean) {
         super(null);
         this.bean = bean;
         this.value = bean.getValue();
@@ -55,7 +55,7 @@ public class SmoothieComponent<T>
         this.priority = p != null ? p : DEFAULT_PRIORITY;
     }
 
-    public QualifiedBean<Annotation,T> getBean() {
+    public BeanEntry<Annotation,T> getBean() {
         return bean;
     }
 
