@@ -53,6 +53,6 @@ public abstract class TestSupport
 
     @After
     public void tearDown() throws Exception {
-        SmoothieUtil.installContainer(null);
+        SmoothieUtil.reset();
     }
 }

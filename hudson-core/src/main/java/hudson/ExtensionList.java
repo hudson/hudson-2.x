@@ -232,7 +232,7 @@ public class ExtensionList<T> extends AbstractList<T> {
      */
     protected List<ExtensionComponent<T>> load() {
         if (LOGGER.isLoggable(Level.FINE))
-            LOGGER.log(Level.FINE,"Loading ExtensionList: "+extensionType, new Throwable());
+            LOGGER.log(Level.FINE,"Loading ExtensionList: "+extensionType);
 
         return hudson.getPluginManager().getPluginStrategy().findComponents(extensionType, hudson);
     }

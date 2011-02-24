@@ -470,6 +470,13 @@ THE SOFTWARE.
 
       <dependency>
         <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>hudson-inject</artifactId>
+        <classifier>tests</classifier>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
         <artifactId>hudson-remoting</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -529,6 +536,7 @@ THE SOFTWARE.
       </reporting>
     </profile>
     <profile>
+      <!-- FIXME: This is crappy use of a default activated profile. -->
       <id>debug</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -627,6 +635,18 @@ THE SOFTWARE.
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>integration-tests</id>
+      <activation>
+        <property>
+            <name>it</name>
+        </property>
+      </activation>
+      <modules>
+        <module>hudson-test-harness</module>
+      </modules>
     </profile>
   </profiles>
   

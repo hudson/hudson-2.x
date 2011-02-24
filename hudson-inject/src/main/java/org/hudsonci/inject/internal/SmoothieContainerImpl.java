@@ -145,6 +145,9 @@ public class SmoothieContainerImpl
         }
     }
 
+    // FIXME: Bootstrap probably needs to be aware of WEB-INF/lib/* bits, and should include its own ExtensionModule?
+
+
     /**
      * Bindings and class space for plugins.
      */
@@ -161,6 +164,8 @@ public class SmoothieContainerImpl
         @Override
         protected void configure() {
             ClassSpace space = createClassSpace();
+            // FIXME: Use this here instead:
+            //install(new ExtensionModule(space));
             install(new SpaceModule(space));
             install(new SezPozExtensionModule(space));
             super.configure();
