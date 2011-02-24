@@ -3,29 +3,41 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <relativePath/>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>6</version>
+    <relativePath/> <!-- avoid cycle -->
   </parent>
+
   <groupId>org.jvnet.hudson</groupId>
   <artifactId>hudson-parent</artifactId>
   <version>1.12-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Hudson :: Parent</name>
+  <name>Hudson Parent</name>
   <description>Hudson Continuous Integration Server</description>
   <url>http://hudson-ci.org/</url>
   <inceptionYear>2004</inceptionYear>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- by default only check remote repositories once per week -->
+    <maven.repository.update.freqency>interval:10080</maven.repository.update.freqency>
+  </properties>
+
+  <organization>
+    <name>Hudson</name>
+    <url>http://hudson-ci.org/</url>
+  </organization>
+
   <issueManagement>
     <system>JIRA</system>
-    <url>http://issues.hudson-ci.org/secure/Dashboard.jspa</url>
+    <url>http://issues.hudson-ci.org</url>
   </issueManagement>
 
   <ciManagement>
     <system>Hudson</system>
-    <url>http://ci.hudson-ci.org/job/hudson_main_trunk</url>
+    <url>http://hudson-ci.org:58200/hudson</url>
   </ciManagement>
 
   <mailingLists>
@@ -36,6 +48,7 @@
       <post>dev@hudson.java.net</post>
       <archive>http://java.net/projects/hudson/lists/dev/archive</archive>
     </mailingList>
+
     <mailingList>
       <name>Hudson user discussion list</name>
       <subscribe>sympa@hudson.java.net?subject=unsubscribe%20users</subscribe>
@@ -43,6 +56,7 @@
       <post>users@hudson.java.net</post>
       <archive>http://java.net/projects/hudson/lists/users/archive</archive>
     </mailingList>
+
     <mailingList>
       <name>Hudson Japanese user discussion list</name>
       <subscribe>sympa@hudson.java.net?subject=unsubscribe%20ja</subscribe>
@@ -52,12 +66,7 @@
     </mailingList>
   </mailingLists>
 
-  <scm>
-    <connection>scm:git:git://java.net/hudson~git</connection>
-    <developerConnection>scm:git:ssh://${jvnet.user}@java.net/hudson~git</developerConnection>
-    <tag>hudson</tag>
-    <url>http://java.net/projects/hudson/</url>
-  </scm>
+  <!-- FIXME: Why are these needed? Maybe replace them with RSO's public-grid group? -->
 
   <repositories>
     <repository>
@@ -85,41 +94,104 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <organization>
-    <name>Hudson</name>
-    <url>http://hudson-ci.org/</url>
-  </organization>
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>1.0-beta-1</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>display-info</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+    <defaultGoal>install</defaultGoal>
 
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources-filtered</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
 
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.1</version>
-      </plugin>
-    </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.5</source>
+            <target>1.5</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.0</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.6.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.7.2</version>
+          <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <systemPropertyVariables>
+              <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.3</version>
+        </plugin>
+
         <!--TODO TEXT. This plugin's configuration is used in m2e only. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -138,7 +210,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -151,7 +223,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -164,7 +236,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -177,7 +249,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -189,7 +261,6 @@
   </build>
 
   <profiles>
-
     <profile>
       <id>always-check-remote-repositories</id>
       <properties>
@@ -197,13 +268,6 @@
       </properties>
     </profile>
   </profiles>
-  <properties>
 
-    <!-- by default only check remote repositories once per week -->
-    <maven.repository.update.freqency>interval:10080</maven.repository.update.freqency>
-
-    <!-- the version of Maven that we embed in Hudson -->
-    <maven.version>2.0.4</maven.version>
-  </properties>
 </project>
 

@@ -32,7 +32,7 @@ THE SOFTWARE.
   
   <artifactId>maven-agent</artifactId>
   <packaging>jar</packaging>
-  <name>Hudson :: Maven2 CLI agent</name>
+  <name>Hudson Maven :: M2 Agent</name>
   <description>
     Code that boots up Maven2 with Hudson's remoting support in place.
     Used for the native maven support.
@@ -50,6 +50,7 @@ THE SOFTWARE.
           </archive>
         </configuration>
       </plugin>
+
       <plugin>
         <!-- compile with 1.2 so that we can report JDK version errors nicely -->
         <artifactId>maven-compiler-plugin</artifactId>
@@ -58,6 +59,7 @@ THE SOFTWARE.
           <target>1.2</target>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -71,7 +73,6 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven-interceptor</artifactId>
-      <version>${project.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
@@ -89,7 +90,8 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-    </dependency>    
+    </dependency>
+
     <dependency>
       <!-- default dependency to 2.0.2 confuses IntelliJ. Otherwise this value doesn't really affect build or runtime. -->
       <groupId>commons-httpclient</groupId>
@@ -110,10 +112,10 @@ THE SOFTWARE.
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-remoting</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

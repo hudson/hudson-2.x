@@ -36,7 +36,7 @@ THE SOFTWARE.
   <version>1.397-SNAPSHOT</version>
   <packaging>pom</packaging>
   
-  <name>Hudson :: Main</name>
+  <name>Hudson</name>
   <description>The module that constitutes the main hudson.war</description>
 
   <licenses>
@@ -53,21 +53,7 @@ THE SOFTWARE.
     <url>https://github.com/hudson/hudson</url>
   </scm>
 
-  <ciManagement>
-    <system>Hudson</system>
-    <url>http://hudson-ci.org:58200/hudson</url>
-  </ciManagement>
-
-  <issueManagement>
-    <system>JIRA</system>
-    <url>http://issues.hudson-ci.org</url>
-  </issueManagement>
-
   <properties>
-    <!-- *.html files are in UTF-8, and *.properties are in iso-8859-1, so this configuration is actually incorrect,
-    but this suppresses a warning from Maven, and as long as we don't do filtering we should be OK. -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
     <aspectjVersion>1.6.10</aspectjVersion>
     <sisuInjectVersion>2.1.1</sisuInjectVersion>
   </properties>
@@ -90,99 +76,8 @@ THE SOFTWARE.
   </modules>
   
   <build>
-    <defaultGoal>install</defaultGoal>
-
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-      </resource>
-      <resource>
-        <directory>src/main/resources-filtered</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.1</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-remote-resources-plugin</artifactId>
-          <version>1.1</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.2</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.0</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.5</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.3.1</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.6.1</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.3.1</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.7.2</version>
-          <configuration>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-            <systemPropertyVariables>
-              <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.2</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>2.4.3</version>
-        </plugin>
-
         <plugin>
           <groupId>org.kohsuke.gmaven</groupId>
           <artifactId>gmaven-plugin</artifactId>
@@ -263,6 +158,27 @@ THE SOFTWARE.
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>display-info</goal>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <!-- There is a bug in JDK 1.5's compiler therefore need to compile with 1.6 -->
+                <requireJavaVersion>
+                  <version>[1.6.0,]</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <!-- enable release profile during the release, create IPS package, and sign bits. -->
@@ -285,35 +201,6 @@ THE SOFTWARE.
               <resourceBundles>
                 <resourceBundle>org.jvnet.hudson:license:1.0</resourceBundle>
               </resourceBundles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <!-- There is a bug in JDK 1.5's compiler therefore need to compile with 1.6 -->
-                <requireJavaVersion>
-                  <version>[1.6.0,]</version>
-                </requireJavaVersion>
-              </rules>
             </configuration>
           </execution>
         </executions>
