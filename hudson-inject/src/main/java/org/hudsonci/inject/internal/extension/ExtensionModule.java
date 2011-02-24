@@ -16,6 +16,7 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import org.sonatype.guice.bean.binders.SpaceModule;
 import org.sonatype.guice.bean.reflect.ClassSpace;
+import org.sonatype.inject.BeanScanning;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -37,8 +38,8 @@ public final class ExtensionModule
     public void configure(final Binder binder) {
         assert binder != null;
 
-         // Scan for @Named components
-        binder.install(new SpaceModule(space));
+         // Scan for @Named components using the bean index
+        binder.install(new SpaceModule(space, BeanScanning.INDEX));
 
         // Scan for @Extension components via SezPoz index
         binder.install(new SezPozExtensionModule(space));

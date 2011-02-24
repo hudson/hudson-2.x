@@ -33,7 +33,7 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import org.hudsonci.inject.SmoothieContainer;
 import org.hudsonci.inject.internal.extension.ExtensionLocator;
-import org.hudsonci.inject.internal.extension.SezPozExtensionModule;
+import org.hudsonci.inject.internal.extension.ExtensionModule;
 import org.hudsonci.inject.internal.extension.SmoothieExtensionLocator;
 import org.hudsonci.inject.internal.plugin.PluginClassLoader;
 import org.hudsonci.inject.internal.plugin.SmoothiePluginStrategy;
@@ -41,7 +41,6 @@ import hudson.PluginStrategy;
 import hudson.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.guice.bean.binders.SpaceModule;
 import org.sonatype.guice.bean.binders.WireModule;
 import org.sonatype.guice.bean.locators.DefaultBeanLocator;
 import org.sonatype.guice.bean.locators.MutableBeanLocator;
@@ -164,10 +163,7 @@ public class SmoothieContainerImpl
         @Override
         protected void configure() {
             ClassSpace space = createClassSpace();
-            // FIXME: Use this here instead:
-            //install(new ExtensionModule(space));
-            install(new SpaceModule(space));
-            install(new SezPozExtensionModule(space));
+            install(new ExtensionModule(space));
             super.configure();
         }
 
