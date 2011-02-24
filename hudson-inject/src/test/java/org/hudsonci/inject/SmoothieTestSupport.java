@@ -44,6 +44,7 @@ public abstract class SmoothieTestSupport
 
     @Before
     public void setUp() throws Exception {
+        SmoothieUtil.reset();
         new SmoothieContainerBootstrap().bootstrap(getClass().getClassLoader(), Smoothie.class, getClass());
     }
 

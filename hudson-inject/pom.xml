@@ -94,16 +94,6 @@ THE SOFTWARE.
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          <!-- Always fork for inject tests, due to static field in InjectomaticAspectHelper -->
-          <forkMode>always</forkMode>
-        </configuration>
-      </plugin>
-
      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
