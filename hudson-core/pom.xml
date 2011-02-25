@@ -88,16 +88,11 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.localizer</groupId>
         <artifactId>maven-localizer-plugin</artifactId>
-        <version>1.10</version>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
-            <configuration>
-              <fileMask>Messages.properties</fileMask>
-              <outputDirectory>target/generated-sources/localizer</outputDirectory>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -267,7 +262,6 @@ THE SOFTWARE.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>findbugs-maven-plugin</artifactId>
-            <version>1.2</version>
             <configuration>
               <effort>Max</effort>
               <threshold>Normal</threshold>

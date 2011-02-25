@@ -79,31 +79,21 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.54</version>
         <extensions>true</extensions>
-        <configuration>
-          <showDeprecation>true</showDeprecation>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
-        <version>1.15</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
         <groupId>org.jvnet.localizer</groupId>
         <artifactId>maven-localizer-plugin</artifactId>
-        <version>1.8</version>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
-            <configuration>
-              <fileMask>Messages.properties</fileMask>
-              <outputDirectory>target/generated-sources/localizer</outputDirectory>
-            </configuration>
           </execution>
         </executions>
       </plugin>

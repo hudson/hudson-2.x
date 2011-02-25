@@ -60,19 +60,12 @@ THE SOFTWARE.
 
   <modules>
     <module>hudson-parent</module>
+    <module>hudson-remoting</module>
+    <module>hudson-cli</module>
     <module>hudson-core</module>
     <module>hudson-inject</module>
     <module>hudson-maven</module>
     <module>hudson-war</module>
-    <module>hudson-cli</module>
-    <module>hudson-remoting</module>
-    <!--
-    
-    We will move the ITs out so that the product can be built without taking an hour
-    
-    <module>test</module>
-    <module>ui-samples-plugin</module>
-    -->
   </modules>
   
   <build>
@@ -132,6 +125,13 @@ THE SOFTWARE.
               <version>1.4</version>
             </dependency>
           </dependencies>
+        </plugin>
+
+        <!-- this is really just a patched version of maven-jetty-plugin to workaround issue #932 -->
+        <plugin>
+          <groupId>org.jvnet.hudson.tools</groupId>
+          <artifactId>maven-hudson-dev-plugin</artifactId>
+          <version>6.1.7-hudson-1</version>
         </plugin>
 
         <plugin>
@@ -392,7 +392,6 @@ THE SOFTWARE.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>findbugs-maven-plugin</artifactId>
-            <version>2.4</version>
             <configuration>
               <threshold>High</threshold>
             </configuration>
@@ -401,7 +400,6 @@ THE SOFTWARE.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>2.5</version>
             <configuration>
               <!--rulesets>
                   <ruleset>ruleset.xml</ruleset>
@@ -413,7 +411,6 @@ THE SOFTWARE.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.5</version>
             <configuration>
             </configuration>
           </plugin>

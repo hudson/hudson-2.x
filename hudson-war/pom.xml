@@ -33,18 +33,26 @@ THE SOFTWARE.
   
   <artifactId>hudson-war</artifactId>
   <packaging>war</packaging>
-  <name>Hudson :: Webapp</name>
+  <name>Hudson Webapp</name>
+
   <description>
     Creates a war file. Also includes additional static web resources, such as images, CSS, JavaScript, and
     some HTML files.
   </description>
-  
+
+  <properties>
+    <HUDSON_HOME>${basedir}/work</HUDSON_HOME>
+    <contextPath>/</contextPath><!-- context path during test -->
+    <port>8080</port><!-- HTTP listener port -->
+  </properties>
+
   <build>
     <finalName>hudson</finalName>
+
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.1-beta-1</version>
         <configuration>
           <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
           <webResources>
@@ -64,7 +72,9 @@ THE SOFTWARE.
           </archive>
         </configuration>
       </plugin>
+
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -79,6 +89,7 @@ THE SOFTWARE.
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
         <artifactId>maven-antrun-extended-plugin</artifactId>
@@ -131,11 +142,10 @@ THE SOFTWARE.
           </execution>
         </executions>
       </plugin>
+
       <plugin>
-        <!-- this is really just a patched version of maven-jetty-plugin to workaround issue #932 -->
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hudson-dev-plugin</artifactId>
-        <version>6.1.7-hudson-1</version>
         <configuration>
           <contextPath>${contextPath}</contextPath>
           <connectors>
@@ -268,12 +278,6 @@ THE SOFTWARE.
       <artifactId>slf4j-jdk14</artifactId>
     </dependency>
   </dependencies>
-  
-  <properties>
-    <HUDSON_HOME>${basedir}/work</HUDSON_HOME>
-    <contextPath>/</contextPath><!-- context path during test -->
-    <port>8080</port><!-- HTTP listener port -->
-  </properties>
 
   <profiles>
     <profile>
@@ -301,6 +305,7 @@ THE SOFTWARE.
         </plugins>
       </build>
     </profile>
+
     <profile>
       <!-- sign war -->
       <id>sign</id>

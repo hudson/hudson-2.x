@@ -192,6 +192,55 @@
           <version>2.4.3</version>
         </plugin>
 
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>findbugs-maven-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jvnet.localizer</groupId>
+          <artifactId>maven-localizer-plugin</artifactId>
+          <version>1.10</version>
+          <configuration>
+            <fileMask>Messages.properties</fileMask>
+            <outputDirectory>${project.build.directory}/generated-sources/localizer</outputDirectory>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jvnet.hudson.tools</groupId>
+          <artifactId>maven-hpi-plugin</artifactId>
+          <version>1.54</version>
+          <configuration>
+            <showDeprecation>true</showDeprecation>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.kohsuke.stapler</groupId>
+          <artifactId>maven-stapler-plugin</artifactId>
+          <version>1.15</version>
+        </plugin>
+
         <!--TODO TEXT. This plugin's configuration is used in m2e only. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>

@@ -33,8 +33,12 @@ THE SOFTWARE.
   <artifactId>maven-plugin</artifactId>
   <packaging>hpi</packaging>
   <name>Hudson Maven :: Plugin</name>
-  <description>This plug-in provides deep integration of Hudson and Maven. This functionality used to be part of the Hudson core.
-  Now it is a plug-in that is installed by default, but can be disabled.</description>
+
+  <description>
+    This plug-in provides deep integration of Hudson and Maven. This functionality used to be part of the Hudson core.
+    Now it is a plug-in that is installed by default, but can be disabled.
+  </description>
+
   <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+2+Project+Plugin</url>
     
   <dependencies>
@@ -245,40 +249,37 @@ THE SOFTWARE.
       not to have version number in the .hpi file name.
     -->
     <finalName>${project.artifactId}</finalName>
-    <defaultGoal>package</defaultGoal>
+    <defaultGoal>package</defaultGoal> <!-- FIXME: why? -->
+
     <plugins>
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.54</version>
         <extensions>true</extensions>
         <configuration>
           <showDeprecation>true</showDeprecation>
           <disabledTestInjection>true</disabledTestInjection>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
-        <version>1.12</version>
         <extensions>true</extensions>
       </plugin>
+
       <plugin>
         <groupId>org.jvnet.localizer</groupId>
         <artifactId>maven-localizer-plugin</artifactId>
-        <version>1.8</version>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
-            <configuration>
-              <fileMask>Messages.properties</fileMask>
-              <outputDirectory>target/generated-sources/localizer</outputDirectory>
-            </configuration>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
         <artifactId>maven-antrun-extended-plugin</artifactId>
