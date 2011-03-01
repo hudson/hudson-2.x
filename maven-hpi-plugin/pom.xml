@@ -1,18 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jvnet.hudson.tools</groupId>
-    <artifactId>tools</artifactId>
-    <version>1.7</version>
-    <relativePath>../pom.xml</relativePath>
+    <groupId>org.jvnet.hudson</groupId>
+    <artifactId>hudson-parent</artifactId>
+    <version>1.12-SNAPSHOT</version>
+    <relativePath>../hudson-parent/pom.xml</relativePath>
   </parent>
-  
+
+  <groupId>org.jvnet.hudson.tools</groupId>
   <artifactId>maven-hpi-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   
   <name>Maven Hudson Plugin</name>
   <version>1.61-SNAPSHOT</version>
-  <description>Maven2 plugin for developing Hudson plugins</description>
+
+  <description>
+      Support for developing Hudson plugins with Apache Maven.
+  </description>
   
   <licenses>
     <license>
@@ -20,6 +24,14 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
+
+  <properties>
+    <!-- used for escape -->
+    <begin>${${$}}{</begin>
+    <end>$}</end>
+    <dollar>$</dollar>
+    <openbracket>{</openbracket>
+  </properties>
 
   <build>
     <resources>
@@ -38,6 +50,7 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
@@ -76,14 +89,6 @@
       </extension>
     </extensions>
   </build>
-
-  <properties>
-    <!-- used for escape -->
-    <begin>${${$}}{</begin>
-    <end>$}</end>
-    <dollar>$</dollar>
-    <openbracket>{</openbracket>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -140,25 +145,9 @@
   <reporting>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
-  
-  <scm>
-    <connection>scm:git:git://github.com/hudson/maven-hpi-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/hudson/maven-hpi-plugin.git</developerConnection>
-    <url>https://github.com/hudson/maven-hpi-plugin</url>
-  </scm>
-
-  <distributionManagement>
-    <site>
-      <id>hudson-labs.org</id>
-      <url>scp://hudson-labs.org/var/www/hudson-labs.org/maven-hpi-plugin/</url>
-    </site>
-    <repository>
-      <id>maven.hudson-labs.org</id>
-      <url>http://maven.hudson-labs.org:8081/content/repositories/releases</url>
-    </repository>
-  </distributionManagement>
 </project>
