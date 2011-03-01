@@ -30,7 +30,7 @@ public class TestInsertionMojo extends AbstractMojo {
      *
      * @parameter
      */
-    private boolean disabledTestInjection;
+    private boolean disabledTestInjection = true;
 
     private static String quote(String s) {
         return '"'+s.replace("\\", "\\\\")+'"';
