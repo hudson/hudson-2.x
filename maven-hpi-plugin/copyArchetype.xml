@@ -1,0 +1,53 @@
+<project name="copy.archetype" default="make.transforming.copy">
+  <!-- copy hpi-archetypes as resources, while performing necessary transformations for an archetype. -->
+  <target name="make.transforming.copy">
+    <property name="src" location="hpi-archetype" />
+    <property name="dst" location="target/classes/archetype-resources" />
+
+    <property name="package.header.file" location="${dst}/.package.header" />
+
+    <delete dir="${dst}" />
+    <mkdir dir="${dst}" />
+
+    <!-- this filter chain is applied to all files -->
+    <filterchain id="artifactId">
+      <replacestring from="hpi-archetype" to="@artifactId@" />
+    </filterchain>
+
+    <!-- modify POM -->
+    <copy todir="${dst}">
+      <fileset dir="${src}">
+        <include name="pom.xml" />
+      </fileset>
+      <filterchain>
+        <replaceregex pattern="&lt;!-- \$$ --&gt;&lt;([^&gt;]+)&gt;.+&lt;!-- /\$$ --&gt;" replace="&lt;\1&gt;$$\{\1\}&lt;/\1&gt;" flags="g" />
+      </filterchain>
+      <filterchain refid="artifactId" />
+    </copy>
+
+    <!-- inject the package statement into *.java files -->
+    <echo message="package $${groupId};&#xA;" file="${package.header.file}" />
+    <copy todir="${dst}">
+      <fileset dir="${src}">
+        <include name="**/*.java" />
+      </fileset>
+      <filterchain>
+        <concatfilter prepend="${package.header.file}" />
+      </filterchain>
+      <filterchain refid="artifactId" />
+    </copy>
+    <delete file="${package.header.file}" />
+
+    <!-- process the remaining files -->
+    <copy todir="${dst}">
+      <fileset dir="${src}">
+        <exclude name="pom.xml" />
+        <exclude name="**/*.java" />
+        <exclude name="**/.svn" />
+        <exclude name="target" />
+        <exclude name="hpi-archetype.*" />
+      </fileset>
+      <filterchain refid="artifactId" />
+    </copy>
+  </target>
+</project>

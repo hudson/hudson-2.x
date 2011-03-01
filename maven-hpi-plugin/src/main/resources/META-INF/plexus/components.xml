@@ -1,0 +1,47 @@
+<component-set>
+  <!-- this defines a custom life cycle for .hpi -->
+  <components>
+    <component>
+      <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+      <role-hint>hpi</role-hint>
+      <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <configuration>
+        <lifecycles>
+          <lifecycle>
+            <id>default</id>
+            <phases>
+              <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
+              <compile>org.jvnet.hudson.tools:maven-hpi-plugin:apt-compile</compile>
+              <process-classes>org.kohsuke:access-modifier-checker:enforce</process-classes>
+              <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+              <generate-test-sources>org.jvnet.hudson.tools:maven-hpi-plugin:insert-test</generate-test-sources>
+              <test-compile>org.apache.maven.plugins:maven-compiler-plugin:testCompile,org.jvnet.hudson.tools:maven-hpi-plugin:test-hpl,org.jvnet.hudson.tools:maven-hpi-plugin:resolve-test-dependencies</test-compile>
+              <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>
+              <package>org.jvnet.hudson.tools:maven-hpi-plugin:hpi</package>
+              <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+              <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+            </phases>
+          </lifecycle>
+        </lifecycles>
+      </configuration>
+    </component>
+    <component>
+      <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+      <role-hint>hpi</role-hint>
+      <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+      <configuration>
+        <extension>hpi</extension>
+        <type>hudson-plugin</type>
+        <packaging>hpi</packaging>
+        <language>java</language>
+        <addedToClasspath>true</addedToClasspath>
+      </configuration>
+    </component>
+    <component>
+      <role>org.codehaus.plexus.compiler.Compiler</role>
+      <role-hint>hpi-apt</role-hint>
+      <implementation>org.jvnet.hudson.maven.plugins.hpi.AptCompiler</implementation>
+      <description />
+    </component>
+  </components>
+</component-set>
