@@ -318,15 +318,5 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-    <profile>
-      <id>always-check-remote-repositories</id>
-      <properties>
-        <maven.repository.update.freqency>always</maven.repository.update.freqency>
-      </properties>
-    </profile>
-  </profiles>
-
 </project>
 
