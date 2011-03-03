@@ -108,6 +108,16 @@ public class FastPipedInputStream extends InputStream {
         if(source == null) {
             throw new IOException("Unconnected pipe");
         }
+
+        // Fix for http://issues.hudson-ci.org/browse/HUDSON-7809
+        // If a transaction has already started (say a large file transfer) and the sender
+        // keep sending bytes, closing the receiver makes the sender (FastPipedOutputStream)
+        // to throw "Pipe is already closed" exception
+        final byte[] flushBuffer = new byte[4096];
+        while (read(flushBuffer) != -1) {
+            // Flush all the pending writes
+        }
+
         synchronized(buffer) {
             closed = new ClosedBy();
             // Release any pending writers.
@@ -163,7 +173,7 @@ public class FastPipedInputStream extends InputStream {
         while (true) {
             synchronized(buffer) {
                 if(writePosition == readPosition && writeLaps == readLaps) {
-                    if(closed!=null) {
+                    if(closed != null) {
                         return -1;
                     }
                     source(); // make sure the sink is still trying to read, or else fail the write.
