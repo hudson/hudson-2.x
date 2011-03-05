@@ -104,7 +104,7 @@ import java.util.concurrent.ThreadFactory;
  *  and not likely useful for applications directly.
  * </ul>
  *
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi, Winston Prakash (bug fixes)
  */
 public class Channel implements VirtualChannel, IChannel {
     private final ObjectInputStream ois;
@@ -236,6 +236,7 @@ public class Channel implements VirtualChannel, IChannel {
     private volatile long lastHeard;
 
     /*package*/ final ExecutorService pipeWriter;
+
 
     /**
      * Communication mode.
@@ -663,6 +664,48 @@ public class Channel implements VirtualChannel, IChannel {
                 }
             }
         };
+    }
+
+    /*
+     * This method provides a mean to flush the I/O pipe associated with this
+     * channel. Useful when the process associated with the channel is terminating
+     * but the pipe might still transmitting data.
+     * See http://issues.hudson-ci.org/browse/HUDSON-7809
+     */
+    public void flushPipe() throws IOException, InterruptedException {
+        // The solution is to create no-op dummy RemotePipeWriter  callable and submit
+        // to the channel synchronously.
+    
+
+        try {
+            pipeWriter.submit(new Runnable() {
+
+                public void run() {
+                    // Do nothing, just a dummy runnable just to flush
+                    // this side of the Pipe
+                }
+            }).get();
+        } catch (ExecutionException exc) {
+            throw new AssertionError(exc);
+        }
+        Callable<Object, InterruptedException> dummyRemotePipeWriterCallable = new Callable<Object, InterruptedException>() {
+
+            public Object call() throws InterruptedException {
+                try {
+                    return Channel.current().pipeWriter.submit(new Runnable() {
+
+                        public void run() {
+                            // Do nothing, just a dummy runnable just to flush
+                            // other side of the Pipe
+                        }
+                    }).get();
+                } catch (ExecutionException exc) {
+                    throw new AssertionError(exc);
+                }
+            }
+        };
+
+        call(dummyRemotePipeWriterCallable);
     }
 
     /**
