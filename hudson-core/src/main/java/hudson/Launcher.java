@@ -71,7 +71,8 @@ import static org.apache.commons.io.output.NullOutputStream.NULL_OUTPUT_STREAM;
  * {@link Launcher} is responsible for inheriting environment variables.
  *
  *
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi, Winston Prakash (bug fixes)
+ *
  * @see FilePath#createLauncher(TaskListener) 
  */
 public abstract class Launcher {
@@ -795,6 +796,18 @@ public abstract class Launcher {
                 return p.join();
             } catch (InterruptedException e) {
                 return -1;
+            } finally{
+                try {
+                    // Fix: http://issues.hudson-ci.org/browse/HUDSON-7809
+                    // This call should not return immediately after the
+                    // process is done. The pipe associated with the channel
+                    // may be still transmitting data.
+                    // Get the channel associated with this thread and flush
+                    // its IO pipe
+                    Channel.current().flushPipe();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
