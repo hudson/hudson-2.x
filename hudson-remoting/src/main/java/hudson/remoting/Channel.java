@@ -37,6 +37,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -688,7 +689,12 @@ public class Channel implements VirtualChannel, IChannel {
         } catch (ExecutionException exc) {
             throw new AssertionError(exc);
         }
-        Callable<Object, InterruptedException> dummyRemotePipeWriterCallable = new Callable<Object, InterruptedException>() {
+        // Do not use anonymous class, other wise whole class gets marshalled over pipe and
+        // the channel class is not serializable.
+        call(new DummyRemotePipeWriterCallable());
+    }
+
+    public static class DummyRemotePipeWriterCallable implements Callable<Object, InterruptedException>, Serializable {
 
             public Object call() throws InterruptedException {
                 try {
@@ -705,8 +711,6 @@ public class Channel implements VirtualChannel, IChannel {
             }
         };
 
-        call(dummyRemotePipeWriterCallable);
-    }
 
     /**
      * Aborts the connection in response to an error.

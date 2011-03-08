@@ -806,7 +806,7 @@ public abstract class Launcher {
                     // its IO pipe
                     Channel.current().flushPipe();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Launcher.class.getName()).log(Level.INFO, null, ex);
                 }
             }
         }
