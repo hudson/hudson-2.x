@@ -13,7 +13,8 @@
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>1.397-SNAPSHOT</version>
+    <version>1.398-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <!-- TODO: Should really give these modules their own groupId -->

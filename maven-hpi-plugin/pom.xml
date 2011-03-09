@@ -11,8 +11,8 @@
   <artifactId>maven-hpi-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   
-  <name>Maven Hudson Plugin</name>
-  <version>1.397-SNAPSHOT</version>
+  <name>Maven hpi Plugin</name>
+  <version>1.398-SNAPSHOT</version>
 
   <description>
       Support for developing Hudson plugins with Apache Maven.
