@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jvnet.hudson.plugins</groupId>
         <artifactId>hudson-plugin-parent</artifactId>
-        <version>1.398-SNAPSHOT</version><!-- which version of Hudson is this plugin built against? -->
+        <version>1.398</version><!-- which version of Hudson is this plugin built against? -->
     </parent>
 
     <!-- $ --><groupId>org.jvnet.hudson.tools</groupId><!-- /$ -->
