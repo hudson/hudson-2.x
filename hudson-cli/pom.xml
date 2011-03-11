@@ -4,7 +4,7 @@
   <parent>
     <artifactId>hudson</artifactId>
     <groupId>org.jvnet.hudson.main</groupId>
-    <version>1.398</version>
+    <version>1.399-SNAPSHOT</version>
   </parent>
   <artifactId>hudson-cli</artifactId>
   <name>Hudson :: CLI</name>
