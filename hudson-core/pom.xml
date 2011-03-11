@@ -28,7 +28,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>1.398-SNAPSHOT</version>
+    <version>1.398</version>
   </parent>
 
   <artifactId>hudson-core</artifactId>
