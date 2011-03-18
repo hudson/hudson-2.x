@@ -27,13 +27,13 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson</groupId>
     <artifactId>hudson-parent</artifactId>
-    <version>1.12-SNAPSHOT</version>
+    <version>1.13-SNAPSHOT</version>
     <relativePath>hudson-parent/pom.xml</relativePath>
   </parent>
   
   <groupId>org.jvnet.hudson.main</groupId>
   <artifactId>hudson</artifactId>
-  <version>1.397-SNAPSHOT</version>
+  <version>1.399-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>Hudson</name>
@@ -450,47 +450,6 @@ THE SOFTWARE.
             <groupId>org.jvnet.sorcerer</groupId>
             <artifactId>maven-sorcerer-plugin</artifactId>
             <version>0.8</version>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <inherited>false</inherited>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>attached</goal>
-                </goals>
-                <phase>package</phase>
-                <configuration>
-                  <finalName>hudson-${project.version}</finalName>
-                  <descriptors>
-                    <descriptor>assembly-src.xml</descriptor>
-                  </descriptors>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

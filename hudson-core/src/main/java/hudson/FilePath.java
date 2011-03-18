@@ -51,6 +51,7 @@ import hudson.os.PosixAPI;
 import hudson.org.apache.tools.tar.TarInputStream;
 import hudson.util.io.Archiver;
 import hudson.util.io.ArchiverFactory;
+import java.util.logging.Level;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
@@ -1397,6 +1398,13 @@ public final class FilePath implements Serializable {
                 try {
                     fis = new FileInputStream(f);
                     Util.copyStream(fis,out);
+                    try {
+                        if (Channel.current() != null){
+                            Channel.current().flushPipe();
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FilePath.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     return null;
                 } finally {
                     IOUtils.closeQuietly(fis);
