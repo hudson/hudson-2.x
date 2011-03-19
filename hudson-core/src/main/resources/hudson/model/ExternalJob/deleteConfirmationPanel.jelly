@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Seiji Sogabe
+Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<!--
-  Side panel for the build view.
--->
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-	<l:header title="${it.name}">
-	  <st:include page="rssHeader.jelly" />
-	</l:header>
-	<l:side-panel>
-	  <l:tasks>
-	    <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back to Dashboard}" />
-	    <l:task icon="images/24x24/search.gif" href="." title="${%Status}" />
-	    <l:isAdmin>
-	      <l:taskWithDialog icon="images/24x24/edit-delete.gif" dialogPanel="deleteConfirmationPanel.jelly" href="delete" title="${%Delete Job}" />
-	      <l:task icon="images/24x24/setting.gif" href="configure" title="${%Configure}" />
-	    </l:isAdmin>
-	    <st:include page="actions.jelly" />
-	  </l:tasks>
-    
-    <j:forEach var="w" items="${it.widgets}">
-      <st:include it="${w}" page="index.jelly" />
-    </j:forEach>
-	</l:side-panel>
-</j:jelly>
+<div>
+   <form method="post" action="doDelete">
+       <h4>Are you sure you want to delete the Job?.</h4>
+       <input type="submit" id="yes" value="Yes" />
+       <input type="button" id="no" value="No" />
+   </form>
+</div>
