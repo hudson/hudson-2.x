@@ -137,7 +137,9 @@ public class Which {
             // Equinox/Felix/etc.
             try {
                 URLConnection con = res.openConnection();
-                res = (URL)con.getClass().getDeclaredMethod( "getLocalURL" ).invoke(con);
+                Method m = con.getClass().getDeclaredMethod( "getLocalURL" );
+                m.setAccessible(true);
+                res = (URL)m.invoke(con);
             } catch ( Throwable e ) {
                 // something must have changed in Equinox. fall through
                 LOGGER.log(Level.FINE, "Failed to resolve bundleresource into a jar location",e);
