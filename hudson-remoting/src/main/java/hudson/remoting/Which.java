@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.net.JarURLConnection;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.zip.ZipFile;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
@@ -130,7 +131,17 @@ public class Which {
             } finally {
                 is.close();
             }
+        }
 
+        if(resURL.startsWith("bundleresource:") || resURL.startsWith("bundle:")) {
+            // Equinox/Felix/etc.
+            try {
+                URLConnection con = res.openConnection();
+                res = (URL)con.getClass().getDeclaredMethod( "getLocalURL" ).invoke(con);
+            } catch ( Throwable e ) {
+                // something must have changed in Equinox. fall through
+                LOGGER.log(Level.FINE, "Failed to resolve bundleresource into a jar location",e);
+            }
         }
 
         URLConnection con = res.openConnection();
