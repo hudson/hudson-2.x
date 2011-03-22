@@ -53,7 +53,7 @@ THE SOFTWARE.
             }
           </script>
         </j:if>
-        <l:task icon="images/24x24/edit-delete.gif" href="${url}/delete" title="${%delete(it.pronoun)}" permission="${it.DELETE}" />
+        <l:taskWithDialog icon="images/24x24/edit-delete.gif" href="${url}/delete" dialogPanel="deleteConfirmationPanel.jelly" title="${%delete(it.pronoun)}" permission="${it.DELETE}" />
         <j:choose>
             <j:when test="${h.hasPermission(it,it.CONFIGURE)}">
                 <l:task icon="images/24x24/setting.gif" href="${url}/configure" title="${%Configure}" />
