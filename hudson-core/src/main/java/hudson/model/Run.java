@@ -1889,7 +1889,7 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
         @Override
         public String getEntryID(Run e) {
             // can't use a meaningful year field unless we remember when the job was created.
-            return "tag:hudson.dev.java.net,2008:"+e.getParent().getAbsoluteUrl();
+            return "tag:hudson.java.net,2008:"+e.getParent().getAbsoluteUrl();
         }
     };
 
@@ -1920,7 +1920,7 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
         }
 
         public String getEntryID(Run entry) {
-            return "tag:" + "hudson.dev.java.net,"
+            return "tag:" + "hudson.java.net,"
                 + entry.getTimestamp().get(Calendar.YEAR) + ":"
                 + entry.getParent().getName()+':'+entry.getId();
         }

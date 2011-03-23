@@ -121,7 +121,7 @@ public class DownloadService extends PageDecorator {
          * @param url
          *      URL relative to {@link UpdateCenter#getUrl()}.
          *      So if this string is "foo.json", the ultimate URL will be
-         *      something like "https://hudson.dev.java.net/foo.json"
+         *      something like "https://hudson.java.net/foo.json"
          *
          *      For security and privacy reasons, we don't allow the retrieval
          *      from random locations.

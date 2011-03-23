@@ -60,7 +60,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author Kohsuke Kawaguchi
  * @since 1.286
- * @see <a href="https://sezpoz.dev.java.net/nonav/">SezPoz</a>
+ * @see <a href="http://java.net/projects/sezpoz/">SezPoz</a>
  * @see ExtensionFinder
  * @see ExtensionList
  */

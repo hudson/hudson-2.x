@@ -93,7 +93,6 @@ public final class SuiteResult implements Serializable {
         // parse into DOM
         SAXReader saxReader = new SAXReader();
         // install EntityResolver for resolving DTDs, which are in files created by TestNG.
-        // (see https://hudson.dev.java.net/servlets/ReadMsg?listName=users&msgNo=5530)
         XMLEntityResolver resolver = new XMLEntityResolver();
         saxReader.setEntityResolver(resolver);
         Document result = saxReader.read(xmlReport);
@@ -138,11 +137,11 @@ public final class SuiteResult implements Serializable {
         }
 
         for (Element e : (List<Element>)suite.elements("testcase")) {
-            // https://hudson.dev.java.net/issues/show_bug.cgi?id=1233 indicates that
+            // http://issues.hudson-ci.org/browse/HUDSON-1233 indicates that
             // when <testsuites> is present, we are better off using @classname on the
             // individual testcase class.
 
-            // https://hudson.dev.java.net/issues/show_bug.cgi?id=1463 indicates that
+            // http://issues.hudson-ci.org/browse/HUDSON-1463 indicates that
             // @classname may not exist in individual testcase elements. We now
             // also test if the testsuite element has a package name that can be used
             // as the class name instead of the file name which is default.
@@ -151,7 +150,7 @@ public final class SuiteResult implements Serializable {
                 classname = suite.attributeValue("name");
             }
 
-            // https://hudson.dev.java.net/issues/show_bug.cgi?id=1233 and
+            // http://issues.hudson-ci.org/browse/HUDSON-1233 and
             // http://www.nabble.com/difference-in-junit-publisher-and-ant-junitreport-tf4308604.html#a12265700
             // are at odds with each other --- when both are present,
             // one wants to use @name from <testsuite>,
