@@ -1,7 +1,8 @@
 <div>
-  Normally, Hudson uses the local Maven repository as determined by Maven &mdash; the exact process
-  seems to be undocumented, but it's <tt>~/.m2/repository</tt> and can be overridden by
-  &lt;localRepository> in <tt>~/.m2/settings.xml</tt> (see <a  href="http://maven.apache.org/settings.html">the reference</a> for more details.)
+  Normally, Hudson uses the local Maven repository as determined by Maven
+    in <tt>~/.m2/repository</tt>, which can be overridden by
+  &lt;localRepository&gt; in <tt>~/.m2/settings.xml</tt> (see <a
+        href="http://maven.apache.org/settings.html">the reference</a> for more details.)
 
   <p>
   This normally means that all the jobs that are executed on the same node shares a single Maven repository.
@@ -23,8 +24,4 @@
   <p>
   When using this option, consider setting up a Maven artifact manager so that you don't have to hit
   remote Maven repositories too often.
-
-  <p>
-  If you'd prefer to activate this mode in all the Maven jobs executed on Hudson, refer to the technique described
-  <a href="http://n4.nabble.com/Hudson-on-2-4-8-16-core-boxes-td371215.html#a371217">here</a>.
 </div>

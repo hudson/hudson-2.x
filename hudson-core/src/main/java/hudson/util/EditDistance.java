@@ -5,13 +5,13 @@
  * in compliance with the License.
  *
  * You can obtain a copy of the license at
- * https://jwsdp.dev.java.net/CDDLv1.0.html
+ * http://java.net/projects/metro/
  * See the License for the specific language governing
  * permissions and limitations under the License.
  *
  * When distributing Covered Code, include this CDDL
  * HEADER in each file and include the License file at
- * https://jwsdp.dev.java.net/CDDLv1.0.html  If applicable,
+ * https://jwsdp.java.net/CDDLv1.0.html  If applicable,
  * add the following below this CDDL HEADER, with the
  * fields enclosed by brackets "[]" replaced with your
  * own identifying information: Portions Copyright [yyyy]

@@ -1,8 +1,10 @@
 <div>
-  Normalerweise verwendet Hudson das lokale Maven-Repository so wie es von Maven
-  bestimmt wird &mdash; das exakte Verfahren dafür scheint undokumentiert, aber es ist typischerweise
-  <tt>~/.m2/repository</tt> und kann durch &lt;localRepository> in <tt>~/.m2/settings.xml</tt>
-  überschrieben werden (mehr dazu in der <a  href="http://maven.apache.org/settings.html">Maven Dokumentation</a>).
+  Normalerweise verwendet Hudson die lokale Maven-Repository so wie es von Maven
+  bestimmt wird in
+  <tt>~/.m2/repository</tt>, welches durch &lt;localRepository&gt; in <tt>~/
+    .m2/settings.xml</tt>
+  überschrieben werden kann (mehr dazu in der <a  href="http://maven.apache
+  .org/settings.html">Maven Dokumentation</a>).
 
   <p>
   Dies bedeutet, dass sich alle Jobs, die auf dem gleichen Knoten ausgeführt werden, ein gemeinsames
@@ -24,7 +26,4 @@
   Wenn Sie diese Option verwenden, ziehen Sie die Installation eines Maven-Artefakt-Managers
   in Betracht: Dadurch vermeiden Sie zu häufige Zugriffe auf entfernte Maven-Repositories.
 
-  <p>
-  Möchten Sie diese Option in allen Maven-Jobs aktivieren, die über Hudson ausgeführt
-  werden, folgen Sie den Anweisungen <a href="http://n4.nabble.com/Hudson-on-2-4-8-16-core-boxes-td371215.html#a371217">hier</a>.
 </div>
