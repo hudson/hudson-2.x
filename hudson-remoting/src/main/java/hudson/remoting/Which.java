@@ -114,9 +114,9 @@ public class Which {
             try {
                 Object delegate = is;
                 while (delegate.getClass().getEnclosingClass()!=ZipFile.class) {
-                    Field f = is.getClass().getDeclaredField("delegate");
+                    Field f = delegate.getClass().getDeclaredField("delegate");
                     f.setAccessible(true);
-                    delegate = f.get(is);
+                    delegate = f.get(delegate);
                 }
                 Field f = delegate.getClass().getDeclaredField("this$0");
                 f.setAccessible(true);
