@@ -137,6 +137,23 @@ public class Which {
             }
         }
 
+        if(resURL.startsWith("vfs:") || resURL.startsWith("vfsfile:")) {
+            // JBoss6
+            try {
+                String resource = '/' + clazz.getName().replace('.', '/');
+                resURL = resURL.substring(0, resURL.lastIndexOf(resource));
+                Object content = new URL(res, resURL).getContent();
+                if (content instanceof File) {
+                    return (File)content;
+                }
+                Method m = content.getClass().getMethod( "getPhysicalFile" );
+                return (File)m.invoke(content);
+            } catch ( Throwable e ) {
+                // something must have changed in JBoss6. fall through
+                LOGGER.log(Level.FINE, "Failed to resolve vfs/vfsfile into a jar location",e);
+            }
+        }
+
         if(resURL.startsWith("bundleresource:") || resURL.startsWith("bundle:")) {
             // Equinox/Felix/etc.
             try {
