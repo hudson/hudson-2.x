@@ -113,8 +113,15 @@ public class Which {
             InputStream is = res.openStream();
             try {
                 Object delegate = is;
-                while (delegate.getClass().getEnclosingClass()!=ZipFile.class) {
-                    Field f = delegate.getClass().getDeclaredField("delegate");
+                try {
+                    while (delegate.getClass().getEnclosingClass()!=ZipFile.class) {
+                        Field f = delegate.getClass().getDeclaredField("delegate");
+                        f.setAccessible(true);
+                        delegate = f.get(delegate);
+                    }
+                } catch (NoSuchFieldException e) {
+                    // extra step for JDK6u24; zip internals have changed
+                    Field f = delegate.getClass().getDeclaredField("is");
                     f.setAccessible(true);
                     delegate = f.get(delegate);
                 }
@@ -122,10 +129,7 @@ public class Which {
                 f.setAccessible(true);
                 ZipFile zipFile = (ZipFile)f.get(delegate);
                 return new File(zipFile.getName());
-            } catch (NoSuchFieldException e) {
-                // something must have changed in JBoss5. fall through
-                LOGGER.log(Level.FINE, "Failed to resolve vfszip into a jar location",e);
-            } catch (IllegalAccessException e) {
+            } catch (Throwable e) {
                 // something must have changed in JBoss5. fall through
                 LOGGER.log(Level.FINE, "Failed to resolve vfszip into a jar location",e);
             } finally {
