@@ -56,7 +56,7 @@ THE SOFTWARE.
   <properties>
     <aspectjVersion>1.6.10</aspectjVersion>
     <sisuGuiceVersion>3.0.1</sisuGuiceVersion>
-    <sisuInjectVersion>2.1.1</sisuInjectVersion>
+    <sisuInjectVersion>2.2.1</sisuInjectVersion>
   </properties>
 
   <modules>

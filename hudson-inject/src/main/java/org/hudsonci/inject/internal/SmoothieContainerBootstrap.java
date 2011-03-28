@@ -57,7 +57,7 @@ public class SmoothieContainerBootstrap
         ClassSpace space = new ClassSpaceFactory().create(classLoader, types);
 
         // Start up the container
-        SmoothieContainer container = new SmoothieContainerImpl(new ExtensionModule(space));
+        SmoothieContainer container = new SmoothieContainerImpl(new ExtensionModule(space, true));
         Smoothie.setContainer(container);
 
         return container;

@@ -50,35 +50,25 @@ public final class SpaceIndex<T extends Annotation, I> implements Iterable<Space
 
     /**
      * Load an index for a given annotation type.
-     * Uses the thread's context class loader to find the index and load annotated classes.
-     * @param annotation the type of annotation to find
-     * @param instanceType the type of instance to be created (use {@link Void} if all instances will be null)
-     * @return an index of all elements known to be annotated with it
-     * @throws IllegalArgumentException if the annotation type is not marked with {@link Indexable}
-     *                                  or the instance type is not equal to or a supertype of the annotation's actual {@link Indexable#type}
-     */
-    public static <T extends Annotation,I> SpaceIndex<T,I> load(Class<T> annotation, Class<I> instanceType) throws IllegalArgumentException {
-        return load(annotation, instanceType, new URLClassSpace(Thread.currentThread().getContextClassLoader()));
-    }
-
-    /**
-     * Load an index for a given annotation type.
      * @param annotation the type of annotation to find
      * @param instanceType the type of instance to be created (use {@link Void} if all instances will be null)
      * @param space a class space in which to find the index and any annotated classes
+     * @param globalIndex search the entire classloader hierarchy?
      * @return an index of all elements known to be annotated with it
      * @throws IllegalArgumentException if the annotation type is not marked with {@link Indexable}
      *                                  or the instance type is not equal to or a supertype of the annotation's actual {@link Indexable#type}
      */
-    public static <T extends Annotation,I> SpaceIndex<T,I> load(Class<T> annotation, Class<I> instanceType, ClassSpace space) throws IllegalArgumentException {
-        return new SpaceIndex<T,I>(annotation, instanceType, space);
+    public static <T extends Annotation,I> SpaceIndex<T,I> load(Class<T> annotation, Class<I> instanceType, ClassSpace space, boolean globalIndex) throws IllegalArgumentException {
+        return new SpaceIndex<T,I>(annotation, instanceType, space, globalIndex);
     }
 
+    private final boolean globalIndex;
     private final Class<T> annotation;
     private final Class<I> instanceType;
     private final ClassSpace space;
 
-    private SpaceIndex(Class<T> annotation, Class<I> instance, ClassSpace space) {
+    private SpaceIndex(Class<T> annotation, Class<I> instance, ClassSpace space, boolean globalIndex) {
+        this.globalIndex = globalIndex;
         this.annotation = annotation;
         this.instanceType = instance;
         this.space = space;
@@ -129,7 +119,11 @@ public final class SpaceIndex<T extends Annotation, I> implements Iterable<Space
                     }
                     if (ois == null) {
                         if (resources == null) {
-                            resources = space.findEntries("META-INF/annotations/", annotation.getName(), false);
+                            if (globalIndex) {
+                                resources = space.getResources("META-INF/annotations/" + annotation.getName());
+                            } else {
+                                resources = space.findEntries("META-INF/annotations/", annotation.getName(), false);
+                            }
                         }
                         if (!resources.hasMoreElements()) {
                             // Exhausted all streams.

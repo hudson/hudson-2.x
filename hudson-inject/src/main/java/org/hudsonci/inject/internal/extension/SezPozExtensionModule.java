@@ -52,13 +52,16 @@ public final class SezPozExtensionModule
 
     private final ClassSpace space;
 
+    private final boolean globalIndex;
+
     // ----------------------------------------------------------------------
     // Constructors
     // ----------------------------------------------------------------------
 
-    public SezPozExtensionModule( final ClassSpace space )
+    public SezPozExtensionModule( final ClassSpace space, final boolean globalIndex )
     {
         this.space = checkNotNull(space);
+        this.globalIndex = globalIndex;
     }
 
     // ----------------------------------------------------------------------
@@ -67,7 +70,7 @@ public final class SezPozExtensionModule
 
     public void configure( final Binder binder )
     {
-        for ( final SpaceIndexItem item : SpaceIndex.load( Extension.class, Object.class, space ) )
+        for ( final SpaceIndexItem item : SpaceIndex.load( Extension.class, Object.class, space, globalIndex ) )
         {
             try
             {

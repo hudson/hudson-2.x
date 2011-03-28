@@ -163,7 +163,7 @@ public class SmoothieContainerImpl
         @Override
         protected void configure() {
             ClassSpace space = createClassSpace();
-            install(new ExtensionModule(space));
+            install(new ExtensionModule(space, false));
             super.configure();
         }
 

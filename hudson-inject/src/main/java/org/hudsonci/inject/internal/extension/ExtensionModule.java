@@ -31,17 +31,20 @@ public final class ExtensionModule
 {
     private final ClassSpace space;
 
-    public ExtensionModule(final ClassSpace space) {
+    private final boolean globalIndex;
+
+    public ExtensionModule(final ClassSpace space, final boolean globalIndex) {
         this.space = checkNotNull(space);
+        this.globalIndex = globalIndex;
     }
 
     public void configure(final Binder binder) {
         assert binder != null;
 
          // Scan for @Named components using the bean index
-        binder.install(new SpaceModule(space, BeanScanning.INDEX));
+        binder.install(new SpaceModule(space, globalIndex ? BeanScanning.GLOBAL_INDEX : BeanScanning.INDEX));
 
         // Scan for @Extension components via SezPoz index
-        binder.install(new SezPozExtensionModule(space));
+        binder.install(new SezPozExtensionModule(space, globalIndex));
     }
 }
