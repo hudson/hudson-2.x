@@ -29,12 +29,22 @@
 //     for memory leak patterns and how to prevent them.
 //
 
+// We use both jQuery and protoype. Both defines $ as an alias in the global namespace.
+// By specifying jQuery.noConflict(), $ is no longer used as alias. Use jQuery("div").hide();
+// instead of $("div").hide();
+// http://docs.jquery.com/Using_jQuery_with_Other_Libraries
+
+jQuery.noConflict();
+
+
 // create a new object whose prototype is the given object
 function object(o) {
     function F() {}
     F.prototype = o;
     return new F();
 }
+
+
 
 // id generator
 var iota = 0;
