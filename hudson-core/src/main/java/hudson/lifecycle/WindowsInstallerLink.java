@@ -238,7 +238,7 @@ public class WindowsInstallerLink extends ManagementLink {
      * Decide if {@link WindowsInstallerLink} should show up in UI, and if so, register it.
      */
     @Extension
-    public static WindowsInstallerLink registerIfApplicable() {
+    public static ManagementLink registerIfApplicable() {
         if(!Functions.isWindows())
             return null; // this is a Windows only feature
 
