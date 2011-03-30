@@ -113,23 +113,44 @@ public class Which {
             InputStream is = res.openStream();
             try {
                 Object delegate = is;
-                while (delegate.getClass().getEnclosingClass()!=ZipFile.class) {
-                    Field f = is.getClass().getDeclaredField("delegate");
+                try {
+                    while (delegate.getClass().getEnclosingClass()!=ZipFile.class) {
+                        Field f = delegate.getClass().getDeclaredField("delegate");
+                        f.setAccessible(true);
+                        delegate = f.get(delegate);
+                    }
+                } catch (NoSuchFieldException e) {
+                    // extra step for JDK6u24; zip internals have changed
+                    Field f = delegate.getClass().getDeclaredField("is");
                     f.setAccessible(true);
-                    delegate = f.get(is);
+                    delegate = f.get(delegate);
                 }
                 Field f = delegate.getClass().getDeclaredField("this$0");
                 f.setAccessible(true);
                 ZipFile zipFile = (ZipFile)f.get(delegate);
                 return new File(zipFile.getName());
-            } catch (NoSuchFieldException e) {
-                // something must have changed in JBoss5. fall through
-                LOGGER.log(Level.FINE, "Failed to resolve vfszip into a jar location",e);
-            } catch (IllegalAccessException e) {
+            } catch (Throwable e) {
                 // something must have changed in JBoss5. fall through
                 LOGGER.log(Level.FINE, "Failed to resolve vfszip into a jar location",e);
             } finally {
                 is.close();
+            }
+        }
+
+        if(resURL.startsWith("vfs:") || resURL.startsWith("vfsfile:")) {
+            // JBoss6
+            try {
+                String resource = '/' + clazz.getName().replace('.', '/');
+                resURL = resURL.substring(0, resURL.lastIndexOf(resource));
+                Object content = new URL(res, resURL).getContent();
+                if (content instanceof File) {
+                    return (File)content;
+                }
+                Method m = content.getClass().getMethod( "getPhysicalFile" );
+                return (File)m.invoke(content);
+            } catch ( Throwable e ) {
+                // something must have changed in JBoss6. fall through
+                LOGGER.log(Level.FINE, "Failed to resolve vfs/vfsfile into a jar location",e);
             }
         }
 
