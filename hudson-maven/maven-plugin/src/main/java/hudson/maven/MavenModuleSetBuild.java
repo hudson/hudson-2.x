@@ -706,6 +706,8 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
                 throw new AbortException();
             }
 
+            boolean needsDependencyGraphComputation = false;
+
             // update the module list
             Map<ModuleName,MavenModule> modules = project.modules;
             synchronized(modules) {
@@ -721,12 +723,18 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
                     if(mm!=null) {// found an existing matching module
                         if(debug)
                             logger.println("Reconfiguring "+mm);
+                        if (!mm.hasSimilarPomInfo(pom)){
+                            // The module POMInfo changed so need computation
+                             needsDependencyGraphComputation = true;
+                        }
                         mm.reconfigure(pom);
                         modules.put(pom.name,mm);
                     } else {// this looks like a new module
                         logger.println(Messages.MavenModuleSetBuild_DiscoveredModule(pom.name,pom.displayName));
                         mm = new MavenModule(project,pom,getNumber());
                         modules.put(mm.getModuleName(),mm);
+                        // Some Modules are removed so need computation of Dependency Graph
+                        needsDependencyGraphComputation = true;
                     }
                     sortedModules.add(mm);
                     mm.save();
@@ -734,18 +742,24 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
                 // at this point the list contains all the live modules
                 project.sortedActiveModules = sortedModules;
 
+
+
                 // remaining modules are no longer active.
                 old.keySet().removeAll(modules.keySet());
                 for (MavenModule om : old.values()) {
                     if(debug)
                         logger.println("Disabling "+om);
                     om.makeDisabled(true);
+                    // Some Modules are removed so need computation of Dependency Graph
+                    needsDependencyGraphComputation = true;
                 }
                 modules.putAll(old);
             }
 
             // we might have added new modules
-            Hudson.getInstance().rebuildDependencyGraph();
+            if (needsDependencyGraphComputation){
+                Hudson.getInstance().rebuildDependencyGraph();
+            }
 
             // module builds must start with this build's number
             for (MavenModule m : modules.values())

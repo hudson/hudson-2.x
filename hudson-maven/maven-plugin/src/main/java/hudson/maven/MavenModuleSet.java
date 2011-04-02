@@ -578,12 +578,19 @@ public final class MavenModuleSet extends AbstractMavenProject<MavenModuleSet,Ma
     }
 
     protected void buildDependencyGraph(DependencyGraph graph) {
+        // This project has already computed its dependency graph
+        if (graph.isAlreadyComputedProject(this)){
+            return;
+        }
     	Collection<MavenModule> modules = getModules();
     	for (MavenModule m : modules) {
     		m.buildDependencyGraph(graph);
     	}
         publishers.buildDependencyGraph(this,graph);
         buildWrappers.buildDependencyGraph(this,graph);
+        
+        // Tell DependencyGraph that this project has computed its dependency graph
+        graph.addToAlreadyComputedProjects(this);
     }
 
     public MavenModule getRootModule() {

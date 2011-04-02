@@ -120,6 +120,8 @@ public final class MavenModule extends AbstractMavenProject<MavenModule,MavenBui
      */
     /*package*/ volatile transient int nestLevel;
 
+    private PomInfo pomInfo;
+
     /*package*/ MavenModule(MavenModuleSet parent, PomInfo pom, int firstBuildNumber) throws IOException {
         super(parent, pom.name.toFileSystemName());
         reconfigure(pom);
@@ -171,12 +173,27 @@ public final class MavenModule extends AbstractMavenProject<MavenModule,MavenBui
     }
 
     /**
+     * Check if the MavenModule has similar PomInfo
+     * @param pom
+     * @return
+     */
+    boolean hasSimilarPomInfo(PomInfo pomInfo){
+        // This is possible because PomInfo overrides equals and hashcode
+        return this.pomInfo == pomInfo;
+    }
+
+
+
+    /**
      * Called to update the module with the new POM.
      * <p>
      * This method is invoked on {@link MavenModule} that has the matching
      * {@link ModuleName}.
      */
     /*package*/ void reconfigure(PomInfo pom) {
+
+        this.pomInfo = pom;
+
         this.displayName = pom.displayName;
         this.version = pom.version;
         this.relativePath = pom.relativePath;
@@ -381,7 +398,11 @@ public final class MavenModule extends AbstractMavenProject<MavenModule,MavenBui
     }
 
     protected void buildDependencyGraph(DependencyGraph graph) {
-        if(isDisabled() || getParent().ignoreUpstremChanges())        return;
+
+        if(isDisabled() || getParent().ignoreUpstremChanges() 
+                || graph.isAlreadyComputedProject(this)) { // This project has already computed its dependency graph
+            return;
+        }
 
         Map<ModuleDependency,MavenModule> modules = new HashMap<ModuleDependency,MavenModule>();
 
@@ -417,6 +438,8 @@ public final class MavenModule extends AbstractMavenProject<MavenModule,MavenBui
                     graph.addDependency(dep);
             }
         }
+        // Tell DependencyGraph that this project has computed its dependency graph
+        graph.addToAlreadyComputedProjects(this);
     }
 
     @Override

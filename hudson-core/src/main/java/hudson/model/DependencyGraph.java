@@ -90,6 +90,11 @@ public final class DependencyGraph implements Comparator<AbstractProject> {
     private boolean built;
 
     /**
+     * A unique set that holds the list of projects that have already computed its dependency graph
+     */
+    private Set<AbstractProject> alreadyComputedProjects = new HashSet<AbstractProject>();
+
+    /**
      * Builds the dependency graph.
      */
     public DependencyGraph() {
@@ -107,6 +112,7 @@ public final class DependencyGraph implements Comparator<AbstractProject> {
             backward = finalize(backward);
 
             built = true;
+            alreadyComputedProjects.clear();
         } finally {
             SecurityContextHolder.setContext(saveCtx);
         }
@@ -119,6 +125,23 @@ public final class DependencyGraph implements Comparator<AbstractProject> {
         forward = backward = Collections.emptyMap();
         built = true;
     }
+
+    /**
+     * Add this project to the set of projects that have already computed its dependency graph
+     * @param project
+     */
+    public void addToAlreadyComputedProjects(AbstractProject project) {
+        alreadyComputedProjects.add(project);
+    }
+
+    /**
+     * Check if the project has already computed its dependency graph
+     * @param project
+     */
+    public boolean isAlreadyComputedProject(AbstractProject project) {
+        return alreadyComputedProjects.contains(this);
+    }
+
 
     /**
      * Gets all the immediate downstream projects (IOW forward edges) of the given project.
