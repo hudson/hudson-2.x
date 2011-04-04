@@ -48,7 +48,11 @@ public class DNSMultiCast implements Closeable {
 
     public void close() {
         if (jmdns!=null) {
-            jmdns.close();
+            try {
+                jmdns.close();
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            }
             jmdns = null;
         }
     }

@@ -213,8 +213,7 @@ final class PomInfo implements Serializable {
     }
 
     @Override
-    public boolean equals( Object obj )
-    {
+    public boolean equals( Object obj ){
         if (obj == null) {
             return false;
         }
@@ -225,8 +224,27 @@ final class PomInfo implements Serializable {
             return false;
         }
         PomInfo pomInfo = (PomInfo) obj;
-        return StringUtils.equals( pomInfo.groupId, this.groupId ) 
-            && StringUtils.equals( pomInfo.artifactId, this.artifactId ); 
+        if (!StringUtils.equals( pomInfo.groupId, this.groupId )){
+            return false;
+        }
+        if (!StringUtils.equals( pomInfo.artifactId, this.artifactId )){
+            return false;
+        }
+        return isDependencisesSimilar(pomInfo);
+    }
+
+    private boolean isDependencisesSimilar(PomInfo pom){
+
+        if (pom.dependencies.size() != dependencies.size()){
+            return false;
+        }
+        for (ModuleDependency dependency : dependencies){
+            // This is feasible because ModuleDependency overrides equal and Hashcode
+            if (!pom.dependencies.contains(dependency)){
+                return false;
+            }
+        }
+        return true;
     }
     
     /**
