@@ -55,6 +55,7 @@ THE SOFTWARE.
 
   <properties>
     <aspectjVersion>1.6.10</aspectjVersion>
+    <sisuGuiceVersion>3.0.1</sisuGuiceVersion>
     <sisuInjectVersion>2.1.1</sisuInjectVersion>
   </properties>
 
@@ -307,6 +308,12 @@ THE SOFTWARE.
         <version>${aspectjVersion}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.sonatype.sisu</groupId>
+        <artifactId>sisu-guice</artifactId>
+        <version>${sisuGuiceVersion}</version>
+        <classifier>no_aop</classifier>
+      </dependency>
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-inject-bean</artifactId>
