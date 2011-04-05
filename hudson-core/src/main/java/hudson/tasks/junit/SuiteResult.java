@@ -98,17 +98,30 @@ public final class SuiteResult implements Serializable {
         Document result = saxReader.read(xmlReport);
         Element root = result.getRootElement();
 
-        if(root.getName().equals("testsuites")) {
-            // multi-suite file
-            for (Element suite : (List<Element>)root.elements("testsuite"))
-                r.add(new SuiteResult(xmlReport, suite, keepLongStdio));
-        } else {
-            // single suite file
-            r.add(new SuiteResult(xmlReport, root, keepLongStdio));
-        }
+        getTestSuites(root, r, xmlReport, keepLongStdio);
 
         return r;
     }
+
+    /**
+     * Gets the "testsuite" elements that contain at least one "testcase" element.
+     * Finds all the elements recursively in order to find nested "testsuite" elements.
+     * Bug 6546 
+     * @see http://issues.hudson-ci.org/browse/HUDSON-6545
+     * @param element XML element to examine
+     * @param r List of SuiteResult
+     * @param xmlReport A Junit XML report file
+     * @param keepLongStdio if true, retain a suite's complete stdout/stderr even if this is huge and the suite passed
+     */
+    static private void getTestSuites(Element element, List<SuiteResult> r, File xmlReport, boolean keepLongStdio) throws DocumentException, IOException {
+        if(element.elements("testcase").size() != 0) {
+            r.add(new SuiteResult(xmlReport, element, keepLongStdio));
+        }
+        for (Element suite : (List<Element>)element.elements("testsuite")) {
+            getTestSuites(suite, r, xmlReport, keepLongStdio);
+        }
+    }
+
 
     /**
      * @param xmlReport
