@@ -27,7 +27,7 @@ THE SOFTWARE.
     <f:entry title="${%SMTP server}" field="smtpServer">
       <f:textbox />
     </f:entry>
-    <f:entry title="${%Default user e-mail suffix}" field="defaultSuffix">
+    <f:entry title="${%Default User E-mail Suffix}" field="defaultSuffix">
       <f:textbox />
     </f:entry>
     <f:entry title="${%System Admin E-mail Address}" field="adminAddress">
