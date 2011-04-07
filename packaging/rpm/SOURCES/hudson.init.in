@@ -74,7 +74,7 @@ do
 done
 
 JAVA_CMD="$HUDSON_JAVA_CMD $HUDSON_JAVA_OPTIONS -DHUDSON_HOME=$HUDSON_HOME -jar $HUDSON_WAR"
-PARAMS="--logfile=/var/log/hudson/hudson.log"
+PARAMS="--logfile=/var/log/hudson/hudson.log --daemon"
 [ -n "$HUDSON_PORT" ] && PARAMS="$PARAMS --httpPort=$HUDSON_PORT"
 [ -n "$HUDSON_DEBUG_LEVEL" ] && PARAMS="$PARAMS --debug=$HUDSON_DEBUG_LEVEL"
 [ -n "$HUDSON_HANDLER_STARTUP" ] && PARAMS="$PARAMS --handlerCountStartup=$HUDSON_HANDLER_STARTUP"
