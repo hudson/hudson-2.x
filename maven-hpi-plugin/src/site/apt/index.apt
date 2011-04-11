@@ -21,4 +21,4 @@ Maven Hudson Plugin
   * {{{upload-mojo.html}hpi:upload}} Posts the hpi file to java.net. Used during the release.
 
 
-  For more information about how to develop Hudson plugins, refer to {{{http://hudson.gotdns.com/wiki/display/HUDSON/Extend+Hudson}Wiki}}
+  For more information about how to develop Hudson plugins, refer to {{{http://wiki.hudson-ci.com/display/HUDSON/Extend+Hudson}Wiki}}

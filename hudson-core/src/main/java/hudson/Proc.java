@@ -224,7 +224,7 @@ public abstract class Proc {
 
             try {
                 int r = proc.waitFor();
-                // see http://hudson.gotdns.com/wiki/display/HUDSON/Spawning+processes+from+build
+                // see http://wiki.hudson-ci.com/display/HUDSON/Spawning+processes+from+build
                 // problems like that shows up as infinite wait in join(), which confuses great many users.
                 // So let's do a timed wait here and try to diagnose the problem
                 copier.join(10*1000);
