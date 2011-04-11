@@ -60,7 +60,7 @@ THE SOFTWARE.
 				<loctext xml:lang='C'>Hudson Continuous Build Server</loctext>
 			</common_name>
 			<documentation>
-				<doc_link name='hudson.dev.java.net' uri='https://hudson.dev.java.net/' />
+				<doc_link name='hudson-ci.org' uri='https://hudson-ci.org/' />
 			</documentation>
 		</template>
 	</service>

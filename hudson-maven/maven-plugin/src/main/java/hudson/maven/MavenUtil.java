@@ -144,12 +144,12 @@ public class MavenUtil {
         
         MavenRequest mavenRequest = new MavenRequest();
         
-        // make sure ~/.m2 exists to avoid http://www.nabble.com/BUG-Report-tf3401736.html
+        // make sure ~/.m2 exists to avoid http://issues.hudson-ci.org/browse/HUDSON-421
         File m2Home = new File(MavenEmbedder.userHome, ".m2");
         m2Home.mkdirs();
         if(!m2Home.exists())
             throw new AbortException("Failed to create "+m2Home+
-                "\nSee https://hudson.dev.java.net/cannot-create-.m2.html");
+                "\nSee http://issues.hudson-ci.org/browse/HUDSON-421");
 
         if (mavenEmbedderRequest.getPrivateRepository()!=null)
             mavenRequest.setLocalRepositoryPath( mavenEmbedderRequest.getPrivateRepository() );

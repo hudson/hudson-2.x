@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Acts as a reverse proxy to https://hudson.dev.java.net/ , so that during a test
+ * Acts as a reverse proxy to https://hudson.java.net/ , so that during a test
  * we can avoid hitting java.net.
  *
  * <p>

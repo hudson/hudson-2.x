@@ -95,7 +95,7 @@ public class Main {
     public static void _main(String[] args) throws IOException, InterruptedException, CmdLineException {
         // see http://forum.java.sun.com/thread.jspa?threadID=706976&tstart=0
         // not sure if this is the cause, but attempting to fix
-        // https://hudson.dev.java.net/issues/show_bug.cgi?id=310
+        // http://issues.hudson-ci.org/browse/HUDSON-310
         // by overwriting the security manager.
         try {
             System.setSecurityManager(null);
