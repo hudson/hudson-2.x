@@ -34,7 +34,12 @@ THE SOFTWARE.
       <f:textbox />
     </f:entry>
     <f:entry title="${%Hudson URL}" field="url">
-      <f:textbox default="${h.inferHudsonURL(request)}" />
+      
+      <!--
+        Do not try to infer the URL, most of the time you get "localhost:<port>".
+        This is confusing. http://issues.hudson-ci.org/browse/HUDSON-8796
+      <f:textbox default="${h.inferHudsonURL(request)}" />--> 
+      <f:textbox />
     </f:entry>
     <f:advanced>
       <f:optionalBlock name="useSMTPAuth" title="${%Use SMTP Authentication}" checked="${descriptor.smtpAuthUserName!=null}"
