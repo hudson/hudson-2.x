@@ -61,7 +61,6 @@ import org.apache.tools.tar.TarEntry;
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.kohsuke.stapler.Stapler;
-import org.jvnet.robust_http_client.RetryableHttpStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -628,9 +627,9 @@ public final class FilePath implements Serializable {
             if(listener!=null)
                 listener.getLogger().println(message);
 
-            // for HTTP downloads, enable automatic retry for added resilience
-            InputStream in = archive.getProtocol().equals("http") ? new RetryableHttpStream(archive) : con.getInputStream();
+            InputStream in = con.getInputStream();
             CountingInputStream cis = new CountingInputStream(in);
+             
             try {
                 if(archive.toExternalForm().endsWith(".zip"))
                     unzipFrom(cis);

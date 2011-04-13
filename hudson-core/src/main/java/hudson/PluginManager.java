@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Stephen Connolly, Tom Huybrechts
+ * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Stephen Connolly, Tom Huybrechts, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -546,22 +546,35 @@ public abstract class PluginManager extends AbstractModelObject {
     public HttpResponse doProxyConfigure(
             @QueryParameter("proxy.server") String server,
             @QueryParameter("proxy.port") String port,
+            @QueryParameter("proxy.noProxyFor") String noProxyFor,
             @QueryParameter("proxy.userName") String userName,
-            @QueryParameter("proxy.password") String password) throws IOException {
+            @QueryParameter("proxy.password") String password,
+            @QueryParameter("proxy.authNeeded") String authNeeded) throws IOException {
         Hudson hudson = Hudson.getInstance();
         hudson.checkPermission(Hudson.ADMINISTER);
-
+        
         server = Util.fixEmptyAndTrim(server);
-        if(server==null) {
+
+        if ((server != null) && !"".equals(server)) {
+            // If port is not specified assume it is port 80 (usual default for HTTP port)
+            int portNumber = 80;
+            if (!"".equals(Util.fixNull(port))){
+                portNumber = Integer.parseInt(Util.fixNull(port));
+            }
+            
+            boolean proxyAuthNeeded = "on".equals(Util.fixNull(authNeeded));
+            if (!proxyAuthNeeded){
+                userName = "";
+                password = "";
+            }
+             
+            hudson.proxy = new ProxyConfiguration(server , portNumber, Util.fixEmptyAndTrim(noProxyFor),
+                    Util.fixEmptyAndTrim(userName), Util.fixEmptyAndTrim(password), "on".equals(Util.fixNull(authNeeded)));
+            hudson.proxy.save();
+        } else {
             hudson.proxy = null;
             ProxyConfiguration.getXmlFile().delete();
-        } else try {
-            hudson.proxy = new ProxyConfiguration(server,Integer.parseInt(Util.fixNull(port)),
-                    Util.fixEmptyAndTrim(userName),Util.fixEmptyAndTrim(password));
-            hudson.proxy.save();
-        } catch (NumberFormatException nfe) {
-            return HttpResponses.error(StaplerResponse.SC_BAD_REQUEST,
-                    new IllegalArgumentException("Invalid proxy port: " + port, nfe));
+
         }
         return new HttpRedirect("advanced");
     }
