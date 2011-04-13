@@ -211,8 +211,22 @@
     overflow:   hidden;
     z-index:    0;
 }
-.timeline-band-input input{
+.timeline-band-input input {
     width:      0;
+}
+
+.timeline-band-scrollbar {
+    display:    none;
+    position:   absolute;
+    background: #f8f8f8;
+    z-index:    100;
+    overflow:   hidden;
+}
+
+.timeline-band-scrollbar-thumb {
+    margin: 2px;
+    background: #666;
+    position: relative;
 }
 
 .timeline-band-layer {
