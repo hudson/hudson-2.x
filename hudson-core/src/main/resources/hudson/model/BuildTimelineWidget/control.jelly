@@ -26,34 +26,41 @@ THE SOFTWARE.
     Show timeline trend image. It takes two builds
     </st:documentation>
     
-      <script type="text/javascript">
-            var SimileAjax = {
-                Platform: {}
-            }; 
+    <script type="text/javascript">
+        var SimileAjax = {
+            Platform: {}
+        }; 
     </script>          
 
-  <!--
-  <st:adjunct includes="org.kohsuke.stapler.simile.timeline" />
-  -->
-    <link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.0/timeline_ajax/styles/graphics.css" />
-    <link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.0/timeline_js/timeline-bundle.css" />
+    <script type="text/javascript">
+        var browserName=navigator.appName;
+        if (browserName=="Microsoft Internet Explorer"){
+           //load ie friendly stylesheet
+           document.write('<link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.2/timeline_ajax/styles/graphics-ie6.css" />)
+        } else{
+           document.write('<link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.2/timeline_ajax/styles/graphics.css" />)
+        }
+     </script> 
+
+    <link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.2/timeline_ajax/styles/graphics.css" />
+    <link rel="stylesheet" type="text/css" href="${resURL}/scripts/timeline_2.3.2/timeline_js/timeline-bundle.css" />
     
-    <script src="${resURL}/scripts/timeline_2.3.0/timeline_ajax/simile-ajax-bundle.js" type="text/javascript" /> 
+    <script src="${resURL}/scripts/timeline_2.3.2/timeline_ajax/simile-ajax-bundle.js" type="text/javascript" /> 
     
      <script type="text/javascript">
         
             var Timeline = {};
             Timeline.DateTime = SimileAjax.DateTime;
-            Timeline.urlPrefix ='${resURL}/scripts/timeline_2.3.0/timeline_js/';
+            Timeline.urlPrefix ='${resURL}/scripts/timeline_2.3.2/timeline_js/';
             Timeline.serverLocale = '${h.serverLocale.language}';
             Timeline.clientLocale = '${h.clientLocale.language}';;
             
     </script>  
     
-    <script src="${resURL}/scripts/timeline_2.3.0/timeline_js/timeline-bundle.js" type="text/javascript" /> 
-    <script src="${resURL}/scripts/timeline_2.3.0/timeline_js/timeline-bundle.js" type="text/javascript" />
-    <script src="${resURL}/scripts/timeline_2.3.0/timeline_js/scripts/l10n/en/labellers.js" type="text/javascript" />   
-    <script src="${resURL}/scripts/timeline_2.3.0/timeline_js/scripts/l10n/en/timeline.js" type="text/javascript" /> 
+    <script src="${resURL}/scripts/timeline_2.3.2/timeline_js/timeline-bundle.js" type="text/javascript" />
+    
+    <script src="${resURL}/scripts/timeline_2.3.2/timeline_js/scripts/l10n/en/labellers.js" type="text/javascript" />   
+    <script src="${resURL}/scripts/timeline_2.3.2/timeline_js/scripts/l10n/en/timeline.js" type="text/javascript" /> 
     
     
     <j:invokeStatic var="tz" className="java.util.TimeZone" method="getDefault"/>
