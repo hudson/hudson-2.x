@@ -117,6 +117,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.SimpleFormatter;
@@ -1223,6 +1224,14 @@ public class Functions {
 
     public static Date getCurrentTime() {
         return new Date();
+    }
+    
+    public static Locale getClientLocale(){
+        return Stapler.getCurrentRequest().getLocale();
+    }
+    
+    public static Locale getServerLocale(){
+        return Locale.getDefault();
     }
 
     /**

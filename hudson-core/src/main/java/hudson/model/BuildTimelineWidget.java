@@ -23,17 +23,24 @@
  */
 package hudson.model;
 
+import hudson.Functions;
 import hudson.util.RunList;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.processors.JsonValueProcessor;
 import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-import org.koshuke.stapler.simile.timeline.Event;
-import org.koshuke.stapler.simile.timeline.TimelineEventList;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+import org.kohsuke.stapler.QueryParameter;
 
 /**
  * UI widget for showing the SMILE timeline control.
@@ -41,10 +48,12 @@ import java.util.Date;
  * <p>
  * Return this from your "getTimeline" method.
  *
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi, Winston Prakash
  * @since 1.372
  */
 public class BuildTimelineWidget {
+
+     
     protected final RunList<?> builds;
 
     public BuildTimelineWidget(RunList<?> builds) {
@@ -61,21 +70,93 @@ public class BuildTimelineWidget {
 
     public TimelineEventList doData(StaplerRequest req, @QueryParameter long min, @QueryParameter long max) throws IOException {
         TimelineEventList result = new TimelineEventList();
-        for (Run r : builds.byTimestamp(min,max)) {
+        for (Run r : builds.byTimestamp(min, max)) {
             Event e = new Event();
             e.start = r.getTime();
-            e.end   = new Date(r.timestamp+r.getDuration());
+            e.end = new Date(r.timestamp + r.getDuration());
             e.title = r.getFullDisplayName();
             // what to put in the description?
             // e.description = "Longish description of event "+r.getFullDisplayName();
             // e.durationEvent = true;
-            e.link = req.getContextPath()+'/'+r.getUrl();
+            e.link = req.getContextPath() + '/' + r.getUrl();
             BallColor c = r.getIconColor();
-            e.color = String.format("#%06X",c.getBaseColor().darker().getRGB()&0xFFFFFF);
-            e.classname = "event-"+c.noAnime().toString()+" " + (c.isAnimated()?"animated":"");
+            e.color = String.format("#%06X", c.getBaseColor().darker().getRGB() & 0xFFFFFF);
+            e.classname = "event-" + c.noAnime().toString() + " " + (c.isAnimated() ? "animated" : "");
             result.add(e);
         }
         return result;
     }
+    
+    /**
+     * List of {@link Event} that the timeline component will display.
+     */
+    private static class TimelineEventList extends ArrayList<Event> implements HttpResponse {
 
+        /**
+         * Renders HTTP response.
+         */
+        public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+            // Date needs to be converted into iso-8601 date format.
+            JsonConfig config = new JsonConfig();
+            config.registerJsonValueProcessor(Date.class, new JsonValueProcessor() {
+
+                public synchronized Object processArrayValue(Object value, JsonConfig jsonConfig) {
+                    if (value != null){
+                       DateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss 'GMT'Z", Functions.getClientLocale());
+                       return dateFormat.format(value);
+                    }
+                    return null;
+                }
+
+                public Object processObjectValue(String key, Object value, JsonConfig jsonConfig) {
+                    return processArrayValue(value, jsonConfig);
+                }
+            });
+
+            JSONObject o = new JSONObject();
+            o.put("events", JSONArray.fromObject(this, config));
+            rsp.setContentType("application/javascript;charset=UTF-8");
+            o.write(rsp.getWriter());
+        }
+    }
+
+    /**
+     * Event data to be rendered on timeline.
+     * See http://code.google.com/p/simile-widgets/wiki/Timeline_EventSources
+    
+     * <p>
+     * This is bound to JSON and sent to the client-side JavaScript.
+     */
+    private static class Event {
+
+        public Date start;
+        public Date end;
+        public String title, description;
+        /**
+         * If true, the event occurs over a time duration. No icon. The event will be
+         * drawn as a dark blue tape. The tape color is set with the color attribute.
+         * Default color is #58A0DC
+         *
+         * If false (default), the event is focused on a specific "instant" (shown with the icon).
+         * The event will be drawn as a blue dot icon (default) with a pale blue tape.
+         * The tape is the default color (or color attribute color), with opacity
+         * set to 20. To change the opacity, change the theme's instant: {impreciseOpacity: 20}
+         * value. Maximum 100.
+         */
+        public Boolean durationEvent;
+        /**
+         * Url. The bubble's title text be a hyper-link to this address.
+         */
+        public String link;
+        /**
+         * Color of the text and tape (duration events) to display in the timeline.
+         * If the event has durationEvent = false, then the bar's opacity will
+         * be applied (default 20%). See durationEvent, above.
+         */
+        public String color;
+        /**
+         * CSS class name.
+         */
+        public String classname;
+    }
 }
