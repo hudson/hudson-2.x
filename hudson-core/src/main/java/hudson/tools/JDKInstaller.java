@@ -39,7 +39,6 @@ import hudson.model.DownloadService.Downloadable;
 import hudson.model.JDK;
 import static hudson.tools.JDKInstaller.Preference.*;
 import hudson.remoting.Callable;
-import org.jvnet.robust_http_client.RetryableHttpStream;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.apache.commons.io.IOUtils;
@@ -305,12 +304,7 @@ public class JDKInstaller extends ToolInstaller {
         try {
             FileOutputStream out = new FileOutputStream(tmp);
             try {
-                IOUtils.copy(new RetryableHttpStream(src) {
-                    @Override
-                    protected HttpURLConnection connect() throws IOException {
-                        return (HttpURLConnection) ProxyConfiguration.open(url);
-                    }
-                }, out);
+                IOUtils.copy(ProxyConfiguration.open(src).getInputStream(), out);
             } finally {
                 out.close();
             }

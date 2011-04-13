@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Harald Wellmann
+Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Harald Wellmann, Winston Prakash
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,28 +33,40 @@ THE SOFTWARE.
     <table id="pluginsAdv" class="pane bigtable" style="margin-top:0; border-top:none">
       <tr style="border-top:none">
         <td>
-          <h1>${%HTTP Proxy Configuration}</h1>
+           <h2>${%HTTP Proxy Configuration}</h2>      
           <f:form method="post" action="proxyConfigure">
-            <f:block>
-              <f:entry title="${%Server}" help="/help/update-center/proxy-server.html">
-                <f:textbox name="proxy.server" value="${app.proxy.name}" />
-              </f:entry>
-              <f:entry title="${%Port}" help="/help/update-center/proxy-port.html">
-                <f:textbox name="proxy.port" value="${app.proxy.port}" />
-              </f:entry>
-            </f:block>
-            <f:entry title="${%User name}" help="/help/update-center/proxy-username.html">
-              <f:textbox name="proxy.userName" value="${app.proxy.userName}" />
-            </f:entry>
-            <f:entry title="${%Password}">
-              <f:password name="proxy.password" value="${app.proxy.password}" />
-            </f:entry>
-            <f:block>
+                <f:block>
+                  <f:entry title="${%Server}" help="/help/update-center/proxy-server.html">
+                    <f:textbox name="proxy.server" value="${app.proxy.name}" />
+                  </f:entry>
+                  <f:entry title="${%Port}" help="/help/update-center/proxy-port.html">
+                    <f:textbox name="proxy.port" value="${app.proxy.port}" />
+                  </f:entry>
+                  <f:entry title="${%No Proxy for}" help="/help/update-center/no-proxy.html">
+                    <f:textbox name="proxy.noProxyFor" value="${app.proxy.noProxyFor}" />
+                  </f:entry>
+                </f:block>
+
+                <f:optionalBlock name="proxy.authNeeded"
+                       help="/help/update-center/proxy-auth.html"
+                       title="${%Proxy Needs Authorization}" 
+                       checked="${app.proxy.authNeeded}">
+
+                        <f:entry title="${%User name}" help="/help/update-center/proxy-username.html">
+                          <f:textbox name="proxy.userName" value="${app.proxy.userName}" />
+                        </f:entry>
+                        <f:entry title="${%Password}">
+                          <f:password name="proxy.password" value="${app.proxy.password}" />
+                        </f:entry>
+                </f:optionalBlock>
+                <f:block>
               <f:submit value="${%Submit}" />
             </f:block>
+             
           </f:form>
+           
 
-          <h1>${%Upload Plugin}</h1>
+          <h2>${%Upload Plugin}</h2>
           <f:form method="post" action="uploadPlugin" name="uploadPlugin" enctype="multipart/form-data">
             <f:block>
               <div style="margin-bottom: 1em;">
@@ -70,7 +82,7 @@ THE SOFTWARE.
             </f:block>
           </f:form>
 
-          <h1>${%Update Site}</h1>
+          <h2>${%Update Site}</h2>
           <f:form method="post" action="siteConfigure">
             <f:entry title="${%URL}" >
               <f:textbox name="site" value="${app.updateCenter.getSite('default').url}" />
