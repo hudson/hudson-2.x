@@ -67,13 +67,13 @@ THE SOFTWARE.
     <div id="tl" style="height:250px; border:1px solid black;" />
     <div id="status" />
  
-    <script type="text/javascript">
-        
+     <script type="text/javascript">
+       
           <![CDATA[
-             
-            var tz = ${tz.rawOffset / 3600000};
             
-            window.addEventListener('load', function() {
+            var tz = ${tz.rawOffset / 3600000};
+           
+             function onLoadEvent() {
                 var tl_el = document.getElementById("tl");
                 var eventSource1 = new Timeline.DefaultEventSource();
                 eventSource1.loaded = {};
@@ -154,11 +154,17 @@ THE SOFTWARE.
                         }, 500);
                     }
                 },false);
-            },false);
-            
-            
+            }
+
+            if (window.attachEvent) {
+                window.attachEvent('onload', onLoadEvent);
+            }else if (window.addEventListener) {
+               window.addEventListener('load', onLoadEvent, false);
+            }else {
+               document.addEventListener('load', onLoadEvent, false);
+            }
      ]]>
-     
+    
   </script>
      
 </j:jelly>
