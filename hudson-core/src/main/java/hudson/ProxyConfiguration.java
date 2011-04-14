@@ -26,6 +26,7 @@ package hudson;
 import hudson.model.Hudson;
 import hudson.model.Saveable;
 import hudson.model.listeners.SaveableListener;
+import hudson.util.IOException2;
 import hudson.util.Scrambler;
 import hudson.util.XStream2;
 
@@ -175,11 +176,11 @@ public final class ProxyConfiguration implements Saveable {
                 }
                 connected = false;
             } catch (UnknownHostException exc) {
-                throw new IOException(
+                throw new IOException2(
                         "Could not connect to " + url.toExternalForm() + ". Check your internet connection.",
                         exc);
             } catch (ConnectException exc) {
-                throw new IOException(
+                throw new IOException2(
                         "Could not connect to " + url.toExternalForm() + ". Check your internet connection.",
                         exc);
             }

@@ -33,6 +33,8 @@ import hudson.PluginStrategy;
 import hudson.PluginWrapper;
 import hudson.PluginWrapper.Dependency;
 import hudson.model.Hudson;
+import hudson.util.IOException2;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +96,7 @@ public class SmoothiePluginStrategy
             plugin = pluginFactory.create(archive);
         }
         catch (Exception e) {
-            throw new IOException(e);
+            throw new IOException2(e);
         }
 
         if (log.isDebugEnabled()) {
@@ -181,7 +183,7 @@ public class SmoothiePluginStrategy
                     log.trace("Plugin instance: {}", instance);
                 }
                 catch (Throwable e) {
-                    throw new IOException("Failed to load plugin instance for: " + plugin.getShortName(), e);
+                    throw new IOException2("Failed to load plugin instance for: " + plugin.getShortName(), e);
                 }
             }
 
@@ -191,7 +193,7 @@ public class SmoothiePluginStrategy
                 start(plugin);
             }
             catch (Exception e) {
-                throw new IOException("Failed to start plugin: " + plugin.getShortName(), e);
+                throw new IOException2("Failed to start plugin: " + plugin.getShortName(), e);
             }
         }
         finally {
