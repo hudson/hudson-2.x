@@ -122,11 +122,11 @@ THE SOFTWARE.
                 ${title}
               </j:otherwise>
             </j:choose>
-
-            <div id="question" style="display:none; cursor: default">
-                <st:include page="${dialogPanel}" />
-            </div>
           </a>
+          
+          <div id="question" style="display:none; cursor: default">
+                <st:include page="${dialogPanel}" />
+          </div>
 
           <j:if test="${match}">
             <div class="subtasks">
