@@ -45,30 +45,52 @@ THE SOFTWARE.
               title:  'Confirmation',
             });
 	}
+        
+        function submitForm(){
+            jQuery('#loginMsg').css({ opacity: 1.0 });
+            jQuery('#loginError').css({ opacity: 0.0 });
+            var dataString = jQuery("#loginForm").serialize();
+            jQuery.ajax({
+              type: 'POST',
+              url: "${app.securityRealm.authenticationGatewayUrl}",
+              data: dataString,
+              success: function(){
+                window.location.href="${from}";
+              },
+              error: function(){
+                jQuery('#loginError').css({ opacity: 1.0 });
+                jQuery('#loginMsg').css({ opacity: 0.0 });
+              },
+              dataType: "html"
+            }); 
+        }
 
         jQuery(document).ready(function() {
+        
+            jQuery('#j_username').keypress(function(e){
+              if(e.which == 13){
+                submitForm();
+              }
+            });
+            
+            jQuery('#j_password').keypress(function(e){
+              if(e.which == 13){
+                submitForm();
+              }
+            });
+
 
             jQuery('#yes').click(function() {
-                jQuery('#loginError').css({ opacity: 0.0 });
-                var dataString = jQuery("#loginForm").serialize();
-                jQuery.ajax({
-                  type: 'POST',
-                  url: "${app.securityRealm.authenticationGatewayUrl}",
-                  data: dataString,
-                  success: function(){
-                    window.location.href="${from}";
-                  },
-                  error: function(){
-                    jQuery('#loginError').css({ opacity: 1.0 });
-                  },
-                  dataType: "html"
-                }); 
-
-                //setTimeout(jQuery.unblockUI, 4000);
+                 submitForm();
             });
+            
 
             jQuery('#no').click(function() {
                 jQuery.unblockUI();
+                jQuery('#j_username').attr({value:""});
+                jQuery('#j_password').attr({value:""});
+                jQuery('#loginError').css({ opacity: 0.0 });
+                jQuery('#loginMsg').css({ opacity: 0.0 });
                 return false;
             });
 
