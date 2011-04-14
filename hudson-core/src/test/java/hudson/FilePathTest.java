@@ -27,6 +27,7 @@ import hudson.remoting.VirtualChannel;
 import hudson.util.NullStream;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.io.output.NullOutputStream;
 
@@ -73,6 +74,35 @@ public class FilePathTest extends ChannelTestCase {
             assertEquals(1, fp.copyRecursiveTo(new FilePath(dst)));
             // copy again should still report 1
             assertEquals(1, fp.copyRecursiveTo(new FilePath(dst)));
+        } finally {
+            Util.deleteRecursive(tmp);
+        }
+
+    }
+
+    /**
+     * Attempt to reproduce  http://issues.hudson-ci.org/browse/HUDSON-2154
+     */
+    public void testRemoteFileCopyRecursiveTo() throws IOException, InterruptedException {
+        File tmp = Util.createTempDir(), src = new File(tmp, "src"), dst = new File(tmp, "dst");
+        try {
+
+            assertTrue(src.mkdir());
+            assertTrue(dst.mkdir());
+
+            FilePath localFilePath = new FilePath(french, dst.getPath());
+
+            FilePath remoteFilePath = new FilePath(british, src.getPath());
+            remoteFilePath.unzipFrom(getClass().getResourceAsStream("/hudson/remoteCopyFiles.zip"));
+            remoteFilePath.copyRecursiveTo("**/*", localFilePath);
+            for (FilePath child : localFilePath.list()) {
+                System.out.println(child.getName());
+                if (child.isDirectory()) {
+                    for (FilePath child2 : child.list()) {
+                        System.out.println(child2.getName());
+                    }
+                }
+            }
         } finally {
             Util.deleteRecursive(tmp);
         }
