@@ -24,57 +24,88 @@ THE SOFTWARE.
 -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
-     <j:set var="from" value="${if (request.session.attribute('from')!=null) request.session.getAttribute('from');  else if (request.getParameter('from')!=null) request.getParameter('from'); else if (request.requestURI=='/loginError' || request.requestURI=='/login') '/'; else request.requestURI;}" />
+  <j:invokeStatic var="fromEncoded" className="java.net.URLEncoder" method="encode">
+
+   <j:arg value="${if (request.session.attribute('from')!=null) request.session.getAttribute('from');  else if (request.getParameter('from')!=null) request.getParameter('from'); else if (request.requestURI=='/loginError' || request.requestURI=='/login') '/'; else request.requestURI;}"/>
+   <j:arg value="UTF-8"/>
+
+  </j:invokeStatic>
+  
+  <j:set var="from" value="${if (request.session.attribute('from')!=null) request.session.getAttribute('from');  else if (request.getParameter('from')!=null) request.getParameter('from'); else if (request.requestURI=='/loginError' || request.requestURI=='/login') '/'; else request.requestURI;}" />
+   
+  
     <script type="text/javascript">
+        
+        function onLinkClick(){
+            jQuery.blockUI({
+              message: jQuery('#question'),
+              css: { 
+                width: '350px', 
+              },
+              title:  'Confirmation',
+            });
+	}
+        
+        function submitForm(){
+            jQuery('#loginMsg').css({ opacity: 1.0 });
+            jQuery('#loginError').css({ opacity: 0.0 });
+            var dataString = jQuery("#loginForm").serialize();
+            jQuery.ajax({
+              type: 'POST',
+              url: "${app.securityRealm.authenticationGatewayUrl}",
+              data: dataString,
+              success: function(){
+                window.location.href="${from}";
+              },
+              error: function(){
+                jQuery('#loginError').css({ opacity: 1.0 });
+                jQuery('#loginMsg').css({ opacity: 0.0 });
+              },
+              dataType: "html"
+            }); 
+        }
 
-                jQuery(document).ready(function() {
+        jQuery(document).ready(function() {
+        
+            jQuery('#j_username').keypress(function(e){
+              if(e.which == 13){
+                submitForm();
+              }
+            });
+            
+            jQuery('#j_password').keypress(function(e){
+              if(e.which == 13){
+                submitForm();
+              }
+            });
 
-                    jQuery('#link1').click(function() {
-                        jQuery.blockUI({
-                          message: jQuery('#question'),
-                          css: { 
-                            width: '350px', 
-                          },
-                          title:  'Confirmation',
-                        });
-                    });
 
+            jQuery('#yes').click(function() {
+                 submitForm();
+            });
+            
 
-                    jQuery('#yes').click(function() {
-                        jQuery('#loginError').css({ opacity: 0.0 });
-                        var dataString = jQuery("#loginForm").serialize();
-                        jQuery.ajax({
-                          type: 'POST',
-                          url: "${app.securityRealm.authenticationGatewayUrl}",
-                          data: dataString,
-                          success: function(){
-                            window.location.href="${from}";
-                          },
-                          error: function(){
-                            jQuery('#loginError').css({ opacity: 1.0 });
-                          },
-                          dataType: "html"
-                        }); 
-                    
-                        //setTimeout(jQuery.unblockUI, 4000);
-                    });
+            jQuery('#no').click(function() {
+                jQuery.unblockUI();
+                jQuery('#j_username').attr({value:""});
+                jQuery('#j_password').attr({value:""});
+                jQuery('#loginError').css({ opacity: 0.0 });
+                jQuery('#loginMsg').css({ opacity: 0.0 });
+                return false;
+            });
 
-                    jQuery('#no').click(function() {
-                        jQuery.unblockUI();
-                        return false;
-                    });
-
-                });
+        });
 
     </script>
+    
 
-    <a href="#" id="link1">
+    <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}" onclick="onLinkClick(); return false;" >
         <b>${%login}</b>
     </a>
         
        
     <div id="question" style="display:none; cursor: default">
-        <j:set var="submitFrom" value="${if (request.session.attribute('from')!=null) request.session.getAttribute('from');  else if (request.getParameter('from')!=null) request.getParameter('from'); else if (request.requestURI=='/loginError' || request.requestURI=='/login') '/'; else request.requestURI;}" />
+        <j:set var="submitFrom" value="${from}" />
         <st:include page="loginDialog.jelly" />
     </div>
 

@@ -76,75 +76,44 @@ THE SOFTWARE.
         <div class="task">
 
         <script type="text/javascript">
-
-                jQuery(document).ready(function($) {
-
-                    $('#link1').click(function() {
-                        $.blockUI({
-                          message: $('#question'),
-                          css: { 
-                            width: '350px', 
-                            border: '2px solid #FFFFFF',
-                            padding: '5px', 
-                            backgroundColor: '#000', 
-                            '-webkit-border-radius': '10px', 
-                            '-moz-border-radius': '10px', 
-                            opacity: .6, 
-                            color: '#fff'
-                          },
-                          title:  'Confirmation',
-                        });
-                    });
-
-                    $('#link2').click(function() {
-                        $.blockUI({ 
-                          message: $('#question'),
-                          css: {
-                            width: '350px',
-                            border: '2px solid #FFFFFF',
-                            padding: '5px',
-                            backgroundColor: '#000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .6,
-                            color: '#fff'
-                          },
-                          title:  'Confirmation',
-                        });
-                    });
-
-                    $('#yes').click(function() {
-                        /*
-                        // update the block message
-                        $.blockUI({ message: "<h1>Remote call in progress...</h1>" });
-
-                        $.ajax({
-                            url: 'wait.php',
-                            cache: false,
-                            complete: function() {
-                                // unblock when remote call returns
-                                $.unblockUI();
-                            }
-                        });
-                        */
-                        setTimeout($.unblockUI, 4000);
-                    });
-
-                    $('#no').click(function() {
-                        $.unblockUI();
-                        return false;
-                    });
-
+            function onLinkClick(){
+                jQuery.blockUI({
+                  message: jQuery('#question'),
+                  css: { 
+                    width: '350px', 
+                    border: '2px solid #FFFFFF',
+                    padding: '5px', 
+                    backgroundColor: '#000', 
+                    '-webkit-border-radius': '10px', 
+                    '-moz-border-radius': '10px', 
+                    opacity: .6, 
+                    color: '#fff'
+                  },
+                  title:  'Confirmation',
                 });
+            }
+
+            jQuery(document).ready(function() {
+
+                jQuery('#yes').click(function() {
+                    setTimeout(jQuery.unblockUI, 4000);
+                });
+
+                jQuery('#no').click(function() {
+                    jQuery.unblockUI();
+                    return false;
+                });
+
+            });
 
           </script>
 
-          <a href="#" id="link1">
+          <a href="${href}" onclick="onLinkClick(); return false;">
             <img width="24" height="24" style="margin: 2px;" alt="" src="${rootURL}${icon.startsWith('images/') ? h.resourcePath : ''}/${icon}"/>
           </a>
           <st:nbsp />
 
-          <a href="#" id="link2">
+          <a href="${href}" onclick="onLinkClick(); return false;">
             <j:choose>
               <j:when test="${match}">
                 <b>${title}</b>
@@ -153,11 +122,11 @@ THE SOFTWARE.
                 ${title}
               </j:otherwise>
             </j:choose>
-
-            <div id="question" style="display:none; cursor: default">
-                <st:include page="${dialogPanel}" />
-            </div>
           </a>
+          
+          <div id="question" style="display:none; cursor: default">
+                <st:include page="${dialogPanel}" />
+          </div>
 
           <j:if test="${match}">
             <div class="subtasks">
