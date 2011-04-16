@@ -221,6 +221,11 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
     private boolean concurrentBuild;
+    
+    /**
+    * True to clean the workspace prior to each build.
+    */
+    private volatile boolean cleanWorkspaceRequired;
 
     protected AbstractProject(ItemGroup parent, String name) {
         super(parent,name);
@@ -293,6 +298,10 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public void setConcurrentBuild(boolean b) throws IOException {
         concurrentBuild = b;
         save();
+    }
+    
+    public boolean isCleanWorkspaceRequired() {
+        return cleanWorkspaceRequired;
     }
 
     /**
@@ -1206,7 +1215,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public boolean pollSCMChanges( TaskListener listener ) {
         return poll(listener).hasChanges();
     }
-
+    
     /**
      * Checks if there's any update in SCM, and returns true if any is found.
      *
@@ -1631,6 +1640,13 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         } else {
             assignedNode = null;
         }
+        
+        if (req.getParameter("cleanWorkspaceRequired") != null) {
+            cleanWorkspaceRequired = true;
+        } else {
+            cleanWorkspaceRequired = false;
+        }
+        
         canRoam = assignedNode==null;
 
         concurrentBuild = req.getSubmittedForm().has("concurrentBuild");
@@ -1692,15 +1708,23 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * Wipes out the workspace.
      */
     public HttpResponse doDoWipeOutWorkspace() throws IOException, ServletException, InterruptedException {
+        if (cleanWorkspace()){
+            return new HttpRedirect(".");
+        }else{
+            return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
+        } 
+    }
+    
+    public boolean cleanWorkspace() throws IOException, InterruptedException{
         checkPermission(BUILD);
         R b = getSomeBuildWithWorkspace();
-        FilePath ws = b!=null ? b.getWorkspace() : null;
-        if (ws!=null && getScm().processWorkspaceBeforeDeletion(this, ws, b.getBuiltOn())) {
+        FilePath ws = b != null ? b.getWorkspace() : null;
+        if (ws != null && getScm().processWorkspaceBeforeDeletion(this, ws, b.getBuiltOn())) {
             ws.deleteRecursive();
-            return new HttpRedirect(".");
-        } else {
+            return true;
+        } else{
             // If we get here, that means the SCM blocked the workspace deletion.
-            return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
+            return false;
         }
     }
 

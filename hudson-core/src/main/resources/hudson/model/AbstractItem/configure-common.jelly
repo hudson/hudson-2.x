@@ -63,6 +63,7 @@ THE SOFTWARE.
       <p:config-blockWhenUpstreamBuilding />
       <p:config-blockWhenDownstreamBuilding />
       <st:include page="configure-advanced.jelly" optional="true" />
+      <p:config-cleanWorkspace />
     </f:advanced>
   </f:section>
 

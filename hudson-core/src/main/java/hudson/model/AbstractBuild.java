@@ -412,6 +412,13 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
                 workspace = lease.path.getRemote();
                 node.getFileSystemProvisioner().prepareWorkspace(AbstractBuild.this,lease.path,listener);
 
+                if (project.isCleanWorkspaceRequired()) {
+                    listener.getLogger().println("Cleaning the workspace because project is configured to clean the workspace before each build.");
+                    if (!project.cleanWorkspace()){
+                        listener.getLogger().println("Workspace cleaning was attempted but SCM blocked the cleaning.");
+                    }
+                }
+                
                 checkout(listener);
 
                 if (!preBuild(listener,project.getProperties()))
