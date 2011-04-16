@@ -70,7 +70,7 @@ public final class SezPozExtensionModule
 
     public void configure( final Binder binder )
     {
-        for ( final SpaceIndexItem item : SpaceIndex.load( Extension.class, Object.class, space, globalIndex ) )
+        for ( final SpaceIndexItem<Extension, Object> item : SpaceIndex.load( Extension.class, Object.class, space, globalIndex ) )
         {
             try
             {
@@ -108,7 +108,11 @@ public final class SezPozExtensionModule
             }
             catch ( final Throwable e )
             {
-                log.error("Failed to bind item: {}", item, e);
+                if (item.annotation().optional()) {
+                    log.debug("Failed to bind optional extension: {}", item, e);
+                } else {
+                    log.warn("Failed to bind extension: {}", item, e);
+                }
             }
         }
     }

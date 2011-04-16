@@ -25,7 +25,10 @@
 package org.hudsonci.inject.internal.extension;
 
 import com.google.inject.Key;
+
 import org.hudsonci.inject.SmoothieContainer;
+
+import hudson.Extension;
 import hudson.ExtensionComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,31 +74,39 @@ public class SmoothieExtensionLocator
         }
 
         List<ExtensionComponent<T>> components = new ArrayList<ExtensionComponent<T>>();
-        try {
-            Iterable<BeanEntry<Annotation,T>> items = container.locate(Key.get(type));
-            for (BeanEntry<Annotation,T> item : items) {
+        for (BeanEntry<Annotation,T> item : container.locate(Key.get(type))) {
+            try {
                 // Use our container for extendability and logging simplicity.
                 SmoothieComponent<T> component = new SmoothieComponent<T>(item);
                 log.debug("Found: {}", component);
                 if (component.getInstance() != null) { // filter out null components (ie. uninitialized @Extension fields)
                     components.add(component);
                 }
+            } catch (Throwable e) {
+                if (isOptional(item)) {
+                    log.debug("Failed to create optional extension", e);
+                } else {
+                    log.warn("Failed to create extension", e);                    
+                }
             }
-
-            if (log.isDebugEnabled()) {
-                log.debug("Found {} {} components", components.size(), type.getName());
-            }
-        }
-        catch (Exception e) {
-            log.error("Extension discovery failed", e);
         }
 
         if (log.isDebugEnabled()) {
             if (components.isEmpty()) {
                 log.debug("No components of type '{}' discovered", type.getName());
+            } else {
+                log.debug("Found {} {} components", components.size(), type.getName());
             }
         }
 
         return components;
+    }
+
+    private static boolean isOptional(BeanEntry<Annotation,?> item) {
+        try {
+            return item.getImplementationClass().getAnnotation(Extension.class).optional();
+        } catch (Throwable e) {
+            return false;
+        }
     }
 }
