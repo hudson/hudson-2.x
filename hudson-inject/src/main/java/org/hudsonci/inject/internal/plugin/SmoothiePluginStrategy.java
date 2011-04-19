@@ -28,6 +28,7 @@ import org.hudsonci.inject.SmoothieContainer;
 import org.hudsonci.inject.internal.extension.ExtensionLocator;
 
 import hudson.ExtensionComponent;
+import hudson.ExtensionFinder;
 import hudson.Plugin;
 import hudson.PluginStrategy;
 import hudson.PluginWrapper;
@@ -66,12 +67,18 @@ public class SmoothiePluginStrategy
     private final PluginWrapperFactory pluginFactory;
 
     private final ExtensionLocator extensionLocator;
+    
+    private final List<ExtensionFinder> extensionFinders;
 
     @Inject
-    public SmoothiePluginStrategy(final SmoothieContainer container, final PluginWrapperFactory pluginFactory, final @Named("default") ExtensionLocator extensionLocator) {
+    public SmoothiePluginStrategy(final SmoothieContainer container,
+                                  final PluginWrapperFactory pluginFactory,
+                                  final @Named("default") ExtensionLocator extensionLocator,
+                                  final List<ExtensionFinder> extensionFinders) {
         this.container = checkNotNull(container);
         this.pluginFactory = checkNotNull(pluginFactory);
         this.extensionLocator = checkNotNull(extensionLocator);
+        this.extensionFinders = checkNotNull(extensionFinders);
     }
 
     private String basename(String name) {
@@ -233,6 +240,23 @@ public class SmoothiePluginStrategy
     }
 
     public <T> List<ExtensionComponent<T>> findComponents(final Class<T> type, final Hudson hudson) {
-        return extensionLocator.locate(type);
+        List<ExtensionComponent<T>> components = extensionLocator.locate(type);
+
+        for (ExtensionFinder finder : extensionFinders) {
+            try {
+                try {
+                    components.addAll(finder._find(type, hudson));
+                } catch (AbstractMethodError e) {
+                    // support legacy finders that only have the old method
+                    for (T instance : finder.findExtensions(type, hudson)) {
+                        components.add(new ExtensionComponent<T>(instance));
+                    }
+                }
+            } catch (Throwable e) {
+                log.warn("Failed to query ExtensionFinder: "+finder, e);                    
+            }
+        }
+
+        return components;
     }
 }
