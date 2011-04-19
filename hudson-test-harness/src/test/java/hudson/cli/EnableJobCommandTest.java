@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2009, Sun Microsystems, Inc.
+ * Copyright 2011 Hudson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.cli
+package hudson.cli;
 
-import org.jvnet.hudson.test.HudsonTestCase
+import hudson.model.FreeStyleProject;
+import java.io.IOException;
+import org.jvnet.hudson.test.HudsonTestCase;
 
 /**
  *
- *
- * @author Kohsuke Kawaguchi
+ * @author Winston Prakash (converted from original groovy test)
+ * 
  */
 public class EnableJobCommandTest extends HudsonTestCase {
-    void test1() {
-        def p = createFreeStyleProject();
+    
+    public void test1() throws IOException, InterruptedException{
+        FreeStyleProject p = createFreeStyleProject();
 
-        def cli = new CLI(getURL())
+        CLI cli = new CLI(getURL());
 
-        cli.execute(["disable-job",p.name])
-        assertTrue(p.disabled)
-        cli.execute(["enable-job",p.name])
-        assertFalse(p.disabled)
+        cli.execute("disable-job",p.getName());
+        assertTrue(p.isDisabled());
+        cli.execute("enable-job",p.getName());
+        assertFalse(p.isDisabled());
     }
-
+    
 }

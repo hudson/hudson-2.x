@@ -234,6 +234,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
 
     @Override
     protected void setUp() throws Exception {
+        //System.setProperty("hudson.PluginStrategy", "hudson.ClassicPluginStrategy");
         env.pin();
         recipe();
         AbstractProject.WORKSPACE.toString();

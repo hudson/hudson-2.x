@@ -33,11 +33,15 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * @author Kohsuke Kawaguchi
  */
 public class ConsoleAnnotatorTest extends HudsonTestCase {
+    
+    private static final Logger LOGGER = Logger.getLogger(ConsoleAnnotatorTest.class.getName());
     /**
      * Let the build complete, and see if stateless {@link ConsoleAnnotator} annotations happen as expected.
      */
@@ -62,6 +66,8 @@ public class ConsoleAnnotatorTest extends HudsonTestCase {
         // make sure raw console output doesn't include the garbage
         TextPage raw = (TextPage)createWebClient().goTo(b.getUrl()+"consoleText","text/plain");
         System.out.println(raw.getContent());
+        LOGGER.log(Level.INFO, raw.getContent());
+        
         String nl = System.getProperty("line.separator");
         assertTrue(raw.getContent().contains(nl+"---"+nl+"ooo"+nl+"ooo"+nl));
 
