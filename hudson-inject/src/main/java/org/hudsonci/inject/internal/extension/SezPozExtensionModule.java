@@ -21,6 +21,7 @@ import com.google.inject.Scopes;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import hudson.Extension;
+import hudson.ExtensionFinder.Sezpoz;
 import hudson.ExtensionPoint;
 import hudson.model.Descriptor;
 import net.java.sezpoz.SpaceIndex;
@@ -74,36 +75,10 @@ public final class SezPozExtensionModule
         {
             try
             {
-                switch ( item.kind() )
+                // ignore the legacy SezPoz ExtensionFinder
+                if ( !Sezpoz.class.equals( item.element() ) )
                 {
-                    case TYPE:
-                    {
-                        final Class impl = (Class) item.element();
-                        binder.bind( impl ).in( Scopes.SINGLETON );
-                        bindHierarchy( binder, Key.get( impl ) );
-
-                        break;
-                    }
-                    case METHOD:
-                    {
-                        final Method method = (Method) item.element();
-                        final Named name = Names.named( method.getDeclaringClass().getName() + '.' + method.getName() );
-                        final Key key = Key.get( method.getReturnType(), name );
-                        bindProvider(binder, item, key);
-
-                        break;
-                    }
-                    case FIELD:
-                    {
-                        final Field field = (Field) item.element();
-                        final Named name = Names.named( field.getDeclaringClass().getName() + '.' + field.getName() );
-                        final Key key = Key.get( field.getType(), name );
-                        bindProvider(binder, item, key);
-
-                        break;
-                    }
-                    default:
-                        break;
+                    bindItem( binder, item );
                 }
             }
             catch ( final Throwable e )
@@ -114,6 +89,44 @@ public final class SezPozExtensionModule
                     log.warn("Failed to bind extension: {}", item, e);
                 }
             }
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Implementation methods
+    // ----------------------------------------------------------------------
+
+    private void bindItem( final Binder binder, final SpaceIndexItem<?, ?> item )
+        throws InstantiationException
+    {
+        switch ( item.kind() )
+        {
+            case TYPE:
+            {
+                final Class impl = (Class) item.element();
+                binder.bind( impl ).in( Scopes.SINGLETON );
+                bindHierarchy( binder, Key.get( impl ) );
+
+                break;
+            }
+            case METHOD:
+            {
+                final Method method = (Method) item.element();
+                final Named name = Names.named( method.getDeclaringClass().getName() + '.' + method.getName() );
+                bindProvider(binder, item, Key.get( method.getReturnType(), name ));
+
+                break;
+            }
+            case FIELD:
+            {
+                final Field field = (Field) item.element();
+                final Named name = Names.named( field.getDeclaringClass().getName() + '.' + field.getName() );
+                bindProvider(binder, item, Key.get( field.getType(), name ));
+
+                break;
+            }
+            default:
+                break;
         }
     }
 
