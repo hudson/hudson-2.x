@@ -83,7 +83,7 @@ public class SmoothieExtensionLocator
                     components.add(component);
                 }
             } catch (Throwable e) {
-                if (isOptional(item)) {
+                if (SmoothieComponent.isOptional(item)) {
                     log.debug("Failed to create optional extension", e);
                 } else {
                     log.warn("Failed to create extension", e);                    
@@ -100,13 +100,5 @@ public class SmoothieExtensionLocator
         }
 
         return components;
-    }
-
-    private static boolean isOptional(BeanEntry<Annotation,?> item) {
-        try {
-            return item.getImplementationClass().getAnnotation(Extension.class).optional();
-        } catch (Throwable e) {
-            return false;
-        }
     }
 }

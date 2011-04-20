@@ -50,9 +50,7 @@ public class SmoothieComponent<T>
         super(null);
         this.bean = bean;
         this.value = bean.getValue();
-
-        Double p = priorityOf(value);
-        this.priority = p != null ? p : DEFAULT_PRIORITY;
+        this.priority = priorityOf(bean);
     }
 
     public BeanEntry<Annotation,T> getBean() {
@@ -87,27 +85,104 @@ public class SmoothieComponent<T>
     }
 
     //
+    // IsOptional helpers
+    //
+
+    public static boolean isOptional(final BeanEntry<Annotation,?> beanEntry) {
+        try {
+            Boolean isOptional = isOptional(beanEntry.getKey());
+            if (isOptional == null) {
+                isOptional = isOptional(beanEntry.getImplementationClass());
+                if (isOptional == null) {
+                    isOptional = isOptional(beanEntry.getValue());
+                    if (isOptional == null) {
+                        return false;
+                    }
+                }
+            }
+            return isOptional.booleanValue();
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    public static Boolean isOptional(final Object component) {
+        if (component != null) {
+            return isOptional(component.getClass());
+        }
+        return null;
+    }
+
+    public static Boolean isOptional(final Class<?> type) {
+        if (type != null) {
+            Extension extension = type.getAnnotation(Extension.class);
+            if (extension != null) {
+                return Boolean.valueOf(extension.optional());
+            }
+            ExtensionQualifier qualifier = type.getAnnotation(ExtensionQualifier.class);
+            if (qualifier != null) {
+                return Boolean.valueOf(qualifier.extension().optional());
+            }
+        }
+        return null;
+    }
+
+    public static Boolean isOptional(final Annotation annotation) {
+        if (annotation != null) {
+            if (annotation instanceof Extension) {
+                return Boolean.valueOf(((Extension)annotation).optional());
+            }
+            if (annotation instanceof ExtensionQualifier) {
+                return Boolean.valueOf(((ExtensionQualifier)annotation).extension().optional());
+            }
+        }
+        return null;
+    }
+
+    //
     // Priority helpers
     //
 
     public static final double DEFAULT_PRIORITY = 0;
 
-    public static Double priorityOf(final Object component) {
-        if (component == null) {
-            return null;
+    public static double priorityOf(final BeanEntry<Annotation, ?> beanEntry) {
+        try {
+            Double priority = priorityOf(beanEntry.getKey());
+            if (priority == null) {
+                priority = priorityOf(beanEntry.getImplementationClass());
+                if (priority == null) {
+                    priority = priorityOf(beanEntry.getValue());
+                    if (priority == null) {
+                        return DEFAULT_PRIORITY;
+                    }
+                }
+            }
+            return priority.doubleValue();
+        } catch (Throwable e) {
+            return DEFAULT_PRIORITY;
         }
-        return priorityOf(component.getClass());
+    }
+
+    public static Double priorityOf(final Object component) {
+        if (component != null) {
+            return priorityOf(component.getClass());
+        }
+        return null;
     }
 
     public static Double priorityOf(final Class<?> type) {
         if (type != null) {
+            Extension extension = type.getAnnotation(Extension.class);
+            if (extension != null) {
+                return Double.valueOf(extension.ordinal());
+            }
+            ExtensionQualifier qualifier = type.getAnnotation(ExtensionQualifier.class);
+            if (qualifier != null) {
+                return Double.valueOf(qualifier.extension().ordinal());
+            }
             Priority priority = type.getAnnotation(Priority.class);
             if (priority != null) {
-                return priority.value();
-            }
-            Extension ext = type.getAnnotation(Extension.class);
-            if (ext != null) {
-                return ext.ordinal();
+                return Double.valueOf(priority.value());
             }
         }
         return null;
@@ -115,11 +190,14 @@ public class SmoothieComponent<T>
 
     public static Double priorityOf(final Annotation annotation) {
         if (annotation != null) {
-            if (annotation instanceof Priority) {
-                return ((Priority)annotation).value();
+            if (annotation instanceof Extension) {
+                return Double.valueOf(((Extension)annotation).ordinal());
             }
-            else if (annotation instanceof Extension) {
-                return ((Extension)annotation).ordinal();
+            if (annotation instanceof ExtensionQualifier) {
+                return Double.valueOf(((ExtensionQualifier)annotation).extension().ordinal());
+            }
+            if (annotation instanceof Priority) {
+                return Double.valueOf(((Priority)annotation).value());
             }
         }
         return null;

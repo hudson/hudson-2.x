@@ -1,15 +1,27 @@
 /**
+ * The MIT License
+ *
  * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
  *
- * This program is licensed to you under the Apache License Version 2.0,
- * and you may not use this file except in compliance with the Apache License Version 2.0.
- * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the Apache License Version 2.0 is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package org.hudsonci.inject.internal.extension;
 
 import com.google.inject.Binder;
@@ -18,7 +30,6 @@ import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.ProvisionException;
 import com.google.inject.Scopes;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import hudson.Extension;
 import hudson.ExtensionFinder.Sezpoz;
@@ -96,7 +107,7 @@ public final class SezPozExtensionModule
     // Implementation methods
     // ----------------------------------------------------------------------
 
-    private void bindItem( final Binder binder, final SpaceIndexItem<?, ?> item )
+    private void bindItem( final Binder binder, final SpaceIndexItem<Extension, ?> item )
         throws InstantiationException
     {
         switch ( item.kind() )
@@ -106,23 +117,22 @@ public final class SezPozExtensionModule
                 final Class impl = (Class) item.element();
                 binder.bind( impl ).in( Scopes.SINGLETON );
                 bindHierarchy( binder, Key.get( impl ) );
-
                 break;
             }
             case METHOD:
             {
                 final Method method = (Method) item.element();
-                final Named name = Names.named( method.getDeclaringClass().getName() + '.' + method.getName() );
-                bindProvider(binder, item, Key.get( method.getReturnType(), name ));
-
+                final String name = method.getDeclaringClass().getName() + '.' + method.getName();
+                final ExtensionQualifier qualifier = new ExtensionQualifierImpl( item.annotation(), name );
+                bindProvider( binder, item, Key.get( method.getReturnType(), qualifier ) );
                 break;
             }
             case FIELD:
             {
                 final Field field = (Field) item.element();
-                final Named name = Names.named( field.getDeclaringClass().getName() + '.' + field.getName() );
-                bindProvider(binder, item, Key.get( field.getType(), name ));
-
+                final String name = field.getDeclaringClass().getName() + '.' + field.getName();
+                final ExtensionQualifier qualifier = new ExtensionQualifierImpl( item.annotation(), name );
+                bindProvider( binder, item, Key.get( field.getType(), qualifier ) );
                 break;
             }
             default:
