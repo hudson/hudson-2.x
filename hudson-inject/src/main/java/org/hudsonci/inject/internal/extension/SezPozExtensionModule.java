@@ -18,7 +18,6 @@ import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.ProvisionException;
 import com.google.inject.Scopes;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import hudson.Extension;
 import hudson.ExtensionFinder.Sezpoz;
@@ -96,7 +95,7 @@ public final class SezPozExtensionModule
     // Implementation methods
     // ----------------------------------------------------------------------
 
-    private void bindItem( final Binder binder, final SpaceIndexItem<?, ?> item )
+    private void bindItem( final Binder binder, final SpaceIndexItem<Extension, ?> item )
         throws InstantiationException
     {
         switch ( item.kind() )
@@ -106,23 +105,22 @@ public final class SezPozExtensionModule
                 final Class impl = (Class) item.element();
                 binder.bind( impl ).in( Scopes.SINGLETON );
                 bindHierarchy( binder, Key.get( impl ) );
-
                 break;
             }
             case METHOD:
             {
                 final Method method = (Method) item.element();
-                final Named name = Names.named( method.getDeclaringClass().getName() + '.' + method.getName() );
-                bindProvider(binder, item, Key.get( method.getReturnType(), name ));
-
+                final String name = method.getDeclaringClass().getName() + '.' + method.getName();
+                final ExtensionQualifier qualifier = new ExtensionQualifierImpl( item.annotation(), name );
+                bindProvider( binder, item, Key.get( method.getReturnType(), qualifier ) );
                 break;
             }
             case FIELD:
             {
                 final Field field = (Field) item.element();
-                final Named name = Names.named( field.getDeclaringClass().getName() + '.' + field.getName() );
-                bindProvider(binder, item, Key.get( field.getType(), name ));
-
+                final String name = field.getDeclaringClass().getName() + '.' + field.getName();
+                final ExtensionQualifier qualifier = new ExtensionQualifierImpl( item.annotation(), name );
+                bindProvider( binder, item, Key.get( field.getType(), qualifier ) );
                 break;
             }
             default:
