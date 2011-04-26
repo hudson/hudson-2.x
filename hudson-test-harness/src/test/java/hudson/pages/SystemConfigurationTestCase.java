@@ -48,8 +48,8 @@ public class SystemConfigurationTestCase extends HudsonTestCase {
      */
     @Bug(2289)
     //TODO - Revisit this test case
-    /*public void ignore_testPageDecoratorIsListedInPage() throws Exception {
-        pageDecoratorImpl = new PageDecoratorImpl();
+    public void testPageDecoratorIsListedInPage() throws Exception {
+        /*pageDecoratorImpl = new PageDecoratorImpl();
         PageDecorator.ALL.add(pageDecoratorImpl);
         
         HtmlPage page = new WebClient().goTo("configure");
@@ -58,8 +58,8 @@ public class SystemConfigurationTestCase extends HudsonTestCase {
         HtmlForm form = page.getFormByName("config");
         form.getInputByName("_.decoratorId").setValueAttribute("this_is_a_profile");
         submit(form);
-        assertEquals("The decorator field was incorrect", "this_is_a_profile", pageDecoratorImpl.getDecoratorId());
-    }*/
+        assertEquals("The decorator field was incorrect", "this_is_a_profile", pageDecoratorImpl.getDecoratorId());*/
+    }
 
     /**
      * PageDecorator for bug#2289
