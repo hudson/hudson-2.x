@@ -22,7 +22,7 @@ import org.jvnet.hudson.test.HudsonTestCase;
  */
 public class Maven3BuildTest extends HudsonTestCase {
    
-    //TODO: Revisit this test case
+    /*//TODO: Revisit this test case
     public void ignore_testSimpleMaven3Build() throws Exception {
         
         MavenModuleSet m = createMavenProject();
@@ -73,7 +73,7 @@ public class Maven3BuildTest extends HudsonTestCase {
         m.setGoals( "clean site" );
         MavenModuleSetBuild b = buildAndAssertSuccess(m);
         assertTrue( MavenUtil.maven3orLater( b.getMavenVersionUsed() ) );
-    }   
+    }*/   
     
     @Bug(value=8395)
     public void testMaven3BuildWrongScope() throws Exception {
@@ -106,7 +106,8 @@ public class Maven3BuildTest extends HudsonTestCase {
         assertTrue( mmsb.getProject().getModules().isEmpty());
     }    
 
-   
+ 
+    /*  
     @Bug(value=8445)
     //TODO: Revisit this test case
     public void ignore_testMavenSeveralModulesInDirectory() throws Exception {
@@ -152,7 +153,7 @@ public class Maven3BuildTest extends HudsonTestCase {
         assertTrue("MavenModuleSet.isNonRecursive() should be true", m.isNonRecursive());
         buildAndAssertSuccess(m);
         assertEquals("not only one module", 1, m.getModules().size());
-    }    
+    }*/    
     
     private static class TestReporter extends MavenReporter {
         @Override

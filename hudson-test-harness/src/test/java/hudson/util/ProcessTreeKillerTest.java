@@ -12,7 +12,7 @@ import org.kohsuke.stapler.StaplerResponse;
 
 public class ProcessTreeKillerTest extends HudsonTestCase {
 
-    //TODO - Revisit this test case
+    /*//TODO - Revisit this test case
     public void ignore_testManualAbortProcess() throws Exception {
         ProcessTree.enabled = true;
         FreeStyleProject project = createFreeStyleProject();
@@ -36,5 +36,5 @@ public class ProcessTreeKillerTest extends HudsonTestCase {
         // will fail (at least on windows) if test process is still running
         b.getWorkspace().deleteRecursive();
 
-    }
+    }*/
 }

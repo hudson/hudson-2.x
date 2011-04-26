@@ -129,6 +129,7 @@ public class RedeployPublisherTest extends HudsonTestCase {
         assertTrue("tar.gz doesn't exist",!files[0].contains( "SNAPSHOT" ));
     }    
     
+    /*
     //TODO: Revisit this test case
     public void ignore_testTarGzMaven3() throws Exception {
         
@@ -185,7 +186,7 @@ public class RedeployPublisherTest extends HudsonTestCase {
         });
         assertFalse("tar.gz doesn't exist",new File(repo,"test/test/0.1-SNAPSHOT/test-0.1-SNAPSHOT-bin.tar.gz").exists());
         assertTrue("tar.gz doesn't exist",!files[0].contains( "SNAPSHOT" ));
-    }    
+    }*/    
 
     @Bug(3773)
     public void testDeployUnstable() throws Exception {

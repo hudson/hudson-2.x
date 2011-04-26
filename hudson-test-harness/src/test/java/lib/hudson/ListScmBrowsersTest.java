@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Kohsuke Kawaguchi
  */
 public class ListScmBrowsersTest extends HudsonTestCase {
-    //TODO - Revisit this test case
+    /*//TODO - Revisit this test case
     public void ignore_testSelectBoxesUnique() throws Exception {
         check(createFreeStyleProject());
     }
@@ -29,7 +29,7 @@ public class ListScmBrowsersTest extends HudsonTestCase {
     //TODO - Revisit this test case
     public void ignore_testSelectBoxesUnique3() throws Exception {
         check(createMatrixProject());
-    }
+    }*/
 
     private void check(Item p) throws IOException, SAXException {
         HtmlPage page = new WebClient().getPage(p, "configure");
