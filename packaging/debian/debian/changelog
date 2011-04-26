@@ -1,3 +1,9 @@
+hudson (2.0.0) unstable; urgency=low
+
+  * See http://hudson-ci.org/changelog.html for more details.
+
+ -- Hudson Community <dev@hudson.java.net>  Thu, 21 Apr 2011 23:33:06 -0800
+
 hudson (1.398) unstable; urgency=low
 
   * See http://hudson-ci.org/changelog.html for more details.
