@@ -1,19 +1,24 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.Collection;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugin.logging.Log;
 import org.kohsuke.stapler.framework.io.IOException2;
 
 /**
  * @author Kohsuke Kawaguchi
  */
 class HpiUtil {
+
+    private static final String HUDSON_CORE_GROUP_ID = "org.jvnet.hudson.main";
+    private static final String HUDSON_CORE_ARTIFACT_ID = "hudson-core";
+
+    private static final String[] HUDSON_PLUGIN_HEADERS = {"Plugin-Class","Plugin-Version"};
+
     static boolean isPlugin(Artifact artifact) throws IOException {
         try {
             // some artifacts aren't even Java, so ignore those.
@@ -28,7 +33,7 @@ class HpiUtil {
             try {
                 Manifest manifest = jar.getManifest();
                 if(manifest==null)  return false;
-                for( String key : Arrays.asList("Plugin-Class","Plugin-Version")) {
+                for( String key : HUDSON_PLUGIN_HEADERS ) {
                     if(manifest.getMainAttributes().getValue(key) != null)
                         return true;
                 }
@@ -41,12 +46,15 @@ class HpiUtil {
         }
     }
 
-    static String findHudsonVersion(MavenProject project) {
-        for(Artifact a : (Set<Artifact>)project.getArtifacts()) {
-            if(a.getGroupId().equals("org.jvnet.hudson.main") && a.getArtifactId().equals("hudson-core")) {
+    static String findHudsonVersion(Collection<Artifact> artifacts, Log log) {
+        for(Artifact a :artifacts) {
+            if(HUDSON_CORE_GROUP_ID.equals(a.getGroupId()) &&
+                    HUDSON_CORE_ARTIFACT_ID.equals(a.getArtifactId())) {
+                log.info("Targeting Hudson-Version: "+a.getVersion());
                 return a.getVersion();
             }
         }
+        log.warn("Cannot determine Hudson-Version from project dependencies");
         return null;
     }
 }

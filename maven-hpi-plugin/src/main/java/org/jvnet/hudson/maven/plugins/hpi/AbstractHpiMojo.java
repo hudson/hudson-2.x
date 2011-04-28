@@ -19,7 +19,6 @@ package org.jvnet.hudson.maven.plugins.hpi;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.model.Resource;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -54,6 +53,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -450,7 +450,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             copyDirectoryStructureIfModified(classesDirectory, webappClassesDirectory);
         }
 
-        Set<Artifact> artifacts = project.getArtifacts();
+        Set<Artifact> artifacts = getResolvedDependencies();
 
         List duplicates = findDuplicates(artifacts);
 
@@ -881,7 +881,8 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
             v += " (private-"+dt+"-"+System.getProperty("user.name")+")";
         }
         mainSection.addAttributeAndCheck(new Attribute("Plugin-Version",v));
-        mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",HpiUtil.findHudsonVersion(project)));
+        mainSection.addAttributeAndCheck(new Attribute("Hudson-Version",
+            HpiUtil.findHudsonVersion(getResolvedDependencies(),getLog())));
 
         if(maskClasses!=null)
             mainSection.addAttributeAndCheck(new Attribute("Mask-Classes",maskClasses));
@@ -919,14 +920,23 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         return buf.toString();
     }
 
+    protected Set<Artifact> getResolvedDependencies() {
+        Set<Artifact> dependencies = new LinkedHashSet<Artifact>();
+        for (Artifact a : (Set<Artifact>)project.getArtifacts()) {
+            if(includeTestScope || !"test".equals(a.getScope())) {
+                dependencies.add(a);
+            }
+        }
+        return dependencies;
+    }
 
     /**
      * Finds and lists dependency plugins.
      */
     private String findDependencyProjects() throws IOException, MojoExecutionException {
         StringBuilder buf = new StringBuilder();
-        for (Artifact a : (Collection<Artifact>)project.getArtifacts()) {
-            if(HpiUtil.isPlugin(a) && (includeTestScope || !"test".equals(a.getScope()))) {
+        for (Artifact a : getResolvedDependencies()) {
+            if(HpiUtil.isPlugin(a)) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());
