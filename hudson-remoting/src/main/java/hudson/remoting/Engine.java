@@ -23,6 +23,7 @@
  */
 package hudson.remoting;
 
+import org.apache.commons.codec.binary.Base64;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -149,7 +150,7 @@ public class Engine extends Thread {
                     // find out the TCP port
                     HttpURLConnection con = (HttpURLConnection)salURL.openConnection();
                     if (con instanceof HttpURLConnection && credentials != null) {
-                        String encoding = new sun.misc.BASE64Encoder().encode(credentials.getBytes());
+                        String encoding = new String(Base64.encodeBase64(credentials.getBytes()));
                         con.setRequestProperty("Authorization", "Basic " + encoding);
                     }
                     try {
