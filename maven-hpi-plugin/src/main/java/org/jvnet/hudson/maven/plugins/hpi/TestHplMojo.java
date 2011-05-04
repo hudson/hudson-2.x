@@ -12,6 +12,11 @@ import java.io.File;
  * @author Kohsuke Kawaguchi
  */
 public class TestHplMojo extends HplMojo {
+
+    public TestHplMojo() {
+        includeTestScope = true;
+    }
+
     /**
      * Generates the hpl file in a known location.
      */

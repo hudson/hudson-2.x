@@ -1,5 +1,6 @@
 package org.jvnet.hudson.maven.plugins.hpi;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -10,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.FileNotFoundException;
+import java.util.Set;
 
 /**
  * Insert default test suite.
@@ -42,7 +44,7 @@ public class TestInsertionMojo extends AbstractMojo {
             return;
         }
         
-        String target = HpiUtil.findHudsonVersion(project);
+        String target = HpiUtil.findHudsonVersion((Set<Artifact>)project.getArtifacts(),getLog());
 
         if (new VersionNumber(target).compareTo(new VersionNumber("1.327"))<0) {
             getLog().info("Skipping auto-test generation because we are targeting Hudson "+target+" (at least 1.327 is required).");
