@@ -890,7 +890,7 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
         if(pluginFirstClassLoader)
             mainSection.addAttributeAndCheck( new Attribute( "PluginFirstClassLoader", "true" ) );
 
-        String dep = findDependencyProjects();
+        String dep = findPluginDependencies();
         if(dep.length()>0)
             mainSection.addAttributeAndCheck(new Attribute("Plugin-Dependencies",dep));
 
@@ -933,10 +933,10 @@ public abstract class AbstractHpiMojo extends AbstractMojo {
     /**
      * Finds and lists dependency plugins.
      */
-    private String findDependencyProjects() throws IOException, MojoExecutionException {
+    private String findPluginDependencies() throws IOException, MojoExecutionException {
         StringBuilder buf = new StringBuilder();
         for (Artifact a : getResolvedDependencies()) {
-            if(HpiUtil.isPlugin(a)) {
+            if(a.getDependencyTrail().size() <= 2 && HpiUtil.isPlugin(a)) {
                 if(buf.length()>0)
                     buf.append(',');
                 buf.append(a.getArtifactId());
