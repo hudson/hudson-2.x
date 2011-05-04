@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="testUI" verbose="10" time-out="200000">
+    <test name="ui">
+        <packages>                                                                                                                                           
+            <package name="hudson.ui"/>                                                                                                                      
+        </packages>                                                                                                                                          
+    </test>                                                                                                                                                  
+</suite>                                                                                                                                                     
+             

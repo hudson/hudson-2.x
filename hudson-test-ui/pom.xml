@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!--
+The MIT License
+
+Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>hudson</artifactId>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <version>2.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jvnet.hudson.main</groupId>
+    <artifactId>hudson-test-ui</artifactId>
+    <name>Hudson :: UI Integration Testing</name>
+    <description>
+        Hudson UI Integration Testing
+    </description>
+
+    <properties>
+        <HUDSON_HOME>${basedir}/target/work</HUDSON_HOME>
+        <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+        <jetty.stop.port>6001</jetty.stop.port>
+        <test.target.host>localhost</test.target.host>
+        <test.target.port>6002</test.target.port>
+        <test.target.contextroot>hudson</test.target.contextroot>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.hudson.main</groupId>
+            <artifactId>hudson-war</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium</artifactId>
+            <version>2.0b1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.0.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                      <artifactId>maven-resources-plugin</artifactId>
+                      <version>2.5</version>
+                      <executions>
+                        <execution>
+                          <id>copy-custom-plugins</id>
+                          <phase>validate</phase>
+                          <goals>
+                            <goal>copy-resources</goal>
+                          </goals>
+                          <configuration>
+                            <outputDirectory>${basedir}/target/work/plugins</outputDirectory>
+                            <resources>
+                              <resource>
+                                <directory>src/test/resources/plugins</directory>
+                                <filtering>false</filtering>
+                              </resource>
+                            </resources>
+                          </configuration>
+                        </execution>
+                      </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>maven-jetty-plugin</artifactId>
+                        <version>${jetty-version}</version>
+                        <configuration>
+                            <scanIntervalSeconds>2</scanIntervalSeconds>
+                            <stopPort>${jetty.stop.port}</stopPort>
+                            <stopKey>stop-webserver</stopKey>
+                            <connectors>
+                                <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                                    <port>${test.target.port}</port>
+                                    <maxIdleTime>60000</maxIdleTime>
+                                </connector>
+                            </connectors>
+                            <webAppConfig>
+                                <extraClasspath>${basedir}/src/test/resources/</extraClasspath>
+                            </webAppConfig>
+                            <webApp>../hudson-war/target/hudson.war</webApp>
+                            <contextPath>/${test.target.contextroot}</contextPath>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>HUDSON_HOME</name>
+                                    <value>${HUDSON_HOME}</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>deploy-war</goal>
+                                </goals>
+                                <configuration>
+                                    <daemon>true</daemon>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                            <detail>true</detail>
+                            <systemPropertyVariables>
+                                <property>
+                                    <name>test.target.host</name>
+                                    <value>${test.target.host}</value>
+                                </property>
+                                <property>
+                                    <name>test.target.port</name>
+                                    <value>${test.target.port}</value>
+                                </property>
+                                <property>
+                                    <name>test.target.contextroot</name>
+                                    <value>${test.target.contextroot}</value>
+                                </property>
+                                <property>
+                                    <name>HUDSON_HOME</name>
+                                    <value>./target/work</value>
+                                </property>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+               </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
