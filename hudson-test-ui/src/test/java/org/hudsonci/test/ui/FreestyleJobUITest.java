@@ -1,4 +1,28 @@
-package hudson.ui;
+/*
+  * The MIT License
+  *
+  * Copyright (c) 2011, Oracle Corporation, Anton Kozak
+  *
+  * Permission is hereby granted, free of charge, to any person obtaining a copy
+  * of this software and associated documentation files (the "Software"), to deal
+  * in the Software without restriction, including without limitation the rights
+  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  * copies of the Software, and to permit persons to whom the Software is
+  * furnished to do so, subject to the following conditions:
+  *
+  * The above copyright notice and this permission notice shall be included in
+  * all copies or substantial portions of the Software.
+  *
+  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  * THE SOFTWARE.
+  */
+
+package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
 import org.testng.annotations.Test;
@@ -32,16 +56,15 @@ public class FreestyleJobUITest extends BaseUITest {
         selenium.waitForPageToLoad("30000");
         selenium.click("radio-block-25");
         selenium.type("svn.remote.loc", "https://svn.java.net/svn/hudson~svn/trunk/hudson/plugins/subversion");
-        selenium.click("_.useUpdate");
         selenium.click("//span[@id='yui-gen2']/span/button");
         selenium.click("link=Invoke top-level Maven targets");
         selenium.type("textarea._.targets", "clean install -DskipTests");
-        selenium.click("//span[@id='yui-gen11']/span/button");
-        selenium.waitForPageToLoad("30000");
+   		selenium.click("//span[@id='yui-gen19']/span/button");
+		selenium.waitForPageToLoad("30000");
         selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/subversion-plugin/1/console");
-        waitQuietly(30000L);
+        waitQuietly(35000L);
         assertTrue(selenium.isTextPresent(BUILD_SUCCESS_TEXT));
     }
 
@@ -67,7 +90,7 @@ public class FreestyleJobUITest extends BaseUITest {
 		selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/git-plugin/1/console");
-        waitQuietly(30000L);
+        waitQuietly(35000L);
         assertTrue(selenium.isTextPresent(BUILD_SUCCESS_TEXT));
 	}
 
@@ -90,7 +113,7 @@ public class FreestyleJobUITest extends BaseUITest {
 		selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/cvs-plugin/1/console");
-        waitQuietly(20000L);
+        waitQuietly(35000L);
 		assertTrue(selenium.isTextPresent("Finished: SUCCESS"));
     }
 }

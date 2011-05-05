@@ -2,7 +2,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2011, Oracle Corporation, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,7 @@ THE SOFTWARE.
     </description>
 
     <properties>
-        <HUDSON_HOME>${basedir}/target/work</HUDSON_HOME>
-        <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+        <hudson.home>${basedir}/target/work</hudson.home>
         <jetty.stop.port>6001</jetty.stop.port>
         <test.target.host>localhost</test.target.host>
         <test.target.port>6002</test.target.port>
@@ -49,26 +48,20 @@ THE SOFTWARE.
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${org.springframework.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${org.springframework.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jvnet.hudson.main</groupId>
             <artifactId>hudson-war</artifactId>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium</artifactId>
-            <version>2.0b1</version>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>2.0b3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-control</artifactId>
+            <version>2.0b3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -95,26 +88,26 @@ THE SOFTWARE.
             <build>
                 <plugins>
                     <plugin>
-                      <artifactId>maven-resources-plugin</artifactId>
-                      <version>2.5</version>
-                      <executions>
-                        <execution>
-                          <id>copy-custom-plugins</id>
-                          <phase>validate</phase>
-                          <goals>
-                            <goal>copy-resources</goal>
-                          </goals>
-                          <configuration>
-                            <outputDirectory>${basedir}/target/work/plugins</outputDirectory>
-                            <resources>
-                              <resource>
-                                <directory>src/test/resources/plugins</directory>
-                                <filtering>false</filtering>
-                              </resource>
-                            </resources>
-                          </configuration>
-                        </execution>
-                      </executions>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>copy-custom-plugins</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${hudson.home}/plugins</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/test/resources/plugins</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.mortbay.jetty</groupId>
@@ -138,7 +131,7 @@ THE SOFTWARE.
                             <systemProperties>
                                 <systemProperty>
                                     <name>HUDSON_HOME</name>
-                                    <value>${HUDSON_HOME}</value>
+                                    <value>${hudson.home}</value>
                                 </systemProperty>
                             </systemProperties>
                         </configuration>
@@ -186,7 +179,7 @@ THE SOFTWARE.
                                 </property>
                                 <property>
                                     <name>HUDSON_HOME</name>
-                                    <value>./target/work</value>
+                                    <value>${hudson.home}</value>
                                 </property>
                             </systemPropertyVariables>
                         </configuration>
@@ -200,7 +193,7 @@ THE SOFTWARE.
                             </execution>
                         </executions>
                     </plugin>
-               </plugins>
+                </plugins>
             </build>
         </profile>
     </profiles>
