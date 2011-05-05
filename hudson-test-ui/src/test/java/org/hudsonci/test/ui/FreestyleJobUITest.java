@@ -27,8 +27,6 @@ package org.hudsonci.test.ui;
 import com.thoughtworks.selenium.Selenium;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
-
 /**
  * Test cases for free-style jobs.
  * <p/>
@@ -41,6 +39,7 @@ import static org.testng.Assert.assertTrue;
 public class FreestyleJobUITest extends BaseUITest {
 
     private static final String BUILD_SUCCESS_TEXT = "Finished: SUCCESS";
+    private static final String BUILD_FAILURE_TEXT = "Finished: FAILURE";
 
     @Test
     public void testSubversionScm() {
@@ -64,8 +63,7 @@ public class FreestyleJobUITest extends BaseUITest {
         selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/subversion-plugin/1/console");
-        waitQuietly(35000L);
-        assertTrue(selenium.isTextPresent(BUILD_SUCCESS_TEXT));
+        waitForTextPresent(BUILD_SUCCESS_TEXT, BUILD_FAILURE_TEXT);
     }
 
     @Test
@@ -90,9 +88,8 @@ public class FreestyleJobUITest extends BaseUITest {
 		selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/git-plugin/1/console");
-        waitQuietly(35000L);
-        assertTrue(selenium.isTextPresent(BUILD_SUCCESS_TEXT));
-	}
+        waitForTextPresent(BUILD_SUCCESS_TEXT, BUILD_FAILURE_TEXT);
+    }
 
     @Test
     public void testCvsScm() {
@@ -113,7 +110,6 @@ public class FreestyleJobUITest extends BaseUITest {
 		selenium.click("link=Build Now");
         selenium.waitForPageToLoad("30000");
         selenium.open("/job/cvs-plugin/1/console");
-        waitQuietly(35000L);
-		assertTrue(selenium.isTextPresent("Finished: SUCCESS"));
+        waitForTextPresent(BUILD_SUCCESS_TEXT, BUILD_FAILURE_TEXT);
     }
 }

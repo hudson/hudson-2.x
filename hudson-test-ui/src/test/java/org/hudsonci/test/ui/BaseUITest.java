@@ -30,6 +30,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 /**
  * Base class for UI testing.
  * <p/>
@@ -39,12 +42,22 @@ import org.testng.annotations.BeforeClass;
  *
  * @author Anton Kozak
  */
-public abstract class BaseUITest{
+public abstract class BaseUITest {
 
     /**
      * Base application URL.
      */
     public static final String BASE_URL = "http://localhost:6002/hudson";
+
+    /**
+     * Default wait period.
+     */
+    private static final long VERIFICATION_ATTEMPT_PERIOD = 5000L;
+
+    /**
+     * Count of attempts.
+     */
+    private static final int VERIFICATION_ATTEMPTS_COUNT = 100;
 
     /**
      * WebDriver.
@@ -87,6 +100,31 @@ public abstract class BaseUITest{
         } catch (InterruptedException ignored) {
         }
     }
+
+    /**
+     * Wait for text present on UI.
+     *
+     * @param successText text to search.
+     * @param failureText text shows that test fails.
+     */
+    protected void waitForTextPresent(String successText, String failureText) {
+        boolean isSuccessTextPresent = false;
+        for (int i = 0; i < VERIFICATION_ATTEMPTS_COUNT; i++) {
+            if (failureText != null) {
+                assertFalse(getSelenium().isTextPresent(failureText), "Failure text is present:" + failureText);
+            }
+            try {
+                if (getSelenium().isTextPresent(successText)){
+                    isSuccessTextPresent = true;
+                    break;
+                }
+            } catch (Exception ignored) {
+            }
+            waitQuietly(VERIFICATION_ATTEMPT_PERIOD);
+        }
+        assertTrue(isSuccessTextPresent, "Cannot find success text:" + successText);
+    }
+
 
     /**
      * Quits webdriver, closing every associated window.
