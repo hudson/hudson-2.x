@@ -114,9 +114,11 @@ public class InstallPluginCommand extends CLICommand {
                     Set<String> candidates = new HashSet<String>();
                     for (UpdateSite s : h.getUpdateCenter().getSites()) {
                         Data dt = s.getData();
-                        if (dt==null)
+                        if (dt==null) {
                             stdout.println(Messages.InstallPluginCommand_NoUpdateDataRetrieved(s.getUrl()));
-                        candidates.addAll(dt.plugins.keySet());
+                        } else {
+                            candidates.addAll(dt.plugins.keySet());
+                        }
                     }
                     stdout.println(Messages.InstallPluginCommand_DidYouMean(source,EditDistance.findNearest(source,candidates)));
                 }
