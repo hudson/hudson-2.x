@@ -70,7 +70,6 @@ THE SOFTWARE.
     <module>hudson-war</module>
     <module>hudson-plugin-parent</module>
     <module>maven-hpi-plugin</module>
-    <module>hudson-test-ui</module>
   </modules>
   
   <build>
@@ -517,6 +516,7 @@ THE SOFTWARE.
       </activation>
       <modules>
         <module>hudson-test-harness</module>
+        <module>hudson-test-ui</module>          
       </modules>
     </profile>
   </profiles>

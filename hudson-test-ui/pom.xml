@@ -84,7 +84,7 @@ THE SOFTWARE.
     </build>
     <profiles>
         <profile>
-            <id>integration</id>
+            <id>integration-tests</id>
             <build>
                 <plugins>
                     <plugin>
