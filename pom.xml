@@ -57,6 +57,7 @@ THE SOFTWARE.
     <aspectjVersion>1.6.10</aspectjVersion>
     <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
     <sisuInjectVersion>2.2.2</sisuInjectVersion>
+    <jetty-version>6.1.26</jetty-version>
   </properties>
 
   <modules>
@@ -347,55 +348,61 @@ THE SOFTWARE.
       <!-- INTERNAL -->
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-core</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-inject</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-inject</artifactId>
         <classifier>tests</classifier>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-remoting</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-cli</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-cli</artifactId>
         <classifier>jar-with-dependencies</classifier>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-war</artifactId>
         <type>war</type>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-test-harness</artifactId>
         <version>${project.version}</version>
       </dependency>
+
+       <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>hudson-test-ui</artifactId>
+         <version>${project.version}</version>
+       </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -509,6 +516,7 @@ THE SOFTWARE.
       </activation>
       <modules>
         <module>hudson-test-harness</module>
+        <module>hudson-test-ui</module>          
       </modules>
     </profile>
   </profiles>
