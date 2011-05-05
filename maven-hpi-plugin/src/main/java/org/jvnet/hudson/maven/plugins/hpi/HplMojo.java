@@ -15,14 +15,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Generate .hpl file.
  *
  * @author Kohsuke Kawaguchi
  * @goal hpl
- * @requiresDependencyResolution runtime
+ * @requiresDependencyResolution test
  */
 public class HplMojo extends AbstractHpiMojo {
     /**
@@ -65,7 +64,7 @@ public class HplMojo extends AbstractHpiMojo {
             if(buf.length()>0)
                 buf.append(',');
             buf.append(new File(project.getBuild().getOutputDirectory()).getAbsoluteFile());
-            for (Artifact a : (Set<Artifact>) project.getArtifacts()) {
+            for (Artifact a : getResolvedDependencies()) {
                 if ("provided".equals(a.getScope()))
                     continue;   // to simulate the real environment, drop the "provided" scope dependencies from the list
                 if ("pom".equals(a.getType()))
