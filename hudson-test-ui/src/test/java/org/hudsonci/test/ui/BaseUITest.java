@@ -90,6 +90,15 @@ public abstract class BaseUITest {
     }
 
     /**
+     * Returns web driver.
+     *
+     * @return web driver.
+     */
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    /**
      * Waits specified time.
      *
      * @param delay delay.
