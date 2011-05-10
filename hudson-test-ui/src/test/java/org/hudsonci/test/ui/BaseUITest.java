@@ -24,6 +24,7 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -123,7 +124,7 @@ public abstract class BaseUITest {
                 assertFalse(getSelenium().isTextPresent(failureText), "Failure text is present:" + failureText);
             }
             try {
-                if (getSelenium().isTextPresent(successText)){
+                if (getSelenium().isTextPresent(successText)) {
                     isSuccessTextPresent = true;
                     break;
                 }
@@ -134,6 +135,23 @@ public abstract class BaseUITest {
         assertTrue(isSuccessTextPresent, "Cannot find success text:" + successText);
     }
 
+    /**
+     * Wait for element presence. If element is absent, exception is thrown.
+     *
+     * @param element element search.
+     */
+    protected void waitForElementPresence(String element) {
+        for (int i = 0; i < VERIFICATION_ATTEMPTS_COUNT; i++) {
+            if (!getSelenium().isElementPresent(element)) {
+                waitQuietly(VERIFICATION_ATTEMPT_PERIOD);
+            } else {
+                break;
+            }
+        }
+        if (!getSelenium().isElementPresent(element)) {
+            throw new NoSuchElementException("Expected element: " + element + " is absent");
+        }
+    }
 
     /**
      * Quits webdriver, closing every associated window.
