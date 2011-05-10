@@ -121,9 +121,9 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
     }
 
     /**
-     * Checks if captcha is disabled on signup.
+     * Checks if captcha is enabled on signup.
      *
-     * @return true if captcha is disabled on signup.
+     * @return true if captcha is enabled on signup.
      */
     public boolean isEnableCaptcha() {
         return enableCaptcha;
