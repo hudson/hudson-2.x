@@ -76,7 +76,7 @@ public class ConfigureHudsonIT extends BaseUITest {
         assertEquals(selenium.getValue("_.name"), jdkName);
 //        assertEquals(selenium.getSelectedLabel("_.id"), jdkVersion);
         //Click delete installer and save button.
-        selenium.click("//button[contains(text(), 'Delete Installer')]");
+        selenium.click("//button[contains(text(), 'Delete JDK')]");
         selenium.click("//button[contains(text(), 'Save')]");
     }
 
