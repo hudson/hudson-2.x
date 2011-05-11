@@ -25,8 +25,8 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
+import org.junit.Test;
 import org.openqa.selenium.By;
-import org.testng.annotations.Test;
 
 /**
  * Test cases for free-style jobs.
@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  *
  * @author Anton Kozak
  */
-public class FreestyleJobUITest extends BaseUITest {
+public class FreestyleJobIT extends BaseUITest {
 
     private static final String BUILD_SUCCESS_TEXT = "Finished: SUCCESS";
     private static final String BUILD_FAILURE_TEXT = "Finished: FAILURE";
@@ -49,9 +49,8 @@ public class FreestyleJobUITest extends BaseUITest {
     @Test
     public void testSubversionScm() {
         Selenium selenium = getSelenium();
-        waitQuietly(4000L);
         selenium.open("/");
-        waitQuietly(10000L);
+        waitForTextPresent("New Job");
         selenium.click("link=New Job");
         selenium.waitForPageToLoad("30000");
         selenium.type("name", "subversion-plugin");
@@ -74,9 +73,8 @@ public class FreestyleJobUITest extends BaseUITest {
     @Test
     public void testGitScm() {
         Selenium selenium = getSelenium();
-        waitQuietly(4000L);
         selenium.open("/");
-        waitQuietly(10000L);
+        waitForTextPresent("New Job");
         selenium.click("link=New Job");
         selenium.waitForPageToLoad("30000");
         selenium.type("name", "git-plugin");
@@ -99,9 +97,8 @@ public class FreestyleJobUITest extends BaseUITest {
     @Test
     public void testCvsScm() {
         Selenium selenium = getSelenium();
-        waitQuietly(4000L);
         selenium.open("/");
-        waitQuietly(10000L);
+        waitForTextPresent("New Job");
         selenium.click("link=New Job");
         selenium.waitForPageToLoad("30000");
         selenium.type("name", "cvs-plugin");
