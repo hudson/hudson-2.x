@@ -24,15 +24,15 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Base class for UI testing.
@@ -43,7 +43,7 @@ import static org.testng.Assert.assertTrue;
  *
  * @author Anton Kozak
  */
-public abstract class BaseUITest {
+public abstract class BaseUITest{
 
     /**
      * Base application URL.
@@ -63,12 +63,12 @@ public abstract class BaseUITest {
     /**
      * WebDriver.
      */
-    private WebDriver driver;
+    private static WebDriver driver;
 
     /**
      * Selenium
      */
-    private Selenium selenium;
+    private static Selenium selenium;
 
     /**
      * Starts WebDriver and selenium.
@@ -76,7 +76,7 @@ public abstract class BaseUITest {
      * @throws Exception Exception.
      */
     @BeforeClass
-    public void setUp() throws Exception {
+    public static void setUp() throws Exception {
         driver = new FirefoxDriver();
         selenium = new WebDriverBackedSelenium(driver, BASE_URL);
     }
@@ -115,13 +115,22 @@ public abstract class BaseUITest {
      * Wait for text present on UI.
      *
      * @param successText text to search.
+     */
+    protected void waitForTextPresent(String successText) {
+        waitForTextPresent(successText, null);
+    }
+
+    /**
+     * Wait for text present on UI.
+     *
+     * @param successText text to search.
      * @param failureText text shows that test fails.
      */
     protected void waitForTextPresent(String successText, String failureText) {
         boolean isSuccessTextPresent = false;
         for (int i = 0; i < VERIFICATION_ATTEMPTS_COUNT; i++) {
             if (failureText != null) {
-                assertFalse(getSelenium().isTextPresent(failureText), "Failure text is present:" + failureText);
+                assertFalse("Failure text is present:" + failureText, getSelenium().isTextPresent(failureText));
             }
             try {
                 if (getSelenium().isTextPresent(successText)) {
@@ -132,7 +141,7 @@ public abstract class BaseUITest {
             }
             waitQuietly(VERIFICATION_ATTEMPT_PERIOD);
         }
-        assertTrue(isSuccessTextPresent, "Cannot find success text:" + successText);
+        assertTrue("Cannot find success text:" + successText, isSuccessTextPresent);
     }
 
     /**
@@ -157,7 +166,7 @@ public abstract class BaseUITest {
      * Quits webdriver, closing every associated window.
      */
     @AfterClass
-    public void tearDown() {
+    public static void tearDown() {
         driver.quit();
     }
 }

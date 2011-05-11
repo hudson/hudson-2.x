@@ -99,7 +99,7 @@ THE SOFTWARE.
         <local:row sid="${null}" />
       </tr>
     </table>
-    <table style="margin-top:0.5em; margin-left: 2em; width: 100%">
+    <table style="margin-top:0.5em; margin-left: 2em; width: 100%" id="add-user-tbl">
      <tr><td colspan="3">
       ${%User/group to add}:
       <input type="text" id="${id}text" />
