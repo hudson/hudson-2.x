@@ -174,6 +174,9 @@ final class RemoteInvocationHandler implements InvocationHandler, Serializable {
      * Two proxies are the same iff they represent the same remote object. 
      */
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
         if(Proxy.isProxyClass(o.getClass()))
             o = Proxy.getInvocationHandler(o);
 

@@ -144,7 +144,7 @@ public final class ProxyConfiguration implements Saveable {
             while (tokenizer.hasMoreTokens()){
                 String noProxyHost = tokenizer.nextToken().trim();
                 if (noProxyHost.contains("*")){
-                    if (url.getHost().trim().contains(noProxyHost.replaceAll("*", ""))){
+                    if (url.getHost().trim().contains(noProxyHost.replaceAll("\\*", ""))){
                         return url.openConnection(Proxy.NO_PROXY);
                     }
                 }else if (url.getHost().trim().equals(noProxyHost)){

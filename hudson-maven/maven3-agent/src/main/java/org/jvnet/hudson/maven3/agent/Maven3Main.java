@@ -96,9 +96,10 @@ public class Maven3Main {
 			
 		// expose variables used in the classworlds configuration
 		System.setProperty("maven.home", m2Home.getPath());
-		System.setProperty("maven3.interceptor", (interceptorJar != null ? interceptorJar
-				: interceptorJar).getPath());
-
+                if (interceptorJar != null) {
+                    System.setProperty("maven3.interceptor", interceptorJar.getPath());
+                }
+                
 		// load the default realms
 		launcher = new Launcher();
 		launcher.setSystemClassLoader(Maven3Main.class.getClassLoader());

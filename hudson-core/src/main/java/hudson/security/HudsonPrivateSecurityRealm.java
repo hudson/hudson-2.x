@@ -1,8 +1,8 @@
 /*
  * The MIT License
- * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, David Calavera, Seiji Sogabe
- * 
+ *
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, David Calavera, Seiji Sogabe, Anton Kozak
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -27,13 +27,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import hudson.Extension;
 import hudson.Util;
 import hudson.diagnosis.OldDataMonitor;
-import hudson.model.Descriptor;
-import hudson.model.Hudson;
-import hudson.model.ManagementLink;
-import hudson.model.ModelObject;
-import hudson.model.User;
-import hudson.model.UserProperty;
-import hudson.model.UserPropertyDescriptor;
+import hudson.model.*;
 import hudson.security.FederatedLoginService.FederatedIdentity;
 import hudson.tasks.Mailer;
 import hudson.util.PluginServletFilter;
@@ -51,29 +45,19 @@ import org.acegisecurity.providers.encoding.PasswordEncoder;
 import org.acegisecurity.providers.encoding.ShaPasswordEncoder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.ForwardToView;
-import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.HttpResponses;
-import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.*;
 import org.springframework.dao.DataAccessException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 /**
  * {@link SecurityRealm} that performs authentication by looking up {@link User}.
@@ -92,9 +76,24 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
      */
     private final boolean disableSignup;
 
-    @DataBoundConstructor
+    /**
+     * If true, captcha will be enabled.
+     */
+    private final boolean enableCaptcha;
+
+    /**
+     * @deprecated as of 2.0.1
+     */
+    @Deprecated
     public HudsonPrivateSecurityRealm(boolean allowsSignup) {
+        this(allowsSignup, true);
+    }
+
+    @DataBoundConstructor
+    public HudsonPrivateSecurityRealm(boolean allowsSignup, boolean enableCaptcha) {
         this.disableSignup = !allowsSignup;
+        this.enableCaptcha = enableCaptcha;
+
         if(!allowsSignup && !hasSomeUser()) {
             // if Hudson is newly set up with the security realm and there's no user account created yet,
             // insert a filter that asks the user to create one
@@ -109,6 +108,15 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
     @Override
     public boolean allowsSignup() {
         return !disableSignup;
+    }
+
+    /**
+     * Checks if captcha is enabled on signup.
+     *
+     * @return true if captcha is enabled on signup.
+     */
+    public boolean isEnableCaptcha() {
+        return enableCaptcha;
     }
 
     /**
@@ -194,7 +202,7 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
             throw HttpResponses.error(SC_UNAUTHORIZED,new Exception("User sign up is prohibited"));
 
         boolean firstUser = !hasSomeUser();
-        User u = createAccount(req, rsp, true, formView);
+        User u = createAccount(req, rsp, enableCaptcha, formView);
         if(u!=null) {
             if(firstUser)
                 tryToMakeAdmin(u);  // the first user should be admin, or else there's a risk of lock out

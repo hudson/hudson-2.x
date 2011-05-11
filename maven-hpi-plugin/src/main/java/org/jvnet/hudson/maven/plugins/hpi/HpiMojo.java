@@ -40,7 +40,7 @@ import java.io.PrintWriter;
  * @version $Id: HpiMojo.java 33552 2010-08-03 23:28:55Z olamy $
  * @goal hpi
  * @phase package
- * @requiresDependencyResolution runtime
+ * @requiresDependencyResolution test
  */
 public class HpiMojo extends AbstractHpiMojo {
 
