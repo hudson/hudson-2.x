@@ -24,8 +24,10 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test cases for configure system page.
@@ -34,7 +36,7 @@ import org.testng.annotations.Test;
  *
  * @author Nikita Levyankov
  */
-public class ConfigureHudsonUITest extends BaseUITest {
+public class ConfigureHudsonIT extends BaseUITest {
     @Test
     public void testAddJDK() throws Exception {
         String addJDKButtonXpath = "//button[contains(text(), 'Add JDK')]";
@@ -50,14 +52,14 @@ public class ConfigureHudsonUITest extends BaseUITest {
         selenium.click("link=Configure System");
         waitForElementPresence(addJDKButtonXpath);
         //Validate Add JDK button presence
-        Assert.assertTrue(selenium.isElementPresent(addJDKButtonXpath));
+        assertTrue(selenium.isElementPresent(addJDKButtonXpath));
         selenium.click(addJDKButtonXpath);
-        Assert.assertTrue(selenium.isElementPresent("//input[@name='_.name']"));
+        assertTrue(selenium.isElementPresent("//input[@name='_.name']"));
         //name is pre-validated. Non-Empty value is required. Check that error is displayed
-        Assert.assertTrue(selenium.isTextPresent("Required"));
+        assertTrue(selenium.isTextPresent("Required"));
         //Validate for accept licence checkbox presence
         selenium.isElementPresent("//input[@name='_.acceptLicense']");
-        Assert.assertTrue(selenium.isTextPresent("You must agree to the license to download the JDK."));
+        assertTrue(selenium.isTextPresent("You must agree to the license to download the JDK."));
         //Enter required jdk name
         selenium.type("_.name", jdkName);
         selenium.select("_.id", jdkVersion);
@@ -71,8 +73,8 @@ public class ConfigureHudsonUITest extends BaseUITest {
         selenium.click("link=Configure System");
 
         //Re-validate changes
-        Assert.assertEquals(selenium.getValue("_.name"), jdkName);
-        Assert.assertEquals(selenium.getSelectedLabel("_.id"), jdkVersion);
+        assertEquals(selenium.getValue("_.name"), jdkName);
+        assertEquals(selenium.getSelectedLabel("_.id"), jdkVersion);
     }
 
 }
