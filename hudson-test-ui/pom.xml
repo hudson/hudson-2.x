@@ -169,6 +169,11 @@ THE SOFTWARE.
                                     <value>${hudson.home}</value>
                                 </property>
                             </systemPropertyVariables>
+                            <includes>
+                                <include>**/IT*.java</include>
+                                <include>**/*IT.java</include>
+                                <include>**/*Test.java</include>
+                            </includes>
                         </configuration>
                         <executions>
                             <execution>

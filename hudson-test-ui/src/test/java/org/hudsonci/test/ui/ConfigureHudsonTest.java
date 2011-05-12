@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Nikita Levyankov
  */
-public class ConfigureHudsonIT extends BaseUITest {
+public class ConfigureHudsonTest extends BaseUITest {
     @Test
     public void testAddJDK() throws Exception {
         String addJDKButtonXpath = "//button[contains(text(), 'Add JDK')]";

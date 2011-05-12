@@ -26,7 +26,6 @@ package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 /**
  * Test cases for free-style jobs.
@@ -37,14 +36,14 @@ import org.openqa.selenium.By;
  *
  * @author Anton Kozak
  */
-public class FreestyleJobIT extends BaseUITest {
+public class FreestyleJobTest extends BaseUITest {
 
     private static final String BUILD_SUCCESS_TEXT = "Finished: SUCCESS";
     private static final String BUILD_FAILURE_TEXT = "Finished: FAILURE";
 
-    private static final String SUBVERSION_LBL_SELECT_EXP = ".//label[contains(text(),'Subversion')]";
-    private static final String GIT_LBL_SELECT_EXP = ".//label[contains(text(),'Git')]";
-    private static final String CVS_LBL_SELECT_EXP = ".//label[contains(text(),'CVS')]";
+    private static final String SUBVERSION_LBL_SELECT_EXP = "//label[contains(text(),'Subversion')]";
+    private static final String GIT_LBL_SELECT_EXP = "//label[contains(text(),'Git')]";
+    private static final String CVS_LBL_SELECT_EXP = "//label[contains(text(),'CVS')]";
 
     @Test
     public void testSubversionScm() {
@@ -57,7 +56,7 @@ public class FreestyleJobIT extends BaseUITest {
         selenium.click("mode");
         selenium.click("//button[@type='button']");
         selenium.waitForPageToLoad("30000");
-        getDriver().findElement(By.xpath(SUBVERSION_LBL_SELECT_EXP)).click();
+        selenium.click(SUBVERSION_LBL_SELECT_EXP);
         selenium.type("svn.remote.loc", "https://svn.java.net/svn/hudson~svn/trunk/hudson/plugins/subversion");
         selenium.click("//span[@id='yui-gen2']/span/button");
         selenium.click("link=Invoke top-level Maven targets");
@@ -81,7 +80,7 @@ public class FreestyleJobIT extends BaseUITest {
         selenium.click("mode");
         selenium.click("//button[@type='button']");
         selenium.waitForPageToLoad("30000");
-        getDriver().findElement(By.xpath(GIT_LBL_SELECT_EXP)).click();
+        selenium.click(GIT_LBL_SELECT_EXP);
         selenium.type("git.repo.url", "https://github.com/hudson-plugins/git-plugin.git");
         selenium.click("//span[@id='yui-gen2']/span/button");
         selenium.click("link=Invoke top-level Maven targets");
@@ -105,7 +104,7 @@ public class FreestyleJobIT extends BaseUITest {
         selenium.click("mode");
         selenium.click("//button[@type='button']");
         selenium.waitForPageToLoad("30000");
-        getDriver().findElement(By.xpath(CVS_LBL_SELECT_EXP)).click();
+        selenium.click(CVS_LBL_SELECT_EXP);
         selenium.type("cvs_root", ":pserver:anonymous@proftp.cvs.sourceforge.net:2401/cvsroot/proftp");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
