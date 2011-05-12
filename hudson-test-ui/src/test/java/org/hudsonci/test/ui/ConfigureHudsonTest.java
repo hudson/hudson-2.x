@@ -28,8 +28,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import static org.testng.Assert.fail;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -111,7 +110,7 @@ public class ConfigureHudsonTest extends BaseUITest {
 	waitForTextPresent("Configure System", null);
 	selenium.click("link=Configure System");
 	waitForTextPresent("# of executors", null);
-	Assert.assertEquals(selenium.getValue("_.numExecutors"), "2");
+	assertEquals(selenium.getValue("_.numExecutors"), "2");
 	selenium.type("_.numExecutors", "1");
 	selenium.click("//button[contains(text(), 'Save')]");
         waitForTextPresent("Manage Hudson", null);
@@ -120,7 +119,7 @@ public class ConfigureHudsonTest extends BaseUITest {
 		try { if ("1".equals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"))) break; } catch (Exception e) {}
 		Thread.sleep(1000);
 		}
-        Assert.assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"),"1");
+        assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"),"1");
     }
 
 }
