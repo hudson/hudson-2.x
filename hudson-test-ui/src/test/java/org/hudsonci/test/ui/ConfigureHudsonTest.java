@@ -86,14 +86,17 @@ public class ConfigureHudsonTest extends BaseUITest {
     public void testChangeSystemMessage() throws Exception {
         Selenium selenium = getSelenium();
         selenium.open("/");
+        //Navigate to Configure System page
         waitForTextPresent("Manage Hudson", null);
 	selenium.click("link=Manage Hudson");
         waitForTextPresent("Configure System", null);
 	selenium.click("link=Configure System");
 	waitForTextPresent("System Message", null);
+        //Enter a simple message and save
 	selenium.type("system_message", "A simple test message\n\n<p>With some html tags</p>");
 	selenium.click("//button[contains(text(), 'Save')]");
 	selenium.waitForPageToLoad("30000");
+        //Verify the message appears
         waitForTextPresent("A simple test message With some html tags", null);
     }
     
@@ -101,24 +104,22 @@ public class ConfigureHudsonTest extends BaseUITest {
     public void testChangeExecutors() throws Exception {
         Selenium selenium = getSelenium();
         selenium.open("/");
-	for (int second = 0;; second++) {
-		if (second >= 60) fail("timeout");
-		try { if ("2".equals(selenium.getText("//table[@id='executors']/tbody[2]/tr[3]/td[1]"))) break; } catch (Exception e) {}
-		Thread.sleep(1000);
-	}
+        //Check that we have two executors to start with
+        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[3]/td[1]");
+        assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[3]/td[1]"),"2");
+        //Navigate to Configure System page
 	selenium.click("link=Manage Hudson");
 	waitForTextPresent("Configure System", null);
 	selenium.click("link=Configure System");
 	waitForTextPresent("# of executors", null);
+        //Check and update the number of executors
 	assertEquals(selenium.getValue("_.numExecutors"), "2");
 	selenium.type("_.numExecutors", "1");
+        //Save
 	selenium.click("//button[contains(text(), 'Save')]");
         waitForTextPresent("Manage Hudson", null);
-	for (int second = 0;; second++) {
-		if (second >= 60) fail("timeout");
-		try { if ("1".equals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"))) break; } catch (Exception e) {}
-		Thread.sleep(1000);
-		}
+        //Verify the number of excutors now
+        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[2]/td[1]");
         assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"),"1");
     }
 
