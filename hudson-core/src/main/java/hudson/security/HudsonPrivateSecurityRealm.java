@@ -86,17 +86,7 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
      */
     @Deprecated
     public HudsonPrivateSecurityRealm(boolean allowsSignup) {
-        this.disableSignup = !allowsSignup;
-        this.enableCaptcha = true;
-        if(!allowsSignup && !hasSomeUser()) {
-            // if Hudson is newly set up with the security realm and there's no user account created yet,
-            // insert a filter that asks the user to create one
-            try {
-                PluginServletFilter.addFilter(CREATE_FIRST_USER_FILTER);
-            } catch (ServletException e) {
-                throw new AssertionError(e); // never happen because our Filter.init is no-op
-            }
-        }
+        this(allowsSignup, true);
     }
 
     @DataBoundConstructor

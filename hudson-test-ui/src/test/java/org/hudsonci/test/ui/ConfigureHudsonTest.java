@@ -24,8 +24,10 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import static org.testng.Assert.fail;
 
@@ -37,12 +39,12 @@ import static org.testng.Assert.fail;
  *
  * @author Nikita Levyankov
  */
-public class ConfigureHudsonUITest extends BaseUITest {
+public class ConfigureHudsonTest extends BaseUITest {
     @Test
     public void testAddJDK() throws Exception {
         String addJDKButtonXpath = "//button[contains(text(), 'Add JDK')]";
         String jdkName = "jdk_6_24";
-        String jdkVersion = "6 Update 22";
+//        String jdkVersion = "6 Update 22";
         Selenium selenium = getSelenium();
         selenium.open("/");
         //Open Manage Hudson page
@@ -53,17 +55,17 @@ public class ConfigureHudsonUITest extends BaseUITest {
         selenium.click("link=Configure System");
         waitForElementPresence(addJDKButtonXpath);
         //Validate Add JDK button presence
-        Assert.assertTrue(selenium.isElementPresent(addJDKButtonXpath));
+        assertTrue(selenium.isElementPresent(addJDKButtonXpath));
         selenium.click(addJDKButtonXpath);
-        Assert.assertTrue(selenium.isElementPresent("//input[@name='_.name']"));
+        assertTrue(selenium.isElementPresent("//input[@name='_.name']"));
         //name is pre-validated. Non-Empty value is required. Check that error is displayed
-        Assert.assertTrue(selenium.isTextPresent("Required"));
+        assertTrue(selenium.isTextPresent("Required"));
         //Validate for accept licence checkbox presence
         selenium.isElementPresent("//input[@name='_.acceptLicense']");
-        Assert.assertTrue(selenium.isTextPresent("You must agree to the license to download the JDK."));
+        assertTrue(selenium.isTextPresent("You must agree to the license to download the JDK."));
         //Enter required jdk name
         selenium.type("_.name", jdkName);
-        selenium.select("_.id", jdkVersion);
+//        selenium.select("_.id", jdkVersion);
         //Need to accept oracle licence
         selenium.click("_.acceptLicense");
         //Click save button.
@@ -74,8 +76,11 @@ public class ConfigureHudsonUITest extends BaseUITest {
         selenium.click("link=Configure System");
 
         //Re-validate changes
-        Assert.assertEquals(selenium.getValue("_.name"), jdkName);
-        Assert.assertEquals(selenium.getSelectedLabel("_.id"), jdkVersion);
+        assertEquals(selenium.getValue("_.name"), jdkName);
+//        assertEquals(selenium.getSelectedLabel("_.id"), jdkVersion);
+        //Click delete installer and save button.
+        selenium.click("//button[contains(text(), 'Delete JDK')]");
+        selenium.click("//button[contains(text(), 'Save')]");
     }
     
     @Test
