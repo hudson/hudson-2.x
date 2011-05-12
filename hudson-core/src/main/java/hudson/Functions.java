@@ -67,6 +67,7 @@ import hudson.util.Area;
 import hudson.util.Iterators;
 import hudson.scm.SCM;
 import hudson.scm.SCMDescriptor;
+import hudson.security.captcha.CaptchaSupport;
 import hudson.util.Secret;
 import hudson.views.MyViewsTabBar;
 import hudson.views.ViewsTabBar;
@@ -676,6 +677,10 @@ public class Functions {
 
     public static List<Descriptor<ViewsTabBar>> getViewsTabBarDescriptors() {
         return ViewsTabBar.all();
+    }
+    
+    public static List<Descriptor<CaptchaSupport>> getCaptchaSupportDescriptors() {
+        return CaptchaSupport.all();
     }
 
     public static List<Descriptor<MyViewsTabBar>> getMyViewsTabBarDescriptors() {

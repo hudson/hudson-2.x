@@ -23,6 +23,7 @@
  */
 package hudson.security;
 
+import hudson.security.captcha.CaptchaSupport;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import hudson.Extension;
 import hudson.Util;
@@ -80,19 +81,21 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
      * If true, captcha will be enabled.
      */
     private final boolean enableCaptcha;
-
+    
+    
     /**
      * @deprecated as of 2.0.1
      */
     @Deprecated
     public HudsonPrivateSecurityRealm(boolean allowsSignup) {
-        this(allowsSignup, true);
+        this(allowsSignup, true, null);
     }
 
     @DataBoundConstructor
-    public HudsonPrivateSecurityRealm(boolean allowsSignup, boolean enableCaptcha) {
+    public HudsonPrivateSecurityRealm(boolean allowsSignup, boolean enableCaptcha, CaptchaSupport captchaSupport) {
         this.disableSignup = !allowsSignup;
         this.enableCaptcha = enableCaptcha;
+        setCaptchaSupport(captchaSupport);
 
         if(!allowsSignup && !hasSomeUser()) {
             // if Hudson is newly set up with the security realm and there's no user account created yet,
@@ -118,7 +121,7 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
     public boolean isEnableCaptcha() {
         return enableCaptcha;
     }
-
+    
     /**
      * Computes if this Hudson has some user accounts configured.
      *

@@ -23,8 +23,6 @@
  */
 package hudson.security;
 
-import com.octo.captcha.service.CaptchaServiceException;
-import com.octo.captcha.service.image.DefaultManageableImageCaptchaService;
 import groovy.lang.Binding;
 import hudson.ExtensionPoint;
 import hudson.DescriptorExtensionList;
@@ -34,6 +32,7 @@ import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.security.FederatedLoginService.FederatedIdentity;
+import hudson.security.captcha.CaptchaSupport;
 import hudson.util.DescriptorList;
 import hudson.util.PluginServletFilter;
 import hudson.util.spring.BeanBuilder;
@@ -56,13 +55,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.dao.DataAccessException;
 
-import javax.imageio.ImageIO;
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,6 +125,7 @@ import java.util.logging.Logger;
  * @see PluginServletFilter
  */
 public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityRealm> implements ExtensionPoint {
+
     /**
      * Creates fully-configured {@link AuthenticationManager} that performs authentication
      * against the user realm. The implementation hides how such authentication manager
@@ -143,6 +143,10 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      * overriding {@link #createFilter(FilterConfig)}.
      */
     public abstract SecurityComponents createSecurityComponents();
+    /**
+     * Captcha Support to be used with this SecurityRealm for User Signup
+     */
+    private CaptchaSupport captchaSupport;
 
     /**
      * Creates a {@link CliAuthenticator} object that authenticates an invocation of a CLI command.
@@ -156,6 +160,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      */
     public CliAuthenticator createCliAuthenticator(final CLICommand command) {
         return new CliAuthenticator() {
+
             public Authentication authenticate() {
                 return command.getTransportAuthentication();
             }
@@ -232,7 +237,19 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      * @see #doLogout(StaplerRequest, StaplerResponse) 
      */
     protected String getPostLogOutUrl(StaplerRequest req, Authentication auth) {
-        return req.getContextPath()+"/";
+        return req.getContextPath() + "/";
+    }
+
+    public CaptchaSupport getCaptchaSupport() {
+        return captchaSupport;
+    }
+
+    public void setCaptchaSupport(CaptchaSupport captchaSupport) {
+        this.captchaSupport = captchaSupport;
+    }
+
+    public List<Descriptor<CaptchaSupport>> getCaptchaSupportDescriptors() {
+        return CaptchaSupport.all();
     }
 
     /**
@@ -246,17 +263,18 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      */
     public void doLogout(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
         HttpSession session = req.getSession(false);
-        if(session!=null)
+        if (session != null) {
             session.invalidate();
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         SecurityContextHolder.clearContext();
 
         // reset remember-me cookie
-        Cookie cookie = new Cookie(ACEGI_SECURITY_HASHED_REMEMBER_ME_COOKIE_KEY,"");
-        cookie.setPath(req.getContextPath().length()>0 ? req.getContextPath() : "/");
+        Cookie cookie = new Cookie(ACEGI_SECURITY_HASHED_REMEMBER_ME_COOKIE_KEY, "");
+        cookie.setPath(req.getContextPath().length() > 0 ? req.getContextPath() : "/");
         rsp.addCookie(cookie);
 
-        rsp.sendRedirect2(getPostLogOutUrl(req,auth));
+        rsp.sendRedirect2(getPostLogOutUrl(req, auth));
     }
 
     /**
@@ -274,7 +292,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      */
     public boolean allowsSignup() {
         Class clz = getClass();
-        return clz.getClassLoader().getResource(clz.getName().replace('.','/')+"/signup.jelly")!=null;
+        return clz.getClassLoader().getResource(clz.getName().replace('.', '/') + "/signup.jelly") != null;
     }
 
     /**
@@ -324,34 +342,27 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
     }
 
     /**
-     * {@link DefaultManageableImageCaptchaService} holder to defer initialization.
-     */
-    private static final class CaptchaService {
-        private static final DefaultManageableImageCaptchaService INSTANCE = new DefaultManageableImageCaptchaService();
-    }
-
-    /**
      * Generates a captcha image.
      */
     public final void doCaptcha(StaplerRequest req, StaplerResponse rsp) throws IOException {
-        String id = req.getSession().getId();
-        rsp.setContentType("image/png");
-        rsp.addHeader("Cache-Control","no-cache");
-        ImageIO.write( CaptchaService.INSTANCE.getImageChallengeForID(id), "PNG", rsp.getOutputStream() );
+        if (captchaSupport != null) {
+            String id = req.getSession().getId();
+            rsp.setContentType("image/png");
+            rsp.addHeader("Cache-Control", "no-cache");
+            captchaSupport.generateImage(id, rsp.getOutputStream());
+        }
     }
 
     /**
      * Validates the captcha.
      */
     protected final boolean validateCaptcha(String text) {
-        try {
+        if (captchaSupport != null) {
             String id = Stapler.getCurrentRequest().getSession().getId();
-            Boolean b = CaptchaService.INSTANCE.validateResponseForID(id, text);
-            return b!=null && b;
-        } catch (CaptchaServiceException e) {
-            LOGGER.log(Level.INFO, "Captcha validation had a problem",e);
-            return false;
+            return captchaSupport.validateCaptcha(id, text);
         }
+        // If no Captcha Support then bogus validation always retuers true
+        return true;
     }
 
     /**
@@ -364,16 +375,15 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      */
     protected static <T> T findBean(Class<T> type, ApplicationContext context) {
         Map m = context.getBeansOfType(type);
-        switch(m.size()) {
-        case 0:
-            throw new IllegalArgumentException("No beans of "+type+" are defined");
-        case 1:
-            return type.cast(m.values().iterator().next());
-        default:
-            throw new IllegalArgumentException("Multiple beans of "+type+" are defined: "+m);            
+        switch (m.size()) {
+            case 0:
+                throw new IllegalArgumentException("No beans of " + type + " are defined");
+            case 1:
+                return type.cast(m.values().iterator().next());
+            default:
+                throw new IllegalArgumentException("Multiple beans of " + type + " are defined: " + m);
         }
     }
-
     /**
      * Holder for the SecurityComponents.
      */
@@ -407,29 +417,31 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      */
     public Filter createFilter(FilterConfig filterConfig) {
         LOGGER.entering(SecurityRealm.class.getName(), "createFilter");
-        
+
         Binding binding = new Binding();
         SecurityComponents sc = getSecurityComponents();
         binding.setVariable("securityComponents", sc);
-        binding.setVariable("securityRealm",this);
+        binding.setVariable("securityRealm", this);
         BeanBuilder builder = new BeanBuilder();
-        builder.parse(filterConfig.getServletContext().getResourceAsStream("/WEB-INF/security/SecurityFilters.groovy"),binding);
+        builder.parse(filterConfig.getServletContext().getResourceAsStream("/WEB-INF/security/SecurityFilters.groovy"), binding);
         WebApplicationContext context = builder.createApplicationContext();
         return (Filter) context.getBean("filter");
     }
-
     /**
      * Singleton constant that represents "no authentication."
      */
     public static final SecurityRealm NO_AUTHENTICATION = new None();
 
     private static class None extends SecurityRealm {
+
         public SecurityComponents createSecurityComponents() {
             return new SecurityComponents(new AuthenticationManager() {
+
                 public Authentication authenticate(Authentication authentication) {
                     return authentication;
                 }
             }, new UserDetailsService() {
+
                 public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
                     throw new UsernameNotFoundException(username);
                 }
@@ -479,6 +491,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      * @see SecurityRealm#createSecurityComponents() 
      */
     public static final class SecurityComponents {
+
         public final AuthenticationManager manager;
         public final UserDetailsService userDetails;
         public final RememberMeServices rememberMe;
@@ -492,15 +505,15 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
         public SecurityComponents(AuthenticationManager manager) {
             // we use UserDetailsServiceProxy here just as an implementation that fails all the time,
             // not as a proxy. No one is supposed to use this as a proxy.
-            this(manager,new UserDetailsServiceProxy());
+            this(manager, new UserDetailsServiceProxy());
         }
 
         public SecurityComponents(AuthenticationManager manager, UserDetailsService userDetails) {
-            this(manager,userDetails,createRememberMeService(userDetails));
+            this(manager, userDetails, createRememberMeService(userDetails));
         }
 
         public SecurityComponents(AuthenticationManager manager, UserDetailsService userDetails, RememberMeServices rememberMe) {
-            assert manager!=null && userDetails!=null && rememberMe!=null;
+            assert manager != null && userDetails != null && rememberMe != null;
             this.manager = manager;
             this.userDetails = userDetails;
             this.rememberMe = rememberMe;
@@ -515,7 +528,6 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
             return rms;
         }
     }
-
     /**
      * All registered {@link SecurityRealm} implementations.
      *
@@ -527,13 +539,10 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
     /**
      * Returns all the registered {@link SecurityRealm} descriptors.
      */
-    public static DescriptorExtensionList<SecurityRealm,Descriptor<SecurityRealm>> all() {
-        return Hudson.getInstance().<SecurityRealm,Descriptor<SecurityRealm>>getDescriptorList(SecurityRealm.class);
+    public static DescriptorExtensionList<SecurityRealm, Descriptor<SecurityRealm>> all() {
+        return Hudson.getInstance().<SecurityRealm, Descriptor<SecurityRealm>>getDescriptorList(SecurityRealm.class);
     }
-
-
     private static final Logger LOGGER = Logger.getLogger(SecurityRealm.class.getName());
-
     /**
      * {@link GrantedAuthority} that represents the built-in "authenticated" role, which is granted to
      * anyone non-anonymous.
