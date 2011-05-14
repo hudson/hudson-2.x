@@ -23,28 +23,23 @@
  */
 package hudson.tasks.test;
 
+import hudson.util.graph.DataSet;
+import hudson.util.graph.ColorPalette;
 import hudson.Functions;
 import hudson.model.*;
 import hudson.tasks.junit.CaseResult;
 import hudson.util.*;
-import hudson.util.ChartUtil.NumberOnlyBuildLabel;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.StackedAreaRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.RectangleInsets;
+import hudson.util.graph.ChartLabel;
+import hudson.util.graph.ChartUtil;
+import hudson.util.graph.ChartUtil.NumberOnlyBuildLabel;
+import hudson.util.graph.Graph;
+import java.awt.Color;
 import org.jvnet.localizer.Localizable;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -204,8 +199,14 @@ public abstract class AbstractTestResultAction<T extends AbstractTestResultActio
 
         if(req.checkIfModified(owner.getTimestamp(),rsp))
             return;
-
-        ChartUtil.generateGraph(req,rsp,createChart(req,buildDataSet(req)),calcDefaultSize());
+    
+        Area defSize = calcDefaultSize();
+        Graph graph = new Graph(-1, defSize.width, defSize.height);
+        graph.setXAxisLabel("count");
+        graph.setData(getGraphDataSet(req));
+        graph.doPng(req,rsp);
+        
+        //ChartUtil.generateGraph(req,rsp,createChart(req,buildDataSet(req)),calcDefaultSize());
     }
 
     /**
@@ -214,7 +215,66 @@ public abstract class AbstractTestResultAction<T extends AbstractTestResultActio
     public void doGraphMap( StaplerRequest req, StaplerResponse rsp) throws IOException {
         if(req.checkIfModified(owner.getTimestamp(),rsp))
             return;
-        ChartUtil.generateClickableMap(req,rsp,createChart(req,buildDataSet(req)),calcDefaultSize());
+        
+        Area defSize = calcDefaultSize();
+        Graph graph = new Graph(-1, defSize.width, defSize.height);
+        graph.setXAxisLabel("count");
+        graph.setData(getGraphDataSet(req));
+        graph.doMap(req,rsp);
+        
+        //ChartUtil.generateClickableMap(req,rsp,createChart(req,buildDataSet(req)),calcDefaultSize());
+    }
+    
+    private DataSet getGraphDataSet(StaplerRequest req) {
+        boolean failureOnly = Boolean.valueOf(req.getParameter("failureOnly"));
+
+        DataSet<String, ChartLabel> dsb = new DataSet<String, ChartLabel>();
+
+        for( AbstractTestResultAction<?> a=this; a!=null; a=a.getPreviousResult(AbstractTestResultAction.class) ) {
+            dsb.add( a.getFailCount(), "failed", new TestResultChartLabel(req, a.owner));
+            if(!failureOnly) {
+                
+                dsb.add( a.getSkipCount(), "skipped", new TestResultChartLabel(req, a.owner));
+                dsb.add( a.getTotalCount()-a.getFailCount()-a.getSkipCount(),"total", new TestResultChartLabel(req, a.owner));
+            }
+        }
+        return dsb;
+    }
+    
+    private class TestResultChartLabel extends NumberOnlyBuildLabel{
+        final String relPath;
+        
+        public TestResultChartLabel(StaplerRequest req, AbstractBuild build){
+            super(build);
+            relPath = getRelPath(req);
+        }
+        @Override
+        public Color getColor(int row, int column) {
+            return ColorPalette.BLUE;
+        }
+
+        @Override
+        public String getLink(int row, int column) {
+            return relPath + build.getNumber()+"/testReport/";
+        }
+
+        @Override
+        public String getToolTip(int row, int column) {
+             
+                AbstractTestResultAction a = build.getAction(AbstractTestResultAction.class);
+                switch (row) {
+                    case 0:
+                        return String.valueOf(Messages.AbstractTestResultAction_fail(build.getDisplayName(), a.getFailCount()));
+                    case 1:
+                        return String.valueOf(Messages.AbstractTestResultAction_skip(build.getDisplayName(), a.getSkipCount()));
+                    default:
+                        return String.valueOf(Messages.AbstractTestResultAction_test(build.getDisplayName(), a.getTotalCount()));
+                }
+        }
+
+        public int compareTo(ChartLabel t) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
     /**
@@ -238,97 +298,85 @@ public abstract class AbstractTestResultAction<T extends AbstractTestResultActio
             return new Area(500,200);
     }
     
-    private CategoryDataset buildDataSet(StaplerRequest req) {
-        boolean failureOnly = Boolean.valueOf(req.getParameter("failureOnly"));
+    
+     
 
-        DataSetBuilder<String,NumberOnlyBuildLabel> dsb = new DataSetBuilder<String,NumberOnlyBuildLabel>();
-
-        for( AbstractTestResultAction<?> a=this; a!=null; a=a.getPreviousResult(AbstractTestResultAction.class) ) {
-            dsb.add( a.getFailCount(), "failed", new NumberOnlyBuildLabel(a.owner));
-            if(!failureOnly) {
-                dsb.add( a.getSkipCount(), "skipped", new NumberOnlyBuildLabel(a.owner));
-                dsb.add( a.getTotalCount()-a.getFailCount()-a.getSkipCount(),"total", new NumberOnlyBuildLabel(a.owner));
-            }
-        }
-        return dsb.build();
-    }
-
-    private JFreeChart createChart(StaplerRequest req,CategoryDataset dataset) {
-
-        final String relPath = getRelPath(req);
-
-        final JFreeChart chart = ChartFactory.createStackedAreaChart(
-            null,                   // chart title
-            null,                   // unused
-            "count",                  // range axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL, // orientation
-            false,                     // include legend
-            true,                     // tooltips
-            false                     // urls
-        );
-
-        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
-
-        // set the background color for the chart...
-
-//        final StandardLegend legend = (StandardLegend) chart.getLegend();
-//        legend.setAnchor(StandardLegend.SOUTH);
-
-        chart.setBackgroundPaint(Color.white);
-
-        final CategoryPlot plot = chart.getCategoryPlot();
-
-        // plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setOutlinePaint(null);
-        plot.setForegroundAlpha(0.8f);
-//        plot.setDomainGridlinesVisible(true);
-//        plot.setDomainGridlinePaint(Color.white);
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.black);
-
-        CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
-        plot.setDomainAxis(domainAxis);
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        domainAxis.setLowerMargin(0.0);
-        domainAxis.setUpperMargin(0.0);
-        domainAxis.setCategoryMargin(0.0);
-
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-        StackedAreaRenderer ar = new StackedAreaRenderer2() {
-            @Override
-            public String generateURL(CategoryDataset dataset, int row, int column) {
-                NumberOnlyBuildLabel label = (NumberOnlyBuildLabel) dataset.getColumnKey(column);
-                return relPath+label.build.getNumber()+"/testReport/";
-            }
-
-            @Override
-            public String generateToolTip(CategoryDataset dataset, int row, int column) {
-                NumberOnlyBuildLabel label = (NumberOnlyBuildLabel) dataset.getColumnKey(column);
-                AbstractTestResultAction a = label.build.getAction(AbstractTestResultAction.class);
-                switch (row) {
-                    case 0:
-                        return String.valueOf(Messages.AbstractTestResultAction_fail(label.build.getDisplayName(), a.getFailCount()));
-                    case 1:
-                        return String.valueOf(Messages.AbstractTestResultAction_skip(label.build.getDisplayName(), a.getSkipCount()));
-                    default:
-                        return String.valueOf(Messages.AbstractTestResultAction_test(label.build.getDisplayName(), a.getTotalCount()));
-                }
-            }
-        };
-        plot.setRenderer(ar);
-        ar.setSeriesPaint(0,ColorPalette.RED); // Failures.
-        ar.setSeriesPaint(1,ColorPalette.YELLOW); // Skips.
-        ar.setSeriesPaint(2,ColorPalette.BLUE); // Total.
-
-        // crop extra space around the graph
-        plot.setInsets(new RectangleInsets(0,0,0,5.0));
-
-        return chart;
-    }
+//    private JFreeChart createChart(StaplerRequest req,CategoryDataset dataset) {
+//
+//        final String relPath = getRelPath(req);
+//
+//        final JFreeChart chart = ChartFactory.createStackedAreaChart(
+//            null,                   // chart title
+//            null,                   // unused
+//            "count",                  // range axis label
+//            dataset,                  // data
+//            PlotOrientation.VERTICAL, // orientation
+//            false,                     // include legend
+//            true,                     // tooltips
+//            false                     // urls
+//        );
+//
+//        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
+//
+//        // set the background color for the chart...
+//
+////        final StandardLegend legend = (StandardLegend) chart.getLegend();
+////        legend.setAnchor(StandardLegend.SOUTH);
+//
+//        chart.setBackgroundPaint(Color.white);
+//
+//        final CategoryPlot plot = chart.getCategoryPlot();
+//
+//        // plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
+//        plot.setBackgroundPaint(Color.WHITE);
+//        plot.setOutlinePaint(null);
+//        plot.setForegroundAlpha(0.8f);
+////        plot.setDomainGridlinesVisible(true);
+////        plot.setDomainGridlinePaint(Color.white);
+//        plot.setRangeGridlinesVisible(true);
+//        plot.setRangeGridlinePaint(Color.black);
+//
+//        CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
+//        plot.setDomainAxis(domainAxis);
+//        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+//        domainAxis.setLowerMargin(0.0);
+//        domainAxis.setUpperMargin(0.0);
+//        domainAxis.setCategoryMargin(0.0);
+//
+//        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+//        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//
+//        StackedAreaRenderer ar = new StackedAreaRenderer2() {
+//            @Override
+//            public String generateURL(CategoryDataset dataset, int row, int column) {
+//                NumberOnlyBuildLabel label = (NumberOnlyBuildLabel) dataset.getColumnKey(column);
+//                return relPath+label.build.getNumber()+"/testReport/";
+//            }
+//
+//            @Override
+//            public String generateToolTip(CategoryDataset dataset, int row, int column) {
+//                NumberOnlyBuildLabel label = (NumberOnlyBuildLabel) dataset.getColumnKey(column);
+//                AbstractTestResultAction a = label.build.getAction(AbstractTestResultAction.class);
+//                switch (row) {
+//                    case 0:
+//                        return String.valueOf(Messages.AbstractTestResultAction_fail(label.build.getDisplayName(), a.getFailCount()));
+//                    case 1:
+//                        return String.valueOf(Messages.AbstractTestResultAction_skip(label.build.getDisplayName(), a.getSkipCount()));
+//                    default:
+//                        return String.valueOf(Messages.AbstractTestResultAction_test(label.build.getDisplayName(), a.getTotalCount()));
+//                }
+//            }
+//        };
+//        plot.setRenderer(ar);
+//        ar.setSeriesPaint(0,ColorPalette.RED); // Failures.
+//        ar.setSeriesPaint(1,ColorPalette.YELLOW); // Skips.
+//        ar.setSeriesPaint(2,ColorPalette.BLUE); // Total.
+//
+//        // crop extra space around the graph
+//        plot.setInsets(new RectangleInsets(0,0,0,5.0));
+//
+//        return chart;
+//    }
 
     private String getRelPath(StaplerRequest req) {
         String relPath = req.getParameter("rel");

@@ -26,11 +26,11 @@ package hudson.slaves;
 import hudson.model.LoadStatistics;
 import hudson.model.Node;
 import hudson.model.Hudson;
-import hudson.model.MultiStageTimeSeries;
+import hudson.util.graph.MultiStageTimeSeries;
 import hudson.model.Label;
 import hudson.model.PeriodicWork;
 import static hudson.model.LoadStatistics.DECAY;
-import hudson.model.MultiStageTimeSeries.TimeScale;
+import hudson.util.graph.MultiStageTimeSeries.TimeScale;
 import hudson.Extension;
 
 import java.awt.Color;

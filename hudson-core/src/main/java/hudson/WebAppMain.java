@@ -39,7 +39,7 @@ import hudson.util.RingBufferLogHandler;
 import hudson.util.NoTempDir;
 import hudson.util.IncompatibleAntVersionDetected;
 import hudson.util.HudsonFailedToLoad;
-import hudson.util.ChartUtil;
+import hudson.util.graph.ChartUtil;
 import hudson.util.AWTProblem;
 import hudson.util.JNADoublyLoaded;
 import org.jvnet.localizer.LocaleProvider;

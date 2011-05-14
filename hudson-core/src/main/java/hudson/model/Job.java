@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
+ * Copyright (c) 2004-2011, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt, 
+ * Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,29 +43,24 @@ import hudson.search.SearchItem;
 import hudson.search.SearchItems;
 import hudson.security.ACL;
 import hudson.tasks.LogRotator;
-import hudson.util.ChartUtil;
-import hudson.util.ColorPalette;
+import hudson.util.graph.ColorPalette;
 import hudson.util.CopyOnWriteList;
-import hudson.util.DataSetBuilder;
+import hudson.util.graph.DataSet;
 import hudson.util.IOException2;
 import hudson.util.RunList;
-import hudson.util.ShiftedCategoryAxis;
-import hudson.util.StackedAreaRenderer2;
 import hudson.util.TextFile;
-import hudson.util.Graph;
+import hudson.util.graph.ChartLabel;
+import hudson.util.graph.Graph;
 import hudson.widgets.HistoryWidget;
 import hudson.widgets.Widget;
 import hudson.widgets.HistoryWidget.Adapter;
 
 import java.awt.Color;
-import java.awt.Paint;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.AbstractList;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -78,16 +74,6 @@ import javax.servlet.ServletException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONException;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.StackedAreaRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.RectangleInsets;
 import org.jvnet.localizer.Localizable;
 import org.kohsuke.stapler.StaplerOverridable;
 import org.kohsuke.stapler.StaplerRequest;
@@ -119,15 +105,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * file, so even though this is marked as transient, don't move it around.
      */
     protected transient volatile int nextBuildNumber = 1;
-
     /**
      * Newly copied jobs get this flag set, so that Hudson doesn't try to run the job until its configuration
      * is saved once.
      */
     private transient volatile boolean holdOffBuildUntilSave;
-
     private volatile LogRotator logRotator;
-
     /**
      * Not all plugins are good at calculating their health report quickly.
      * These fields are used to cache the health reports to speed up rendering
@@ -135,9 +118,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     private transient Integer cachedBuildHealthReportsBuildNumber = null;
     private transient List<HealthReport> cachedBuildHealthReports = null;
-
     private boolean keepDependencies;
-
     /**
      * List of {@link UserProperty}s configured for this project.
      */
@@ -177,10 +158,13 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         }
 
         if (properties == null) // didn't exist < 1.72
+        {
             properties = new CopyOnWriteList<JobProperty<? super JobT>>();
+        }
 
-        for (JobProperty p : properties)
+        for (JobProperty p : properties) {
             p.setOwner(this);
+        }
     }
 
     @Override
@@ -239,7 +223,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public boolean isBuilding() {
         RunT b = getLastBuild();
-        return b!=null && b.isBuilding();
+        return b != null && b.isBuilding();
     }
 
     @Override
@@ -291,7 +275,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public synchronized void updateNextBuildNumber(int next) throws IOException {
         RunT lb = getLastBuild();
-        if (lb!=null ?  next>lb.getNumber() : next>0) {
+        if (lb != null ? next > lb.getNumber() : next > 0) {
             this.nextBuildNumber = next;
             saveNextBuildNumber();
         }
@@ -313,8 +297,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public void logRotate() throws IOException, InterruptedException {
         LogRotator lr = getLogRotator();
-        if (lr != null)
+        if (lr != null) {
             lr.perform(this);
+        }
     }
 
     /**
@@ -327,14 +312,17 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @Override
     protected SearchIndexBuilder makeSearchIndex() {
         return super.makeSearchIndex().add(new SearchIndex() {
+
             public void find(String token, List<SearchItem> result) {
                 try {
-                    if (token.startsWith("#"))
+                    if (token.startsWith("#")) {
                         token = token.substring(1); // ignore leading '#'
+                    }
                     int n = Integer.parseInt(token);
                     Run b = getBuildByNumber(n);
-                    if (b == null)
+                    if (b == null) {
                         return; // no such build
+                    }
                     result.add(SearchItems.create("#" + n, "" + n, b));
                 } catch (NumberFormatException e) {
                     // not a number.
@@ -348,7 +336,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     public Collection<? extends Job> getAllJobs() {
-        return Collections.<Job> singleton(this);
+        return Collections.<Job>singleton(this);
     }
 
     /**
@@ -357,7 +345,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @since 1.188
      */
     public void addProperty(JobProperty<? super JobT> jobProp) throws IOException {
-        ((JobProperty)jobProp).setOwner(this);
+        ((JobProperty) jobProp).setOwner(this);
         properties.add(jobProp);
         save();
     }
@@ -401,7 +389,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * List of all {@link JobProperty} exposed primarily for the remoting API.
      * @since 1.282
      */
-    @Exported(name="property",inline=true)
+    @Exported(name = "property", inline = true)
     public List<JobProperty<? super JobT>> getAllProperties() {
         return properties.getView();
     }
@@ -412,8 +400,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public <T extends JobProperty> T getProperty(Class<T> clazz) {
         for (JobProperty p : properties) {
-            if (clazz.isInstance(p))
+            if (clazz.isInstance(p)) {
                 return clazz.cast(p);
+            }
         }
         return null;
     }
@@ -423,8 +412,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public Collection<?> getOverrides() {
         List<Object> r = new ArrayList<Object>();
-        for (JobProperty<? super JobT> p : properties)
+        for (JobProperty<? super JobT> p : properties) {
             r.addAll(p.getJobOverrides());
+        }
         return r;
     }
 
@@ -437,8 +427,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     protected HistoryWidget createHistoryWidget() {
         return new HistoryWidget<Job, RunT>(this, getBuilds(), HISTORY_ADAPTER);
     }
-
     protected static final HistoryWidget.Adapter<Run> HISTORY_ADAPTER = new Adapter<Run>() {
+
         public int compare(Run record, String key) {
             try {
                 int k = Integer.parseInt(key);
@@ -498,7 +488,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         List<RunT> builds = new LinkedList<RunT>();
 
         for (Range r : rs.getRanges()) {
-            for (RunT b = getNearestBuild(r.start); b!=null && b.getNumber()<r.end; b=b.getNextBuild()) {
+            for (RunT b = getNearestBuild(r.start); b != null && b.getNumber() < r.end; b = b.getNextBuild()) {
                 builds.add(b);
             }
         }
@@ -520,8 +510,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @Deprecated
     public RunT getBuild(String id) {
         for (RunT r : _getRuns().values()) {
-            if (r.getId().equals(id))
+            if (r.getId().equals(id)) {
                 return r;
+            }
         }
         return null;
     }
@@ -545,19 +536,20 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @WithBridgeMethods(List.class)
     public RunList<RunT> getBuildsByTimestamp(long start, long end) {
-        return getBuilds().byTimestamp(start,end);
+        return getBuilds().byTimestamp(start, end);
     }
 
     @CLIResolver
-    public RunT getBuildForCLI(@Argument(required=true,metaVar="BUILD#",usage="Build number") String id) throws CmdLineException {
+    public RunT getBuildForCLI(@Argument(required = true, metaVar = "BUILD#", usage = "Build number") String id) throws CmdLineException {
         try {
             int n = Integer.parseInt(id);
             RunT r = getBuildByNumber(n);
-            if (r==null)
-                throw new CmdLineException(null, "No such build '#"+n+"' exists");
+            if (r == null) {
+                throw new CmdLineException(null, "No such build '#" + n + "' exists");
+            }
             return r;
         } catch (NumberFormatException e) {
-            throw new CmdLineException(null, id+ "is not a number");
+            throw new CmdLineException(null, id + "is not a number");
         }
     }
 
@@ -569,9 +561,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public final RunT getNearestBuild(int n) {
         SortedMap<Integer, ? extends RunT> m = _getRuns().headMap(n - 1); // the map should
-                                                                          // include n, so n-1
-        if (m.isEmpty())
+        // include n, so n-1
+        if (m.isEmpty()) {
             return null;
+        }
         return m.get(m.lastKey());
     }
 
@@ -583,8 +576,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public final RunT getNearestOldBuild(int n) {
         SortedMap<Integer, ? extends RunT> m = _getRuns().tailMap(n);
-        if (m.isEmpty())
+        if (m.isEmpty()) {
             return null;
+        }
         return m.get(m.firstKey());
     }
 
@@ -597,14 +591,16 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         } catch (NumberFormatException e) {
             // try to map that to widgets
             for (Widget w : getWidgets()) {
-                if (w.getUrlName().equals(token))
+                if (w.getUrlName().equals(token)) {
                     return w;
+                }
             }
 
             // is this a permalink?
             for (Permalink p : getPermalinks()) {
-                if(p.getId().equals(token))
+                if (p.getId().equals(token)) {
                     return p.resolve(this);
+                }
             }
 
             return super.getDynamic(token, req, rsp);
@@ -648,8 +644,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public RunT getLastBuild() {
         SortedMap<Integer, ? extends RunT> runs = _getRuns();
 
-        if (runs.isEmpty())
+        if (runs.isEmpty()) {
             return null;
+        }
         return runs.get(runs.firstKey());
     }
 
@@ -661,8 +658,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public RunT getFirstBuild() {
         SortedMap<Integer, ? extends RunT> runs = _getRuns();
 
-        if (runs.isEmpty())
+        if (runs.isEmpty()) {
             return null;
+        }
         return runs.get(runs.lastKey());
     }
 
@@ -678,9 +676,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         RunT r = getLastBuild();
         // temporary hack till we figure out what's causing this bug
         while (r != null
-                && (r.isBuilding() || r.getResult() == null || r.getResult()
-                        .isWorseThan(Result.UNSTABLE)))
+                && (r.isBuilding() || r.getResult() == null || r.getResult().isWorseThan(Result.UNSTABLE))) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
 
@@ -693,8 +691,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public RunT getLastUnsuccessfulBuild() {
         RunT r = getLastBuild();
         while (r != null
-                && (r.isBuilding() || r.getResult() == Result.SUCCESS))
+                && (r.isBuilding() || r.getResult() == Result.SUCCESS)) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
 
@@ -707,8 +706,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public RunT getLastUnstableBuild() {
         RunT r = getLastBuild();
         while (r != null
-                && (r.isBuilding() || r.getResult() != Result.UNSTABLE))
+                && (r.isBuilding() || r.getResult() != Result.UNSTABLE)) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
 
@@ -721,8 +721,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public RunT getLastStableBuild() {
         RunT r = getLastBuild();
         while (r != null
-                && (r.isBuilding() || r.getResult().isWorseThan(Result.SUCCESS)))
+                && (r.isBuilding() || r.getResult().isWorseThan(Result.SUCCESS))) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
 
@@ -733,8 +734,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @QuickSilver
     public RunT getLastFailedBuild() {
         RunT r = getLastBuild();
-        while (r != null && (r.isBuilding() || r.getResult() != Result.FAILURE))
+        while (r != null && (r.isBuilding() || r.getResult() != Result.FAILURE)) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
 
@@ -745,11 +747,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @QuickSilver
     public RunT getLastCompletedBuild() {
         RunT r = getLastBuild();
-        while (r != null && r.isBuilding())
+        while (r != null && r.isBuilding()) {
             r = r.getPreviousBuild();
+        }
         return r;
     }
-    
+
     /**
      * Returns the last 'numberOfBuilds' builds with a build result >= 'threshold'
      * 
@@ -757,33 +760,37 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *   if not enough builds satisfying the threshold have been found. Never null.
      */
     public List<RunT> getLastBuildsOverThreshold(int numberOfBuilds, Result threshold) {
-        
+
         List<RunT> result = new ArrayList<RunT>(numberOfBuilds);
-        
+
         RunT r = getLastBuild();
         while (r != null && result.size() < numberOfBuilds) {
-            if (!r.isBuilding() && 
-                 (r.getResult() != null && r.getResult().isBetterOrEqualTo(threshold))) {
+            if (!r.isBuilding()
+                    && (r.getResult() != null && r.getResult().isBetterOrEqualTo(threshold))) {
                 result.add(r);
             }
             r = r.getPreviousBuild();
         }
-        
+
         return result;
     }
-    
+
     public final long getEstimatedDuration() {
         List<RunT> builds = getLastBuildsOverThreshold(3, Result.UNSTABLE);
-        
-        if(builds.isEmpty())     return -1;
+
+        if (builds.isEmpty()) {
+            return -1;
+        }
 
         long totalDuration = 0;
         for (RunT b : builds) {
             totalDuration += b.getDuration();
         }
-        if(totalDuration==0) return -1;
+        if (totalDuration == 0) {
+            return -1;
+        }
 
-        return Math.round((double)totalDuration / builds.size());
+        return Math.round((double) totalDuration / builds.size());
     }
 
     /**
@@ -809,13 +816,15 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @Exported(visibility = 2, name = "color")
     public BallColor getIconColor() {
         RunT lastBuild = getLastBuild();
-        while (lastBuild != null && lastBuild.hasntStartedYet())
+        while (lastBuild != null && lastBuild.hasntStartedYet()) {
             lastBuild = lastBuild.getPreviousBuild();
+        }
 
-        if (lastBuild != null)
+        if (lastBuild != null) {
             return lastBuild.getIconColor();
-        else
+        } else {
             return BallColor.GREY;
+        }
     }
 
     /**
@@ -843,14 +852,11 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         if (cachedBuildHealthReportsBuildNumber != null
                 && cachedBuildHealthReports != null
                 && lastBuild != null
-                && cachedBuildHealthReportsBuildNumber.intValue() == lastBuild
-                        .getNumber()) {
+                && cachedBuildHealthReportsBuildNumber.intValue() == lastBuild.getNumber()) {
             reports.addAll(cachedBuildHealthReports);
         } else if (lastBuild != null) {
-            for (HealthReportingAction healthReportingAction : lastBuild
-                    .getActions(HealthReportingAction.class)) {
-                final HealthReport report = healthReportingAction
-                        .getBuildHealth();
+            for (HealthReportingAction healthReportingAction : lastBuild.getActions(HealthReportingAction.class)) {
+                final HealthReport report = healthReportingAction.getBuildHealth();
                 if (report != null) {
                     if (report.isAggregateReport()) {
                         reports.addAll(report.getAggregatedReports());
@@ -885,19 +891,19 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         RunT i = getLastBuild();
         while (totalCount < 5 && i != null) {
             switch (i.getIconColor()) {
-            case BLUE:
-            case YELLOW:
-                // failCount stays the same
-                totalCount++;
-                break;
-            case RED:
-                failCount++;
-                totalCount++;
-                break;
+                case BLUE:
+                case YELLOW:
+                    // failCount stays the same
+                    totalCount++;
+                    break;
+                case RED:
+                    failCount++;
+                    totalCount++;
+                    break;
 
-            default:
-                // do nothing as these are inconclusive statuses
-                break;
+                default:
+                    // do nothing as these are inconclusive statuses
+                    break;
             }
             i = i.getPreviousBuild();
         }
@@ -941,14 +947,14 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
             JSONObject json = req.getSubmittedForm();
 
-            if (req.getParameter("logrotate") != null)
-                logRotator = LogRotator.DESCRIPTOR.newInstance(req,json.getJSONObject("logrotate"));
-            else
+            if (req.getParameter("logrotate") != null) {
+                logRotator = LogRotator.DESCRIPTOR.newInstance(req, json.getJSONObject("logrotate"));
+            } else {
                 logRotator = null;
-            
+            }
+
             int i = 0;
-            for (JobPropertyDescriptor d : JobPropertyDescriptor
-                    .getPropertyDescriptors(Job.this.getClass())) {
+            for (JobPropertyDescriptor d : JobPropertyDescriptor.getPropertyDescriptors(Job.this.getClass())) {
                 String name = "jobProperty" + (i++);
                 JSONObject config = json.getJSONObject(name);
                 JobProperty prop = d.newInstance(req, config);
@@ -1030,144 +1036,92 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     public Graph getBuildTimeGraph() {
-        return new Graph(getLastBuild().getTimestamp(),500,400) {
-            @Override
-            protected JFreeChart createGraph() {
-                class ChartLabel implements Comparable<ChartLabel> {
-                    final Run run;
+        Graph graph = new Graph(getLastBuild().getTimestamp(), 500, 400);
 
-                    public ChartLabel(Run r) {
-                        this.run = r;
-                    }
-
-                    public int compareTo(ChartLabel that) {
-                        return this.run.number - that.run.number;
-                    }
-
-                    @Override
-                    public boolean equals(Object o) {
-                        // HUDSON-2682 workaround for Eclipse compilation bug
-                        // on (c instanceof ChartLabel)
-                        if (o == null || !ChartLabel.class.isAssignableFrom( o.getClass() ))  {
-                            return false;
-                        }
-                        ChartLabel that = (ChartLabel) o;
-                        return run == that.run;
-                    }
-
-                    public Color getColor() {
-                        // TODO: consider gradation. See
-                        // http://www.javadrive.jp/java2d/shape/index9.html
-                        Result r = run.getResult();
-                        if (r == Result.FAILURE)
-                            return ColorPalette.RED;
-                        else if (r == Result.UNSTABLE)
-                            return ColorPalette.YELLOW;
-                        else if (r == Result.ABORTED || r == Result.NOT_BUILT)
-                            return ColorPalette.GREY;
-                        else
-                            return ColorPalette.BLUE;
-                    }
-
-                    @Override
-                    public int hashCode() {
-                        return run.hashCode();
-                    }
-
-                    @Override
-                    public String toString() {
-                        String l = run.getDisplayName();
-                        if (run instanceof Build) {
-                            String s = ((Build) run).getBuiltOnStr();
-                            if (s != null)
-                                l += ' ' + s;
-                        }
-                        return l;
-                    }
-
-                }
-
-                DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
-                for (Run r : getBuilds()) {
-                    if (r.isBuilding())
-                        continue;
-                    data.add(((double) r.getDuration()) / (1000 * 60), "min",
-                            new ChartLabel(r));
-                }
-
-                final CategoryDataset dataset = data.build();
-
-                final JFreeChart chart = ChartFactory.createStackedAreaChart(null, // chart
-                                                                                    // title
-                        null, // unused
-                        Messages.Job_minutes(), // range axis label
-                        dataset, // data
-                        PlotOrientation.VERTICAL, // orientation
-                        false, // include legend
-                        true, // tooltips
-                        false // urls
-                        );
-
-                chart.setBackgroundPaint(Color.white);
-
-                final CategoryPlot plot = chart.getCategoryPlot();
-
-                // plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
-                plot.setBackgroundPaint(Color.WHITE);
-                plot.setOutlinePaint(null);
-                plot.setForegroundAlpha(0.8f);
-                // plot.setDomainGridlinesVisible(true);
-                // plot.setDomainGridlinePaint(Color.white);
-                plot.setRangeGridlinesVisible(true);
-                plot.setRangeGridlinePaint(Color.black);
-
-                CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
-                plot.setDomainAxis(domainAxis);
-                domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-                domainAxis.setLowerMargin(0.0);
-                domainAxis.setUpperMargin(0.0);
-                domainAxis.setCategoryMargin(0.0);
-
-                final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-                ChartUtil.adjustChebyshev(dataset, rangeAxis);
-                rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-                StackedAreaRenderer ar = new StackedAreaRenderer2() {
-                    @Override
-                    public Paint getItemPaint(int row, int column) {
-                        ChartLabel key = (ChartLabel) dataset.getColumnKey(column);
-                        return key.getColor();
-                    }
-
-                    @Override
-                    public String generateURL(CategoryDataset dataset, int row,
-                            int column) {
-                        ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
-                        return String.valueOf(label.run.number);
-                    }
-
-                    @Override
-                    public String generateToolTip(CategoryDataset dataset, int row,
-                            int column) {
-                        ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
-                        return label.run.getDisplayName() + " : "
-                                + label.run.getDurationString();
-                    }
-                };
-                plot.setRenderer(ar);
-
-                // crop extra space around the graph
-                plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
-
-                return chart;
+        DataSet<String, ChartLabel> data = new DataSet<String, ChartLabel>();
+        for (Run r : getBuilds()) {
+            if (r.isBuilding()) {
+                continue;
             }
-        };
+            data.add(((double) r.getDuration()) / (1000 * 60), "min",
+                    new TimeTrendChartLabel(r));
+        }
+        graph.setXAxisLabel(Messages.Job_minutes());
+        graph.setData(data);
+
+        return graph;
+    }
+
+    private class TimeTrendChartLabel extends ChartLabel {
+
+        final Run run;
+
+        public TimeTrendChartLabel(Run r) {
+            this.run = r;
+        }
+
+        public int compareTo(ChartLabel that) {
+            return this.run.number - ((TimeTrendChartLabel) that).run.number;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            // HUDSON-2682 workaround for Eclipse compilation bug
+            // on (c instanceof ChartLabel)
+            if (o == null || !ChartLabel.class.isAssignableFrom(o.getClass())) {
+                return false;
+            }
+            TimeTrendChartLabel that = (TimeTrendChartLabel) o;
+            return run == that.run;
+        }
+
+        public Color getColor(int row, int column) {
+            // TODO: consider gradation. See
+            // http://www.javadrive.jp/java2d/shape/index9.html
+            Result r = run.getResult();
+            if (r == Result.FAILURE) {
+                return ColorPalette.RED;
+            } else if (r == Result.UNSTABLE) {
+                return ColorPalette.YELLOW;
+            } else if (r == Result.ABORTED || r == Result.NOT_BUILT) {
+                return ColorPalette.GREY;
+            } else {
+                return ColorPalette.BLUE;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return run.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            String l = run.getDisplayName();
+            if (run instanceof Build) {
+                String s = ((Build) run).getBuiltOnStr();
+                if (s != null) {
+                    l += ' ' + s;
+                }
+            }
+            return l;
+        }
+
+        @Override
+        public String getLink(int row, int column) {
+            return String.valueOf(run.number);
+        }
+
+        @Override
+        public String getToolTip(int row, int column) {
+            return run.getDisplayName() + " : " + run.getDurationString();
+        }
     }
 
     /**
      * Renames this job.
      */
-    public/* not synchronized. see renameTo() */void doDoRename(
+    public/* not synchronized. see renameTo() */ void doDoRename(
             StaplerRequest req, StaplerResponse rsp) throws IOException,
             ServletException {
         requirePOST();

@@ -23,7 +23,7 @@
  */
 package hudson.model;
 
-import hudson.model.MultiStageTimeSeries.TimeScale;
+import hudson.util.graph.MultiStageTimeSeries.TimeScale;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.IOUtils;

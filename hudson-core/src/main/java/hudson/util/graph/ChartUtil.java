@@ -21,10 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.util;
+package hudson.util.graph;
 
+import hudson.util.graph.Graph;
 import hudson.model.AbstractBuild;
 import hudson.tasks.junit.History;
+import hudson.util.Area;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.category.CategoryDataset;
@@ -46,7 +48,7 @@ public class ChartUtil {
     /**
      * Can be used as a graph label. Only displays numbers.
      */
-    public static final class NumberOnlyBuildLabel implements Comparable<NumberOnlyBuildLabel> {
+    public static abstract class NumberOnlyBuildLabel extends ChartLabel {
         public final AbstractBuild build;
 
         public NumberOnlyBuildLabel(AbstractBuild build) {

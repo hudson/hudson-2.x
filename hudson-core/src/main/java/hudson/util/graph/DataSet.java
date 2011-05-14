@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.util;
-
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+package hudson.util.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * Builds {@link CategoryDataset}.
@@ -42,35 +38,40 @@ import java.util.TreeSet;
  * @param <Column>
  *      X-axis.
  */
-public final class DataSetBuilder<Row extends Comparable,Column extends Comparable> {
+public final class DataSet<Row extends Comparable, Column extends Comparable> {
 
     private List<Number> values = new ArrayList<Number>();
     private List<Row> rows = new ArrayList<Row>();
     private List<Column> columns = new ArrayList<Column>();
 
-    public void add( Number value, Row rowKey, Column columnKey ) {
+    public void add(Number value, Row rowKey, Column columnKey) {
         values.add(value);
         rows.add(rowKey);
         columns.add(columnKey);
     }
 
-    public CategoryDataset build() {
-        DefaultCategoryDataset ds = new DefaultCategoryDataset();
-
-        TreeSet<Row> rowSet = new TreeSet<Row>(rows);
-        TreeSet<Column> colSet = new TreeSet<Column>(columns);
-
-        Comparable[] _rows = rowSet.toArray(new Comparable[rowSet.size()]);
-        Comparable[] _cols = colSet.toArray(new Comparable[colSet.size()]);
-
-        // insert rows and columns in the right order
-        for (Comparable r : _rows)
-            ds.setValue(null, r, _cols[0]);
-        for (Comparable c : _cols)
-            ds.setValue(null, _rows[0], c);
-
-        for( int i=0; i<values.size(); i++ )
-            ds.addValue( values.get(i), rows.get(i), columns.get(i) );
-        return ds;
+    public List<Column> getColumns() {
+        return columns;
     }
+
+    public void setColumns(List<Column> columns) {
+        this.columns = columns;
+    }
+
+    public List<Row> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
+    }
+
+    public List<Number> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Number> values) {
+        this.values = values;
+    }
+
 }

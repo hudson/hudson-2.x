@@ -23,12 +23,13 @@
  */
 package hudson.model;
 
-import hudson.util.ColorPalette;
+import hudson.util.graph.ColorPalette;
 import org.jvnet.localizer.LocaleProvider;
 import org.jvnet.localizer.Localizable;
 import org.kohsuke.stapler.Stapler;
 
-import java.awt.*;
+import java.awt.Color;
+
 import java.util.Locale;
 
 /**

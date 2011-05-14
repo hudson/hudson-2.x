@@ -24,12 +24,12 @@
 package hudson.diagnosis;
 
 import hudson.util.TimeUnit2;
-import hudson.util.ColorPalette;
+import hudson.util.graph.ColorPalette;
 import hudson.Extension;
 import hudson.model.PeriodicWork;
-import hudson.model.MultiStageTimeSeries;
-import hudson.model.MultiStageTimeSeries.TrendChart;
-import hudson.model.MultiStageTimeSeries.TimeScale;
+import hudson.util.graph.MultiStageTimeSeries;
+import hudson.util.graph.MultiStageTimeSeries.TrendChart;
+import hudson.util.graph.MultiStageTimeSeries.TimeScale;
 
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryType;

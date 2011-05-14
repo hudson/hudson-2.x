@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package hudson.util.graph;
 
+import hudson.model.Api;
+import hudson.model.Messages;
+import hudson.model.TimeSeries;
 import hudson.util.TimeUnit2;
-import hudson.util.NoOverlapCategoryAxis;
-import hudson.util.ChartUtil;
+import hudson.util.graph.NoOverlapCategoryAxis;
+import hudson.util.graph.ChartUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

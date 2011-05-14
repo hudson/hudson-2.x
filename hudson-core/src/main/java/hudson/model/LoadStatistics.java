@@ -24,25 +24,14 @@
 package hudson.model;
 
 import hudson.Extension;
-import hudson.model.MultiStageTimeSeries.TimeScale;
-import hudson.model.MultiStageTimeSeries.TrendChart;
-import hudson.util.ColorPalette;
-import hudson.util.NoOverlapCategoryAxis;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.RectangleInsets;
+import hudson.util.graph.MultiStageTimeSeries.TimeScale;
+import hudson.util.graph.MultiStageTimeSeries.TrendChart;
+import hudson.util.graph.ColorPalette;
+import hudson.util.graph.MultiStageTimeSeries;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.stapler.export.Exported;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -111,57 +100,57 @@ public abstract class LoadStatistics {
     /**
      * Creates a trend chart.
      */
-    public JFreeChart createChart(CategoryDataset ds) {
-        final JFreeChart chart = ChartFactory.createLineChart(null, // chart title
-                null, // unused
-                null, // range axis label
-                ds, // data
-                PlotOrientation.VERTICAL, // orientation
-                true, // include legend
-                true, // tooltips
-                false // urls
-                );
+//    public JFreeChart createChart(CategoryDataset ds) {
+//        final JFreeChart chart = ChartFactory.createLineChart(null, // chart title
+//                null, // unused
+//                null, // range axis label
+//                ds, // data
+//                PlotOrientation.VERTICAL, // orientation
+//                true, // include legend
+//                true, // tooltips
+//                false // urls
+//                );
+//
+//        chart.setBackgroundPaint(Color.white);
+//
+//        final CategoryPlot plot = chart.getCategoryPlot();
+//        plot.setBackgroundPaint(Color.WHITE);
+//        plot.setOutlinePaint(null);
+//        plot.setRangeGridlinesVisible(true);
+//        plot.setRangeGridlinePaint(Color.black);
+//
+//        final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
+//        renderer.setBaseStroke(new BasicStroke(3));
+//        configureRenderer(renderer);
+//
+//        final CategoryAxis domainAxis = new NoOverlapCategoryAxis(null);
+//        plot.setDomainAxis(domainAxis);
+//        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+//        domainAxis.setLowerMargin(0.0);
+//        domainAxis.setUpperMargin(0.0);
+//        domainAxis.setCategoryMargin(0.0);
+//
+//        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+//        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//
+//        // crop extra space around the graph
+//        plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
+//
+//        return chart;
+//    }
 
-        chart.setBackgroundPaint(Color.white);
-
-        final CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint(Color.WHITE);
-        plot.setOutlinePaint(null);
-        plot.setRangeGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.black);
-
-        final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
-        renderer.setBaseStroke(new BasicStroke(3));
-        configureRenderer(renderer);
-
-        final CategoryAxis domainAxis = new NoOverlapCategoryAxis(null);
-        plot.setDomainAxis(domainAxis);
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-        domainAxis.setLowerMargin(0.0);
-        domainAxis.setUpperMargin(0.0);
-        domainAxis.setCategoryMargin(0.0);
-
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-        // crop extra space around the graph
-        plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
-
-        return chart;
-    }
-
-    protected void configureRenderer(LineAndShapeRenderer renderer) {
-        renderer.setSeriesPaint(0, ColorPalette.BLUE);  // total
-        renderer.setSeriesPaint(1, ColorPalette.RED);   // busy
-        renderer.setSeriesPaint(2, ColorPalette.GREY);  // queue
-    }
+//    protected void configureRenderer(LineAndShapeRenderer renderer) {
+//        renderer.setSeriesPaint(0, ColorPalette.BLUE);  // total
+//        renderer.setSeriesPaint(1, ColorPalette.RED);   // busy
+//        renderer.setSeriesPaint(2, ColorPalette.GREY);  // queue
+//    }
 
     /**
      * Creates {@link CategoryDataset} which then becomes the basis
      * of the load statistics graph.
      */
     public TrendChart createTrendChart(TimeScale timeScale) {
-        return MultiStageTimeSeries.createTrendChart(timeScale,totalExecutors,busyExecutors,queueLength);
+        return MultiStageTimeSeries.createTrendChart(timeScale, totalExecutors, busyExecutors, queueLength);
     }
 
     /**

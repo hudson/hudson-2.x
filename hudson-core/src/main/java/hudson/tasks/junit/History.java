@@ -27,28 +27,15 @@ import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
 import hudson.tasks.test.TestObject;
 import hudson.tasks.test.TestResult;
-import hudson.util.ChartUtil;
-import hudson.util.ColorPalette;
-import hudson.util.DataSetBuilder;
-import hudson.util.Graph;
-import hudson.util.ShiftedCategoryAxis;
-import hudson.util.StackedAreaRenderer2;
+import hudson.util.graph.ChartLabel;
+import hudson.util.graph.ColorPalette;
+import hudson.util.graph.DataSet;
+import hudson.util.graph.Graph;
 
 import java.awt.Color;
-import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.StackedAreaRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.ui.RectangleInsets;
 import org.kohsuke.stapler.Stapler;
 
 /**
@@ -95,161 +82,163 @@ public class History {
      * Graph of duration of tests over time.
      */
     public Graph getDurationGraph() {
-       return new GraphImpl("seconds") {
-    	   
-           protected DataSetBuilder<String, ChartLabel> createDataSet() {
-               DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
-               
-               List<TestResult> list;
-               try {
-               	list = getList(
-               			Integer.parseInt(Stapler.getCurrentRequest().getParameter("start")), 
-               			Integer.parseInt(Stapler.getCurrentRequest().getParameter("end")));
-               } catch (NumberFormatException e) {
-               	list = getList();
-               }
-               
-			for (hudson.tasks.test.TestResult o: list) {
-                   data.add(((double) o.getDuration()) / (1000), "", new ChartLabel(o)  {
-                       @Override
-                       public Color getColor() {
-                           if (o.getFailCount() > 0)
-                               return ColorPalette.RED;
-                           else if (o.getSkipCount() > 0)
-                               return ColorPalette.YELLOW;
-                           else
-                               return ColorPalette.BLUE;
-                       }
-                   });
-               }
-               return data;
-           }
-           
-       };
+        Graph graph = new Graph(-1, 600, 300);
+        graph.setXAxisLabel("seconds");
+        graph.setData(getDurationGraphDataSet());
+        return graph;
+    }
+    
+    private DataSet<String, HistoryChartLabel> getDurationGraphDataSet() {
+        DataSet<String, HistoryChartLabel> data = new DataSet<String, HistoryChartLabel>();
+
+        List<TestResult> list;
+        try {
+            list = getList(
+                    Integer.parseInt(Stapler.getCurrentRequest().getParameter("start")),
+                    Integer.parseInt(Stapler.getCurrentRequest().getParameter("end")));
+        } catch (NumberFormatException e) {
+            list = getList();
+        }
+
+        for (hudson.tasks.test.TestResult o : list) {
+            data.add(((double) o.getDuration()) / (1000), "", new HistoryChartLabel(o) {
+
+                @Override
+                public Color getColor(int row, int column) {
+                    if (o.getFailCount() > 0) {
+                        return ColorPalette.RED;
+                    } else if (o.getSkipCount() > 0) {
+                        return ColorPalette.YELLOW;
+                    } else {
+                        return ColorPalette.BLUE;
+                    }
+                }
+            });
+        }
+        return data;
     }
 
     /**
      * Graph of # of tests over time.
      */
     public Graph getCountGraph() {
-        return new GraphImpl("") {
-            protected DataSetBuilder<String, ChartLabel> createDataSet() {
-                DataSetBuilder<String, ChartLabel> data = new DataSetBuilder<String, ChartLabel>();
-
-                List<TestResult> list;
-                try {
-                	list = getList(
-                			Integer.parseInt(Stapler.getCurrentRequest().getParameter("start")), 
-                			Integer.parseInt(Stapler.getCurrentRequest().getParameter("end")));
-                } catch (NumberFormatException e) {
-                	list = getList();
-                }
-                
-                for (TestResult o: list) {
-                    data.add(o.getPassCount(), "2Passed", new ChartLabel(o));
-                    data.add(o.getFailCount(), "1Failed", new ChartLabel(o));
-                    data.add(o.getSkipCount(), "0Skipped", new ChartLabel(o));
-                }
-                return data;
-            }
-        };
+        Graph graph = new Graph(-1, 600, 300);
+        graph.setXAxisLabel("");
+        graph.setData(getCountGraphDataSet());
+        return graph; 
     }
+    
+    private DataSet<String, HistoryChartLabel> getCountGraphDataSet() {
+        DataSet<String, HistoryChartLabel> data = new DataSet<String, HistoryChartLabel>();
 
-    private abstract class GraphImpl extends Graph {
-        private final String yLabel;
-
-        protected GraphImpl(String yLabel) {
-            super(-1,600,300); // cannot use timestamp, since ranges may change
-            this.yLabel =  yLabel;
+        List<TestResult> list;
+        try {
+            list = getList(
+                    Integer.parseInt(Stapler.getCurrentRequest().getParameter("start")),
+                    Integer.parseInt(Stapler.getCurrentRequest().getParameter("end")));
+        } catch (NumberFormatException e) {
+            list = getList();
         }
 
-        protected abstract DataSetBuilder<String, ChartLabel> createDataSet();
-
-        protected JFreeChart createGraph() {
-            final CategoryDataset dataset = createDataSet().build();
-
-            final JFreeChart chart = ChartFactory.createStackedAreaChart(null, // chart
-                                                                                // title
-                    null, // unused
-                    yLabel, // range axis label
-                    dataset, // data
-                    PlotOrientation.VERTICAL, // orientation
-                    false, // include legend
-                    true, // tooltips
-                    false // urls
-                    );
-
-            chart.setBackgroundPaint(Color.white);
-
-            final CategoryPlot plot = chart.getCategoryPlot();
-
-            // plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
-            plot.setBackgroundPaint(Color.WHITE);
-            plot.setOutlinePaint(null);
-            plot.setForegroundAlpha(0.8f);
-            // plot.setDomainGridlinesVisible(true);
-            // plot.setDomainGridlinePaint(Color.white);
-            plot.setRangeGridlinesVisible(true);
-            plot.setRangeGridlinePaint(Color.black);
-
-            CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
-            plot.setDomainAxis(domainAxis);
-            domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-            domainAxis.setLowerMargin(0.0);
-            domainAxis.setUpperMargin(0.0);
-            domainAxis.setCategoryMargin(0.0);
-
-            final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-            ChartUtil.adjustChebyshev(dataset, rangeAxis);
-            rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-            rangeAxis.setAutoRange(true);
-
-            StackedAreaRenderer ar = new StackedAreaRenderer2() {
-                @Override
-                public Paint getItemPaint(int row, int column) {
-                    ChartLabel key = (ChartLabel) dataset.getColumnKey(column);
-                    if (key.getColor() != null) return key.getColor();
-                    return super.getItemPaint(row, column);
-                }
-
-                @Override
-                public String generateURL(CategoryDataset dataset, int row,
-                        int column) {
-                    ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
-                    return label.getUrl();
-                }
-
-                @Override
-                public String generateToolTip(CategoryDataset dataset, int row,
-                        int column) {
-                    ChartLabel label = (ChartLabel) dataset.getColumnKey(column);
-                    return label.o.getOwner().getDisplayName() + " : "
-                            + label.o.getDurationString();
-                }
-            };
-            plot.setRenderer(ar);
-            ar.setSeriesPaint(0,ColorPalette.RED); // Failures.
-            ar.setSeriesPaint(1,ColorPalette.YELLOW); // Skips.
-            ar.setSeriesPaint(2,ColorPalette.BLUE); // Total.
-
-            // crop extra space around the graph
-            plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
-
-            return chart;
+        for (TestResult o : list) {
+            data.add(o.getPassCount(), "2Passed", new HistoryChartLabel(o));
+            data.add(o.getFailCount(), "1Failed", new HistoryChartLabel(o));
+            data.add(o.getSkipCount(), "0Skipped", new HistoryChartLabel(o));
         }
+        return data;
     }
+    
 
-    class ChartLabel implements Comparable<ChartLabel> {
+//    private abstract class GraphImpl extends Graph {
+//        private final String yLabel;
+//
+//        protected GraphImpl(String yLabel) {
+//            super(-1,600,300); // cannot use timestamp, since ranges may change
+//            this.yLabel =  yLabel;
+//        }
+//
+//        protected abstract DataSet<String, HistoryChartLabel> createDataSet();
+//
+//        protected JFreeChart createGraph() {
+//            final CategoryDataset dataset = createDataSet().build();
+//
+//            final JFreeChart chart = ChartFactory.createStackedAreaChart(null, // chart
+//                                                                                // title
+//                    null, // unused
+//                    yLabel, // range axis label
+//                    dataset, // data
+//                    PlotOrientation.VERTICAL, // orientation
+//                    false, // include legend
+//                    true, // tooltips
+//                    false // urls
+//                    );
+//
+//            chart.setBackgroundPaint(Color.white);
+//
+//            final CategoryPlot plot = chart.getCategoryPlot();
+//
+//            // plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
+//            plot.setBackgroundPaint(Color.WHITE);
+//            plot.setOutlinePaint(null);
+//            plot.setForegroundAlpha(0.8f);
+//            // plot.setDomainGridlinesVisible(true);
+//            // plot.setDomainGridlinePaint(Color.white);
+//            plot.setRangeGridlinesVisible(true);
+//            plot.setRangeGridlinePaint(Color.black);
+//
+//            CategoryAxis domainAxis = new ShiftedCategoryAxis(null);
+//            plot.setDomainAxis(domainAxis);
+//            domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+//            domainAxis.setLowerMargin(0.0);
+//            domainAxis.setUpperMargin(0.0);
+//            domainAxis.setCategoryMargin(0.0);
+//
+//            final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+//            ChartUtil.adjustChebyshev(dataset, rangeAxis);
+//            rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//            rangeAxis.setAutoRange(true);
+//
+//            StackedAreaRenderer ar = new StackedAreaRenderer2() {
+//                @Override
+//                public Paint getItemPaint(int row, int column) {
+//                    HistoryChartLabel key = (HistoryChartLabel) dataset.getColumnKey(column);
+//                    if (key.getColor(row, column) != null) return key.getColor(row, column);
+//                    return super.getItemPaint(row, column);
+//                }
+//
+//                @Override
+//                public String generateURL(CategoryDataset dataset, int row,
+//                        int column) {
+//                    HistoryChartLabel label = (HistoryChartLabel) dataset.getColumnKey(column);
+//                    return label.getLink(row, column);
+//                }
+//
+//                @Override
+//                public String generateToolTip(CategoryDataset dataset, int row,
+//                        int column) {
+//                    HistoryChartLabel label = (HistoryChartLabel) dataset.getColumnKey(column);
+//                    return label.o.getOwner().getDisplayName() + " : "
+//                            + label.o.getDurationString();
+//                }
+//            };
+//            plot.setRenderer(ar);
+//            ar.setSeriesPaint(0,ColorPalette.RED); // Failures.
+//            ar.setSeriesPaint(1,ColorPalette.YELLOW); // Skips.
+//            ar.setSeriesPaint(2,ColorPalette.BLUE); // Total.
+//
+//            // crop extra space around the graph
+//            plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
+//
+//            return chart;
+//        }
+//    }
+
+    class HistoryChartLabel extends ChartLabel {
     	TestResult o;
         String url;
-        public ChartLabel(TestResult o) {
+        public HistoryChartLabel(TestResult o) {
             this.o = o;
             this.url = null;
-        }
-
-        public String getUrl() {
-            if (this.url == null) generateUrl();
-            return url;
         }
 
          private void generateUrl() {
@@ -260,20 +249,16 @@ public class History {
         }
 
         public int compareTo(ChartLabel that) {
-            return this.o.getOwner().number - that.o.getOwner().number;
+            return this.o.getOwner().number - ((HistoryChartLabel)that).o.getOwner().number;
         }
 
         @Override
         public boolean equals(Object o) {
-        	if (!(o instanceof ChartLabel)) {
+        	if (!(o instanceof HistoryChartLabel)) {
             	return false;
             }
-            ChartLabel that = (ChartLabel) o;
+            HistoryChartLabel that = (HistoryChartLabel) o;
             return this.o == that.o;
-        }
-
-        public Color getColor() {
-        	return null;
         }
 
         @Override
@@ -291,6 +276,21 @@ public class History {
 //            return o.getDisplayName() + " " + o.getOwner().getDisplayName();
         }
 
+        @Override
+        public Color getColor(int row, int column) {
+            return null;
+        }
+
+        @Override
+        public String getLink(int row, int column) {
+            if (this.url == null) generateUrl();
+            return url;
+        }
+
+        @Override
+        public String getToolTip(int row, int column) {
+            return o.getOwner().getDisplayName() + " : " + o.getDurationString();
+        }
     }
 
 }
