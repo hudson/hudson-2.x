@@ -93,7 +93,7 @@ public class PAMSecurityRealm extends SecurityRealm {
                 int i=0;
                 for (String g : grps)
                     groups[i++] = new GrantedAuthorityImpl(g);
-
+                setHudsonUserEnvVar(username);
                 // I never understood why Acegi insists on keeping the password...
                 return new UsernamePasswordAuthenticationToken(username, password, groups);
             } catch (PAMException e) {
