@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov,
+ * Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -78,6 +79,7 @@ import javax.servlet.ServletException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -106,10 +108,11 @@ import org.kohsuke.args4j.CmdLineException;
  * To create a custom job type, extend {@link TopLevelItemDescriptor} and put {@link Extension} on it.
  *
  * @author Kohsuke Kawaguchi
+ * @author Nikita Levyankov
  */
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
         extends AbstractItem implements ExtensionPoint, StaplerOverridable {
-
+    private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
     /**
      * Next build number. Kept in a separate file because this is the only
      * information that gets updated often. This allows the rest of the
@@ -613,15 +616,22 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Directory for storing {@link Run} records.
-     * <p>
+     * <p/>
      * Some {@link Job}s may not have backing data store for {@link Run}s, but
      * those {@link Job}s that use file system for storing data should use this
      * directory for consistency.
-     * 
+     * This dir could be configured by setting HUDSON_BUILDS property in JNDI or Environment or System properties.
+     *
+     * @return result directory
      * @see RunMap
      */
     protected File getBuildDir() {
-        return new File(getRootDir(), "builds");
+        String resultDir = getConfiguredHudsonProperty(HUDSON_BUILDS_PROPERTY_KEY);
+        if (StringUtils.isNotBlank(resultDir)) {
+            return new File(resultDir + "/" + getSearchName());
+        } else {
+            return new File(getRootDir(), "builds");
+        }
     }
 
     /**
