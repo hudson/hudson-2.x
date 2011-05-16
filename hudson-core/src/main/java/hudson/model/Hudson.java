@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi,
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov,
  * Erik Ramfelt, Koichi Fujikawa, Red Hat, Inc., Seiji Sogabe,
  * Stephen Connolly, Tom Huybrechts, Yahoo! Inc., Alan Harder, CloudBees, Inc.
  *
@@ -143,6 +143,7 @@ import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
 import org.acegisecurity.ui.AbstractProcessingFilter;
 import org.apache.commons.jelly.JellyException;
 import org.apache.commons.jelly.Script;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.jvnet.hudson.reactor.Executable;
 import org.jvnet.hudson.reactor.ReactorException;
@@ -237,6 +238,7 @@ import java.util.regex.Pattern;
  * Root object of the system.
  *
  * @author Kohsuke Kawaguchi
+ * @author Nikita Levyankov
  */
 @ExportedBean
 public final class Hudson extends Node implements ItemGroup<TopLevelItem>, StaplerProxy, StaplerFallback, ViewGroup, AccessControlled, DescriptorByNameOwner {
@@ -319,6 +321,13 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     private String systemMessage;
 
     private MarkupFormatter markupFormatter;
+
+    private static transient final String HUDSON_WORKSPACES_PROPERTY_KEY = "HUDSON_WORKSPACES";
+
+    /**
+     * Workspace root dir which could be configured by setting HUDSON_WORKSPACES property.
+     */
+    private volatile String configuredWorkspaceRoot;
 
     /**
      * Root directory of the system.
@@ -1826,8 +1835,32 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         return root;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p/>
+     * If {@link Hudson#HUDSON_WORKSPACES_PROPERTY_KEY} is set through JNDI
+     * or system properties or environment variables. workspaceRoot will be set based on property value.
+     */
     public FilePath getWorkspaceFor(TopLevelItem item) {
-        return new FilePath(new File(item.getRootDir(), WORKSPACE_DIRNAME));
+        String workspaceRoot = getConfiguredWorkspaceRoot();
+        if (StringUtils.isNotBlank(workspaceRoot)) {
+            return new FilePath(new File(workspaceRoot + "/" + item.getName(), WORKSPACE_DIRNAME));
+        } else {
+            return new FilePath(new File(item.getRootDir(), WORKSPACE_DIRNAME));
+        }
+    }
+
+    /**
+     * Checks jndi,environment properties and system properties for {@link Hudson#HUDSON_WORKSPACES_PROPERTY_KEY} value
+     *
+     * @return configured workspace root or "" if it is not set
+     */
+    private String getConfiguredWorkspaceRoot() {
+        if (null == configuredWorkspaceRoot) {
+            String resultValue = getConfiguredHudsonProperty(HUDSON_WORKSPACES_PROPERTY_KEY);
+            configuredWorkspaceRoot = (null != resultValue) ? resultValue : StringUtils.EMPTY;
+        }
+        return configuredWorkspaceRoot;
     }
 
     public FilePath getRootPath() {
