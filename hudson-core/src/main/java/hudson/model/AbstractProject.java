@@ -142,7 +142,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * The quiet period. Null to delegate to the system default.
      */
     private volatile Integer quietPeriod = null;
-    
+
     /**
      * The retry count. Null to delegate to the system default.
      */
@@ -159,6 +159,11 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * @see #canRoam
      */
     private String assignedNode;
+
+    /**
+     * Node list is dropdown or textfield
+     */
+    private Boolean advancedAffinityChooser;
 
     /**
      * True if this project can be built on any node.
@@ -221,7 +226,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
     private boolean concurrentBuild;
-    
+
     /**
     * True to clean the workspace prior to each build.
     */
@@ -299,7 +304,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         concurrentBuild = b;
         save();
     }
-    
+
     public boolean isCleanWorkspaceRequired() {
         return cleanWorkspaceRequired;
     }
@@ -354,6 +359,25 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     /**
+     * Gets whether this project is using the advanced affinity chooser UI.
+     *
+     * @return true - advanced chooser, false - simple textfield.
+     */
+    public boolean isAdvancedAffinityChooser() {
+        return advancedAffinityChooser;
+    }
+
+    /**
+     * Sets whether this project is using the advanced affinity chooser UI.
+     *
+     * @param b true - advanced chooser, false - otherwise
+     */
+    public void setAdvancedAffinityChooser(boolean b) throws IOException {
+        advancedAffinityChooser = b;
+        save();
+    }
+
+    /**
      * Get the term used in the UI to represent this kind of {@link AbstractProject}.
      * Must start with a capital letter.
      */
@@ -395,11 +419,11 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         return b != null ? b.getWorkspace() : null;
 
     }
-    
+
     /**
      * Various deprecated methods in this class all need the 'current' build.  This method returns
      * the build suitable for that purpose.
-     * 
+     *
      * @return An AbstractBuild for deprecated methods to use.
      */
     private AbstractBuild getBuildForDeprecatedMethods() {
@@ -480,7 +504,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public int getQuietPeriod() {
         return quietPeriod!=null ? quietPeriod : Hudson.getInstance().getQuietPeriod();
     }
-    
+
     public int getScmCheckoutRetryCount() {
         return scmCheckoutRetryCount !=null ? scmCheckoutRetryCount : Hudson.getInstance().getScmCheckoutRetryCount();
     }
@@ -491,13 +515,13 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     /**
-     * Sets the custom quiet period of this project, or revert to the global default if null is given. 
+     * Sets the custom quiet period of this project, or revert to the global default if null is given.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
         this.quietPeriod = seconds;
         save();
     }
-    
+
     public boolean hasCustomScmCheckoutRetryCount(){
         return scmCheckoutRetryCount != null;
     }
@@ -536,7 +560,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public boolean isDisabled() {
         return disabled;
     }
-    
+
     /**
      * Validates the retry count Regex
      */
@@ -546,7 +570,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             return FormValidation.ok();
         if (!value.matches("[0-9]*")) {
             return FormValidation.error("Invalid retry count");
-        } 
+        }
         return FormValidation.ok();
     }
 
@@ -706,7 +730,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public boolean scheduleBuild() {
     	return scheduleBuild(new LegacyCodeCause());
     }
-    
+
 	/**
 	 * @deprecated
 	 *    Use {@link #scheduleBuild(int, Cause)}.  Since 1.283
@@ -714,7 +738,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public boolean scheduleBuild(int quietPeriod) {
     	return scheduleBuild(quietPeriod, new LegacyCodeCause());
     }
-    
+
     /**
      * Schedules a build of this project.
      *
@@ -788,22 +812,22 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     private List<ParameterValue> getDefaultParametersValues() {
         ParametersDefinitionProperty paramDefProp = getProperty(ParametersDefinitionProperty.class);
         ArrayList<ParameterValue> defValues = new ArrayList<ParameterValue>();
-        
+
         /*
          * This check is made ONLY if someone will call this method even if isParametrized() is false.
          */
         if(paramDefProp == null)
             return defValues;
-        
+
         /* Scan for all parameter with an associated default values */
         for(ParameterDefinition paramDefinition : paramDefProp.getParameterDefinitions())
         {
            ParameterValue defaultValue  = paramDefinition.getDefaultParameterValue();
-            
+
             if(defaultValue != null)
-                defValues.add(defaultValue);           
+                defValues.add(defaultValue);
         }
-        
+
         return defValues;
     }
 
@@ -818,7 +842,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public Future<R> scheduleBuild2(int quietPeriod) {
         return scheduleBuild2(quietPeriod, new LegacyCodeCause());
     }
-    
+
     /**
      * Schedules a build of this project, and returns a {@link Future} object
      * to wait for the completion of the build.
@@ -887,7 +911,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
     // keep track of the previous time we started a build
     private transient long lastBuildStartTime;
-    
+
     /**
      * Creates a new build of this project for immediate execution.
      */
@@ -1022,7 +1046,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             return Messages.AbstractProject_BuildInProgress(lbn, eta);
         }
     }
-    
+
     /**
      * Because the downstream build is in progress, and we are configured to wait for that.
      */
@@ -1176,7 +1200,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
         FilePath workspace = build.getWorkspace();
         workspace.mkdirs();
-        
+
         boolean r = scm.checkout(build, launcher, workspace, listener, changelogFile);
         calcPollingBaseline(build, launcher, listener);
         return r;
@@ -1215,7 +1239,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     public boolean pollSCMChanges( TaskListener listener ) {
         return poll(listener).hasChanges();
     }
-    
+
     /**
      * Checks if there's any update in SCM, and returns true if any is found.
      *
@@ -1440,10 +1464,10 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             if (buildTrigger != null)
                 if (buildTrigger.getChildProjects().contains(this))
                     result.add(ap);
-        }        
+        }
         return result;
-    }    
-    
+    }
+
     /**
      * Gets all the upstream projects including transitive upstream projects.
      *
@@ -1518,7 +1542,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     protected HistoryWidget createHistoryWidget() {
         return new BuildHistoryWidget<R>(this,getBuilds(),HISTORY_ADAPTER);
     }
-    
+
     public boolean isParameterized() {
         return getProperty(ParametersDefinitionProperty.class) != null;
     }
@@ -1593,7 +1617,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         } else {
         	throw new IllegalStateException("This build is not parameterized!");
         }
-    	
+
     }
 
     /**
@@ -1635,18 +1659,22 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         blockBuildWhenDownstreamBuilding = req.getParameter("blockBuildWhenDownstreamBuilding")!=null;
         blockBuildWhenUpstreamBuilding = req.getParameter("blockBuildWhenUpstreamBuilding")!=null;
 
-        if(req.getParameter("hasSlaveAffinity")!=null) {
-            assignedNode = Util.fixEmptyAndTrim(req.getParameter("_.assignedLabelString"));
+        if (req.getParameter("hasSlaveAffinity") != null) {
+            // New logic for handling whether this choice came from the dropdown or textfield.
+            if (req.getParameter("slave") != null) {
+                assignedNode = Util.fixEmptyAndTrim(req.getParameter("slave"));
+                advancedAffinityChooser = false;
+            } else {
+                assignedNode = Util.fixEmptyAndTrim(req.getParameter("_.assignedLabelString"));
+                advancedAffinityChooser = true;
+            }
         } else {
             assignedNode = null;
+            advancedAffinityChooser = false;
         }
-        
-        if (req.getParameter("cleanWorkspaceRequired") != null) {
-            cleanWorkspaceRequired = true;
-        } else {
-            cleanWorkspaceRequired = false;
-        }
-        
+
+        cleanWorkspaceRequired = null != req.getParameter("cleanWorkspaceRequired");
+
         canRoam = assignedNode==null;
 
         concurrentBuild = req.getSubmittedForm().has("concurrentBuild");
@@ -1712,9 +1740,9 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             return new HttpRedirect(".");
         }else{
             return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
-        } 
+        }
     }
-    
+
     public boolean cleanWorkspace() throws IOException, InterruptedException{
         checkPermission(BUILD);
         R b = getSomeBuildWithWorkspace();
@@ -1826,8 +1854,8 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
          * <p>
          * The default implementation returns true for everything.
          *
-         * @see BuildStepDescriptor#isApplicable(Class) 
-         * @see BuildWrapperDescriptor#isApplicable(AbstractProject) 
+         * @see BuildStepDescriptor#isApplicable(Class)
+         * @see BuildWrapperDescriptor#isApplicable(AbstractProject)
          * @see TriggerDescriptor#isApplicable(Item)
          */
         @Override
