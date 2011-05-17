@@ -24,6 +24,7 @@
 package org.hudsonci.test.ui;
 
 import com.thoughtworks.selenium.Selenium;
+import org.hudsonci.test.ui.util.SystemUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,6 +39,10 @@ import static org.junit.Assert.fail;
  * @author Nikita Levyankov
  */
 public class ConfigureHudsonTest extends BaseUITest {
+
+    private static final String GLOBAL_PROPS_LBL_SELECT_EXP = "//label[contains(text(),'Environment variables')]";
+    private static final String BUILD_SUCCESS_TEXT = "Finished: SUCCESS";
+    private static final String BUILD_FAILURE_TEXT = "Finished: FAILURE";
 
     @Test
     public void testAddJDK() throws Exception {
@@ -121,5 +126,67 @@ public class ConfigureHudsonTest extends BaseUITest {
         //Verify the number of excutors now
         waitForElementPresence("//table[@id='executors']/tbody[2]/tr[2]/td[1]");
         assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"), "1");
+    }
+
+    @Test
+    public void testGlobalProperties() throws Exception {
+        Selenium selenium = getSelenium();
+        selenium.open("/");
+        //Navigate to Configure System page
+        waitForTextPresent("Manage Hudson", null);
+        selenium.click("link=Manage Hudson");
+        waitForTextPresent("Configure System", null);
+        selenium.click("link=Configure System");
+        waitForTextPresent("System Message", null);
+        selenium.click(GLOBAL_PROPS_LBL_SELECT_EXP);
+        selenium.click("//button[contains(text(), 'Save')]");
+        //Navigate to Configure System page
+        waitForTextPresent("Manage Hudson", null);
+        selenium.click("link=Manage Hudson");
+        waitForTextPresent("Configure System", null);
+        selenium.click("link=Configure System");
+        waitForTextPresent("System Message", null);
+        selenium.click("//tr[38]/td[3]/div/span/span/button");
+        waitForTextPresent("List of key-value pairs", null);
+        selenium.type("env.key", "TEST");
+        selenium.type("env.value", "Hello");
+        selenium.click("//button[contains(text(), 'Save')]");
+
+        //Create Job that uses TEST property
+        waitForTextPresent("Manage Hudson", null);
+        selenium.open("/");
+        waitForTextPresent("New Job");
+        selenium.click("link=New Job");
+        selenium.waitForPageToLoad("30000");
+        selenium.type("name", "global-prop-test");
+        selenium.click("mode");
+        selenium.click("//button[@type='button']");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("//span[@id='yui-gen2']/span/button");
+        if (SystemUtils.isWindows()) {
+            //On windows use batch command
+            selenium.click("link=Execute Windows batch command");
+            waitForTextPresent("Execute Windows batch command", null);
+            selenium.type("command", "echo %TEST%");
+            selenium.click("//button[contains(text(), 'Save')]");
+            selenium.waitForPageToLoad("30000");
+            selenium.click("link=Build Now");
+        } else {
+            //On non-windows use shell
+            //TBD - Test this on Mac
+            selenium.click("link=Execute shell");
+            waitForTextPresent("Execute shell", null);
+            selenium.type("command", "echo $TEST");
+            selenium.click("//button[contains(text(), 'Save')]");
+            selenium.waitForPageToLoad("30000");
+            selenium.click("link=Build Now");
+        }
+        //Run and verify
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Build Now");
+        selenium.waitForPageToLoad("30000");
+        selenium.open("/job/global-prop-test/1/console");
+        waitForTextPresent(BUILD_SUCCESS_TEXT, BUILD_FAILURE_TEXT);
+        waitForTextPresent("Hello", null);
     }
 }
