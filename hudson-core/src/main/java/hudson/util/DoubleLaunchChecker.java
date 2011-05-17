@@ -23,7 +23,9 @@
  */
 package hudson.util;
 
+import hudson.WebAppMain;
 import hudson.model.Hudson;
+import hudson.stapler.WebAppController;
 import hudson.triggers.SafeTimerTask;
 import hudson.triggers.Trigger;
 import org.apache.commons.io.FileUtils;
@@ -101,7 +103,7 @@ public class DoubleLaunchChecker {
             }
             // we noticed that someone else have updated this file.
             // switch GUI to display this error.
-            Hudson.getInstance().servletContext.setAttribute("app",this);
+            WebAppController.get().install(this);
             LOGGER.severe("Collision detected. timestamp="+t+", expected="+lastWriteTime);
             // we need to continue updating this file, so that the other Hudson would notice the problem, too.
         }
@@ -165,7 +167,7 @@ public class DoubleLaunchChecker {
      */
     public void doIgnore(StaplerRequest req, StaplerResponse rsp) throws IOException {
         ignore = true;
-        Hudson.getInstance().servletContext.setAttribute("app",Hudson.getInstance());
+        WebAppController.get().install(Hudson.getInstance());
         rsp.sendRedirect2(req.getContextPath()+'/');
     }
 

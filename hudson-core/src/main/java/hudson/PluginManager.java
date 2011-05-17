@@ -371,7 +371,7 @@ public abstract class PluginManager extends AbstractModelObject {
                 Class<?> klazz = getClass().getClassLoader().loadClass(strategyName);
                 Object strategy = klazz.getConstructor(PluginManager.class).newInstance(this);
                 if (strategy instanceof PluginStrategy) {
-                    LOGGER.info("Plugin strategy: " + strategyName);
+                    LOGGER.fine("Plugin strategy: " + strategyName);
                     return (PluginStrategy) strategy;
                 } else {
                     LOGGER.warning("Plugin strategy (" + strategyName
@@ -384,7 +384,7 @@ public abstract class PluginManager extends AbstractModelObject {
                 LOGGER.log(Level.WARNING, "Could not instantiate plugin strategy: "
                         + strategyName + ". Falling back to ClassicPluginStrategy", e);
             }
-            LOGGER.info("Falling back to ClassicPluginStrategy");
+            LOGGER.warning("Falling back to ClassicPluginStrategy");
         }
 
         // default and fallback

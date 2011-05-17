@@ -92,7 +92,7 @@ THE SOFTWARE.
         ${%HudsonCliText}
       </local:feature>
       <local:feature icon="notepad.gif"      href="script"      title="${%Script Console}">
-        ${%Executes arbitrary script for administration/trouble-shooting/diagnostics.}
+        ${%Executes arbitrary script for administration, trouble-shooting or diagnostics.}
       </local:feature>
       <local:feature icon="network.gif"      href="computer/"   title="${%Manage Nodes}">
         ${%Add, remove, control and monitor the various nodes that Hudson runs jobs on.}

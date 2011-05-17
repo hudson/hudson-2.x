@@ -592,6 +592,13 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
             }
         }
     }
+    
+    /**
+     * @since 1.377-2
+     */
+    public int getIdleCount() {
+        return countIdle();
+    }
 
     /**
      * Returns the number of idle {@link Executor}s that can start working immediately.
@@ -611,6 +618,13 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     public final int countBusy() {
         return countExecutors()-countIdle();
     }
+    
+    /**
+     * @since 1.377-2
+     */
+    public int getBusyCount() {
+        return countBusy();
+    }
 
     /**
      * Returns the current size of the executor pool for this computer.
@@ -621,6 +635,21 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     public final int countExecutors() {
         return executors.size();
     }
+    
+    /**
+     * @since 1.377-2
+     */
+    public int getExecutorsCount() {
+        return countExecutors();
+    }
+
+    /**
+     * @since 1.377-2
+     */
+    public int getOneOffExecutorsCount() {
+        return oneOffExecutors.size();
+    }
+
 
     /**
      * Gets the read-only snapshot view of all {@link Executor}s.

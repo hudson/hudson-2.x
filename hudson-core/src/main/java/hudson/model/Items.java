@@ -24,17 +24,14 @@
 package hudson.model;
 
 import com.thoughtworks.xstream.XStream;
+import hudson.XmlFile;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
-import hudson.scm.RepositoryBrowser;
 import hudson.matrix.MatrixProject;
 import hudson.matrix.MatrixConfiguration;
-import hudson.XmlFile;
 import hudson.matrix.Axis;
-import hudson.matrix.MatrixConfiguration;
-import hudson.matrix.MatrixProject;
-import hudson.util.DescriptorList;
 import hudson.util.XStream2;
+import hudson.util.DescriptorList;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Convenience methods related to {@link Item}.
@@ -49,6 +48,8 @@ import java.util.StringTokenizer;
  * @author Kohsuke Kawaguchi
  */
 public class Items {
+    private static Logger log = Logger.getLogger(Items.class.getName());
+
     /**
      * List of all installed {@link TopLevelItem} types.
      *
@@ -105,6 +106,9 @@ public class Items {
      *      The directory that contains the config file, not the config file itself.
      */
     public static Item load(ItemGroup parent, File dir) throws IOException {
+        if (log.isLoggable(Level.FINE)) {
+            log.log(Level.FINE, String.format("Loading item from: %s", dir));
+        }
         Item item = (Item)getConfigFile(dir).read();
         item.onLoad(parent,dir.getName());
         return item;

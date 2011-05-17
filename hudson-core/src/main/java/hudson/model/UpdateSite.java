@@ -136,6 +136,8 @@ public class UpdateSite {
      */
     public void doPostBack(StaplerRequest req, StaplerResponse rsp) throws IOException, GeneralSecurityException {
         dataTimestamp = System.currentTimeMillis();
+        
+        LOGGER.fine("UpdateSite post back id=" + id + ", url=" + url);
         String json = IOUtils.toString(req.getInputStream(),"UTF-8");
         JSONObject o = JSONObject.fromObject(json);
 
@@ -149,7 +151,9 @@ public class UpdateSite {
             verifySignature(o);
 
         LOGGER.info("Obtained the latest update center data file for UpdateSource "+ id);
-        getDataFile().write(json);
+        TextFile file = getDataFile();
+        file.write(json);
+        LOGGER.fine("Wrote file: " + file);
         rsp.setContentType("text/plain");  // So browser won't try to parse response
     }
 

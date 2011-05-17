@@ -40,12 +40,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.util.logging.Level.FINEST;
 
 import hudson.model.Hudson;
 
-import static java.util.logging.Level.WARNING;
+
 
 /**
  * Discovers initialization tasks from {@link Initializer}.
@@ -94,8 +94,8 @@ public class InitializerFinder extends TaskBuilder {
             if (key.length()==0)  return c.getSimpleName()+"."+e.getName();
             return rb.format(key);
         } catch (ClassNotFoundException x) {
-            LOGGER.log(WARNING, "Failed to load "+x.getMessage()+" for "+e.toString(),x);
-            return "";
+            LOGGER.log(FINEST, "Failed to load "+x.getMessage()+" for "+e.toString(),x);
+            return e.getName();
         }
     }
 

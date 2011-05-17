@@ -2,12 +2,12 @@ package hudson.util;
 
 import hudson.FilePath;
 import hudson.Util;
-import hudson.remoting.Channel;
 import hudson.remoting.Which;
 
 import java.io.Serializable;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Kohsuke Kawaguchi
  * @since 1.300
  */
-public class ClasspathBuilder implements Serializable {
+public class ClasspathBuilder implements Serializable, Iterable<String> {
     private final List<String> args = new ArrayList<String>();
 
     /**
@@ -62,10 +62,24 @@ public class ClasspathBuilder implements Serializable {
     }
 
     /**
+     * @since 1.377-3
+     */
+    public Iterator<String> iterator() {
+        return args.iterator();
+    }
+
+    /**
      * Returns the string representation of the classpath.
      */
     @Override
     public String toString() {
-        return Util.join(args,File.pathSeparator);
+        return toString(File.pathSeparator);
+    }
+
+    /**
+     * @since 1.377-2
+     */
+    public String toString(final String sep) {
+        return Util.join(args,sep);
     }
 }

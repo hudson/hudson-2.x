@@ -66,6 +66,7 @@ dt {
 }
 
 #main-table {
+  height: 90%;
   padding: 0;
   border-collapse: collapse;
 }
@@ -102,6 +103,12 @@ dt {
 #side-panel {
   padding: 4px;
   width: 220px;
+}
+
+#side-panel-top-divider{
+    margin-left: 20px; 
+    margin-right: 20px; 
+    border-top: 1px solid #bbb
 }
 
 #footer {

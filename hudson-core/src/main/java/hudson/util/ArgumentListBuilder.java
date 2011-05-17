@@ -351,6 +351,11 @@ public class ArgumentListBuilder implements Serializable {
     public void addMasked(String string) {
         add(string, true);
     }
+    
+    @Override
+    public String toString() {
+        return args.toString();
+    }
 
     private static final long serialVersionUID = 1L;
 }

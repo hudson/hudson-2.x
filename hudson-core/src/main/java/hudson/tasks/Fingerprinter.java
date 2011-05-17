@@ -65,6 +65,8 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Records fingerprints of the specified files.
  *
@@ -118,7 +120,9 @@ public class Fingerprinter extends Recorder implements Serializable {
                 record(build, listener, record, aa.getArtifacts() );
             }
 
-            build.getActions().add(new FingerprintAction(build,record));
+            //build.getActions().add(new FingerprintAction(build,record));
+            
+            FingerprintAction.add(build, record);
 
         } catch (IOException e) {
             e.printStackTrace(listener.error(Messages.Fingerprinter_Failed()));
@@ -233,6 +237,9 @@ public class Fingerprinter extends Recorder implements Serializable {
 
     /**
      * Action for displaying fingerprints.
+     * 
+     * To ensure there is only one per build use {@link FingerprintAction#addToBuild(AbstractBuild, Map)}.
+     * This allows for additional fingerprint contributions outside of the {@link Fingerprinter}.
      */
     public static final class FingerprintAction implements RunAction {
         private final AbstractBuild build;
@@ -253,10 +260,34 @@ public class Fingerprinter extends Recorder implements Serializable {
         public void add(Map<String,String> moreRecords) {
             Map<String,String> r = new HashMap<String, String>(record);
             r.putAll(moreRecords);
-            record = PackedMap.of(r);
+            record = PackedMap.of(checkNotNull(r));
             ref = null;
-            onLoad();
         }
+        
+        /**
+        * Adds the record to a {@link FingerprintAction} corresponding to the build.
+         * 
+        * Safely consolidates multiple sources of records (e.g. from different post build actions) into a single 
+         * {@link FingerprintAction}.
+        * 
+        * @param build to add the FingerprintAction and records to
+        * @param record to add
+         * 
+         * @since 1.377-2
+         */
+        public static void add(final AbstractBuild build, final Map<String, String> record) {
+            checkNotNull(build);
+            checkNotNull(record);
+           
+            FingerprintAction action = build.getAction(FingerprintAction.class);
+           if(action != null) {
+                action.add(record);
+           } else {
+                build.addAction(new FingerprintAction(build,record));
+            }
+        }
+
+        
 
         public String getIconFileName() {
             return "fingerprint.gif";
@@ -294,6 +325,7 @@ public class Fingerprinter extends Recorder implements Serializable {
         }
 
         public void onBuildComplete() {
+            onLoad();   // make compact
         }
 
         /**

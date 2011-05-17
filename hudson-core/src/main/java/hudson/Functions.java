@@ -117,11 +117,14 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.SimpleFormatter;
 import java.util.regex.Pattern;
+import org.kohsuke.stapler.StaplerProxy;
 
 /**
  * Utility functions used in views.
@@ -698,10 +701,15 @@ public class Functions {
      * so that descriptors of similar types come nearby.
      */
     public static Collection<Descriptor> getSortedDescriptorsForGlobalConfig() {
-        Map<String,Descriptor> r = new TreeMap<String, Descriptor>();
+        Map<String, Descriptor> r = new TreeMap<String, Descriptor>();
         for (Descriptor<?> d : Hudson.getInstance().getExtensionList(Descriptor.class)) {
-            if (d.getGlobalConfigPage()==null)  continue;
-            r.put(buildSuperclassHierarchy(d.clazz, new StringBuilder()).toString(),d);
+            if (globalConfigIgnoredDescriptors.contains(d.getClass().getName())) {
+                continue;
+            }
+            if (d.getGlobalConfigPage() == null) {
+                continue;
+            }
+            r.put(buildSuperclassHierarchy(d.clazz, new StringBuilder()).toString(), d);
         }
         return r.values();
     }
@@ -1244,16 +1252,16 @@ public class Functions {
         for (ConsoleAnnotatorFactory f : ConsoleAnnotatorFactory.all()) {
             String path = cp + "/extensionList/" + ConsoleAnnotatorFactory.class.getName() + "/" + f.getClass().getName();
             if (f.hasScript())
-                buf.append("<script src='"+path+"/script.js'></script>");
+                buf.append("<script src='" + path + "/script.js'></script>");
             if (f.hasStylesheet())
-                buf.append("<link rel='stylesheet' type='text/css' href='"+path+"/style.css' />");
+                buf.append("<link rel='stylesheet' type='text/css' href='" + path + "/style.css' />");
         }
         for (ConsoleAnnotationDescriptor d : ConsoleAnnotationDescriptor.all()) {
-            String path = cp+"/descriptor/"+d.clazz.getName();
+            String path = cp+"/descriptor/" + d.clazz.getName();
             if (d.hasScript())
-                buf.append("<script src='"+path+"/script.js'></script>");
+                buf.append("<script src='" + path + "/script.js'></script>");
             if (d.hasStylesheet())
-                buf.append("<link rel='stylesheet' type='text/css' href='"+path+"/style.css' />");
+                buf.append("<link rel='stylesheet' type='text/css' href='" + path + "/style.css' />");
         }
         return buf.toString();
     }
@@ -1311,5 +1319,25 @@ public class Functions {
     public static boolean isArtifactsPermissionEnabled() {
         return Boolean.getBoolean("hudson.security.ArtifactsPermission");
     }
+    
+    /**
+     * Resolves the target object for the given object.  
+     * If the object is a StaplerProxy, then return the proxy target.
+     */
+    public static Object resolveStaplerObject(final Object obj) {
+        if (obj instanceof StaplerProxy) {
+           return ((StaplerProxy)obj).getTarget();
+        }
+        return obj;
+    }
+    
+    // HACK: Adding support to ignore/not-display some descriptors from the global /configure page
+    /**
+     * Set of descriptor class names to ignore in the global /configure page.
+     */
+    private static final Set<String> globalConfigIgnoredDescriptors = new HashSet<String>();
 
+    public static Set<String> getGlobalConfigIgnoredDescriptors() {
+        return globalConfigIgnoredDescriptors;
+    }
 }

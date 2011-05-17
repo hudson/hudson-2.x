@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2011 Sonatype, Inc. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
-
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define">
-    <st:documentation>
-        Generates the body as the main content part of a Hudson page.
-    </st:documentation>
- 
-    <j:if test="${mode=='main-panel'}">
-        <a name="skip2content"/>
-        <d:invokeBody/>
+<j:jelly xmlns:j="jelly:core">
+    <j:if test="${app.quietingDown}">
+      <div id='shutdown-msg'>Server is preparing to shutdown</div>
     </j:if>
 </j:jelly>
