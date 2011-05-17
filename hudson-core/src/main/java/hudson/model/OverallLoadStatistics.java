@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Seiji Sogabe
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Seiji Sogabe, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,11 @@
  */
 package hudson.model;
 
+import hudson.util.ColorPalette;
+import hudson.util.graph.MultiStageTimeSeries;
 import hudson.util.graph.MultiStageTimeSeries.TimeScale;
 import hudson.util.graph.MultiStageTimeSeries.TrendChart;
-import hudson.util.graph.ColorPalette;
-import hudson.util.graph.MultiStageTimeSeries;
+import java.awt.Color;
 import org.kohsuke.stapler.export.Exported;
 
 /**

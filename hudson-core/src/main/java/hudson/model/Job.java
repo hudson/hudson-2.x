@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2011, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt, 
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Martin Eigenbrodt, 
  * Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,7 +43,7 @@ import hudson.search.SearchItem;
 import hudson.search.SearchItems;
 import hudson.security.ACL;
 import hudson.tasks.LogRotator;
-import hudson.util.graph.ColorPalette;
+import hudson.util.ColorPalette;
 import hudson.util.CopyOnWriteList;
 import hudson.util.graph.DataSet;
 import hudson.util.IOException2;

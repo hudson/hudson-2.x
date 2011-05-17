@@ -25,7 +25,6 @@ package hudson;
 
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
-import com.sun.jna.Native;
 import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.triggers.SafeTimerTask;
@@ -39,9 +38,8 @@ import hudson.util.RingBufferLogHandler;
 import hudson.util.NoTempDir;
 import hudson.util.IncompatibleAntVersionDetected;
 import hudson.util.HudsonFailedToLoad;
-import hudson.util.graph.ChartUtil;
 import hudson.util.AWTProblem;
-import hudson.util.JNADoublyLoaded;
+import hudson.util.graph.ChartUtil;
 import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
@@ -177,7 +175,7 @@ public final class WebAppMain implements ServletContextListener {
                 return;
             }
 
-            // make sure AWT is functioning, or else JFreeChart won't even load.
+            //make sure AWT is functioning, or else JFreeChart won't even load.
             if(ChartUtil.awtProblemCause!=null) {
                 context.setAttribute(APP,new AWTProblem(ChartUtil.awtProblemCause));
                 return;

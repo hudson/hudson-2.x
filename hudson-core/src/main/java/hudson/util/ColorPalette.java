@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.util.graph;
+package hudson.util;
 
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
 import java.awt.Color;
 import java.util.List;
@@ -50,13 +49,4 @@ public class ColorPalette {
         new Color(0x73d216),
         new Color(0xedd400)
     ));
-
-    /**
-     * Applies {@link #LINE_GRAPH} colors to the given renderer.
-     */
-    public static void apply(LineAndShapeRenderer renderer) {
-        int n=0;
-        for (Color c : LINE_GRAPH)
-            renderer.setSeriesPaint(n++,c);
-    }
 }

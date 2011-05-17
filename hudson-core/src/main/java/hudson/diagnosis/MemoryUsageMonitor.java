@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 package hudson.diagnosis;
 
 import hudson.util.TimeUnit2;
-import hudson.util.graph.ColorPalette;
 import hudson.Extension;
 import hudson.model.PeriodicWork;
+import hudson.util.ColorPalette;
 import hudson.util.graph.MultiStageTimeSeries;
-import hudson.util.graph.MultiStageTimeSeries.TrendChart;
 import hudson.util.graph.MultiStageTimeSeries.TimeScale;
+import hudson.util.graph.MultiStageTimeSeries.TrendChart;
 
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryType;

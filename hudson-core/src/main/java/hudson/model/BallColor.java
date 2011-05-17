@@ -23,7 +23,7 @@
  */
 package hudson.model;
 
-import hudson.util.graph.ColorPalette;
+import hudson.util.ColorPalette;
 import org.jvnet.localizer.LocaleProvider;
 import org.jvnet.localizer.Localizable;
 import org.kohsuke.stapler.Stapler;

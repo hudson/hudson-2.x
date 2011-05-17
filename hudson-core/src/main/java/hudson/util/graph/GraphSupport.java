@@ -30,6 +30,7 @@ import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.views.ListViewColumn;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Extension point for adding Graph Support to Hudson
@@ -52,12 +53,14 @@ public abstract class GraphSupport extends AbstractDescribableImpl<GraphSupport>
         return Hudson.getInstance().<GraphSupport, Descriptor<GraphSupport>>getDescriptorList(GraphSupport.class);
     }
 
+    abstract public void setChartType(int chartType);
     abstract public void setTitle(String title);
     abstract public void setXAxisLabel(String xLabel);
     abstract public void setYAxisLabel(String yLabel);
     abstract public void setData(DataSet data);
+    abstract public void setMultiStageTimeSeries(List<MultiStageTimeSeries> multiStageTimeSeries);
     abstract public BufferedImage render(int width, int height);
-    abstract public String getImageMap(String id);
+    abstract public String getImageMap(String id, int width, int height);
 
 
     @Override

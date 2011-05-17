@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Seiji Sogabe
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Seiji Sogabe, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,11 @@
 package hudson.model;
 
 import hudson.Extension;
+import hudson.util.ColorPalette;
+import hudson.util.graph.MultiStageTimeSeries;
 import hudson.util.graph.MultiStageTimeSeries.TimeScale;
 import hudson.util.graph.MultiStageTimeSeries.TrendChart;
-import hudson.util.graph.ColorPalette;
-import hudson.util.graph.MultiStageTimeSeries;
+import java.awt.Color;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.stapler.export.Exported;
@@ -96,54 +97,6 @@ public abstract class LoadStatistics {
      * Computes the # of queue length right now and obtains the snapshot value.
      */
     public abstract int computeQueueLength();
-
-    /**
-     * Creates a trend chart.
-     */
-//    public JFreeChart createChart(CategoryDataset ds) {
-//        final JFreeChart chart = ChartFactory.createLineChart(null, // chart title
-//                null, // unused
-//                null, // range axis label
-//                ds, // data
-//                PlotOrientation.VERTICAL, // orientation
-//                true, // include legend
-//                true, // tooltips
-//                false // urls
-//                );
-//
-//        chart.setBackgroundPaint(Color.white);
-//
-//        final CategoryPlot plot = chart.getCategoryPlot();
-//        plot.setBackgroundPaint(Color.WHITE);
-//        plot.setOutlinePaint(null);
-//        plot.setRangeGridlinesVisible(true);
-//        plot.setRangeGridlinePaint(Color.black);
-//
-//        final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
-//        renderer.setBaseStroke(new BasicStroke(3));
-//        configureRenderer(renderer);
-//
-//        final CategoryAxis domainAxis = new NoOverlapCategoryAxis(null);
-//        plot.setDomainAxis(domainAxis);
-//        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-//        domainAxis.setLowerMargin(0.0);
-//        domainAxis.setUpperMargin(0.0);
-//        domainAxis.setCategoryMargin(0.0);
-//
-//        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-//        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-//
-//        // crop extra space around the graph
-//        plot.setInsets(new RectangleInsets(0, 0, 0, 5.0));
-//
-//        return chart;
-//    }
-
-//    protected void configureRenderer(LineAndShapeRenderer renderer) {
-//        renderer.setSeriesPaint(0, ColorPalette.BLUE);  // total
-//        renderer.setSeriesPaint(1, ColorPalette.RED);   // busy
-//        renderer.setSeriesPaint(2, ColorPalette.GREY);  // queue
-//    }
 
     /**
      * Creates {@link CategoryDataset} which then becomes the basis
