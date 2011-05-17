@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<f:entry title="${%Files to archive}" field="artifacts">
-	  <f:textbox />
-	</f:entry>
-  <f:advanced>
-    <f:entry title="${%Excludes}" field="excludes">
-      <f:textbox />
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:entry title="${%Files to archive}" field="artifacts">
+        <f:textbox/>
     </f:entry>
-    <f:entry title="" field="latestOnly" >
-      <f:checkbox title="${%lastBuildOnly}"/>
-    </f:entry>
-  </f:advanced>
+    <f:advanced>
+        <f:entry title="${%Excludes}" field="excludes">
+            <f:textbox/>
+        </f:entry>
+        <f:entry title="" field="latestOnly">
+            <f:checkbox title="${%lastBuildOnly}"/>
+        </f:entry>
+        <f:entry title="${%Compression type}" field="compressionType">
+            <select name="compressionType">
+                <f:option value="GZIP" selected="${instance.compressionType.name()=='GZIP'}">GZIP</f:option>
+                <f:option value="NONE" selected="${instance.compressionType.name()=='NONE'}">NONE</f:option>
+            </select>
+        </f:entry>
+    </f:advanced>
 </j:jelly>
