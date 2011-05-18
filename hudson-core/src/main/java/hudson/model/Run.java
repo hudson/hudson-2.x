@@ -1911,6 +1911,9 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
                                                               Functions.isArtifactsPermissionEnabled());
 
     private static class DefaultFeedAdapter implements FeedAdapter<Run> {
+
+        private static final String DESCRIPTION_SUFIX = "description:";
+
         public String getEntryTitle(Run entry) {
             return entry+" ("+entry.getBuildStatusSummary().message+")";
         }
@@ -1926,8 +1929,7 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
         }
 
         public String getEntryDescription(Run entry) {
-            // TODO: this could provide some useful details
-            return null;
+            return (entry.getDescription()!= null ? DESCRIPTION_SUFIX + entry.getDescription(): null);
         }
 
         public Calendar getEntryTimestamp(Run entry) {
