@@ -84,6 +84,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
@@ -215,7 +216,8 @@ public final class FilePath implements Serializable {
         if(base.isUnix()) {
             this.remote = normalize(base.remote+'/'+rel);
         } else {
-            this.remote = normalize(base.remote+'\\'+rel);
+            //Normalize rel path for windows environment. See http://issues.hudson-ci.org/browse/HUDSON-5084
+            this.remote = normalize(base.remote+'\\'+ StringUtils.replace(rel, "/", "\\"));
         }
     }
 
