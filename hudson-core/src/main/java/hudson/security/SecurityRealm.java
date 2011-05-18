@@ -131,11 +131,6 @@ import static org.acegisecurity.ui.rememberme.TokenBasedRememberMeServices.ACEGI
 public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityRealm> implements ExtensionPoint {
 
     /**
-     * Environment property which will be exposed. Value - name of currently logged user.
-     */
-    protected static final String HUDSON_USER_ENV_KEY = "HUDSON_USER";
-
-    /**
      * Creates fully-configured {@link AuthenticationManager} that performs authentication
      * against the user realm. The implementation hides how such authentication manager
      * is configured.
@@ -257,7 +252,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
         SecurityContextHolder.clearContext();
 
         //Clear env property.
-        clearHudsonUserEnvVar();
+        EnvVars.clearHudsonUserEnvVar();
 
         // reset remember-me cookie
         Cookie cookie = new Cookie(ACEGI_SECURITY_HASHED_REMEMBER_ME_COOKIE_KEY, "");
@@ -265,18 +260,6 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
         rsp.addCookie(cookie);
 
         rsp.sendRedirect2(getPostLogOutUrl(req, auth));
-    }
-
-    protected static void clearHudsonUserEnvVar() {
-        EnvVars.masterEnvVars.remove(HUDSON_USER_ENV_KEY);
-    }
-
-    protected static void setHudsonUserEnvVar(String userName) {
-        if (!StringUtils.isEmpty(userName)) {
-            EnvVars.masterEnvVars.put(HUDSON_USER_ENV_KEY, userName);
-        } else {
-            clearHudsonUserEnvVar();
-        }
     }
 
     /**
