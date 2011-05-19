@@ -27,6 +27,6 @@ THE SOFTWARE.
         <f:checkbox name="privateRealm.allowsSignup" checked="${h.defaultToTrue(instance.allowsSignup())}"
                     title="${%Allow users to sign up}"/>
         <f:checkbox name="privateRealm.enableCaptcha" checked="${h.defaultToTrue(instance.isEnableCaptcha())}"
-                    title="${%Enable captcha on sing up}"/>
+                    title="${%Enable captcha on sign up}"/>
     </f:entry>
 </j:jelly>
