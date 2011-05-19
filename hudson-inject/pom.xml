@@ -60,6 +60,11 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-core</artifactId>
       <scope>provided</scope>

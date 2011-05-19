@@ -109,7 +109,6 @@ public class XStreamInjectoHandler
         @Override
         public Object doUnmarshal(Object result, final HierarchicalStreamReader reader, final UnmarshallingContext context) {
             result = super.doUnmarshal(result, reader, context);
-            log.trace("Injecting instance of Describable from converter");
             injecto.inject(result);
             return result;
         }

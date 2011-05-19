@@ -1,8 +1,8 @@
 /**
- * The MIT License
- *
+ * The MIT License 
+ * 
  * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -20,48 +20,19 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ */     
 
-package org.hudsonci.inject.internal.plugin;
+package org.hudsonci.inject.injecto.internal;
 
-import hudson.PluginWrapper;
-import org.aspectj.weaver.loadtime.WeavingURLClassLoader;
-
-import java.net.URL;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import org.hudsonci.inject.injecto.Injectable;
+import hudson.model.Describable;
 
 /**
- * Plugin class-loader.
- *
- * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.397
+ * Make any class implementing {@link Describable} also implement {@link Injectable}.
  */
-public class PluginClassLoader
-    extends WeavingURLClassLoader
+public aspect DescribableInjectionAspect
+    extends InjectionAspectSupport
 {
-    private PluginWrapper plugin;
-
-    public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
-        super(urls.toArray(new URL[urls.size()]), parent);
-    }
-
-    public PluginWrapper getPlugin() {
-        checkState(plugin != null);
-        return plugin;
-    }
-
-    void setPlugin(final PluginWrapper plugin) {
-        checkState(this.plugin == null);
-        this.plugin = checkNotNull(plugin);
-    }
-
-    @Override
-    public String toString() {
-        return "PluginClassLoader{" +
-            (plugin != null ? plugin.getShortName() : "???") +
-            '}';
-    }
+    declare parents:
+        Describable+ implements Injectable;
 }

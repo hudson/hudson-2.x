@@ -22,46 +22,21 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.inject.internal.plugin;
+package org.hudsonci.inject.injecto.internal;
 
-import hudson.PluginWrapper;
-import org.aspectj.weaver.loadtime.WeavingURLClassLoader;
-
-import java.net.URL;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
+import org.hudsonci.inject.injecto.InjectomaticAware;
+import static org.hudsonci.inject.injecto.internal.InjectomaticAspectHelper.install;
 
 /**
- * Plugin class-loader.
- *
- * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.397
+ * Install the {@link Injectomatic} component into {@link InjectomaticAware} objects after they have been created.
+ * Only attempts injection for the most specific sub-type.
  */
-public class PluginClassLoader
-    extends WeavingURLClassLoader
+public aspect InjectomaticAwareAspect
+    extends InjectionAspectSupport
 {
-    private PluginWrapper plugin;
-
-    public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
-        super(urls.toArray(new URL[urls.size()]), parent);
-    }
-
-    public PluginWrapper getPlugin() {
-        checkState(plugin != null);
-        return plugin;
-    }
-
-    void setPlugin(final PluginWrapper plugin) {
-        checkState(this.plugin == null);
-        this.plugin = checkNotNull(plugin);
-    }
-
-    @Override
-    public String toString() {
-        return "PluginClassLoader{" +
-            (plugin != null ? plugin.getShortName() : "???") +
-            '}';
+    after(Object obj) returning:
+        this(obj) && initialization(InjectomaticAware+.new(..)) && mostSpecificSubTypeConstruction()
+    {
+        install(thisJoinPoint);
     }
 }
