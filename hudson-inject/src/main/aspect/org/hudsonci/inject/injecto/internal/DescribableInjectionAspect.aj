@@ -29,6 +29,9 @@ import hudson.model.Describable;
 
 /**
  * Make any class implementing {@link Describable} also implement {@link Injectable}.
+ *
+ * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+ * @since 2.0.1
  */
 public aspect DescribableInjectionAspect
     extends InjectionAspectSupport

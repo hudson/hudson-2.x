@@ -30,6 +30,9 @@ import static org.hudsonci.inject.injecto.internal.InjectomaticAspectHelper.inst
 /**
  * Install the {@link Injectomatic} component into {@link InjectomaticAware} objects after they have been created.
  * Only attempts injection for the most specific sub-type.
+ *
+ * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+ * @since 2.0.1
  */
 public aspect InjectomaticAwareAspect
     extends InjectionAspectSupport

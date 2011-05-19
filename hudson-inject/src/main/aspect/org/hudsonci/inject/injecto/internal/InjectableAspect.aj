@@ -30,6 +30,9 @@ import static org.hudsonci.inject.injecto.internal.InjectomaticAspectHelper.inje
 /**
  * Request injection for {@link Injectable} objects after they have been created.
  * Only attempts injection for the most specific sub-type.
+ *
+ * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+ * @since 2.0.1
  */
 public aspect InjectableAspect
     extends InjectionAspectSupport
