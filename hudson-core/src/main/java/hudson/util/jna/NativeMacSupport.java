@@ -21,49 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.util.graph;
+package hudson.util.jna;
 
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
- * Extension point for adding Graph Support to Hudson
+ * Extension point for adding Native Mac Support to Hudson
  *
  * <p>
- * This object can have an optional <tt>config.jelly</tt> to configure the Graph Support
+ * This object can have an optional <tt>config.jelly</tt> to configure the Native Access Support
  * <p>
- * A default constructor is needed to create GraphSupport in the default configuration.
+ * A default constructor is needed to create NativeAccessSupport in the default configuration.
  *
  * @author Winston Prakash
  * @since 2.0.1
- * @see GraphSupportDescriptor
+ * @see NativeAccessSupportDescriptor
  */
-public abstract class GraphSupport extends AbstractDescribableImpl<GraphSupport> implements ExtensionPoint {
+public abstract class NativeMacSupport extends AbstractDescribableImpl<NativeMacSupport> implements ExtensionPoint {
 
     /**
-     * Returns all the registered {@link GraphSupport} descriptors.
+     * Returns all the registered {@link NativeAccessSupport} descriptors.
      */
-    public static DescriptorExtensionList<GraphSupport, Descriptor<GraphSupport>> all() {
-        return Hudson.getInstance().<GraphSupport, Descriptor<GraphSupport>>getDescriptorList(GraphSupport.class);
+    public static DescriptorExtensionList<NativeMacSupport, Descriptor<NativeMacSupport>> all() {
+        return Hudson.getInstance().<NativeMacSupport, Descriptor<NativeMacSupport>>getDescriptorList(NativeMacSupport.class);
     }
-
-    abstract public void setChartType(int chartType);
-    abstract public void setTitle(String title);
-    abstract public void setXAxisLabel(String xLabel);
-    abstract public void setYAxisLabel(String yLabel);
-    abstract public void setData(DataSet data);
-    abstract public void setMultiStageTimeSeries(List<MultiStageTimeSeries> multiStageTimeSeries);
-    abstract public BufferedImage render(int width, int height);
-    abstract public String getImageMap(String id, int width, int height);
-
 
     @Override
-    public GraphSupportDescriptor getDescriptor() {
-        return (GraphSupportDescriptor) super.getDescriptor();
+    public NativeMacSupportDescriptor getDescriptor() {
+        return (NativeMacSupportDescriptor) super.getDescriptor();
     }
+
+    /**
+     * Check if this Extension has Support for specific native Operation
+     * @param nativeFunc Native Operation
+     * @return true if supported
+     */
+    abstract public boolean hasSupportFor(NativeFunction nativeFunc);
+
+    /**
+     * Get the error associated with the last Operation
+     * @return String error message
+     */
+    abstract public String getLastError();
+
+    /**
+     * Get the Native processes of a Mac System
+     * @return
+     * @throws hudson.util.jna.Native.NativeExecutionException 
+     */
+    abstract public List<NativeProcess> getMacProcesses() throws NativeAccessException;
 }

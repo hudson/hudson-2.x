@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, CloudBees, Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@
  */
 package hudson.lifecycle;
 
-import com.sun.jna.Native;
 import hudson.Launcher.LocalLauncher;
 import hudson.Util;
 import hudson.model.TaskListener;
@@ -32,10 +31,10 @@ import hudson.remoting.Engine;
 import hudson.remoting.jnlp.MainDialog;
 import hudson.remoting.jnlp.MainMenu;
 import hudson.util.StreamTaskListener;
-import hudson.util.jna.DotNet;
-import hudson.util.jna.Kernel32Utils;
-import hudson.util.jna.SHELLEXECUTEINFO;
-import hudson.util.jna.Shell32;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
+import java.util.logging.Logger;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -50,8 +49,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.logging.Level;
 
-import static hudson.util.jna.SHELLEXECUTEINFO.*;
 import static javax.swing.JOptionPane.*;
 
 /**
@@ -113,23 +112,15 @@ public class WindowsSlaveInstaller implements Callable<Void,RuntimeException>, A
             }
         }
 
-        // error code 740 is ERROR_ELEVATION_REQUIRED, indicating that
-        // we run in UAC-enabled Windows and we need to run this in an elevated privilege
-        SHELLEXECUTEINFO sei = new SHELLEXECUTEINFO();
-        sei.fMask = SEE_MASK_NOCLOSEPROCESS;
-        sei.lpVerb = "runas";
-        sei.lpFile = slaveExe.getAbsolutePath();
-        sei.lpParameters = "/redirect redirect.log "+command;
-        sei.lpDirectory = pwd.getAbsolutePath();
-        sei.nShow = SW_HIDE;
-        if (!Shell32.INSTANCE.ShellExecuteEx(sei))
-            throw new IOException("Failed to shellExecute: "+ Native.getLastError());
-
+        String logFile = "redirect.log";
         try {
-            return Kernel32Utils.waitForExitProcess(sei.hProcess);
+            return NativeUtils.getInstance().windowsExec(slaveExe, command, logFile, pwd);
+        } catch (NativeAccessException ex) {
+            Logger.getLogger(WindowsSlaveInstaller.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
         } finally {
-            FileInputStream fin = new FileInputStream(new File(pwd,"redirect.log"));
-            IOUtils.copy(fin,out.getLogger());
+            FileInputStream fin = new FileInputStream(new File(pwd, "redirect.log"));
+            IOUtils.copy(fin, out.getLogger());
             fin.close();
         }
     }
@@ -144,7 +135,7 @@ public class WindowsSlaveInstaller implements Callable<Void,RuntimeException>, A
                     Messages.WindowsInstallerLink_DisplayName(), OK_CANCEL_OPTION);
             if(r!=JOptionPane.OK_OPTION)    return;
 
-            if(!DotNet.isInstalled(2,0)) {
+            if(!NativeUtils.getInstance().isDotNetInstalled(2, 0)) {
                 JOptionPane.showMessageDialog(dialog,Messages.WindowsSlaveInstaller_DotNetRequired(),
                         Messages.WindowsInstallerLink_DisplayName(), ERROR_MESSAGE);
                 return;

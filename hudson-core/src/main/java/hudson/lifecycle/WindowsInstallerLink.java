@@ -29,7 +29,9 @@ import hudson.model.Hudson;
 import hudson.AbortException;
 import hudson.Extension;
 import hudson.util.StreamTaskListener;
-import hudson.util.jna.DotNet;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeFunction;
+import hudson.util.jna.NativeUtils;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -101,10 +103,16 @@ public class WindowsInstallerLink extends ManagementLink {
             sendError("Installation is already complete",req,rsp);
             return;
         }
-        if(!DotNet.isInstalled(2,0)) {
-            sendError(".NET Framework 2.0 or later is required for this feature",req,rsp);
-            return;
+         
+        
+        try {
+            if (!NativeUtils.getInstance().isDotNetInstalled(2, 0)) {
+                sendError(".NET Framework 2.0 or later is required for this feature", req, rsp);
+            }
+        } catch (NativeAccessException exc) {
+            sendError("Native function isDotNetInstalled() failed. " + NativeUtils.getInstance().getLastWindowsError(), req, rsp);
         }
+        
         
         Hudson.getInstance().checkPermission(Hudson.ADMINISTER);
 

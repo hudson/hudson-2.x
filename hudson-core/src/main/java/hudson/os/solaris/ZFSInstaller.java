@@ -23,8 +23,6 @@
  */
 package hudson.os.solaris;
 
-import com.sun.akuma.Daemon;
-import com.sun.akuma.JavaVMArguments;
 import hudson.Launcher.LocalLauncher;
 import hudson.Util;
 import hudson.Extension;
@@ -36,15 +34,10 @@ import hudson.remoting.Callable;
 import hudson.util.ForkOutputStream;
 import hudson.util.HudsonIsRestarting;
 import hudson.util.StreamTaskListener;
-import static hudson.util.jna.GNUCLibrary.*;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
+import hudson.util.jna.NativeZfsFileSystem;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.jvnet.libpam.impl.CLibrary.passwd;
-import org.jvnet.solaris.libzfs.ACLBuilder;
-import org.jvnet.solaris.libzfs.LibZFS;
-import org.jvnet.solaris.libzfs.ZFSException;
-import org.jvnet.solaris.libzfs.ZFSFileSystem;
-import org.jvnet.solaris.libzfs.ErrorCode;
-import org.jvnet.solaris.mount.MountFlags;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.QueryParameter;
@@ -57,7 +50,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,13 +72,20 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
      * This will be the file system name that we'll create.
      */
     private String prospectiveZfsFileSystemName;
+    
+    private NativeUtils nativeUtils = NativeUtils.getInstance();
 
     public boolean isActivated() {
         return active;
     }
 
     public boolean isRoot() {
-        return LIBC.geteuid()==0;
+        try {
+            return NativeUtils.getInstance().getEuid() == 0;
+        } catch (NativeAccessException exc) {
+            LOGGER.log(Level.INFO, "Native Support to find EUID failed - {0}", exc.getLocalizedMessage());
+            return false;
+        }
     }
 
     public String getProspectiveZfsFileSystemName() {
@@ -96,19 +98,20 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
             return false;
 
         try {
-            LibZFS zfs = new LibZFS();
-            List<ZFSFileSystem> roots = zfs.roots();
+            List<NativeZfsFileSystem> roots = nativeUtils.getZfsRoots();
+            
             if(roots.isEmpty())
                 return false;       // no active ZFS pool
 
             // if we don't run on a ZFS file system, activate
-            ZFSFileSystem hudsonZfs = zfs.getFileSystemByMountPoint(Hudson.getInstance().getRootDir());
+            NativeZfsFileSystem hudsonZfs = nativeUtils.getZfsByMountPoint(Hudson.getInstance().getRootDir());
             if(hudsonZfs!=null)
                 return false;       // already on ZFS
 
             // decide what file system we'll create
-            ZFSFileSystem pool = roots.get(0);
-            prospectiveZfsFileSystemName = computeHudsonFileSystemName(zfs,pool);
+            NativeZfsFileSystem pool = roots.get(0);
+            
+            prospectiveZfsFileSystemName = computeHudsonFileSystemName(pool);
 
             return true;
         } catch (Exception e) {
@@ -149,60 +152,59 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
      * @return
      *      The ZFS dataset name to migrate the data to.
      */
-    private String createZfsFileSystem(final TaskListener listener, String rootUsername, String rootPassword) throws IOException, InterruptedException, ZFSException {
+    private String createZfsFileSystem(final TaskListener listener, String rootUsername, String rootPassword) throws IOException, InterruptedException {
         // capture the UID that Hudson runs under
         // so that we can allow this user to do everything on this new partition
-        final int uid = LIBC.geteuid();
-        final int gid = LIBC.getegid();
-        passwd pwd = LIBC.getpwuid(uid);
-        if(pwd==null)
-            throw new IOException("Failed to obtain the current user information for "+uid);
-        final String userName = pwd.pw_name;
-
+        
         final File home = Hudson.getInstance().getRootDir();
 
         // this is the actual creation of the file system.
         // return true indicating a success
-        return SU.execute(listener, rootUsername, rootPassword, new Callable<String,IOException>() {
+        return SU.execute(listener, rootUsername, rootPassword, new Callable<String, IOException>() {
+
             public String call() throws IOException {
-                PrintStream out = listener.getLogger();
-
-                LibZFS zfs = new LibZFS();
-                ZFSFileSystem existing = zfs.getFileSystemByMountPoint(home);
-                if(existing!=null) {
-                    // no need for migration
-                    out.println(home+" is already on ZFS. Doing nothing");
-                    return existing.getName();
-                }
-
-                String name = computeHudsonFileSystemName(zfs, zfs.roots().get(0));
-                out.println("Creating "+name);
-                ZFSFileSystem hudson = zfs.create(name, ZFSFileSystem.class);
-
-                // mount temporarily to set the owner right
-                File dir = Util.createTempDir();
-                hudson.setMountPoint(dir);
-                hudson.mount();
-                if(LIBC.chown(dir.getPath(),uid,gid)!=0)
-                    throw new IOException("Failed to chown "+dir);
-                hudson.unmount();
-
+                NativeZfsFileSystem hudson = null;
                 try {
-                    hudson.setProperty("hudson:managed-by","hudson"); // mark this file system as "managed by Hudson"
+                    PrintStream out = listener.getLogger();
 
-                    ACLBuilder acl = new ACLBuilder();
-                    acl.user(userName).withEverything();
-                    hudson.allow(acl);
-                } catch (ZFSException e) {
-                    // revert the file system creation
-                    try {
-                        hudson.destory();
-                    } catch (Exception _) {
-                        // but ignore the error and let the original error thrown
+                    int uid = nativeUtils.getEuid();
+                    int gid = nativeUtils.getEgid();
+                    final String userName = nativeUtils.getProcessUser();
+
+
+                    NativeZfsFileSystem existing = nativeUtils.getZfsByMountPoint(home);
+
+                    if (existing != null) {
+                        // no need for migration
+                        out.println(home + " is already on ZFS. Doing nothing");
+                        return existing.getName();
                     }
-                    throw e;
+                    List<NativeZfsFileSystem> roots = nativeUtils.getZfsRoots();
+                    String name = computeHudsonFileSystemName(roots.get(0));
+                    out.println("Creating " + name);
+
+                    hudson = nativeUtils.createZfs(name);
+
+                    // mount temporarily to set the owner right
+                    File dir = Util.createTempDir();
+                    hudson.setMountPoint(dir);
+                    hudson.mount();
+                    if (nativeUtils.chown(dir, uid, gid)) {
+                        throw new IOException("Failed to chown " + dir);
+                    }
+                    hudson.unmount();
+
+                    hudson.setProperty("hudson:managed-by", "hudson"); // mark this file system as "managed by Hudson"
+
+                    hudson.allow(userName);
+                    return hudson.getName();
+                } catch (NativeAccessException ex) {
+                    Logger.getLogger(ZFSInstaller.class.getName()).log(Level.SEVERE, null, ex);
+                    if (hudson != null){
+                        hudson.destory();
+                    }
+                    throw new IOException();
                 }
-                return hudson.getName();
             }
         });
     }
@@ -223,9 +225,9 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
         } catch (Exception e) {
             e.printStackTrace(listener.error(e.getMessage()));
 
-            if (e instanceof ZFSException) {
-                ZFSException ze = (ZFSException) e;
-                if(ze.getCode()==ErrorCode.EZFS_PERM) {
+            if (e.getCause() instanceof NativeAccessException) {
+                NativeAccessException ze = (NativeAccessException) e;
+                if(ze.getCode() == NativeAccessException.PERMISSION) {
                     // permission problem. ask the user to give us the root password
                     req.setAttribute("message",log.toString());
                     rsp.forward(this,"askRootPassword",req);
@@ -251,23 +253,14 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
             public void run() {
                 try {
                     Thread.sleep(5000);
+                    
+                    Map<String, String> properties = new HashMap<String, String>();
+                    properties.put("ZFSInstaller.migrate", datasetName);
 
-                    // close all descriptors on exec except stdin,out,err
-                    int sz = LIBC.getdtablesize();
-                    for(int i=3; i<sz; i++) {
-                        int flags = LIBC.fcntl(i, F_GETFD);
-                        if(flags<0) continue;
-                        LIBC.fcntl(i, F_SETFD,flags| FD_CLOEXEC);
-                    }
-
-                    // re-exec with the system property to indicate where to migrate the data to.
-                    // the 2nd phase is implemented in the migrate method.
-                    JavaVMArguments args = JavaVMArguments.current();
-                    args.setSystemProperty(ZFSInstaller.class.getName()+".migrate",datasetName);
-                    Daemon.selfExec(args);
+                    nativeUtils.restartJavaProcess(properties, true);
+                } catch (NativeAccessException ex) {
+                     LOGGER.log(Level.SEVERE, "Restart failed", ex);
                 } catch (InterruptedException e) {
-                    LOGGER.log(Level.SEVERE, "Restart failed",e);
-                } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Restart failed",e);
                 }
             }
@@ -314,87 +307,97 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
      *      false if a migration failed.
      */
     private static boolean migrate(TaskListener listener, String target) throws IOException, InterruptedException {
-        PrintStream out = listener.getLogger();
-
-        File home = Hudson.getInstance().getRootDir();
-        // do the migration
-        LibZFS zfs = new LibZFS();
-        ZFSFileSystem existing = zfs.getFileSystemByMountPoint(home);
-        if(existing!=null) {
-            out.println(home+" is already on ZFS. Doing nothing");
-            return true;
-        }
-
-        File tmpDir = Util.createTempDir();
-
-        // mount a new file system to a temporary location
-        out.println("Opening "+target);
-        ZFSFileSystem hudson = zfs.open(target, ZFSFileSystem.class);
-        hudson.setMountPoint(tmpDir);
-        hudson.setProperty("hudson:managed-by","hudson"); // mark this file system as "managed by Hudson"
-        hudson.mount();
-
-        // copy all the files
-        out.println("Copying all existing data files");
-        if(system(home,listener, "/usr/bin/cp","-pR",".", tmpDir.getAbsolutePath())!=0) {
-            out.println("Failed to copy "+home+" to "+tmpDir);
-            return false;
-        }
-
-        // unmount
-        out.println("Unmounting "+target);
-        hudson.unmount(MountFlags.MS_FORCE);
-
-        // move the original directory to the side
-        File backup = new File(home.getPath()+".backup");
-        out.println("Moving "+home+" to "+backup);
-        if(backup.exists())
-            Util.deleteRecursive(backup);
-        if(!home.renameTo(backup)) {
-            out.println("Failed to move your current data "+home+" out of the way");
-        }
-
-        // update the mount point
-        out.println("Creating a new mount point at "+home);
-        if(!home.mkdir())
-            throw new IOException("Failed to create mount point "+home);
-
-        out.println("Mounting "+target);
-        hudson.setMountPoint(home);
-        hudson.mount();
-
-        out.println("Sharing "+target);
         try {
-            hudson.setProperty("sharesmb","on");
-            hudson.setProperty("sharenfs","on");
+            NativeUtils nativeUtils = NativeUtils.getInstance();
+            
+            PrintStream out = listener.getLogger();
+
+            File home = Hudson.getInstance().getRootDir();
+            // do the migration
+            NativeZfsFileSystem existing = nativeUtils.getZfsByMountPoint(home);
+            if(existing!=null) {
+                out.println(home+" is already on ZFS. Doing nothing");
+                return true;
+            }
+
+            File tmpDir = Util.createTempDir();
+
+            // mount a new file system to a temporary location
+            out.println("Opening "+target);
+            NativeZfsFileSystem hudson = nativeUtils.openZfs(target);
+            hudson.setMountPoint(tmpDir);
+            hudson.setProperty("hudson:managed-by","hudson"); // mark this file system as "managed by Hudson"
+            hudson.mount();
+
+            // copy all the files
+            out.println("Copying all existing data files");
+            if(system(home,listener, "/usr/bin/cp","-pR",".", tmpDir.getAbsolutePath())!=0) {
+                out.println("Failed to copy "+home+" to "+tmpDir);
+                return false;
+            }
+
+            // unmount
+            out.println("Unmounting "+target);
+            hudson.unmount(NativeZfsFileSystem.MS_FORCE);
+
+            // move the original directory to the side
+            File backup = new File(home.getPath()+".backup");
+            out.println("Moving "+home+" to "+backup);
+            if(backup.exists())
+                Util.deleteRecursive(backup);
+            if(!home.renameTo(backup)) {
+                out.println("Failed to move your current data "+home+" out of the way");
+            }
+
+            // update the mount point
+            out.println("Creating a new mount point at "+home);
+            if(!home.mkdir())
+                throw new IOException("Failed to create mount point "+home);
+
+            out.println("Mounting "+target);
+            hudson.setMountPoint(home);
+            hudson.mount();
+
+            out.println("Sharing " + target);
+
+            hudson.setProperty("sharesmb", "on");
+            hudson.setProperty("sharenfs", "on");
             hudson.share();
-        } catch (ZFSException e) {
-            listener.error("Failed to share the file systems: "+e.getCode());
-        }
 
-        // delete back up
-        out.println("Deleting "+backup);
-        if(system(new File("/"),listener,"/usr/bin/rm","-rf",backup.getAbsolutePath())!=0) {
-            out.println("Failed to delete "+backup.getAbsolutePath());
-            return false;
-        }
+            // delete back up
+            out.println("Deleting "+backup);
+            if(system(new File("/"),listener,"/usr/bin/rm","-rf",backup.getAbsolutePath())!=0) {
+                out.println("Failed to delete "+backup.getAbsolutePath());
+                return false;
+            }
 
-        out.println("Migration completed");
-        return true;
+            out.println("Migration completed");
+            return true;
+        } catch (NativeAccessException ex) {
+            Logger.getLogger(ZFSInstaller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     private static int system(File pwd, TaskListener listener, String... args) throws IOException, InterruptedException {
         return new LocalLauncher(listener).launch().cmds(args).stdout(System.out).pwd(pwd).join();
     }
 
-    private static String computeHudsonFileSystemName(LibZFS zfs, ZFSFileSystem top) {
-        if(!zfs.exists(top.getName()+"/hudson"))
-            return top.getName()+"/hudson";
-        for( int i=2; ; i++ ) {
-            String name = top.getName() + "/hudson" + i;
-            if(!zfs.exists(name))
-                return name;
+    private static String computeHudsonFileSystemName(NativeZfsFileSystem top) {
+        try {
+            NativeUtils nativeUtils = NativeUtils.getInstance();
+            
+            if(!nativeUtils.zfsExists(top.getName()+"/hudson"))
+                return top.getName()+"/hudson";
+            for( int i = 2; ; i++ ) {
+                String name = top.getName() + "/hudson" + i;
+                if(!nativeUtils.zfsExists(name))
+                    return name;
+            }
+        } catch (NativeAccessException ex) {
+            Logger.getLogger(ZFSInstaller.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     /**

@@ -34,13 +34,15 @@ import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import hudson.model.AbstractProject;
 import hudson.model.Node;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
+import hudson.util.jna.NativeZfsFileSystem;
 
 import java.io.IOException;
 import java.io.File;
 import java.io.Serializable;
-
-import org.jvnet.solaris.libzfs.LibZFS;
-import org.jvnet.solaris.libzfs.ZFSFileSystem;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {@link FileSystemProvisioner} for ZFS.
@@ -48,7 +50,8 @@ import org.jvnet.solaris.libzfs.ZFSFileSystem;
  * @author Kohsuke Kawaguchi
  */
 public class ZFSProvisioner extends FileSystemProvisioner implements Serializable {
-    private final LibZFS libzfs = new LibZFS();
+    
+    private NativeUtils nativeUtils = NativeUtils.getInstance();
     private final Node node;
     private final String rootDataset;
 
@@ -56,9 +59,13 @@ public class ZFSProvisioner extends FileSystemProvisioner implements Serializabl
         this.node = node;
         rootDataset = node.getRootPath().act(new FileCallable<String>() {
             public String invoke(File f, VirtualChannel channel) throws IOException {
-                ZFSFileSystem fs = libzfs.getFileSystemByMountPoint(f);
-                if(fs!=null)    return fs.getName();
-
+                try {
+                    NativeZfsFileSystem fs = nativeUtils.getZfsByMountPoint(f);
+                    if(fs != null)    return fs.getName();
+                } catch (NativeAccessException ex) {
+                    Logger.getLogger(ZFSProvisioner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                 
                 // TODO: for now, only support slaves that are already on ZFS.
                 throw new IOException("Not on ZFS");
             }
@@ -69,16 +76,23 @@ public class ZFSProvisioner extends FileSystemProvisioner implements Serializabl
         final String name = build.getProject().getFullName();
         
         ws.act(new FileCallable<Void>() {
-            public Void invoke(File f, VirtualChannel channel) throws IOException {
-                ZFSFileSystem fs = libzfs.getFileSystemByMountPoint(f);
-                if(fs!=null)    return null;    // already on ZFS
 
-                // nope. create a file system
-                String fullName = rootDataset + '/' + name;
-                listener.getLogger().println("Creating a ZFS file system "+fullName+" at "+f);
-                fs = libzfs.create(fullName, ZFSFileSystem.class);
-                fs.setMountPoint(f);
-                fs.mount();
+            public Void invoke(File f, VirtualChannel channel) throws IOException {
+                try {
+                    NativeZfsFileSystem fs = nativeUtils.getZfsByMountPoint(f);
+                    if (fs != null) {
+                        return null;    // already on ZFS
+                    }
+                    // nope. create a file system
+                    String fullName = rootDataset + '/' + name;
+                    listener.getLogger().println("Creating a ZFS file system " + fullName + " at " + f);
+                    fs = nativeUtils.createZfs(fullName);
+                    fs.setMountPoint(f);
+                    fs.mount();
+                } catch (NativeAccessException ex) {
+                    Logger.getLogger(ZFSProvisioner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 return null;
             }
         });
@@ -87,9 +101,15 @@ public class ZFSProvisioner extends FileSystemProvisioner implements Serializabl
     public void discardWorkspace(AbstractProject<?, ?> project, FilePath ws) throws IOException, InterruptedException {
         ws.act(new FileCallable<Void>() {
             public Void invoke(File f, VirtualChannel channel) throws IOException {
-                ZFSFileSystem fs = libzfs.getFileSystemByMountPoint(f);
-                if(fs!=null)
-                    fs.destory(true);
+                try {
+                    NativeZfsFileSystem fs = nativeUtils.getZfsByMountPoint(f);
+                    if(fs != null){
+                       fs.destory(true);
+                    }
+                } catch (NativeAccessException ex) {
+                    Logger.getLogger(ZFSProvisioner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                 
                 return null;
             }
         });

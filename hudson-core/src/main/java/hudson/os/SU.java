@@ -35,7 +35,8 @@ import hudson.remoting.VirtualChannel;
 import hudson.remoting.Which;
 import hudson.slaves.Channels;
 import hudson.util.ArgumentListBuilder;
-import static hudson.util.jna.GNUCLibrary.LIBC;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +138,13 @@ public abstract class SU {
         protected abstract Process sudoWithPass(ArgumentListBuilder args) throws IOException;
 
         VirtualChannel start(TaskListener listener, String rootPassword) throws IOException, InterruptedException {
-            final int uid = LIBC.geteuid();
+            final int uid;
+            try {
+                uid = NativeUtils.getInstance().getEuid();
+            } catch (NativeAccessException exc) {
+                // TODO: Added to avoid adding NativeExecutionException to throws clause
+                throw new IOException(exc);
+            }
 
             if(uid==0)  // already running as root
                 return newLocalChannel();

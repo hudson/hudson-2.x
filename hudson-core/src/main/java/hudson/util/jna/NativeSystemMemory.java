@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2010, CloudBees, Inc.
+ * Copyright 2011 Hudson.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,17 +23,33 @@
  */
 package hudson.util.jna;
 
-import com.sun.jna.Native;
-import com.sun.jna.win32.StdCallLibrary;
-
 /**
- * @author Kohsuke Kawaguchi
+ * DataStructure to hold the memory Usage data of a System
+ *  
  */
-public interface Shell32 extends StdCallLibrary {
-    public static final Shell32 INSTANCE = (Shell32) Native.loadLibrary("shell32", Shell32.class);
+public interface NativeSystemMemory {
 
     /**
-     * @return true if successful. Otherwise false.
+     * Get the available System Memory
+     * @return 
      */
-    boolean ShellExecuteEx(SHELLEXECUTEINFO lpExecInfo);
+    public long getAvailablePhysicalMemory();
+
+    /**
+     * Get the available Swap Space
+     * @return 
+     */
+    public long getAvailableSwapSpace();
+
+    /**
+     * Get the available Total Physical memory
+     * @return 
+     */
+    public long getTotalPhysicalMemory();
+
+    /** 
+     * Get the available Total Swap Space
+     * @return 
+     */
+    public long getTotalSwapSpace(); 
 }

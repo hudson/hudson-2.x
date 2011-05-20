@@ -145,30 +145,32 @@ public class UtilTest extends TestCase {
     }
 
     public void testSymlink() throws Exception {
-        if (Functions.isWindows())     return;
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        StreamTaskListener l = new StreamTaskListener(baos);
-        File d = Util.createTempDir();
-        try {
-            new FilePath(new File(d, "a")).touch(0);
-            Util.createSymlink(d,"a","x", l);
-            assertEquals("a",Util.resolveSymlink(new File(d,"x"),l));
-
-            // test a long name
-            StringBuilder buf = new StringBuilder(768);
-            for( int i=0; i<768; i++)
-                buf.append((char)('0'+(i%10)));
-            Util.createSymlink(d,buf.toString(),"x", l);
-
-            String log = baos.toString();
-            if (log.length() > 0)
-                System.err.println("log output: " + log);
-
-            assertEquals(buf.toString(),Util.resolveSymlink(new File(d,"x"),l));
-        } finally {
-            Util.deleteRecursive(d);
-        }
+        
+        // TODO - Move this test to JNA Native Support plugin 
+//        if (Functions.isWindows())     return;
+//
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        StreamTaskListener l = new StreamTaskListener(baos);
+//        File d = Util.createTempDir();
+//        try {
+//            new FilePath(new File(d, "a")).touch(0);
+//            Util.createSymlink(d,"a","x", l);
+//            assertEquals("a",Util.resolveSymlink(new File(d,"x"),l));
+//
+//            // test a long name
+//            StringBuilder buf = new StringBuilder(768);
+//            for( int i=0; i<768; i++)
+//                buf.append((char)('0'+(i%10)));
+//            Util.createSymlink(d,buf.toString(),"x", l);
+//
+//            String log = baos.toString();
+//            if (log.length() > 0)
+//                System.err.println("log output: " + log);
+//
+//            assertEquals(buf.toString(),Util.resolveSymlink(new File(d,"x"),l));
+//        } finally {
+//            Util.deleteRecursive(d);
+//        }
     }
 
     public void TestEscape() {

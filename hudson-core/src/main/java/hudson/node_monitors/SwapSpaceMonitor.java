@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Seiji Sogabe
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Seiji Sogabe, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +28,12 @@ import hudson.Extension;
 import hudson.model.Computer;
 import hudson.model.Hudson;
 import hudson.remoting.Callable;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeFunction;
+import hudson.util.jna.NativeUtils;
+import hudson.util.jna.NativeSystemMemory;
 import net.sf.json.JSONObject;
-import org.jvnet.hudson.MemoryMonitor;
-import org.jvnet.hudson.MemoryUsage;
+
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.stapler.export.Exported;
@@ -47,25 +50,25 @@ public class SwapSpaceMonitor extends NodeMonitor {
     /**
      * Returns the HTML representation of the space.
      */
-    public String toHtml(MemoryUsage usage) {
-        if(usage.availableSwapSpace==-1)
+    public String toHtml(NativeSystemMemory usage) {
+        if(usage.getAvailableSwapSpace() == -1)
             return "N/A";
 
-        long free = usage.availableSwapSpace;
+        long free = usage.getAvailableSwapSpace();
         free/=1024L;   // convert to KB
         free/=1024L;   // convert to MB
-        if(free>256 || usage.totalSwapSpace<usage.availableSwapSpace*5)
+        if(free>256 || usage.getTotalSwapSpace() < usage.getAvailableSwapSpace() * 5)
             return free+"MB"; // if we have more than 256MB free or less than 80% filled up, it's OK
 
         // Otherwise considered dangerously low.
         return Util.wrapToErrorSpan(free+"MB");
     }
 
-    public long toMB(MemoryUsage usage) {
-        if(usage.availableSwapSpace==-1)
+    public long toMB(NativeSystemMemory usage) {
+        if(usage.getAvailableSwapSpace() == -1)
             return -1;
 
-        long free = usage.availableSwapSpace;
+        long free = usage.getAvailableSwapSpace();
         free/=1024L;   // convert to KB
         free/=1024L;   // convert to MB
         return free;
@@ -78,8 +81,8 @@ public class SwapSpaceMonitor extends NodeMonitor {
     }
 
     @Extension
-    public static final AbstractNodeMonitorDescriptor<MemoryUsage> DESCRIPTOR = new AbstractNodeMonitorDescriptor<MemoryUsage>() {
-        protected MemoryUsage monitor(Computer c) throws IOException, InterruptedException {
+    public static final AbstractNodeMonitorDescriptor<NativeSystemMemory> DESCRIPTOR = new AbstractNodeMonitorDescriptor<NativeSystemMemory>() {
+        protected NativeSystemMemory monitor(Computer c) throws IOException, InterruptedException {
             return c.getChannel().call(new MonitorTask());
         }
 
@@ -96,26 +99,26 @@ public class SwapSpaceMonitor extends NodeMonitor {
     /**
      * Obtains the string that represents the architecture.
      */
-    private static class MonitorTask implements Callable<MemoryUsage,IOException> {
-        public MemoryUsage call() throws IOException {
-            MemoryMonitor mm;
+    private static class MonitorTask implements Callable<NativeSystemMemory, IOException> {
+
+        private static final long serialVersionUID = 1L;
+        private static boolean warned = false;
+
+        public NativeSystemMemory call() throws IOException {
+
             try {
-                mm = MemoryMonitor.get();
-            } catch (IOException e) {
-                if(!warned) {
+                return new MemoryUsage(NativeUtils.getInstance().getSystemMemory());
+            } catch (NativeAccessException exc) {
+                if (!warned) {
                     // report the problem just once, and avoid filling up the log with the same error. see HUDSON-2194.
                     warned = true;
-                    throw e;
+                    throw new IOException(exc);
                 } else {
                     return null;
                 }
             }
-            return new MemoryUsage2(mm.monitor());
+
         }
-
-        private static final long serialVersionUID = 1L;
-
-        private static boolean warned = false;
     }
 
     /**
@@ -125,9 +128,12 @@ public class SwapSpaceMonitor extends NodeMonitor {
      * {@link MemoryUsage} + stapler annotations.
      */
     @ExportedBean
-    public static class MemoryUsage2 extends MemoryUsage {
-        public MemoryUsage2(MemoryUsage mem) {
-            super(mem.totalPhysicalMemory, mem.availablePhysicalMemory, mem.totalSwapSpace, mem.availableSwapSpace);
+    public static class MemoryUsage implements NativeSystemMemory{
+        
+        NativeSystemMemory systemMemory;
+        
+        public MemoryUsage(NativeSystemMemory mem) {
+            systemMemory = mem; 
         }
 
         /**
@@ -135,7 +141,7 @@ public class SwapSpaceMonitor extends NodeMonitor {
          */
         @Exported
         public long getTotalPhysicalMemory() {
-            return totalPhysicalMemory;
+            return systemMemory.getTotalPhysicalMemory();
         }
 
         /**
@@ -143,7 +149,7 @@ public class SwapSpaceMonitor extends NodeMonitor {
          */
         @Exported
         public long getAvailablePhysicalMemory() {
-            return availablePhysicalMemory;
+            return systemMemory.getAvailablePhysicalMemory();
         }
 
         /**
@@ -151,7 +157,7 @@ public class SwapSpaceMonitor extends NodeMonitor {
          */
         @Exported
         public long getTotalSwapSpace() {
-            return totalSwapSpace;
+            return systemMemory.getTotalSwapSpace();
         }
 
         /**
@@ -159,7 +165,7 @@ public class SwapSpaceMonitor extends NodeMonitor {
          */
         @Exported
         public long getAvailableSwapSpace() {
-            return availableSwapSpace;
+            return systemMemory.getAvailableSwapSpace();
         }
     }
 }

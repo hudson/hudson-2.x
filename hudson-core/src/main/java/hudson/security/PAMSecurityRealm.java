@@ -29,8 +29,9 @@ import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.Util;
 import hudson.Extension;
-import hudson.os.PosixAPI;
 import hudson.util.FormValidation;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
 import hudson.util.spring.BeanBuilder;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
@@ -44,20 +45,11 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.User;
-import org.jvnet.libpam.PAM;
-import org.jvnet.libpam.PAMException;
-import org.jvnet.libpam.UnixUser;
-import org.jvnet.libpam.impl.CLibrary;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.context.WebApplicationContext;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.jruby.ext.posix.POSIX;
-import org.jruby.ext.posix.FileStat;
-import org.jruby.ext.posix.Passwd;
-import org.jruby.ext.posix.Group;
 
 import java.util.Set;
-import java.io.File;
 
 /**
  * {@link SecurityRealm} that uses Unix PAM authentication.
@@ -66,16 +58,20 @@ import java.io.File;
  * @since 1.282
  */
 public class PAMSecurityRealm extends SecurityRealm {
+
     public final String serviceName;
 
     @DataBoundConstructor
     public PAMSecurityRealm(String serviceName) {
         serviceName = Util.fixEmptyAndTrim(serviceName);
-        if(serviceName==null)   serviceName="sshd"; // use sshd as the default
+        if (serviceName == null) {
+            serviceName = "sshd"; // use sshd as the default
+        }
         this.serviceName = serviceName;
     }
 
     public static class PAMAuthenticationProvider implements AuthenticationProvider {
+
         private String serviceName;
 
         public PAMAuthenticationProvider(String serviceName) {
@@ -87,18 +83,20 @@ public class PAMSecurityRealm extends SecurityRealm {
             String password = authentication.getCredentials().toString();
 
             try {
-                UnixUser u = new PAM(serviceName).authenticate(username, password);
-                Set<String> grps = u.getGroups();
+
+                Set<String> grps = NativeUtils.getInstance().pamAuthenticate(serviceName, username, password);
                 GrantedAuthority[] groups = new GrantedAuthority[grps.size()];
-                int i=0;
-                for (String g : grps)
+                int i = 0;
+                for (String g : grps) {
                     groups[i++] = new GrantedAuthorityImpl(g);
+                }
 
                 // I never understood why Acegi insists on keeping the password...
                 return new UsernamePasswordAuthenticationToken(username, password, groups);
-            } catch (PAMException e) {
-                throw new BadCredentialsException(e.getMessage(),e);
+            } catch (NativeAccessException exc) {
+                throw new BadCredentialsException(exc.getMessage(), exc);
             }
+
         }
 
         public boolean supports(Class clazz) {
@@ -111,27 +109,42 @@ public class PAMSecurityRealm extends SecurityRealm {
         binding.setVariable("instance", this);
 
         BeanBuilder builder = new BeanBuilder();
-        builder.parse(Hudson.getInstance().servletContext.getResourceAsStream("/WEB-INF/security/PAMSecurityRealm.groovy"),binding);
+        builder.parse(Hudson.getInstance().servletContext.getResourceAsStream("/WEB-INF/security/PAMSecurityRealm.groovy"), binding);
         WebApplicationContext context = builder.createApplicationContext();
         return new SecurityComponents(
-            findBean(AuthenticationManager.class, context),
-            new UserDetailsService() {
-                public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-                    if(!UnixUser.exists(username))
-                        throw new UsernameNotFoundException("No such Unix user: "+username);
-                    // return some dummy instance
-                    return new User(username,"",true,true,true,true,
-                            new GrantedAuthority[]{AUTHENTICATED_AUTHORITY});
-                }
-            }
-        );
+                findBean(AuthenticationManager.class, context),
+                new UserDetailsService() {
+
+                    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
+                        try {
+                            if (!NativeUtils.getInstance().checkUnixUser(username)) {
+                                throw new UsernameNotFoundException("No such Unix user: " + username);
+                            }
+                        } catch (NativeAccessException exc) {
+                            throw new DataAccessException("Failed to find Unix User", exc) {
+                            };
+                        }
+
+                        // return some dummy instance
+                        return new User(username, "", true, true, true, true,
+                                new GrantedAuthority[]{AUTHENTICATED_AUTHORITY});
+                    }
+                });
     }
 
     @Override
     public GroupDetails loadGroupByGroupname(final String groupname) throws UsernameNotFoundException, DataAccessException {
-        if(CLibrary.libc.getgrnam(groupname)==null)
-            throw new UsernameNotFoundException(groupname);
+        try {
+            if (!NativeUtils.getInstance().checkUnixGroup(groupname)) {
+                throw new UsernameNotFoundException("No such Unix group: " + groupname);
+            }
+        } catch (NativeAccessException exc) {
+            throw new DataAccessException("Failed to find Unix Group", exc) {
+            };
+        }
+
         return new GroupDetails() {
+
             @Override
             public String getName() {
                 return groupname;
@@ -140,49 +153,30 @@ public class PAMSecurityRealm extends SecurityRealm {
     }
 
     public static final class DescriptorImpl extends Descriptor<SecurityRealm> {
+
         public String getDisplayName() {
             return Messages.PAMSecurityRealm_DisplayName();
         }
 
         public FormValidation doTest() {
-            File s = new File("/etc/shadow");
-            if(s.exists() && !s.canRead()) {
-                // it looks like shadow password is in use, but we don't have read access
-                System.out.println("Shadow in use");
-                POSIX api = PosixAPI.get();
-                FileStat st = api.stat("/etc/shadow");
-                if(st==null)
-                    return FormValidation.error(Messages.PAMSecurityRealm_ReadPermission());
-
-                Passwd pwd = api.getpwuid(api.geteuid());
-                String user;
-                if(pwd!=null)   user=Messages.PAMSecurityRealm_User(pwd.getLoginName());
-                else            user=Messages.PAMSecurityRealm_CurrentUser();
-
-                String group;
-                Group g = api.getgrgid(st.gid());
-                if(g!=null)     group=g.getName();
-                else            group=String.valueOf(st.gid());
-
-                if ((st.mode()&FileStat.S_IRGRP)!=0) {
-                    // the file is readable to group. Hudson should be in the right group, then
-                    return FormValidation.error(Messages.PAMSecurityRealm_BelongToGroup(user, group));
+            try {
+                String message = NativeUtils.getInstance().checkPamAuthentication();
+                if (message.startsWith("Error:")) {
+                    return FormValidation.error(message.replaceFirst("Error:", ""));
                 } else {
-                    Passwd opwd = api.getpwuid(st.uid());
-                    String owner;
-                    if(opwd!=null)  owner=opwd.getLoginName();
-                    else            owner=Messages.PAMSecurityRealm_Uid(st.uid());
-
-                    return FormValidation.error(Messages.PAMSecurityRealm_RunAsUserOrBelongToGroupAndChmod(owner, user, group));
+                    return FormValidation.ok(message);
                 }
+            } catch (NativeAccessException exc) {
+                return FormValidation.error("Native Support for PAM Authentication not available.");
             }
-            return FormValidation.ok(Messages.PAMSecurityRealm_Success());
         }
     }
 
     @Extension
     public static DescriptorImpl install() {
-        if(!Functions.isWindows()) return new DescriptorImpl();
+        if (!Functions.isWindows()) {
+            return new DescriptorImpl();
+        }
         return null;
     }
 }

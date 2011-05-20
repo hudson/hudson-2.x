@@ -31,7 +31,6 @@ import hudson.model.Hudson;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 
@@ -88,19 +87,7 @@ public abstract class Lifecycle implements ExtensionPoint {
                     // when we are run by Solaris SMF, these environment variables are set.
                     instance = new SolarisSMFLifecycle();
                 } else {
-                    // if run on Unix, we can do restart
-                    try {
-                        instance = new UnixLifecycle();
-                    } catch (final IOException e) {
-                        LOGGER.log(Level.WARNING, "Failed to install embedded lifecycle implementation",e);
-                        instance = new Lifecycle() {
-                            @Override
-                            public void verifyRestartable() throws RestartNotSupportedException {
-                                throw new RestartNotSupportedException(
-                                        "Failed to install embedded lifecycle implementation, so cannot restart: " + e, e);
-                            }
-                        };
-                    }
+                    instance = new UnixLifecycle();
                 }
             }
             assert instance != null;

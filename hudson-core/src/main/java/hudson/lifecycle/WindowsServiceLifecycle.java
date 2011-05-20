@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +28,9 @@ import hudson.Launcher.LocalLauncher;
 import hudson.Util;
 import hudson.model.Hudson;
 import hudson.util.StreamTaskListener;
-import hudson.util.jna.Kernel32;
-import static hudson.util.jna.Kernel32.MOVEFILE_DELAY_UNTIL_REBOOT;
-import static hudson.util.jna.Kernel32.MOVEFILE_REPLACE_EXISTING;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
+ 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
@@ -71,9 +71,13 @@ public class WindowsServiceLifecycle extends Lifecycle {
             return; // identical
 
             File stage = new File(rootDir,"hudson.exe.new");
-            FileUtils.copyURLToFile(exe,stage);
-            Kernel32.INSTANCE.MoveFileExA(stage.getAbsolutePath(),currentCopy.getAbsolutePath(),MOVEFILE_DELAY_UNTIL_REBOOT|MOVEFILE_REPLACE_EXISTING);
+            FileUtils.copyURLToFile(exe, stage);
+            
+            NativeUtils.getInstance().windowsMoveFile(stage, currentCopy);
+            
             LOGGER.info("Scheduled a replacement of hudson.exe");
+        } catch (NativeAccessException exc) {
+            LOGGER.log(Level.SEVERE, "Failed to replace hudson.exe", exc);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to replace hudson.exe",e);
         } catch (InterruptedException e) {

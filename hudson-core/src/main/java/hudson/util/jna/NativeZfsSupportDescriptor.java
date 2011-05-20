@@ -1,18 +1,18 @@
 /*
  * The MIT License
- * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, CloudBees, Inc.
- * 
+ *
+ * Copyright (c) 2011, Winston.Prakash@oracle.com
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,33 +23,15 @@
  */
 package hudson.util.jna;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.win32.StdCallLibrary;
-import com.sun.jna.Native;
+import hudson.model.Descriptor;
 
 /**
- * JNA interface to Windows Kernel32 exports.
- * 
- * @author Kohsuke Kawaguchi
+ * {@link Descriptor} for {@link ZfsSupport}.
+ *
+ * @author Winston Prakash
+ * @since 2.0.1
  */
-public interface Kernel32 extends StdCallLibrary {
-    public static final Kernel32 INSTANCE = (Kernel32)Native.loadLibrary("kernel32", Kernel32.class);
-
-    /**
-     * See http://msdn.microsoft.com/en-us/library/aa365240(VS.85).aspx
-     */
-    boolean MoveFileExA(String existingFileName, String newFileName, int flags );
-
-    static final int MOVEFILE_COPY_ALLOWED = 2;
-    static final int MOVEFILE_CREATE_HARDLINK = 16;
-    static final int MOVEFILE_DELAY_UNTIL_REBOOT = 4;
-    static final int MOVEFILE_FAIL_IF_NOT_TRACKABLE = 32;
-    static final int MOVEFILE_REPLACE_EXISTING = 1;
-    static final int MOVEFILE_WRITE_THROUGH = 8;
-
-    int WaitForSingleObject(Pointer handle, int milliseconds);
-    boolean GetExitCodeProcess(Pointer handle, IntByReference r);
-
-    static final int STILL_ACTIVE = 259;
+public abstract class NativeZfsSupportDescriptor extends Descriptor<NativeZfsSupport> {
+    // so far nothing different from plain Descriptor
+    // but it may prove useful for future expansion
 }

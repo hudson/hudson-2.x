@@ -28,7 +28,6 @@ import hudson.ExtensionPoint;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
-import hudson.views.ListViewColumn;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -48,7 +47,7 @@ import java.io.OutputStream;
  */
 public abstract class CaptchaSupport extends AbstractDescribableImpl<CaptchaSupport> implements ExtensionPoint {
     /**
-     * Returns all the registered {@link ListViewColumn} descriptors.
+     * Returns all the registered {@link CaptchaSupport} descriptors.
      */
     public static DescriptorExtensionList<CaptchaSupport, Descriptor<CaptchaSupport>> all() {
         return Hudson.getInstance().<CaptchaSupport, Descriptor<CaptchaSupport>>getDescriptorList(CaptchaSupport.class);

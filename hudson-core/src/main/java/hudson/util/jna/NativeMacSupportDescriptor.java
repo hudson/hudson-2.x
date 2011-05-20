@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2010, CloudBees, Inc.
+ * Copyright (c) 2011, Winston.Prakash@oracle.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,15 @@
  */
 package hudson.util.jna;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
+import hudson.model.Descriptor;
 
 /**
+ * {@link Descriptor} for {@link NativeMacSupport}.
  *
- * @author Kohsuke Kawaguchi
+ * @author Winston Prakash
+ * @since 2.0.1
  */
-public class Kernel32Utils {
-    /**
-     * Given the process handle, waits for its completion and returns the exit code.
-     */
-    public static int waitForExitProcess(Pointer hProcess) throws InterruptedException {
-        while (true) {
-            if (Thread.interrupted())
-                throw new InterruptedException();
-
-            Kernel32.INSTANCE.WaitForSingleObject(hProcess,1000);
-            IntByReference exitCode = new IntByReference();
-            exitCode.setValue(-1);
-            Kernel32.INSTANCE.GetExitCodeProcess(hProcess,exitCode);
-
-            int v = exitCode.getValue();
-            if (v !=Kernel32.STILL_ACTIVE) {
-                return v;
-            }
-        }
-    }
+public abstract class NativeMacSupportDescriptor extends Descriptor<NativeMacSupport> {
+    // so far nothing different from plain Descriptor
+    // but it may prove useful for future expansion
 }

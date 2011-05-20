@@ -1,9 +1,9 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi,
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi,
  * Eric Lefevre-Ardant, Erik Ramfelt, Michael B. Donohue, Alan Harder,
- * Manufacture Francaise des Pneumatiques Michelin, Romain Seguy
+ * Manufacture Francaise des Pneumatiques Michelin, Romain Seguy, Winston Prakash
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,14 +44,17 @@ import hudson.util.IOException2;
 import hudson.util.HeadBufferingStream;
 import hudson.util.FormValidation;
 import hudson.util.IOUtils;
-import static hudson.util.jna.GNUCLibrary.LIBC;
+
+import hudson.util.jna.NativeUtils;
+
 import static hudson.Util.fixEmpty;
 import static hudson.FilePath.TarCompression.GZIP;
-import hudson.os.PosixAPI;
 import hudson.org.apache.tools.tar.TarInputStream;
 import hudson.util.io.Archiver;
 import hudson.util.io.ArchiverFactory;
+import hudson.util.jna.NativeAccessException;
 import java.util.logging.Level;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
@@ -94,9 +97,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipInputStream;
 
-import com.sun.jna.Native;
 import java.util.logging.Logger;
-import org.apache.tools.ant.taskdefs.Chmod;
 
 /**
  * {@link File} like object with remoting support.
@@ -1081,43 +1082,11 @@ public final class FilePath implements Serializable {
         if(!isUnix() || mask==-1)   return;
         act(new FileCallable<Void>() {
             public Void invoke(File f, VirtualChannel channel) throws IOException {
-                _chmod(f, mask);
-
+                Util.chmod(f, mask);
                 return null;
             }
         });
     }
-
-    /**
-     * Run chmod via libc if we can, otherwise fall back to Ant.
-     */
-    private static void _chmod(File f, int mask) throws IOException {
-        if (Functions.isWindows())  return; // noop
-
-        try {
-            if(LIBC.chmod(f.getAbsolutePath(),mask)!=0) {
-                throw new IOException("Failed to chmod "+f+" : "+LIBC.strerror(Native.getLastError()));
-            }
-        } catch(NoClassDefFoundError e) {  // cf. https://groups.google.com/group/hudson-dev/browse_thread/thread/6d16c3e8ea0dbc9?hl=fr
-            _chmodAnt(f, mask);
-        } catch(UnsatisfiedLinkError e2) { // HUDSON-8155: use Ant's chmod task on non-GNU C systems
-            _chmodAnt(f, mask);
-        }
-    }
-
-    private static void _chmodAnt(File f, int mask) {
-        if (!CHMOD_WARNED) { // only warn this once to avoid flooding the log
-            CHMOD_WARNED = true;
-            LOGGER.warning("GNU C Library not available: Using Ant's chmod task instead.");
-        }
-        Chmod chmodTask = new Chmod();
-        chmodTask.setProject(new Project());
-        chmodTask.setFile(f);
-        chmodTask.setPerm(Integer.toOctalString(mask));
-        chmodTask.execute();
-    }
-
-    private static boolean CHMOD_WARNED = false;
 
     /**
      * Gets the file permission bit mask.
@@ -1131,7 +1100,13 @@ public final class FilePath implements Serializable {
         if(!isUnix())   return -1;
         return act(new FileCallable<Integer>() {
             public Integer invoke(File f, VirtualChannel channel) throws IOException {
-                return PosixAPI.get().stat(f.getPath()).mode();
+                int mode = -1;
+                try {
+                    mode = NativeUtils.getInstance().mode(f);
+                } catch (NativeAccessException ex) {
+                    LOGGER.log(Level.WARNING, "Native function mod failed ({0})", NativeUtils.getInstance().getLastUnixError());
+                }
+                return  mode;
             }
         });
     }
@@ -1607,7 +1582,7 @@ public final class FilePath implements Serializable {
                     f.setLastModified(te.getModTime().getTime());
                     int mode = te.getMode()&0777;
                     if(mode!=0 && !Functions.isWindows()) // be defensive
-                        _chmod(f,mode);
+                        Util.chmod(f, mode);
                 }
             }
         } catch(IOException e) {

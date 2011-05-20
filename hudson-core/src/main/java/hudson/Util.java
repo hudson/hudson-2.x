@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Winston Prakash
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,15 @@ package hudson;
 
 import hudson.model.TaskListener;
 import hudson.model.Hudson;
-import static hudson.util.jna.GNUCLibrary.LIBC;
 
 import hudson.util.IOException2;
 import hudson.util.QuotedStringTokenizer;
 import hudson.util.VariableResolver;
 import hudson.Proc.LocalProc;
-import hudson.os.PosixAPI;
+import hudson.util.jna.NativeAccessException;
+
+import hudson.util.jna.NativeFunction;
+import hudson.util.jna.NativeUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
@@ -39,8 +41,7 @@ import org.apache.tools.ant.taskdefs.Chmod;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.commons.io.IOUtils;
-import org.jruby.ext.posix.FileStat;
-import org.jruby.ext.posix.POSIX;
+
 import org.kohsuke.stapler.Stapler;
 import org.jvnet.animal_sniffer.IgnoreJRERequirement;
 
@@ -94,10 +95,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.nio.charset.Charset;
-
-import com.sun.jna.Native;
-import com.sun.jna.Memory;
-import com.sun.jna.NativeLong;
 
 /**
  * Various utility methods that don't have more proper home.
@@ -278,7 +275,7 @@ public class Util {
             chmod.setPerm("u+w");
             chmod.execute();
         } catch (BuildException e) {
-            LOGGER.log(Level.INFO,"Failed to chmod "+f,e);
+            LOGGER.log(Level.INFO, "Failed to chmod " + f, e);
         }
 
         // also try JDK6-way of doing it.
@@ -288,13 +285,10 @@ public class Util {
             // not JDK6
         }
 
-        try {// try libc chmod
-            POSIX posix = PosixAPI.get();
-            String path = f.getAbsolutePath();
-            FileStat stat = posix.stat(path);
-            posix.chmod(path, stat.mode()|0200); // u+w
-        } catch (Throwable t) {
-            LOGGER.log(Level.FINE,"Failed to chmod(2) "+f,t);
+        try {
+            NativeUtils.getInstance().makeFileWritable(f);
+        } catch (NativeAccessException exc) {
+            LOGGER.log(Level.FINE, "Failed to chmod(2) " + f, exc);
         }
 
     }
@@ -999,7 +993,7 @@ public class Util {
      * @param symlinkPath
      *      Where to create a symlink in.
      */
-    public static void createSymlink(File baseDir, String targetPath, String symlinkPath, TaskListener listener) throws InterruptedException {
+    public static void createSymlink(File baseDir, String targetPath, String symlinkPath, TaskListener listener) throws InterruptedException{
         if(Functions.isWindows() || NO_SYMLINK)   return;
 
         try {
@@ -1012,31 +1006,49 @@ public class Util {
                 // ignore a failure.
                 new LocalProc(new String[]{"rm","-rf", symlinkPath},new String[0],listener.getLogger(), baseDir).join();
 
-            int r;
-            if (!SYMLINK_ESCAPEHATCH) {
-                try {
-                    r = LIBC.symlink(targetPath,symlinkFile.getAbsolutePath());
-                    if (r!=0) {
-                        r = Native.getLastError();
-                        errmsg = LIBC.strerror(r);
-                    }
-                } catch (LinkageError e) {
-                    // if JNA is unavailable, fall back.
-                    // we still prefer to try JNA first as PosixAPI supports even smaller platforms.
-                    r = PosixAPI.get().symlink(targetPath,symlinkFile.getAbsolutePath());
-                }
-            } else // escape hatch, until we know that the above works well.
-                r = new LocalProc(new String[]{
-                    "ln","-s", targetPath, symlinkPath},
-                    new String[0],listener.getLogger(), baseDir).join();
-            if(r!=0)
-                listener.getLogger().println(String.format("ln -s %s %s failed: %d %s",targetPath, symlinkFile, r, errmsg));
+            boolean success = false;
+
+            try {
+                success = NativeUtils.getInstance().createSymlink(targetPath, baseDir);
+            } catch (NativeAccessException ex) {
+                errmsg = "Native function mod failed" + NativeUtils.getInstance().getLastUnixError();
+            }
+            if (!success) { // escape hatch, until we know that the above works well.
+                success = new LocalProc(new String[]{
+                            "ln", "-s", targetPath, symlinkPath},
+                        new String[0], listener.getLogger(), baseDir).join() == 0;
+            }
+            if (!success) {
+                listener.getLogger().println(String.format("ln -s %s %s failed: %s", targetPath, symlinkFile, errmsg));
+            }
         } catch (IOException e) {
             PrintStream log = listener.getLogger();
             log.printf("ln %s %s failed\n",targetPath, new File(baseDir, symlinkPath));
             Util.displayIOException(e,listener);
             e.printStackTrace( log );
         }
+    }
+    
+    /**
+     * Run chmod natively if we can, otherwise fall back to Ant.
+     */
+    public static void chmod(File f, int mask) {
+        if (Functions.isWindows()) {
+            return; // noop
+        }
+        try {
+            NativeUtils.getInstance().chmod(f, mask);
+        } catch (NativeAccessException exc) {
+            LOGGER.log(Level.WARNING, "Native function chmod failed ({0}). Using Ant''s chmod task instead.", NativeUtils.getInstance().getLastUnixError());
+        }
+    }
+
+    private static void _chmodAnt(File f, int mask) {
+        Chmod chmodTask = new Chmod();
+        chmodTask.setProject(new Project());
+        chmodTask.setFile(f);
+        chmodTask.setPerm(Integer.toOctalString(mask));
+        chmodTask.execute();
     }
 
     /**
@@ -1048,34 +1060,20 @@ public class Util {
      *      If we rely on an external command to resolve symlink, this is it.
      *      (TODO: try readlink(1) available on some platforms)
      */
-    public static String resolveSymlink(File link, TaskListener listener) throws InterruptedException, IOException {
-        if(Functions.isWindows())     return null;
-
-        String filename = link.getAbsolutePath();
-        try {
-            for (int sz=512; sz < 65536; sz*=2) {
-                Memory m = new Memory(sz);
-                int r = LIBC.readlink(filename,m,new NativeLong(sz));
-                if (r<0) {
-                    int err = Native.getLastError();
-                    if (err==22/*EINVAL --- but is this really portable?*/)
-                        return null; // this means it's not a symlink
-                    throw new IOException("Failed to readlink "+link+" error="+ err+" "+ LIBC.strerror(err));
-                }
-                if (r==sz)
-                    continue;   // buffer too small
-
-                byte[] buf = new byte[r];
-                m.read(0,buf,0,r);
-                return new String(buf);
-            }
-            // something is wrong. It can't be this long!
-            throw new IOException("Symlink too long: "+link);
-        } catch (LinkageError e) {
-            // if JNA is unavailable, fall back.
-            // we still prefer to try JNA first as PosixAPI supports even smaller platforms.
-            return PosixAPI.get().readlink(filename);
+    public static String resolveSymlink(File link, TaskListener listener) {
+        if (Functions.isWindows()) {
+            return null;
         }
+
+
+        try {
+            return NativeUtils.getInstance().resolveSymlink(link);
+        } catch (NativeAccessException exc) {
+            listener.getLogger().print("Native function resolveSymlink failed " + NativeUtils.getInstance().getLastUnixError());
+        }
+
+
+        return null;
     }
 
     /**

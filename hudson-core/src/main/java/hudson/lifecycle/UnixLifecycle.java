@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2009, Sun Microsystems, Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,11 @@
  */
 package hudson.lifecycle;
 
-import com.sun.akuma.JavaVMArguments;
-import com.sun.akuma.Daemon;
-import com.sun.jna.Native;
-import com.sun.jna.StringArray;
-
-import java.io.IOException;
-
-import static hudson.util.jna.GNUCLibrary.*;
 import hudson.model.Hudson;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeFunction;
+import hudson.util.jna.NativeUtils;
+import java.io.IOException;
 
 /**
  * {@link Lifecycle} implementation when Hudson runs on the embedded
@@ -40,44 +36,25 @@ import hudson.model.Hudson;
  * <p>
  * Restart by exec to self.
  *
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi, Winston Prakash
  * @since 1.304
  */
 public class UnixLifecycle extends Lifecycle {
-    private JavaVMArguments args;
-    private Throwable failedToObtainArgs;
 
-    public UnixLifecycle() throws IOException {
-        try {
-            args = JavaVMArguments.current();
-        } catch (UnsupportedOperationException e) {
-            // can't restart
-            failedToObtainArgs = e;
-        } catch (LinkageError e) {
-            // see HUDSON-3875
-            failedToObtainArgs = e;
-        }
-    }
+    private Throwable failedToObtainArgs;
 
     @Override
     public void restart() throws IOException, InterruptedException {
         Hudson h = Hudson.getInstance();
-        if (h != null)
+        if (h != null) {
             h.cleanUp();
-
-        // close all files upon exec, except stdin, stdout, and stderr
-        int sz = LIBC.getdtablesize();
-        for(int i=3; i<sz; i++) {
-            int flags = LIBC.fcntl(i, F_GETFD);
-            if(flags<0) continue;
-            LIBC.fcntl(i, F_SETFD,flags| FD_CLOEXEC);
         }
-
-        // exec to self
-        LIBC.execv(
-            Daemon.getCurrentExecutable(),
-            new StringArray(args.toArray(new String[args.size()])));
-        throw new IOException("Failed to exec "+LIBC.strerror(Native.getLastError()));
+        try {
+            NativeUtils.getInstance().restartJavaProcess(null, false);
+        } catch (NativeAccessException exc) {
+            //TODO: Rethrow as IOException to avoid adding NativeExecutionException in throws clause
+            throw new IOException(exc);
+        }
     }
 
     @Override
@@ -86,9 +63,17 @@ public class UnixLifecycle extends Lifecycle {
         // http://factor-language.blogspot.com/2007/07/execve-returning-enotsup-on-mac-os-x.html
         // on Mac, execv fails with ENOTSUP if the caller is multi-threaded, resulting in an error like
         // the one described in http://www.nabble.com/Restarting-hudson-not-working-on-MacOS--to24641779.html
-        if (Hudson.isDarwin())
+        if (Hudson.isDarwin()) {
             throw new RestartNotSupportedException("Restart is not supported on Mac OS X");
-        if (args==null)
-            throw new RestartNotSupportedException("Failed to obtain the command line arguments of the process",failedToObtainArgs);
+        } else {
+            try {
+
+                if (!NativeUtils.getInstance().canRestartJavaProcess()) {
+                    throw new RestartNotSupportedException("Restart is not supported on this Platform");
+                }
+            } catch (NativeAccessException exc) {
+                throw new RestartNotSupportedException("Restart is not supported on this Platform");
+            }
+        }
     }
 }

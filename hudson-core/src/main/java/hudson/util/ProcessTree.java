@@ -23,10 +23,6 @@
  */
 package hudson.util;
 
-import com.sun.jna.Memory;
-import com.sun.jna.Native;
-import static com.sun.jna.Pointer.NULL;
-import com.sun.jna.ptr.IntByReference;
 import hudson.EnvVars;
 import hudson.Util;
 import hudson.model.Hudson;
@@ -35,13 +31,13 @@ import hudson.remoting.Channel;
 import hudson.remoting.VirtualChannel;
 import hudson.slaves.SlaveComputer;
 import hudson.util.ProcessTree.OSProcess;
-import static hudson.util.jna.GNUCLibrary.LIBC;
 
 import hudson.util.ProcessTreeRemoting.IOSProcess;
 import hudson.util.ProcessTreeRemoting.IProcessTree;
+import hudson.util.jna.NativeAccessException;
+import hudson.util.jna.NativeUtils;
+import hudson.util.jna.NativeProcess;
 import org.apache.commons.io.FileUtils;
-import org.jvnet.winp.WinProcess;
-import org.jvnet.winp.WinpException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -65,6 +61,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import static java.util.logging.Level.FINER;
 import static java.util.logging.Level.FINEST;
@@ -386,75 +383,75 @@ public abstract class ProcessTree implements Iterable<OSProcess>, IProcessTree, 
 
     private static final class Windows extends Local {
         Windows() {
-            for (final WinProcess p : WinProcess.all()) {
-                int pid = p.getPid();
-                super.processes.put(pid,new OSProcess(pid) {
-                    private EnvVars env;
-                    private List<String> args;
+            try {
+                for (final NativeProcess p : NativeUtils.getInstance().getWindowsProcesses()) {
+                    int pid = p.getPid();
+                    super.processes.put(pid,new OSProcess(pid) {
+                        private EnvVars env;
+                        private List<String> args;
 
-                    public OSProcess getParent() {
-                        // windows process doesn't have parent/child relationship
-                        return null;
-                    }
+                        public OSProcess getParent() {
+                            // windows process doesn't have parent/child relationship
+                            return null;
+                        }
 
-                    public void killRecursively() {
-                        LOGGER.finer("Killing recursively "+getPid());
-                        p.killRecursively();
-                    }
+                        public void killRecursively() {
+                            LOGGER.finer("Killing recursively " + getPid());
+                            p.killRecursively();
+                        }
 
-                    public void kill() throws InterruptedException {
-                        LOGGER.finer("Killing "+getPid());
-                        p.kill();
-                        killByKiller();
-                    }
+                        public void kill() throws InterruptedException {
+                            LOGGER.finer("Killing " + getPid());
+                            p.kill();
+                            killByKiller();
+                        }
 
-                    @Override
-                    public synchronized List<String> getArguments() {
-                        if(args==null)  args = Arrays.asList(QuotedStringTokenizer.tokenize(p.getCommandLine()));
-                        return args;
-                    }
+                        @Override
+                        public synchronized List<String> getArguments() {
+                            if(args==null)  args = Arrays.asList(QuotedStringTokenizer.tokenize(p.getCommandLine()));
+                            return args;
+                        }
 
-                    @Override
-                    public synchronized EnvVars getEnvironmentVariables() {
-                        if(env==null)   env = new EnvVars(p.getEnvironmentVariables());
-                        return env;
-                    }
-                });
+                        @Override
+                        public synchronized EnvVars getEnvironmentVariables() {
+                            if(env==null)   env = new EnvVars(p.getEnvironmentVariables());
+                            return env;
+                        }
+                    });
 
+                }
+            } catch (NativeAccessException exc) {
+                LOGGER.log(Level.WARNING,"Failed to fetch Windows Native Processes", exc);
             }
         }
 
         @Override
         public OSProcess get(Process proc) {
-            return get(new WinProcess(proc).getPid());
+            try {
+                return get(NativeUtils.getInstance().getWindowsProcessId(proc));
+            } catch (NativeAccessException exc) {
+                LOGGER.log(Level.WARNING,"Failed to get Windows Native Process", exc);
+            }
+            return null;
         }
 
         public void killAll(Map<String, String> modelEnvVars) throws InterruptedException {
-            for( OSProcess p : this) {
-                if(p.getPid()<10)
+            for (OSProcess p : this) {
+                if (p.getPid() < 10) {
                     continue;   // ignore system processes like "idle process"
-
-                LOGGER.finest("Considering to kill "+p.getPid());
+                }
+                LOGGER.finest("Considering to kill " + p.getPid());
 
                 boolean matched;
-                try {
-                    matched = p.hasMatchingEnvVars(modelEnvVars);
-                } catch (WinpException e) {
-                    // likely a missing privilege
-                    LOGGER.log(FINEST,"  Failed to check environment variable match",e);
-                    continue;
+                matched = p.hasMatchingEnvVars(modelEnvVars);
+
+                if (matched) {
+                    p.killRecursively();
+                } else {
+                    LOGGER.finest("Environment variable didn't match");
                 }
 
-                if(matched)
-                    p.killRecursively();
-                else
-                    LOGGER.finest("Environment variable didn't match");
-
             }
-        }
-
-        static {
-            WinProcess.enableDebugPrivilege();
         }
     }
 
@@ -873,194 +870,49 @@ public abstract class ProcessTree implements Iterable<OSProcess>, IProcessTree, 
      * Implementation for Mac OS X based on sysctl(3).
      */
     private static class Darwin extends Unix {
+
         Darwin() {
+
             try {
-                IntByReference _ = new IntByReference(sizeOfInt);
-                IntByReference size = new IntByReference(sizeOfInt);
-                Memory m;
-                int nRetry = 0;
-                while(true) {
-                    // find out how much memory we need to do this
-                    if(LIBC.sysctl(MIB_PROC_ALL,3, NULL, size, NULL, _)!=0)
-                        throw new IOException("Failed to obtain memory requirement: "+LIBC.strerror(Native.getLastError()));
-
-                    // now try the real call
-                    m = new Memory(size.getValue());
-                    if(LIBC.sysctl(MIB_PROC_ALL,3, m, size, NULL, _)!=0) {
-                        if(Native.getLastError()==ENOMEM && nRetry++<16)
-                            continue; // retry
-                        throw new IOException("Failed to call kern.proc.all: "+LIBC.strerror(Native.getLastError()));
-                    }
-                    break;
+                for (final NativeProcess process : NativeUtils.getInstance().getMacProcesses()) {
+                    super.processes.put(process.getPid(), new DarwinProcess(process));
                 }
-
-                int count = size.getValue()/sizeOf_kinfo_proc;
-                LOGGER.fine("Found "+count+" processes");
-
-                for( int base=0; base<size.getValue(); base+=sizeOf_kinfo_proc) {
-                    int pid = m.getInt(base+24);
-                    int ppid = m.getInt(base+416);
-//                    int effective_uid = m.getInt(base+304);
-//                    byte[] comm = new byte[16];
-//                    m.read(base+163,comm,0,16);
-
-                    super.processes.put(pid,new DarwinProcess(pid,ppid));
-                }
-            } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to obtain process list",e);
+            } catch (NativeAccessException exc) {
+                LOGGER.log(Level.WARNING, "Failed to fecth Native Mac Processes", NativeUtils.getInstance().getLastMacError());
             }
         }
 
         private class DarwinProcess extends UnixProcess {
-            private final int ppid;
-            private EnvVars envVars;
-            private List<String> arguments;
-
-            DarwinProcess(int pid, int ppid) {
-                super(pid);
-                this.ppid = ppid;
+            NativeProcess process;
+             
+            private DarwinProcess(NativeProcess process) {
+                super(process.getPid());
+                this.process = process;
             }
 
             public OSProcess getParent() {
-                return get(ppid);
+                return get(process.getPpid());
             }
 
             public synchronized EnvVars getEnvironmentVariables() {
-                if(envVars !=null)
-                    return envVars;
-                parse();
+                EnvVars envVars = new EnvVars();
+                for (String key : process.getEnvironmentVariables().keySet()) {
+                    envVars.put(key, process.getEnvironmentVariables().get(key)); 
+                }
                 return envVars;
             }
 
             public List<String> getArguments() {
-                if(arguments !=null)
-                    return arguments;
-                parse();
+                List<String> arguments = new ArrayList<String>();
+                StringTokenizer tokenizer = new StringTokenizer(process.getCommandLine());
+                // Skip the exec name
+                tokenizer.nextToken();
+                while (tokenizer.hasMoreTokens()){
+                    arguments.add(tokenizer.nextToken());
+                }
                 return arguments;
             }
-
-            private void parse() {
-                try {
-// allocate them first, so that the parse error wil result in empty data
-                    // and avoid retry.
-                    arguments = new ArrayList<String>();
-                    envVars = new EnvVars();
-
-                    IntByReference _ = new IntByReference();
-
-                    IntByReference argmaxRef = new IntByReference(0);
-                    IntByReference size = new IntByReference(sizeOfInt);
-
-                    // for some reason, I was never able to get sysctlbyname work.
-//        if(LIBC.sysctlbyname("kern.argmax", argmaxRef.getPointer(), size, NULL, _)!=0)
-                    if(LIBC.sysctl(new int[]{CTL_KERN,KERN_ARGMAX},2, argmaxRef.getPointer(), size, NULL, _)!=0)
-                        throw new IOException("Failed to get kernl.argmax: "+LIBC.strerror(Native.getLastError()));
-
-                    int argmax = argmaxRef.getValue();
-
-                    class StringArrayMemory extends Memory {
-                        private long offset=0;
-
-                        StringArrayMemory(long l) {
-                            super(l);
-                        }
-
-                        int readInt() {
-                            int r = getInt(offset);
-                            offset+=sizeOfInt;
-                            return r;
-                        }
-
-                        byte peek() {
-                            return getByte(offset);
-                        }
-
-                        String readString() {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            byte ch;
-                            while((ch = getByte(offset++))!='\0')
-                                baos.write(ch);
-                            return baos.toString();
-                        }
-
-                        void skip0() {
-                            // skip trailing '\0's
-                            while(getByte(offset)=='\0')
-                                offset++;
-                        }
-                    }
-                    StringArrayMemory m = new StringArrayMemory(argmax);
-                    size.setValue(argmax);
-                    if(LIBC.sysctl(new int[]{CTL_KERN,KERN_PROCARGS2,pid},3, m, size, NULL, _)!=0)
-                        throw new IOException("Failed to obtain ken.procargs2: "+LIBC.strerror(Native.getLastError()));
-
-
-                    /*
-                    * Make a sysctl() call to get the raw argument space of the
-                        * process.  The layout is documented in start.s, which is part
-                        * of the Csu project.  In summary, it looks like:
-                        *
-                        * /---------------\ 0x00000000
-                        * :               :
-                        * :               :
-                        * |---------------|
-                        * | argc          |
-                        * |---------------|
-                        * | arg[0]        |
-                        * |---------------|
-                        * :               :
-                        * :               :
-                        * |---------------|
-                        * | arg[argc - 1] |
-                        * |---------------|
-                        * | 0             |
-                        * |---------------|
-                        * | env[0]        |
-                        * |---------------|
-                        * :               :
-                        * :               :
-                        * |---------------|
-                        * | env[n]        |
-                        * |---------------|
-                        * | 0             |
-                        * |---------------| <-- Beginning of data returned by sysctl()
-                        * | exec_path     |     is here.
-                        * |:::::::::::::::|
-                        * |               |
-                        * | String area.  |
-                        * |               |
-                        * |---------------| <-- Top of stack.
-                        * :               :
-                        * :               :
-                        * \---------------/ 0xffffffff
-                        */
-
-                    int nargs = m.readInt();
-                    m.readString(); // exec path
-                    for( int i=0; i<nargs; i++) {
-                        m.skip0();
-                        arguments.add(m.readString());
-                    }
-
-                    // this is how you can read environment variables
-                    while(m.peek()!=0)
-                    envVars.addLine(m.readString());
-                } catch (IOException e) {
-                    // this happens with insufficient permissions, so just ignore the problem.
-                }
-            }
         }
-
-        // local constants
-        private static final int sizeOf_kinfo_proc = 492; // TODO:checked on 32bit Mac OS X. is this different on 64bit?
-        private static final int sizeOfInt = Native.getNativeSize(int.class);
-        private static final int CTL_KERN = 1;
-        private static final int KERN_PROC = 14;
-        private static final int KERN_PROC_ALL = 0;
-        private static final int ENOMEM = 12;
-        private static int[] MIB_PROC_ALL = {CTL_KERN, KERN_PROC, KERN_PROC_ALL};
-        private static final int KERN_ARGMAX = 8;
-        private static final int KERN_PROCARGS2 = 49;
     }
 
     /**
