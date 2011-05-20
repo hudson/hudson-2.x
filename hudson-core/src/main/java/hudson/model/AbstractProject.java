@@ -26,7 +26,6 @@
  */
 package hudson.model;
 
-import java.util.regex.Pattern;
 import antlr.ANTLRException;
 import hudson.AbortException;
 import hudson.CopyOnWrite;
@@ -44,12 +43,12 @@ import hudson.model.Descriptor.FormException;
 import hudson.model.Fingerprint.RangeSet;
 import hudson.model.Queue.Executable;
 import hudson.model.Queue.Task;
-import hudson.model.queue.SubTask;
 import hudson.model.Queue.WaitingItem;
 import hudson.model.RunMap.Constructor;
 import hudson.model.labels.LabelAtom;
 import hudson.model.labels.LabelExpression;
 import hudson.model.queue.CauseOfBlockage;
+import hudson.model.queue.SubTask;
 import hudson.model.queue.SubTaskContributor;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
@@ -75,6 +74,28 @@ import hudson.util.EditDistance;
 import hudson.util.FormValidation;
 import hudson.widgets.BuildHistoryWidget;
 import hudson.widgets.HistoryWidget;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.Vector;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.servlet.ServletException;
 import net.sf.json.JSONObject;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -87,29 +108,9 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 
-import javax.servlet.ServletException;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static hudson.scm.PollingResult.*;
-import static javax.servlet.http.HttpServletResponse.*;
+import static hudson.scm.PollingResult.BUILD_NOW;
+import static hudson.scm.PollingResult.NO_CHANGES;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 /**
  * Base implementation of {@link Job}s that build software.
@@ -233,7 +234,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     private volatile boolean cleanWorkspaceRequired;
 
     protected AbstractProject(ItemGroup parent, String name) {
-        super(parent,name);
+        super(parent, name);
 
         if(!Hudson.getInstance().getNodes().isEmpty()) {
             // if a new job is configured with Hudson that already has slave nodes
@@ -247,6 +248,12 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         super.onCreatedFromScratch();
         // solicit initial contributions, especially from TransientProjectActionFactory
         updateTransientActions();
+        setCreationTime(new GregorianCalendar().getTimeInMillis());
+        User user = User.current();
+        if (user != null){
+            setCreatedBy(user.getId());
+            grantProjectMatrixPermissions(user);
+        }
     }
 
     @Override
