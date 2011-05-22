@@ -67,6 +67,7 @@ THE SOFTWARE.
     <module>hudson-core</module>
     <module>hudson-inject</module>
     <module>hudson-maven</module>
+    <module>hudson-jaxb</module>
     <module>hudson-war</module>
     <module>hudson-test-support</module>
     <module>hudson-plugin-parent</module>
@@ -157,6 +158,13 @@ THE SOFTWARE.
             <target>1.5</target>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
+
       </plugins>
     </pluginManagement>
     
@@ -342,6 +350,12 @@ THE SOFTWARE.
         <artifactId>commons-codec</artifactId>
         <version>1.4</version>
       </dependency> 
+
+      <dependency>
+        <groupId>org.jvnet.hudson</groupId>
+        <artifactId>xstream</artifactId>
+        <version>1.3.1-hudson-8</version>
+      </dependency>
       
       <dependency>
         <groupId>junit</groupId>
@@ -393,6 +407,12 @@ THE SOFTWARE.
         <groupId>${project.groupId}</groupId>
         <artifactId>hudson-war</artifactId>
         <type>war</type>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-test-common</artifactId>
         <version>${project.version}</version>
       </dependency>
 

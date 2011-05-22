@@ -31,7 +31,6 @@ THE SOFTWARE.
     <version>2.0.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.jvnet.hudson.test</groupId>
   <artifactId>hudson-test-support</artifactId>
   <name>Hudson :: Test Support</name>
   <packaging>pom</packaging>
