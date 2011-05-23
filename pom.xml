@@ -66,10 +66,10 @@ THE SOFTWARE.
     <module>hudson-cli</module>
     <module>hudson-core</module>
     <module>hudson-inject</module>
-    <module>hudson-maven/legacy</module>
-    <module>hudson-maven/integrated</module>
     <module>hudson-utils</module>
     <module>hudson-jaxb</module>
+    <module>hudson-maven/legacy</module>
+    <module>hudson-maven/integrated</module>
     <module>hudson-service</module>
     <module>hudson-rest</module>
     <module>hudson-gwt</module>
