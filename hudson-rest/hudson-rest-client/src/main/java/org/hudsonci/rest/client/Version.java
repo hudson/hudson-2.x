@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.client;
 
-import org.hudsonci.utils.VersionSupport;
+import org.hudsonci.utils.common.VersionSupport;
 
 /**
  * REST client version.
