@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+
+    Sonatype Matrix Professional (TM)
+
+    Copyright (c) 2010 Sonatype, Inc. All rights reserved.
+
+    Includes the third-party code listed at http://www.sonatype.com/products/matrix/attributions/.
+    "Sonatype" and "Sonatype Matrix Professional" are trademarks of Sonatype, Inc.
+
+-->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>MavenBuildInfo GWT Dev Page</title>
+    <script type="text/javascript" language="javascript">
+        var baseRestURI = "/rest/plugin/matrix-maven-plugin";
+
+        // Fill in what you need here for testing.
+        // Once there's a test servlet on the backend these values may not matter
+        // for dev mode.
+        // Or send as query parameters 'project' and 'build'
+        // Preference is given to the javascript values if they're not null.
+        //var projectName = "matrix-maven";
+        //var buildNumber = "1";
+        
+        // Might even be able to make these attributes of the mainPanel div
+        // and have GWT pull them off the element.  That may make prod vs dev
+        // mode easier to configure with text entry on the dev page that sets
+        // these.
+    </script>
+    <script type="text/javascript" language="javascript" src="MavenBuildInfo/MavenBuildInfo.nocache.js"></script>
+	<style type="text/css">
+		/* Simulates Hudson wrapper sizing */
+		body
+		,html
+		{
+		    height: 550px;
+		    margin: 0;
+		    padding: 0;
+		}
+        
+        /*
+            Force the size since we can't use the new RootLayoutPanel which takes
+            care of filling parents for us.
+        */		
+		#sonatype-mavenBuildInfoPanel
+		{
+		    width: 100%;
+		    height: 100%;
+		    /* Useful for debugging panel/div/container sizing issues
+		    background: aliceblue;
+		    */
+		}
+	</style>
+  </head>
+
+  <body>
+    <h1>GWT page for rapid dev mode</h1>
+  
+    <div id="sonatype-mavenBuildInfoPanel"/>
+  </body>
+</html>

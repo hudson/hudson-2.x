@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
+
+    <!--
+        Add our own table because summary tag assumes it's in a table, but the 
+        project page doesn't wrap action fragments in a table; but it does other
+        hardcoded actions like changes and test results.
+        
+        TODO: this would be something to fix in Hudson core but could mess up 
+        rendering of other plugins with jobMain.jelly that have worked around
+        this too.
+        
+        See AbstractProject/main.jelly
+    -->
+    <table style="margin-top: 1em; margin-left:1em;">
+        <j:if test="${it.buildAvailable}">
+            <t:summary icon="/plugin/matrix-maven-plugin/images/maven-icon-48x48.png" href="lastBuild/maven/">
+                Latest Maven Build Information
+            </t:summary>
+        </j:if>
+    </table>
+</j:jelly>

@@ -13,14 +13,14 @@
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
     <version>2.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <!-- TODO: Should really give these modules their own groupId -->
 
-  <artifactId>hudson-maven</artifactId>
+  <artifactId>hudson-maven-legacy</artifactId>
   <packaging>pom</packaging>
-  <name>Hudson Maven</name>
+  <name>Hudson Maven (Legacy)</name>
   <description>Hudson Maven Integration</description>
 
   <properties>
@@ -31,11 +31,11 @@
   </properties>
 
   <modules>
-    <module>legacy/maven-agent</module>
-    <module>legacy/maven-interceptor</module>
-    <module>legacy/maven-plugin</module>
-    <module>legacy/maven3-agent</module>
-    <module>legacy/maven3-interceptor</module>
+    <module>maven-agent</module>
+    <module>maven-interceptor</module>
+    <module>maven-plugin</module>
+    <module>maven3-agent</module>
+    <module>maven3-interceptor</module>
   </modules>
 
   <!--

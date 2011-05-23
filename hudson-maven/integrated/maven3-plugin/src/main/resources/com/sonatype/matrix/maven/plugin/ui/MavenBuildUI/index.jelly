@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+    <l:layout title="${it.pageTitle}" permission="${it.viewPermission}" norefresh="true">
+        <l:header>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+            <script type="text/javascript" language="javascript">
+                var baseRestURI = "${it.baseRestURI}";
+                var projectName = "${it.projectName}";
+                var buildNumber = "${it.buildNumber}";
+            </script>
+            <script type="text/javascript" language="javascript" src="${it.pluginPath}/MavenBuildInfo/MavenBuildInfo.nocache.js"/>
+            <style type="text/css">
+                /*
+                    Force the size since we can't use the new RootLayoutPanel which takes
+                    care of filling parents for us.
+                */      
+                #sonatype-mavenBuildInfoPanel
+                {
+                    width: 100%;
+                    height: 100%;
+                    
+                    /* Useful for debugging panel/div/container sizing issues
+                    background: aliceblue;
+                    */
+                }
+            </style>
+        </l:header>
+    
+        <st:include page="sidepanel.jelly" from="${it.sidePanelOwner}"/>
+        <j:set var="images" value="${it.imagesPath}"/>
+
+        <l:main-panel>
+            <div id="sonatype-mavenBuildInfoPanel"/>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

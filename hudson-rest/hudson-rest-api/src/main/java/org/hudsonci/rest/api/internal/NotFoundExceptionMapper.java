@@ -49,12 +49,10 @@ public class NotFoundExceptionMapper
 {
     private static final Logger log = LoggerFactory.getLogger(NotFoundExceptionMapper.class);
 
-    @Override
     public Response toResponse(final NotFoundException cause) {
         checkNotNull(cause);
         String message = cause.getMessage();
         log.debug("Generating NOT_FOUND response: {}", message);
         return Response.status(NOT_FOUND).entity(cause.getMessage()).build();
     }
-
 }

@@ -32,7 +32,7 @@ THE SOFTWARE.
 
   <artifactId>hudson-rest-common</artifactId>
   <name>Hudson :: REST :: Common</name>
-    
+
   <dependencies>
     <dependency>
       <groupId>org.sonatype.sisu</groupId>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sonatype.matrix.maven</groupId>
+        <artifactId>matrix-maven</artifactId>
+        <version>1.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>matrix-snapshotmonitor-plugin</artifactId>
+    <name>Matrix Maven :: SNAPSHOT Monitor</name>
+    <packaging>hpi</packaging>
+
+    <properties>
+        <pluginName>${product.pluginNamePrefix} Maven SNAPSHOT Monitor</pluginName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sonatype.matrix</groupId>
+            <artifactId>matrix-pluginsupport</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-repository-metadata</artifactId>
+            <version>${mavenVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sonatype.matrix.maven</groupId>
+            <artifactId>matrix-maven-plugin</artifactId>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Strip off the version; so its easier to drop in plugins for testing -->
+        <finalName>${project.artifactId}</finalName>
+    </build>
+
+</project>

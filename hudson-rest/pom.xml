@@ -48,25 +48,25 @@ THE SOFTWARE.
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-core-asl</artifactId>
-        <version>${jacksonVersion}</version>
+        <version>1.7.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-mapper-asl</artifactId>
-        <version>${jacksonVersion}</version>
+        <version>1.7.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-jaxrs</artifactId>
-        <version>${jacksonVersion}</version>
+        <version>1.7.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-xc</artifactId>
-        <version>${jacksonVersion}</version>
+        <version>1.7.1</version>
       </dependency>
 
       <dependency>

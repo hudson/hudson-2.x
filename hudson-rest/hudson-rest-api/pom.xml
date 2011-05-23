@@ -37,6 +37,11 @@ THE SOFTWARE.
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-rest-common</artifactId>
     </dependency>
 
@@ -92,6 +97,7 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.5</version>
         <executions>
           <execution>
             <id>build-docs-jar</id>
@@ -125,8 +131,8 @@ THE SOFTWARE.
               <artifacts>
                 <artifact>
                   <file>${project.build.directory}/${project.build.finalName}-docs.jar</file>
-                  <type>jar</type>
                   <classifier>docs</classifier>
+                  <type>jar</type>
                 </artifact>
               </artifacts>
             </configuration>

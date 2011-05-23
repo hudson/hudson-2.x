@@ -42,6 +42,12 @@ THE SOFTWARE.
 
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-utils</artifactId>
     </dependency>
 

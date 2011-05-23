@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+    <l:header/>
+    <l:side-panel>
+        <l:tasks>
+            <l:task icon="images/24x24/setting.gif" href="${rootURL}/manage" title="Manage Server" permission="${app.ADMINISTER}"/>
+        </l:tasks>
+    </l:side-panel>
+</j:jelly>

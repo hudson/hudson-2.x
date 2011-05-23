@@ -154,7 +154,6 @@ public class RestServlet
         }
     }
 
-    @Override
     public synchronized void addListener(final ContainerListener listener) {
         checkNotNull(listener);
         listeners.add(listener);

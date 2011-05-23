@@ -78,12 +78,10 @@ public class SmoothieComponentProviderFactory
 
             return new IoCInstantiatedComponentProvider()
             {
-                @Override
                 public Object getInjectableInstance(final Object obj) {
                     return obj;
                 }
 
-                @Override
                 public Object getInstance() {
                     return entry.getValue();
                 }

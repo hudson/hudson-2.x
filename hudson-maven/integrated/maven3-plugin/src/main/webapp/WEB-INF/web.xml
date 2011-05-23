@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_3_0.dtd">
+
+<web-app>
+
+    <servlet>
+        <servlet-name>jUnitHostImpl</servlet-name>
+        <servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>remoteLoggerServiceImpl</servlet-name>
+        <servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jUnitHostImpl</servlet-name>
+        <url-pattern>/MavenBuildInfo/junithost/*</url-pattern>
+        <url-pattern>/MavenConfiguration/junithost/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>remoteLoggerServiceImpl</servlet-name>
+        <url-pattern>/MavenBuildInfo/gwt-log</url-pattern>
+        <url-pattern>/MavenConfiguration/gwt-log</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>MavenBuildInfo.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

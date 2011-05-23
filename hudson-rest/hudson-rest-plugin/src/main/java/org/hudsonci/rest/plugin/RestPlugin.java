@@ -24,8 +24,8 @@
 
 package org.hudsonci.rest.plugin;
 
-import org.hudsonci.events.EventConsumer;
-import org.hudsonci.events.ready.ReadyEvent;
+import org.hudsonci.service.events.EventConsumer;
+import org.hudsonci.service.events.ready.ReadyEvent;
 import hudson.Plugin;
 import hudson.model.Descriptor;
 import net.sf.json.JSONObject;

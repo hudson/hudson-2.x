@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Sonatype Hudson Professional (TM)
+    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
+    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
+    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
+    "Hudson" is a trademark of Oracle, Inc.
+
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:f="/lib/form">
+    <l:layout title="${it.pageTitle}" permission="${it.viewPermission}" norefresh="true">
+        <st:include page="sidepanel.jelly" from="${it.sidePanelOwner}"/>
+        <j:set var="images" value="${it.imagesPath}"/>
+
+        <l:main-panel>
+            <h1><img src="${images}/maven-icon-24x24.png" alt="icon" style="float: left"/> ${it.displayName}</h1>
+
+            <!--<j:choose>-->
+                <!--<j:when test="${it.buildAvailable}">-->
+                    <!--<div class="modules">-->
+                        <!--&lt;!&ndash;-->
+                            <!--TODO: while project is building update the projects in an ajaxy way.-->
+                        <!--&ndash;&gt;-->
+                        <!--<j:set var="projects" value="${it.buildState.participatingProjects}"/>-->
+                        <!--<j:choose>-->
+                            <!--<j:when test="${it.building and empty( projects )}">-->
+                                <!--<h2>Modules</h2>-->
+                                <!--<p>Waiting to analyze modules...</p>-->
+                            <!--</j:when>-->
+                            <!--<j:when test="${empty( projects )}">-->
+                                <!--<h2>Modules</h2>-->
+                                <!--<p>There were no modules built.</p>-->
+                            <!--</j:when>-->
+                            <!--<j:otherwise>-->
+                                <!--<h2>Modules (${projects.size()})<j:if test="${it.building}"> building...</j:if></h2>-->
+                                <!--<ol>-->
+                                <!--<j:forEach var="project" items="${projects}">-->
+                                    <!--<li class="project" id="${project.id}">-->
+                                        <!--<p>${project.name}</p>-->
+                                        <!--<j:if test="${!empty( project.profiles ) }">-->
+                                            <!--<div class="profiles">Profiles:-->
+                                                <!--<ul>-->
+                                                <!--<j:forEach var="profile" items="${project.profiles}">-->
+                                                    <!--<j:choose>-->
+                                                        <!--<j:when test="${profile.active}">-->
+                                                            <!--<li>${profile.id}</li>-->
+                                                        <!--</j:when>-->
+                                                        <!--<j:otherwise>-->
+                                                            <!--<li class="disabled">${profile.id}</li>-->
+                                                        <!--</j:otherwise>-->
+                                                    <!--</j:choose>-->
+                                                <!--</j:forEach>-->
+                                                <!--</ul>-->
+                                            <!--</div>-->
+                                        <!--</j:if>-->
+                                    <!--</li>-->
+                                <!--</j:forEach>-->
+                                <!--</ol>-->
+                            <!--</j:otherwise>-->
+                        <!--</j:choose>-->
+                    <!--</div>-->
+                <!--</j:when>-->
+
+                <!--<j:otherwise>-->
+                    <!--<p>No builds yet.</p>-->
+                <!--</j:otherwise>-->
+            <!--</j:choose>-->
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
