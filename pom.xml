@@ -57,6 +57,7 @@ THE SOFTWARE.
     <aspectjVersion>1.6.10</aspectjVersion>
     <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
     <sisuInjectVersion>2.2.2</sisuInjectVersion>
+    <jacksonVersion>1.7.1</jacksonVersion>
     <jetty-version>6.1.26</jetty-version>
   </properties>
 
@@ -67,6 +68,7 @@ THE SOFTWARE.
     <module>hudson-core</module>
     <module>hudson-inject</module>
     <module>hudson-maven</module>
+    <module>hudson-utils</module>
     <module>hudson-jaxb</module>
     <module>hudson-gwt</module>
     <module>hudson-war</module>
@@ -164,6 +166,26 @@ THE SOFTWARE.
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
           <version>1.6</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <signature>
+                  <groupId>org.codehaus.mojo.signature</groupId>
+                  <artifactId>java15</artifactId>
+                  <version>1.0</version>
+                </signature>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
         </plugin>
 
       </plugins>
@@ -394,6 +416,12 @@ THE SOFTWARE.
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>hudson-remoting</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-utils</artifactId>
         <version>${project.version}</version>
       </dependency>
 

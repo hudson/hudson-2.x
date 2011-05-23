@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.utils;
+package org.hudsonci.utils.plugin;
 
 import hudson.Plugin;
 import hudson.PluginWrapper;

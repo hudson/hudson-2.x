@@ -52,7 +52,7 @@ import java.util.List;
 public class CodeInsertPlugin
     extends AbstractParameterizablePlugin
 {
-    public static final String NS = "http://hudson-ci.org/jaxb/code-insert";
+    public static final String NS = "http://hudson-ci.org/jaxb/hudson/code-insert";
 
     public static final String CODE = "code";
 

@@ -50,7 +50,7 @@ import java.util.List;
 public abstract class AbstractIdentityBuilderPlugin
     extends AbstractParameterizablePlugin
 {
-    public static final String NAMESPACE_URI = "http://hudson-ci.org/jaxb/id-builder";
+    public static final String NAMESPACE_URI = "http://hudson-ci.org/jaxb/hudson/id-builder";
     private static final String TAG_EXCLUDE = "exclude";
     private static final String ATTRIBUTE_FIELDS = "fields";
     private static final String FIELD_DELIMITER = ",";
