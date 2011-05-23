@@ -31,11 +31,11 @@
   </properties>
 
   <modules>
-    <module>maven-agent</module>
-    <module>maven-interceptor</module>
-    <module>maven-plugin</module>
-    <module>maven3-agent</module>
-    <module>maven3-interceptor</module>
+    <module>legacy/maven-agent</module>
+    <module>legacy/maven-interceptor</module>
+    <module>legacy/maven-plugin</module>
+    <module>legacy/maven3-agent</module>
+    <module>legacy/maven3-interceptor</module>
   </modules>
 
   <!--

@@ -28,29 +28,72 @@ THE SOFTWARE.
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson-maven</artifactId>
     <version>2.0.1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
   
-  <artifactId>maven-interceptor</artifactId>
+  <artifactId>maven-agent</artifactId>
   <packaging>jar</packaging>
-  <name>Hudson Maven :: M2 Interceptor</name>
+  <name>Hudson Maven :: M2 Agent</name>
   <description>
-    Plexus module that intercepts invocations of key Maven components
-    so that Hudson can monitor what's going on in Maven.
+    Code that boots up Maven2 with Hudson's remoting support in place.
+    Used for the native maven support.
   </description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <!-- compile with 1.2 so that we can report JDK version errors nicely -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.2</source>
+          <target>1.2</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <forkMode>never</forkMode>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>2.0.9</version>
-      <scope>provided</scope>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven-interceptor</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-classworlds</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-
+     
     <dependency>
       <groupId>classworlds</groupId>
       <artifactId>classworlds</artifactId>
       <version>1.1</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
     </dependency>
 
     <dependency>
@@ -58,6 +101,26 @@ THE SOFTWARE.
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
       <version>3.1-rc1</version>
+    </dependency>
+    
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>2.0.9</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>classworlds</groupId>
+          <artifactId>classworlds</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-remoting</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
