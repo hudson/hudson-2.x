@@ -546,11 +546,6 @@ THE SOFTWARE.
             <version>2.5</version>
         </dependency>
         <dependency>
-            <groupId>xpp3</groupId>
-            <artifactId>xpp3</artifactId>
-            <version>1.1.4c</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -569,11 +564,6 @@ THE SOFTWARE.
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2</version>
-        </dependency>   
-        <dependency><!-- StAX implementation. See HUDSON-2547. -->
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>wstx-asl</artifactId>
-            <version>3.2.7</version>
         </dependency>
         <dependency>
             <groupId>javax.jmdns</groupId>
@@ -625,14 +615,6 @@ THE SOFTWARE.
             <version>1.0</version>
         </dependency>
 
-    <!-- offline profiler API to put in the classpath if we need it -->
-    <!--dependency>
-      <groupId>com.yourkit.api</groupId>
-      <artifactId>yjp</artifactId>
-      <version>dontcare</version>
-      <scope>system</scope>
-      <systemPath>/usr/local/yjp/lib/yjp.jar</systemPath>
-    </dependency-->
         <dependency>
             <groupId>jline</groupId>
             <artifactId>jline</artifactId>
