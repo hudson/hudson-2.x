@@ -566,11 +566,6 @@ THE SOFTWARE.
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.xml.txw2</groupId>
-            <artifactId>txw2</artifactId>
-            <version>20070624</version>
-        </dependency>
-        <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.2</version>
