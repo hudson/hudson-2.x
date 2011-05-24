@@ -1,77 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+The MIT License
 
-    Sonatype Hudson Professional (TM)
-    Copyright (C) 2010-2011 Sonatype, Inc. All rights reserved.
-    Includes the third-party code listed at http://www.sonatype.com/products/hudson/attributions/.
-    "Sonatype" and "Sonatype Hudson Professional" are trademarks of Sonatype, Inc.
-    "Hudson" is a trademark of Oracle, Inc.
+Copyright (c) 2010-2011, Sonatype, Inc.
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jvnet.hudson.main</groupId>
+    <artifactId>maven3-integration</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+  </parent>
 
-    <parent>
-        <groupId>com.sonatype.matrix.maven</groupId>
-        <artifactId>matrix-maven</artifactId>
-        <version>1.2-SNAPSHOT</version>
-    </parent>
+  <artifactId>maven3-eventspy-common</artifactId>
+  <name>Hudson :: Maven3 :: Event Spy Common</name>
 
-    <artifactId>matrix-maven-eventspy-common</artifactId>
-    <name>Matrix Maven :: Event Spy Common</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-utils</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.sonatype.matrix</groupId>
-            <artifactId>matrix-common</artifactId>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-model</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>com.sonatype.matrix.maven</groupId>
-            <artifactId>matrix-maven-model</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-remoting</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-        <dependency>
-            <groupId>org.jvnet.hudson.main</groupId>
-            <artifactId>hudson-remoting</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!-- The event spy and related modules need to be Java 5 compatible -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <signature>
-                                <groupId>org.codehaus.mojo.signature</groupId>
-                                <artifactId>java15</artifactId>
-                                <version>1.0</version>
-                            </signature>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
