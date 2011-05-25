@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2009, Sun Microsystems, Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation, Nikita Levyankov
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,6 @@ public class ExtractChangeLogParser extends ChangeLogParser {
             super.setParent(parent);
         }
 
-        @Override
         public Collection<String> getAffectedPaths() {
             Collection<String> paths = new ArrayList<String>(files.size());
             for (FileInZip file : files) {
@@ -114,13 +113,11 @@ public class ExtractChangeLogParser extends ChangeLogParser {
             return paths;
         }
 
-        @Override
         @Exported
         public User getAuthor() {
             return User.get("testuser");
         }
 
-        @Override
         @Exported
         public String getMsg() {
             return "Extracted from " + zipFile;
@@ -132,6 +129,10 @@ public class ExtractChangeLogParser extends ChangeLogParser {
 
         public void addFiles(Collection<FileInZip> fileNames) {
             this.files.addAll(fileNames);
+        }
+
+        public String getUser() {
+            return getAuthor().getDisplayName();
         }
     }
 
