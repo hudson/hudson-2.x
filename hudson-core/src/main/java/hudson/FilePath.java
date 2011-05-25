@@ -1515,14 +1515,17 @@ public final class FilePath implements Serializable {
             Future<Void> future = target.actAsync(new FileCallable<Void>() {
                 public Void invoke(File f, VirtualChannel channel) throws IOException {
                     try {
-                        readFromTar(remote + '/' + fileMask, f, remoteCompressionType.extract(pipe.getIn()));
+                        readFromTar(remote + '/' + fileMask, f, (remoteCompressionType != null?
+                            remoteCompressionType.extract(pipe.getIn()) :
+                            FilePath.TarCompression.GZIP.extract(pipe.getIn())));
                         return null;
                     } finally {
                         pipe.getIn().close();
                     }
                 }
             });
-            int r = writeToTar(new File(remote), fileMask, excludes, remoteCompressionType.compress(pipe.getOut()));
+            int r = writeToTar(new File(remote), fileMask, excludes, (remoteCompressionType != null?
+                remoteCompressionType.compress(pipe.getOut()) : FilePath.TarCompression.GZIP.compress(pipe.getOut())));
             try {
                 future.get();
             } catch (ExecutionException e) {
@@ -1536,15 +1539,19 @@ public final class FilePath implements Serializable {
             Future<Integer> future = actAsync(new FileCallable<Integer>() {
                 public Integer invoke(File f, VirtualChannel channel) throws IOException {
                     try {
-                        return writeToTar(f, fileMask, excludes, remoteCompressionType.compress(pipe.getOut()));
+                        return writeToTar(f, fileMask, excludes, (remoteCompressionType != null?
+                            remoteCompressionType.compress(pipe.getOut()) :
+                            FilePath.TarCompression.GZIP.compress(pipe.getOut())));
                     } finally {
                         pipe.getOut().close();
                     }
                 }
             });
             try {
+                //it's possible to get NPE if on slave works old process
                 readFromTar(remote + '/' + fileMask, new File(target.remote),
-                    remoteCompressionType.extract(pipe.getIn()));
+                    (remoteCompressionType != null? remoteCompressionType.extract(pipe.getIn()) :
+                        FilePath.TarCompression.GZIP.extract(pipe.getIn())));
             } catch (IOException e) {// BuildException or IOException
                 try {
                     future.get(3, TimeUnit.SECONDS);
