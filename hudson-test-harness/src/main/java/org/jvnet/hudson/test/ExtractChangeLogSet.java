@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2009, Sun Microsystems, Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation, Nikita Levyankov
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,9 @@ package org.jvnet.hudson.test;
 import hudson.model.AbstractBuild;
 import hudson.scm.ChangeLogSet;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Collections;
-import java.util.Iterator;
 
 
 /**
@@ -45,13 +45,10 @@ public class ExtractChangeLogSet extends ChangeLogSet<ExtractChangeLogParser.Ext
         this.changeLogs = Collections.unmodifiableList(changeLogs);
     }
 
-    @Override
-    public boolean isEmptySet() {
-        return changeLogs.isEmpty();
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<ExtractChangeLogParser.ExtractChangeLogEntry> getLogs() {
+        return changeLogs;
     }
-
-    public Iterator<ExtractChangeLogParser.ExtractChangeLogEntry> iterator() {
-        return changeLogs.iterator();
-    }
-
 }
