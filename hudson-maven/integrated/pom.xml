@@ -130,13 +130,11 @@ THE SOFTWARE.
 
   <modules>
     <module>maven3-model</module>
-<!--
     <module>maven3-eventspy-common</module>
     <module>maven3-eventspy-3.0</module>
     <module>maven3-slavebundle</module>
     <module>maven3-plugin</module>
     <module>maven3-snapshotmonitor-plugin</module>
--->
   </modules>
 
 </project>

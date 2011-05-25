@@ -147,6 +147,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+	<version>2.6</version>
       </plugin>
     </plugins>
   </reporting>

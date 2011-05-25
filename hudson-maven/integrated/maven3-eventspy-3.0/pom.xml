@@ -100,6 +100,7 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-component-metadata</artifactId>
+        <version>1.5.5</version>
       </plugin>
 
       <plugin>

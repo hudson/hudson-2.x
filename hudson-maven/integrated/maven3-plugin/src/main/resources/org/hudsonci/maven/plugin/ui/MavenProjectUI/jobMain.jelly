@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
+
+    <!--
+        Add our own table because summary tag assumes it's in a table, but the 
+        project page doesn't wrap action fragments in a table; but it does other
+        hardcoded actions like changes and test results.
+        
+        TODO: this would be something to fix in Hudson core but could mess up 
+        rendering of other plugins with jobMain.jelly that have worked around
+        this too.
+        
+        See AbstractProject/main.jelly
+    -->
+    <table style="margin-top: 1em; margin-left:1em;">
+        <j:if test="${it.buildAvailable}">
+            <t:summary icon="/plugin/maven3-plugin/images/maven-icon-48x48.png" href="lastBuild/maven/">
+                Latest Maven Build Information
+            </t:summary>
+        </j:if>
+    </table>
+</j:jelly>

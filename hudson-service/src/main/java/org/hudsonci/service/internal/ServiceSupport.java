@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Base Matrix Service from which all service implementations should extend.
+ * Base Hudson Service from which all service implementations should extend.
  *
  * <p>Common {@literal preconditions} of service implementation methods
  * include:
