@@ -32,7 +32,7 @@ import org.hudsonci.maven.model.config.BuildConfigurationDTO;
  * Client for
  * {@link org.hudsonci.maven.plugin.builder.rest.BuilderConfigResource}
  * 
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface BuilderConfigClient extends HudsonClient.Extension {
     BuildConfigurationDTO getBuilderConfiguration(String projectName, int builderIndex);

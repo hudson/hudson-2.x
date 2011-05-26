@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Hyperlink;
  * A cell to render hyperlinks.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class HyperlinkCell
     extends AbstractCell<Hyperlink>

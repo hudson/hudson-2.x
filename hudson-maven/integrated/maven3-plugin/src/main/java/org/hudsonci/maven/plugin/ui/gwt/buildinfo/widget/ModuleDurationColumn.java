@@ -33,7 +33,7 @@ import org.hudsonci.maven.model.state.MavenProjectDTO;
  * Column to display the duration of a {@link MavenProjectDTO} build.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ModuleDurationColumn
     extends TextColumn<MavenProjectDTO>

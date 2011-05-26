@@ -40,7 +40,7 @@ import hudson.model.AbstractProject;
  * scheduled builds have not necessarily been executed, that is intentionally
  * not an operation supported by this interface.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(BuildServiceImpl.class)
 public interface BuildService {

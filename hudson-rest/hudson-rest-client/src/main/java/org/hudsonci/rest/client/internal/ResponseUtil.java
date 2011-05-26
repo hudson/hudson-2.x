@@ -38,7 +38,7 @@ import javax.ws.rs.core.Response.StatusType;
  * Response helpers.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ResponseUtil
 {
@@ -46,8 +46,6 @@ public class ResponseUtil
 
     /**
      * Close the given response quietly.
-     *
-     * @since 1.1
      */
     public static void close(final ClientResponse response) {
         if (response != null) {
@@ -96,8 +94,6 @@ public class ResponseUtil
 
     /**
      * Check if the given response is compatible with <em>any</em> of the given media-types.
-     *
-     * @since 1.1
      */
     public static boolean isCompatible(final ClientResponse response, final MediaType... types) {
         assert response != null;

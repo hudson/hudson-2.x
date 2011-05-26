@@ -39,7 +39,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoPickerTable
  * Presenter for {@link ModuleInfoPickerView} widgets.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(ModuleInfoPickerPresenterImpl.class)
 public interface ModuleInfoPickerPresenter

@@ -56,7 +56,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A property is required to more easily hook up the dependencies when the project loads.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("watched-dependencies-property")
 public class WatchedDependenciesProperty

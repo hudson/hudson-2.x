@@ -56,7 +56,7 @@ import java.util.Set;
  * Archives artifacts collected from a {@link MavenBuilder}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("maven-artifact-archiver")
 public class ArtifactArchiver 

@@ -40,7 +40,7 @@ import java.util.Set;
  * A {@link List} which only allows unique elements; similar to {@link java.util.Set} but typed as {@link List}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("unique-list")
 public class UniqueList<E>

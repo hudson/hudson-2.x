@@ -38,7 +38,7 @@ import com.google.common.base.Preconditions;
  * Preconditions to check common arguments to REST calls
  * 
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 public abstract class RestPreconditions {
 

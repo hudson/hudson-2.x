@@ -31,7 +31,7 @@ import com.google.gwt.user.client.Element;
  * Common functions for manipulating {@link DOM} elements.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class DomHelper
 {

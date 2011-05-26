@@ -39,7 +39,7 @@ import org.hudsonci.service.SecurityService;
 /**
  * Default {@link QueueService} implementation.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

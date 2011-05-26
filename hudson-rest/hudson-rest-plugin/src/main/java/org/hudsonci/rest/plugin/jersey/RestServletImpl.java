@@ -45,7 +45,7 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
  * Provides Hudson-specific integration for using {@link RestServlet}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named("jersey")
 @Singleton

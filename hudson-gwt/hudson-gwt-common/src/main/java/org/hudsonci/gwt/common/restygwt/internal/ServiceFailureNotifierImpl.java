@@ -44,7 +44,7 @@ import org.fusesource.restygwt.client.Method;
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class ServiceFailureNotifierImpl implements ServiceFailureNotifier{

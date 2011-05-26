@@ -30,7 +30,7 @@ import java.io.OutputStream;
  * Allows the target output stream delegate to be changed.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ReplacableOutputStream
     extends DelegatingOutputStream

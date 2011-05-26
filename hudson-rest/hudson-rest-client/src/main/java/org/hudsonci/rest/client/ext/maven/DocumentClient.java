@@ -32,7 +32,7 @@ import org.hudsonci.maven.model.config.DocumentsDTO;
 /**
  * Client for {@link org.hudsonci.maven.plugin.documents.rest.DocumentResource}
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface DocumentClient extends HudsonClient.Extension{
     DocumentDTO getDocument(final String uuid, final boolean summary);

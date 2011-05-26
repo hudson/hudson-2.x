@@ -47,7 +47,7 @@ import static org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
  * Table based view for {@link ModuleInfoPickerView}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class ModuleInfoPickerTableView

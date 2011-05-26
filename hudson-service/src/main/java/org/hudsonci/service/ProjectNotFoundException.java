@@ -30,7 +30,7 @@ import hudson.model.AbstractProject;
  * Thrown when an {@link AbstractProject} is needed to perform an operation, but could not be located.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ProjectNotFoundException
     extends NotFoundException

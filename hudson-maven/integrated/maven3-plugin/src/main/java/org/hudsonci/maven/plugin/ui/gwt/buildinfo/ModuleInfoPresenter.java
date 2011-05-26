@@ -39,7 +39,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoViewImpl;
  * Presenter for {@link ModuleInfoView} widgets.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(ModuleInfoPresenterImpl.class)
 public interface ModuleInfoPresenter

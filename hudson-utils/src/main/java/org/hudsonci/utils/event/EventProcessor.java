@@ -28,7 +28,7 @@ package org.hudsonci.utils.event;
  * Manages dispatching events to appropriate {@link EventHandler} instances.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface EventProcessor<ContextType>
 {

@@ -33,7 +33,7 @@ import org.hudsonci.service.internal.QueueServiceImpl;
 /**
  * Default implementation of {@link QueueService}
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(QueueServiceImpl.class)
 public interface QueueService

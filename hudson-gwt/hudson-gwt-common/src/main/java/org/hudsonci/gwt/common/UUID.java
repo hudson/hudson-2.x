@@ -34,7 +34,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVE
 /**
  * Helper to generate UUID strings in GWT.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class UUID
 {

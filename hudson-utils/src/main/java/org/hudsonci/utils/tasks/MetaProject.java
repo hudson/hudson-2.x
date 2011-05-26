@@ -56,7 +56,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Avoiding generic types where possible to avoid evil <tt>"inconvertible types" due to capture###</tt> crap.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @SuppressWarnings( {"rawtypes", "unchecked"} )
 public class MetaProject

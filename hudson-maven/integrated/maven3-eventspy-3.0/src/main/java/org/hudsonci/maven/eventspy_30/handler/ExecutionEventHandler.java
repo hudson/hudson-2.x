@@ -52,7 +52,7 @@ import static org.apache.maven.execution.ExecutionEvent.Type.SessionStarted;
  * 
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 public class ExecutionEventHandler

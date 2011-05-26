@@ -32,7 +32,7 @@ import java.io.Serializable;
  * Data structure to hold information about collected {@link ArtifactDTO}s.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class DigestRecord implements Serializable
 {

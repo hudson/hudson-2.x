@@ -35,7 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Convert Maven based artifacts to our artifact model. 
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class MavenArtifactConverter
 {

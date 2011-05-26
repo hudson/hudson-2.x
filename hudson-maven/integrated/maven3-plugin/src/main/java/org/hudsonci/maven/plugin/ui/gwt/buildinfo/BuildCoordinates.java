@@ -32,7 +32,7 @@ import com.google.inject.ImplementedBy;
  * Information to locate a build in Hudson.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(GwtLoadedBuildCoordinates.class)
 public interface BuildCoordinates

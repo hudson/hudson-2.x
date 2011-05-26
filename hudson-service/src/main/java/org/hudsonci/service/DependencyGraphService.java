@@ -36,7 +36,7 @@ import com.google.inject.ImplementedBy;
  * {@link DependencyGraph} related services.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(DependencyGraphServiceImpl.class)
 public interface DependencyGraphService {

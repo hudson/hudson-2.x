@@ -38,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Provides the build's "Maven" link and delegates to {@link org.hudsonci.maven.plugin.ui.MavenBuildUI} for viewing the build's Maven details.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("maven-build-action")
 public class MavenBuildAction

@@ -35,7 +35,7 @@ import java.util.UUID;
  * Hudson client.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface HudsonClient
 {
@@ -67,9 +67,6 @@ public interface HudsonClient
 
     interface Extension
     {
-        /**
-         * @since 0.3
-         */
         void init(HudsonClient client);
 
         void open() throws Exception;

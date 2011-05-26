@@ -33,7 +33,7 @@ import static org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
  * Column to display {@link ArtifactDTO} coordinates.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ArtifactCoordinatesColumn
     extends TextColumn<ArtifactDTO>

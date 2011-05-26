@@ -49,7 +49,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Trigger builds for a job whose SNAPSHOT dependencies have changed externally.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("maven-snapshot-trigger")
 public class SnapshotTrigger

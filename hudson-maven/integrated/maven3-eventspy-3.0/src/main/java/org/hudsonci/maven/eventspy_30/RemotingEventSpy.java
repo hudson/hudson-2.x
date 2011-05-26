@@ -44,7 +44,7 @@ import static org.hudsonci.maven.eventspy.common.Constants.PORT_PROPERTY;
  * Hudson {@link org.apache.maven.eventspy.EventSpy} for Maven 3.0 integration.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 public class RemotingEventSpy

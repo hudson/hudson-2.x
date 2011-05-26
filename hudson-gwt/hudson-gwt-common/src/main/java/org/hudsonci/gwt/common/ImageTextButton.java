@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Image;
  * This is a very hacky widget, recommend only using the constructor to configure and not attempt to reconfigure dynamically or bad things happen.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ImageTextButton
     extends Button

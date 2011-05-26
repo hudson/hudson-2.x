@@ -33,7 +33,7 @@ import org.hudsonci.rest.model.NodeModeDTO;
  * Converts {@link hudson.model.Node} to {@link NodeDTO} objects.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class NodeConverter
     extends ConverterSupport

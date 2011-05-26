@@ -56,7 +56,7 @@ import static org.hudsonci.maven.eventspy.common.Constants.DELEGATE_PROPERTY;
  * is loaded via JSR-330.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Component(role=EventSpy.class, hint="delegating")
 public class DelegatingEventSpy

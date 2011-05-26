@@ -45,7 +45,7 @@ import static org.hudsonci.rest.common.Constants.FAULT_v1_XML_TYPE;
  * Throws {@link FaultException} when a fault has been detected.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class FaultDecodingFilter
     extends ClientFilter

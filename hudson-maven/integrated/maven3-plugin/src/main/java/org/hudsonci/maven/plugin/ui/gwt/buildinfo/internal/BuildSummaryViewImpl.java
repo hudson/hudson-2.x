@@ -47,7 +47,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget.ModuleStatusIconColumn;
  * Simple column view implementation of {@link BuildSummaryView}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class BuildSummaryViewImpl

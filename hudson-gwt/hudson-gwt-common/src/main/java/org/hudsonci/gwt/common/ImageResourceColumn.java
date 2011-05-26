@@ -33,7 +33,7 @@ import com.google.gwt.user.cellview.client.Column;
  * Cell view column to render an {@link ImageResource}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public abstract class ImageResourceColumn<T>
     extends Column<T,ImageResource>

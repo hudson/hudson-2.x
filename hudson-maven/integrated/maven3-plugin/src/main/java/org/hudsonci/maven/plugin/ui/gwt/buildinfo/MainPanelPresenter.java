@@ -39,7 +39,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.internal.MainPanelViewImpl;
  * Presenter for {@link MainPanelView} widgets.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(MainPanelPresenterImpl.class)
 public interface MainPanelPresenter

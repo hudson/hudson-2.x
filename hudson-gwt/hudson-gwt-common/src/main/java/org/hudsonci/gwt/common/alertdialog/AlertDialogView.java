@@ -35,7 +35,7 @@ import org.hudsonci.gwt.common.alertdialog.internal.AlertDialogViewImpl;
  * Provides an alert dialog.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(AlertDialogViewImpl.class)
 public interface AlertDialogView

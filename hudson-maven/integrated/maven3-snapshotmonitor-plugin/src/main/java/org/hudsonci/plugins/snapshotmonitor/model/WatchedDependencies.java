@@ -34,7 +34,7 @@ import java.util.Collection;
  * Container for the watched dependencies of a project.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("watched-dependencies")
 @XStreamInclude(WatchedDependency.class)

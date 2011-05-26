@@ -44,7 +44,7 @@ import static org.hudsonci.utils.common.Varargs.$;
  * Default {@link Invoker}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class InvokerImpl
     implements Invoker, Serializable

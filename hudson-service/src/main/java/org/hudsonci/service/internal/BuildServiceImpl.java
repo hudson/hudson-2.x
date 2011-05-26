@@ -51,7 +51,7 @@ import org.hudsonci.service.dummy.DummyStaplerResponse;
 /**
  * Default implementation of {@link BuildService}.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

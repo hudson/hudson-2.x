@@ -48,7 +48,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Controls initial startup and extra configuration of the application.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class MavenBuildInfoController

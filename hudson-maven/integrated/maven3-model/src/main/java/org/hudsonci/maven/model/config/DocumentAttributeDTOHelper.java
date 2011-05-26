@@ -28,7 +28,7 @@ package org.hudsonci.maven.model.config;
  * Helper for {@link DocumentAttributeDTO}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class DocumentAttributeDTOHelper
 {

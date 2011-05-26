@@ -34,7 +34,7 @@ import java.util.Set;
  * Custom {@link org.cometd.client.BayeuxClient} client which remembers what was subscribed too.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BayeuxClient
     extends org.cometd.client.BayeuxClient

@@ -34,7 +34,7 @@ import java.nio.channels.FileChannel;
  * Removes the beginning of a file.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class FileBeheader
 {

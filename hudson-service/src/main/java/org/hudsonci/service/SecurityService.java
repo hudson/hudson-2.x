@@ -39,7 +39,7 @@ import com.google.inject.ImplementedBy;
 /**
  * Security services.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(SecurityServiceImpl.class)
 public interface SecurityService {

@@ -51,7 +51,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * This is required to be executing on the remote node to allow the callback communication to remain open.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class StartProcessing
     implements Callable<Object,Exception>

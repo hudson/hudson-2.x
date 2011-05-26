@@ -45,7 +45,7 @@ import java.util.List;
  * Base class for plugins creating identity methods (equals and hashcode).
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public abstract class AbstractIdentityBuilderPlugin
     extends AbstractParameterizablePlugin

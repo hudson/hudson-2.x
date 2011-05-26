@@ -39,7 +39,7 @@ import javax.xml.namespace.QName;
  * Adds {@link XStreamAlias} to generated types.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class XStreamAliasPlugin
     extends AbstractParameterizablePlugin

@@ -49,7 +49,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Default implementation of {@link BuildInformationManager}.
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class BuildInformationManagerImpl implements BuildInformationManager

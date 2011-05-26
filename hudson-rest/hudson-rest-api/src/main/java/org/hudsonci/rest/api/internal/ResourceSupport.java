@@ -33,7 +33,7 @@ import static javax.ws.rs.core.MediaType.*;
  * Base REST Resource
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Produces({APPLICATION_JSON, APPLICATION_XML})
 public abstract class ResourceSupport

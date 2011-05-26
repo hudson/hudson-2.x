@@ -43,7 +43,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.ModuleInfoPresenter.ModuleInfo
  * factory method to {@link MavenBuildInfoInjector} or another {@link Ginjector} to retrieve objects from GIN.
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @SuppressWarnings("unused")
 public class MavenBuildInfoModule

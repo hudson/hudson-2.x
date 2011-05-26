@@ -65,7 +65,7 @@ import static com.google.common.base.Preconditions.checkState;
  * or some other context during the life of a build execution.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("maven-builder")
 public class MavenBuilder

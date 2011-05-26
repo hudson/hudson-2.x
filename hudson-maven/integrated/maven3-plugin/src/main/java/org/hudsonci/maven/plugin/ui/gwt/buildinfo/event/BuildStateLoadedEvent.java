@@ -37,7 +37,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.event.BuildStateLoadedEvent.Ha
  * Indicates that {@link BuildStateDTO}s have been loaded.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildStateLoadedEvent
     extends EventSupport<Handler>

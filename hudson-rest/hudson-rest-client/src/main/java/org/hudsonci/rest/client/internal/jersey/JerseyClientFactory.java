@@ -48,7 +48,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Provides a suitable {@link Client} for use on the client-side.
  *
  * @author <a href="mailto:jfarcand@apache.org">Jeanfrancois Arcand</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

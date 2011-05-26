@@ -45,7 +45,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Simple file-based {@link XReference} storage strategy.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 1.1
+ * @since 2.1.0
  */
 public class FileXReferenceStore
     implements XReferenceStore

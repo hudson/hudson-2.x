@@ -30,7 +30,7 @@ import org.hudsonci.service.NotFoundException;
  * Thrown when a requested build-state or a collection of build-states is not found.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildStateNotFoundException
     extends NotFoundException

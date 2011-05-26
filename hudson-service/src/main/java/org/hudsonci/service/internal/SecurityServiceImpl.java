@@ -44,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Default {@link SecurityService} implementation.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

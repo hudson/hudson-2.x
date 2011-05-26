@@ -28,7 +28,7 @@ package org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget;
  * Column to display the status of a {@link MavenProjectDTO} build.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.BuildInfoResources;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;

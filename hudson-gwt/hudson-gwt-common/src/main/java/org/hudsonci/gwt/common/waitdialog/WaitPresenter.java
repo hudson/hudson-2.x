@@ -31,7 +31,7 @@ import org.hudsonci.gwt.common.waitdialog.internal.PleaseWaitDialog;
  * Widget that can inform the user of wait events.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(PleaseWaitDialog.class)
 public interface WaitPresenter

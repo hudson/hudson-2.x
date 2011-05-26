@@ -51,7 +51,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * TODO: may want to make this a special string similar to 'external', 'super-pom' or the GAV?
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ProfileCollector
 {

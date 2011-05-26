@@ -53,7 +53,7 @@ import org.junit.Test;
  * The Maven dependency tree can be useful in finding the offending artifact.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class HamcrestCompatibilityTest
 {

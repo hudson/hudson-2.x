@@ -30,7 +30,7 @@ import hudson.ExtensionPoint;
  * Extension to allow plugins to be aware of the {@link ServletContainer} and register servlets.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface ServletContainerAware
     extends ExtensionPoint

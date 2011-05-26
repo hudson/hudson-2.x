@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Parse Maven version from <tt>mvn --version</tt> output.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class MavenVersionParser
 {

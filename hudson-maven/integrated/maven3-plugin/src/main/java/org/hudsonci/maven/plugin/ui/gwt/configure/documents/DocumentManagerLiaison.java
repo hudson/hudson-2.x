@@ -35,7 +35,7 @@ import com.google.inject.ImplementedBy;
  * Provides access to the {@link org.hudsonci.maven.plugin.documents.DocumentManager}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(DocumentManagerLiaisonImpl.class)
 public interface DocumentManagerLiaison

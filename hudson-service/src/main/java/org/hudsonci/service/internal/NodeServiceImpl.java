@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * Default implementation of {@link NodeService}
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

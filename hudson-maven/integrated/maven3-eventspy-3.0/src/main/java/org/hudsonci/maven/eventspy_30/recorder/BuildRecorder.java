@@ -56,7 +56,7 @@ import static org.hudsonci.maven.eventspy_30.MavenProjectConverter.updateWithBui
  * Records and processes significant build events.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildRecorder
 {

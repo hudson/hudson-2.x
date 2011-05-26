@@ -33,7 +33,7 @@ import org.hudsonci.gwt.common.alertdialog.AlertDialogView;
  * Default implementation of {@link AlertDialogPresenter}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class AlertDialogPresenterImpl
     implements AlertDialogPresenter

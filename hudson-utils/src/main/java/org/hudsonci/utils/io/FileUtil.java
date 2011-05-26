@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * verify interactions.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class FileUtil
 {

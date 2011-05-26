@@ -36,7 +36,7 @@ import com.google.inject.ImplementedBy;
 /**
  * {@link hudson.model.Node} related services.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(NodeServiceImpl.class)
 public interface NodeService {

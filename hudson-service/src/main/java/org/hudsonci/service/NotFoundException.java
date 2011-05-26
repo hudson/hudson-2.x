@@ -39,7 +39,7 @@ package org.hudsonci.service;
  * Service API users should do their best to verify an entity exists prior to
  * performing an operation that may trigger this exception.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 public abstract class NotFoundException extends ServiceRuntimeException {
     protected NotFoundException() {

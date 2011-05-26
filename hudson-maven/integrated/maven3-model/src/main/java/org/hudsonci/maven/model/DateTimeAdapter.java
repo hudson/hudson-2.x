@@ -43,7 +43,7 @@ import java.util.Date;
  * Prefer the Jackson version to make the XML consistent with the JSON representation.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class DateTimeAdapter
 {

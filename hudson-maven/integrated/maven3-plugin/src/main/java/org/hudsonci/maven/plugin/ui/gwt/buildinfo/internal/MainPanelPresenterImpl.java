@@ -49,7 +49,7 @@ import java.util.List;
  * Implementation of {@link MainPanelPresenter}.
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class MainPanelPresenterImpl implements MainPanelPresenter

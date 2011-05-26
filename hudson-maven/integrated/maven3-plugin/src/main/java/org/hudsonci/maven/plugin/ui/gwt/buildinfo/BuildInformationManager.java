@@ -35,7 +35,7 @@ import org.hudsonci.maven.plugin.ui.gwt.buildinfo.internal.BuildInformationManag
  * Manages access to the build information.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(BuildInformationManagerImpl.class)
 public interface BuildInformationManager

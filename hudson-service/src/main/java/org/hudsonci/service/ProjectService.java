@@ -40,7 +40,7 @@ import org.hudsonci.service.internal.ProjectServiceImpl;
  * Service API related to Projects and Job models, such as that by {@link AbstractProject}.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(ProjectServiceImpl.class)
 public interface ProjectService

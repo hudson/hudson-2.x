@@ -54,7 +54,7 @@ import org.hudsonci.service.utils.JobUuid;
 /**
  * Default {@link ProjectService} implementation.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

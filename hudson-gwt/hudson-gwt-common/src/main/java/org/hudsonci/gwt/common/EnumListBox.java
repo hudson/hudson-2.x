@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.ListBox;
  * Represents an {@link Enum} as a {@link ListBox}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class EnumListBox<T extends Enum<T>>
     extends ListBox

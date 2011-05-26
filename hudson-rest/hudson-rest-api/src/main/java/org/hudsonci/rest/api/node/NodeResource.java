@@ -45,7 +45,7 @@ import org.hudsonci.service.NodeService;
  * Access Nodes
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Path("/nodes")
 public class NodeResource extends ResourceSupport {

@@ -34,7 +34,7 @@ import hudson.model.Descriptor;
 /**
  * Service operations for {@link Descriptor} and {@link Describable}
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(DescriptorServiceImpl.class)
 public interface DescriptorService {

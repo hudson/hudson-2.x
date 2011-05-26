@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * {@link org.apache.maven.eventspy.EventSpy} event processor.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class EventSpyProcessor
     extends EventProcessorSupport<EventSpyHandler.HandlerContext,EventSpyHandler>

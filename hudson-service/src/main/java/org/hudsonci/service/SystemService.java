@@ -39,7 +39,7 @@ import org.hudsonci.service.internal.SystemServiceImpl;
  * <p>All operations involving restarting, quiet down, or reloading the system require {@link Hudson#ADMINISTER} permission.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(SystemServiceImpl.class)
 public interface SystemService

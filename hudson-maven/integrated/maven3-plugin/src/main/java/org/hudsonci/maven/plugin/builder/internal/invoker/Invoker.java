@@ -30,7 +30,7 @@ import java.rmi.MarshalledObject;
  * InvocationHandler-like thing w/o the method reference and using pre-marshalled arguments.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface Invoker
 {

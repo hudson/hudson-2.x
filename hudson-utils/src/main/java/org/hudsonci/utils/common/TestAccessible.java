@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Marker annotation for members which are exposed for testing access.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Retention(RUNTIME)
 @Target({TYPE, CONSTRUCTOR, METHOD, FIELD, PARAMETER})

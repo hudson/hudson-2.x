@@ -42,6 +42,6 @@
  * {@literal null} if the entity cannot be found. Single entity accessors beginning with {@literal get*}
  * will throw {@link NotFoundException}.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 package org.hudsonci.service;

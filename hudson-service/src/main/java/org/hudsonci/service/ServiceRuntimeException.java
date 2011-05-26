@@ -29,7 +29,7 @@ package org.hudsonci.service;
  * <p>
  * Generally the service layer API should only throw unchecked exceptions that extend this base class.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ServiceRuntimeException
     extends RuntimeException

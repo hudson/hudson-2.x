@@ -34,7 +34,7 @@ import org.hudsonci.maven.model.state.BuildStateDTO;
  * Indicates that a {@link BuildStateDTO} has been selected.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildStateSelectedEvent
     extends EventSupport<Handler>

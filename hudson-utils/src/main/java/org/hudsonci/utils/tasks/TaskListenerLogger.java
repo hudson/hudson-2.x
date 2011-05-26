@@ -34,7 +34,7 @@ import org.sonatype.gossip.support.PrintStreamLogger;
  * Adapts a {@link TaskListener} to the {@link org.slf4j.Logger} interface.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class TaskListenerLogger
     extends PrintStreamLogger

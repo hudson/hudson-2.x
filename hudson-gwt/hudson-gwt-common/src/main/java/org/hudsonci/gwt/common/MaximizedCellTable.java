@@ -32,7 +32,7 @@ import com.google.gwt.view.client.ProvidesKey;
  * A {@link CellTable} with a default width of 100%.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class MaximizedCellTable<T>
     extends CellTable<T>

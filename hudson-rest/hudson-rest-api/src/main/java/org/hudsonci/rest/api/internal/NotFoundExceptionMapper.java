@@ -41,7 +41,7 @@ import static javax.ws.rs.core.Response.Status.*;
  * The {@link NotFoundException#getMessage} is used to supply information in the response about what was not found.
  *
  * @author Peter Lynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Provider
 public class NotFoundExceptionMapper

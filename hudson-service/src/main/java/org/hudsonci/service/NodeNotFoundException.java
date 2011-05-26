@@ -27,7 +27,7 @@ package org.hudsonci.service;
 /**
  * Thrown when a {@link hudson.model.Node} cannot be found in the system.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class NodeNotFoundException extends NotFoundException {
     public NodeNotFoundException(String message) {

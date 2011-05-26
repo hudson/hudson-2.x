@@ -31,7 +31,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * Support for GWT event implementations.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public abstract class EventSupport<H extends EventHandler>
     extends GwtEvent<H>

@@ -34,7 +34,7 @@ import com.google.gwt.inject.client.Ginjector;
  * Ginjector for the Maven build information application. 
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @GinModules(MavenBuildInfoModule.class)
 public interface MavenBuildInfoInjector

@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  * The widget to first show to the user.
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( { ElementType.FIELD, ElementType.PARAMETER } )

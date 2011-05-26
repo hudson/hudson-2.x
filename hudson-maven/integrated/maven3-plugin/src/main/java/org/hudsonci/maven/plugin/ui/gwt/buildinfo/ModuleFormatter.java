@@ -37,7 +37,7 @@ import java.util.List;
  * Standard formatting for Maven module information.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ModuleFormatter
 {

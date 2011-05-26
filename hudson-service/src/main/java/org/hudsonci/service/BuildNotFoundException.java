@@ -31,7 +31,7 @@ import hudson.model.AbstractBuild;
  * could not be found.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildNotFoundException extends NotFoundException {
     public BuildNotFoundException(String message) {

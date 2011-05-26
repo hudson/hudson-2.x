@@ -49,7 +49,7 @@ import static org.hudsonci.utils.common.Varargs.$;
 
 /**
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class PerformArchiving
     extends PerformOperation<ArtifactArchiver>

@@ -35,7 +35,7 @@ import org.fusesource.restygwt.client.Method;
  * Manages user notification of RestyGWT service request failures.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(ServiceFailureNotifierImpl.class)
 public interface ServiceFailureNotifier

@@ -30,7 +30,7 @@ import javax.inject.Named;
  * A simple {@link org.apache.maven.eventspy.EventSpy} which simply logs method calls.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 public class LoggingEventSpy

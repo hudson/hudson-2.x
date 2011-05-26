@@ -30,7 +30,7 @@ import java.io.File;
  * Helper for {@link ArtifactDTO}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ArtifactDTOHelper
 {

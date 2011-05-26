@@ -33,7 +33,7 @@ import com.google.gwt.resources.client.ImageResource;
  * {@link ClientBundle} resource for the build information view.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public interface BuildInfoResources
     extends HudsonResources

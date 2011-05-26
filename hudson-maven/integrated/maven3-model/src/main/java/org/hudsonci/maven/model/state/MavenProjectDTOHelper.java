@@ -35,7 +35,7 @@ import org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
  * with MavenSession.getId and MavenProject.getId .
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class MavenProjectDTOHelper
 {

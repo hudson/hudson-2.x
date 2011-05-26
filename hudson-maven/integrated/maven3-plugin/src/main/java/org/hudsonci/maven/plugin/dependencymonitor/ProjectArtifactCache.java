@@ -37,7 +37,7 @@ import org.hudsonci.maven.plugin.dependencymonitor.internal.ProjectArtifactCache
  * Provides caching of project produced and consumed artifacts.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @ImplementedBy(ProjectArtifactCacheImpl.class)
 public interface ProjectArtifactCache

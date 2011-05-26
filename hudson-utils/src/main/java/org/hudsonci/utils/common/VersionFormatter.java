@@ -28,7 +28,7 @@ package org.hudsonci.utils.common;
  * Utility supplying different ways to format a version number.
  *  
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 class VersionFormatter
 {

@@ -33,7 +33,7 @@ import javax.inject.Named;
  * Handles {@link DependencyResolutionResult}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 public class DependencyResolutionResultHandler

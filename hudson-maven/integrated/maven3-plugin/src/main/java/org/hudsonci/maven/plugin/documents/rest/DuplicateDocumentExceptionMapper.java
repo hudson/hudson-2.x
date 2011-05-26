@@ -37,7 +37,7 @@ import static javax.ws.rs.core.Response.Status;
  * Maps {@link DuplicateDocumentException} to a REST {@link Status#CONFLICT} response.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Provider
 public class DuplicateDocumentExceptionMapper

@@ -29,7 +29,7 @@ package org.hudsonci.service;
  * a requested operation was allowed to proceed.
  *
  * @author plynch
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class SystemIntegrityViolationException
     extends ServiceRuntimeException

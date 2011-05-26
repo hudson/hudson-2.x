@@ -35,7 +35,7 @@ import org.hudsonci.maven.model.state.ArtifactDTO;
  * Table to display {@link ArtifactDTO} information.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ArtifactInfoTable
     extends MaximizedCellTable<ArtifactDTO>

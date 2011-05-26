@@ -41,7 +41,7 @@ import org.hudsonci.service.DescriptorService;
  * <b>Note:</b> Should not normally access this publicly since no security
  * checks are present.
  *
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Named
 @Singleton

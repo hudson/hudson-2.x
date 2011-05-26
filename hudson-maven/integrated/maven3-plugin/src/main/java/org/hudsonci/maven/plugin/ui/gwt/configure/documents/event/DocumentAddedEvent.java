@@ -32,7 +32,7 @@ import com.google.gwt.event.shared.EventHandler;
  * Event fired when a document addition has completed successfully.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class DocumentAddedEvent
     extends DocumentEventSupport<DocumentAddedEvent.Handler>

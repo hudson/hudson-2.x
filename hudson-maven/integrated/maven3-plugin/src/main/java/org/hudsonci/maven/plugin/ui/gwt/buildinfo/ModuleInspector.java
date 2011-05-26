@@ -36,7 +36,7 @@ import java.util.Collection;
  * May be used by GWT so ensure that only translatable classes are used.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ModuleInspector
 {

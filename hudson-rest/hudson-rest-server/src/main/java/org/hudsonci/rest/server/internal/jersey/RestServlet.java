@@ -59,7 +59,7 @@ import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
  *
  * @author <a href="mailto:jjfarcand@apache.org">Jeanfrancois Arcand</a>
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class RestServlet
     extends ServletContainer

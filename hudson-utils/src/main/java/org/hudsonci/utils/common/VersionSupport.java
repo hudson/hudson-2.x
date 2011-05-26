@@ -28,7 +28,7 @@ package org.hudsonci.utils.common;
  * Support for exposing version details.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class VersionSupport
 {
@@ -62,7 +62,6 @@ public class VersionSupport
 
     /**
      * @return a formatted version number in the simplest and most significant form
-     * @since 0.3
      */
     public String getCanonicalVersion()
     {
@@ -73,7 +72,6 @@ public class VersionSupport
 
     /**
      * @return a formatted version number containing the raw information
-     * @since 0.3
      */
     public String getRawVersion()
     {

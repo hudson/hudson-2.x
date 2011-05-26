@@ -33,7 +33,7 @@ import javax.inject.Singleton;
  * Strongly typed data provider for {@link ArtifactDTO}s.
  *
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 @Singleton
 public class ArtifactDataProvider extends ListDataProvider<ArtifactDTO>

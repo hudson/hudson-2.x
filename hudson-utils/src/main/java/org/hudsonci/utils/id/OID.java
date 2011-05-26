@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * the {@link System#identityHashCode}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 @XStreamAlias("oid")
 public class OID
@@ -117,7 +117,6 @@ public class OID
 
     /**
      * @see #get
-     * @since 1.1
      */
     public static OID oid(final Object obj) {
         return get(obj);

@@ -36,7 +36,7 @@ import org.hudsonci.maven.model.state.MavenProjectDTO;
  * Display of MavenProjectDTO {@link Cell}s.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ModuleSummaryCell
     extends AbstractCell<MavenProjectDTO>

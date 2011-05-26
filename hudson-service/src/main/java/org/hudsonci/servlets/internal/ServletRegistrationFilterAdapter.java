@@ -50,7 +50,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Wraps a {@link Servlet} as a {@link Filter} for installation via {@link hudson.util.PluginServletFilter}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class ServletRegistrationFilterAdapter
     implements Filter

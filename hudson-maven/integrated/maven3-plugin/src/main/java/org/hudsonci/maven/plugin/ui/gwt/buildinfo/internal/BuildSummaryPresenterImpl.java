@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Default implementation of {@link BuildSummaryPresenter}.
  * 
  * @author Jamie Whitehouse
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class BuildSummaryPresenterImpl implements BuildSummaryPresenter
 {

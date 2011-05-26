@@ -35,7 +35,7 @@ import static javax.ws.rs.core.MediaType.*;
  * Options for opening connections.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @since 2.0.1
+ * @since 2.1.0
  */
 public class OpenOptions
     implements Cloneable
@@ -79,9 +79,6 @@ public class OpenOptions
 
     private String proxyPassword;
 
-    /**
-     * @since 0.2
-     */
     public static enum Encoding
     {
         XML(APPLICATION_XML_TYPE),
@@ -158,100 +155,58 @@ public class OpenOptions
         this.disableCertificateValidation = disabled;
     }
 
-    /**
-     * @since 0.2
-     */
     public boolean isFollowRedirects() {
         return followRedirects;
     }
 
-    /**
-     * @since 0.2
-     */
     public void setFollowRedirects(final boolean follow) {
         this.followRedirects = follow;
     }
 
-    /**
-     * @since 0.2
-     */
     public Encoding getEncoding() {
         return encoding != null ? encoding : Encoding.DEFAULT;
     }
 
-    /**
-     * @since 0.2
-     */
     public void setEncoding(final Encoding encoding) {
         this.encoding = encoding;
     }
 
-    /**
-     * @since 0.3
-     */
     public String getProxyHost() {
         return proxyHost;
     }
 
-    /**
-     * @since 0.3
-     */
     public void setProxyHost(final String proxyHost) {
         this.proxyHost = proxyHost;
     }
 
-    /**
-     * @since 0.3
-     */
     public int getProxyPort() {
         return proxyPort;
     }
 
-    /**
-     * @since 0.3
-     */
     public void setProxyPort(final int proxyPort) {
         this.proxyPort = proxyPort;
     }
 
-    /**
-     * @since 0.3
-     */
     public String getProxyProtocol() {
         return proxyProtocol;
     }
 
-    /**
-     * @since 0.3
-     */
     public void setProxyProtocol(final String proxyProtocol) {
         this.proxyProtocol = proxyProtocol;
     }
 
-    /**
-     * @since 0.3
-     */
     public String getProxyUsername() {
         return proxyUsername;
     }
 
-    /**
-     * @since 0.3
-     */
     public void setProxyUsername(final String proxyUsername) {
         this.proxyUsername = proxyUsername;
     }
 
-    /**
-     * @since 0.3
-     */
     public String getProxyPassword() {
         return proxyPassword;
     }
 
-    /**
-     * @since 0.3
-     */
     public void setProxyPassword(final String proxyPassword) {
         this.proxyPassword = proxyPassword;
     }
