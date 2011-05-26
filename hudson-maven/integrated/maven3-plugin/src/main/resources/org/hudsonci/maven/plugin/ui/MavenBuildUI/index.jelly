@@ -37,7 +37,7 @@ THE SOFTWARE.
                     Force the size since we can't use the new RootLayoutPanel which takes
                     care of filling parents for us.
                 */      
-                #hudson-mavenBuildInfoPanel
+                #maven3-buildInfoPanel
                 {
                     width: 100%;
                     height: 100%;
@@ -53,7 +53,7 @@ THE SOFTWARE.
         <j:set var="images" value="${it.imagesPath}"/>
 
         <l:main-panel>
-            <div id="hudson-mavenBuildInfoPanel"/>
+            <div id="maven3-buildInfoPanel"/>
         </l:main-panel>
     </l:layout>
 </j:jelly>
