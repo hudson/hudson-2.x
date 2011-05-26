@@ -35,11 +35,6 @@ THE SOFTWARE.
 
   <dependencies>
     <dependency>
-      <groupId>org.sonatype.sisu</groupId>
-      <artifactId>sisu-inject-bean</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
     </dependency>
@@ -74,6 +69,11 @@ THE SOFTWARE.
       <artifactId>jackson-xc</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.sonatype.sisu</groupId>
+      <artifactId>sisu-inject-bean</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>

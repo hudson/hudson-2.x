@@ -57,15 +57,15 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-test-common</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.sonatype.gossip</groupId>
       <artifactId>gossip-support</artifactId>
       <version>1.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-common</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

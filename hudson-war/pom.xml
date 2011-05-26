@@ -134,6 +134,8 @@ THE SOFTWARE.
                 <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
                 
                 <!-- bundled plugins -->
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="hudson-rest-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/hudson-rest-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="ssh-slaves" version="2.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="subversion" version="2.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
@@ -197,14 +199,14 @@ THE SOFTWARE.
               <name>stapler.resourcePath</name>
               <value>
                   ../hudson-core/src/main/resources;
-                  ../hudson-maven/maven-plugin/src/main/resources
+                  ../hudson-maven/legacy/maven-plugin/src/main/resources
               </value>
             </systemProperty>
             <systemProperty>
               <!-- enable the plugins in main by default -->
               <name>hudson.bundled.plugins</name>
               <value>
-                  ${basedir}/../hudson-maven/maven-plugin/target/test-classes/the.hpl,
+                  ${basedir}/../hudson-maven/legacy/maven-plugin/target/test-classes/the.hpl,
                </value>
             </systemProperty>
             <systemProperty>
@@ -249,6 +251,11 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-inject</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-service</artifactId>
     </dependency>
 
     <dependency>
