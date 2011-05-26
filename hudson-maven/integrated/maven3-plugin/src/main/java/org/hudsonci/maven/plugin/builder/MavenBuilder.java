@@ -29,7 +29,7 @@ import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.service.NodeService;
 import org.hudsonci.service.SecurityService;
-import org.hudsonci.utils.ui.JellyAccessible;
+import org.hudsonci.utils.plugin.ui.JellyAccessible;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 

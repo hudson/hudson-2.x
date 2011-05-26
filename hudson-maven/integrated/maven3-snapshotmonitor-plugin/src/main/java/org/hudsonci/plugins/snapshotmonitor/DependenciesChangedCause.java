@@ -24,7 +24,7 @@
 
 package org.hudsonci.plugins.snapshotmonitor;
 
-import org.hudsonci.utils.ui.JellyAccessible;
+import org.hudsonci.utils.plugin.ui.JellyAccessible;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import hudson.model.Cause;
 

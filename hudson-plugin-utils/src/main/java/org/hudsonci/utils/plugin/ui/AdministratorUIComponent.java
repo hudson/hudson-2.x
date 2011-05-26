@@ -22,50 +22,36 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.utils.plugin.ui;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
-
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
+import hudson.model.Action;
 import hudson.model.Hudson;
 import hudson.security.Permission;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * UI components for administrative activities.
+ * 
+ * The user must be an administrator to view and optionally to submit forms.
+ * 
+ * Subclasses should call the {@link #checkPermission()} before performing any
+ * form actions.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+public abstract class AdministratorUIComponent<P extends Action>
+    extends UIComponentSupport<P>
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
+    protected AdministratorUIComponent(final P parent) {
         super(parent);
     }
 
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
+    @Override
     public Permission getViewPermission() {
         return Hudson.ADMINISTER;
+    }
+
+    protected void checkPermission() {
+        checkPermission(Hudson.ADMINISTER);
     }
 }

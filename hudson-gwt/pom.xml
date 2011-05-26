@@ -120,12 +120,6 @@ THE SOFTWARE.
         <artifactId>hudson-gwt-icons-silk</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
-        <artifactId>hudson-gwt-icons-flag</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -143,7 +137,6 @@ THE SOFTWARE.
     <module>hudson-gwt-slf4j</module>
     <module>hudson-gwt-theme-chrome</module>
     <module>hudson-gwt-icons-silk</module>
-    <module>hudson-gwt-icons-flag</module>
   </modules>
 
   <build>

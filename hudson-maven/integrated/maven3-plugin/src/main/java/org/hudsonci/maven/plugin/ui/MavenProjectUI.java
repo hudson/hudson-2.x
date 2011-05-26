@@ -26,8 +26,8 @@ package org.hudsonci.maven.plugin.ui;
 
 import org.hudsonci.maven.plugin.builder.MavenProjectAction;
 
-import org.hudsonci.utils.ui.JellyAccessible;
-import org.hudsonci.utils.ui.UIComponentSupport;
+import org.hudsonci.utils.plugin.ui.JellyAccessible;
+import org.hudsonci.utils.plugin.ui.UIComponentSupport;
 import hudson.model.AbstractProject;
 import hudson.security.Permission;
 

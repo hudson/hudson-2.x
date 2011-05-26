@@ -61,16 +61,9 @@ THE SOFTWARE.
 
   <dependencies>
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-utils</artifactId>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <!-- exclude xerces to prevent gwt maven plugin compile failure using non compatible xerces -->
-        <exclusion>
-          <artifactId>xerces</artifactId>
-          <groupId>xerces</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -85,7 +78,7 @@ THE SOFTWARE.
 
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-rest-server</artifactId>
+      <artifactId>hudson-rest-api</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -137,7 +130,7 @@ THE SOFTWARE.
       <artifactId>hudson-gwt-test-support</artifactId>
       <scope>test</scope>
     </dependency>
-        
+
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-model</artifactId>

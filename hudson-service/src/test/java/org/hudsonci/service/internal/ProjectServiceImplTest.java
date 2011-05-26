@@ -54,7 +54,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import org.hudsonci.service.utils.JobUuid;
+import org.hudsonci.utils.tasks.JobUuid;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Hudson.class, JobUuid.class })

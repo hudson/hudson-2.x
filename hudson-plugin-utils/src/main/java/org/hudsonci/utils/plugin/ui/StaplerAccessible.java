@@ -22,50 +22,25 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.utils.plugin.ui;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
-import hudson.model.Hudson;
-import hudson.security.Permission;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * Marker annotation for members which are exposed for Stapler access.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+@Retention(RUNTIME)
+@Target({METHOD,FIELD})
+@Documented
+public @interface StaplerAccessible
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
-        super(parent);
-    }
-
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
-    public Permission getViewPermission() {
-        return Hudson.ADMINISTER;
-    }
 }

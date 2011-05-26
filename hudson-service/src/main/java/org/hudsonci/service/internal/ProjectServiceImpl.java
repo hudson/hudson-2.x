@@ -49,7 +49,8 @@ import org.hudsonci.service.ServiceRuntimeException;
 import org.hudsonci.service.SystemIntegrityViolationException;
 
 import com.google.common.base.Preconditions;
-import org.hudsonci.service.utils.JobUuid;
+
+import org.hudsonci.utils.tasks.JobUuid;
 
 /**
  * Default {@link ProjectService} implementation.

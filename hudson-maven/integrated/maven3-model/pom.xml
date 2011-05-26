@@ -40,7 +40,6 @@ THE SOFTWARE.
       <artifactId>hudson-jaxb-runtime</artifactId>
     </dependency>
 
-    <!-- Required for API compatibility checking of generated classes imports (using Animal Sniffer). -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
@@ -62,6 +61,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>xstream</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 

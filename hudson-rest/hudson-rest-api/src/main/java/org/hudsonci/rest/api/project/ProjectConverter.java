@@ -29,10 +29,11 @@ import javax.inject.Inject;
 import org.hudsonci.rest.api.build.BuildConverter;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.service.utils.JobUuid;
 import org.hudsonci.rest.model.project.ProjectDTO;
 import org.hudsonci.rest.model.project.ProjectReferenceDTO;
 import org.hudsonci.service.SystemService;
+import org.hudsonci.utils.tasks.JobUuid;
+
 import hudson.matrix.MatrixConfiguration;
 import hudson.matrix.MatrixProject;
 import hudson.model.AbstractProject;

@@ -45,8 +45,6 @@ import org.hudsonci.service.SecurityService;
 import org.hudsonci.service.ServiceRuntimeException;
 
 import com.google.common.base.Preconditions;
-import org.hudsonci.service.dummy.DummyStaplerRequest;
-import org.hudsonci.service.dummy.DummyStaplerResponse;
 
 /**
  * Default implementation of {@link BuildService}.

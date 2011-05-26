@@ -22,50 +22,30 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.events.internal;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
+import org.hudsonci.events.EventConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
-import hudson.model.Hudson;
-import hudson.security.Permission;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.util.EventObject;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * Adds diagnostic information when an event was published.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+@Named
+@Singleton
+public class DiagnosticEventConsumer
+    implements EventConsumer
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
-        super(parent);
-    }
+    private static final Logger log = LoggerFactory.getLogger(DiagnosticEventConsumer.class);
 
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
-    public Permission getViewPermission() {
-        return Hudson.ADMINISTER;
+    public void consume(final EventObject event) throws Exception {
+        log.trace("Event published: {}", event);
     }
 }

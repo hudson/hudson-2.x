@@ -22,50 +22,45 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.events.ready;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
+import org.hudsonci.inject.Priority;
+import hudson.model.listeners.ItemListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
-import hudson.model.Hudson;
-import hudson.security.Permission;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * Starts the {@link ReadyDetector}.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+@Named
+@Singleton
+@Priority(Integer.MIN_VALUE) // run last
+public class ReadyDetectorStarter
+    extends ItemListener
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
-        super(parent);
+    private static final Logger log = LoggerFactory.getLogger(ReadyDetectorStarter.class);
+
+    // FIXME: Use of ItemListener for server life-cycle bits is highly hackish
+
+    private final ReadyDetector detector;
+
+    @Inject
+    public ReadyDetectorStarter(final ReadyDetector detector) {
+        this.detector = checkNotNull(detector);
     }
 
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
-    public Permission getViewPermission() {
-        return Hudson.ADMINISTER;
+    @Override
+    public void onLoaded() {
+        log.debug("Starting ready detector");
+        detector.start();
     }
 }

@@ -22,42 +22,66 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.rest.plugin;
+package org.hudsonci.events.internal;
 
-import com.google.inject.AbstractModule;
 import org.hudsonci.events.EventConsumer;
-import org.hudsonci.events.ready.ReadyEvent;
-import org.hudsonci.rest.common.ObjectMapperProvider;
-import hudson.Plugin;
-import hudson.model.Descriptor;
-import net.sf.json.JSONObject;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.kohsuke.stapler.StaplerRequest;
+import org.hudsonci.events.EventPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.EventObject;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Additional Guice bindings for the REST plugin.
+ * Default {@link EventPublisher} implementation.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
 @Named
-public class RestPluginModule
-    extends AbstractModule
+@Singleton
+public class EventPublisherImpl
+    implements EventPublisher
 {
-    @Override
-    protected void configure() {
-        bind(ObjectMapper.class).toProvider(ObjectMapperProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(EventPublisherImpl.class);
+
+    private final List<EventConsumer> consumers;
+
+    @Inject
+    public EventPublisherImpl(final List<EventConsumer> consumers) {
+        this.consumers = checkNotNull(consumers);
+    }
+
+    private EventConsumer[] getConsumers() {
+        return consumers.toArray(new EventConsumer[consumers.size()]);
+    }
+
+    public void publish(final EventObject event) {
+        checkNotNull(event);
+
+        log.trace("Publishing event: {}", event);
+
+        final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+        for (EventConsumer target : getConsumers()) {
+            log.trace("Firing event ({}) to consumer: {}", event, target);
+
+            Thread.currentThread().setContextClassLoader(target.getClass().getClassLoader());
+
+            try {
+                target.consume(event);
+            }
+            catch (Exception e) {
+                log.error("Consumer raised an exception", e);
+            }
+            finally {
+                Thread.currentThread().setContextClassLoader(cl);
+            }
+        }
     }
 }

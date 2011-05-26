@@ -22,50 +22,26 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.events.ready;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
-
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
 import hudson.model.Hudson;
-import hudson.security.Permission;
+
+import java.util.EventObject;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * Event fired once the system is ready to be used.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+public class ReadyEvent
+    extends EventObject
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
-        super(parent);
+    public ReadyEvent(final Hudson hudson) {
+        super(hudson);
     }
 
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
-    public Permission getViewPermission() {
-        return Hudson.ADMINISTER;
+    public Hudson getHudson() {
+        return (Hudson)getSource();
     }
 }

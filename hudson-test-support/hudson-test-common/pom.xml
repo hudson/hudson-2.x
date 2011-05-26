@@ -41,6 +41,11 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>com.googlecode.junit-ext</groupId>
       <artifactId>junit-ext</artifactId>
       <classifier>junit45</classifier>
@@ -74,11 +79,6 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
     </dependency>
   </dependencies>
 

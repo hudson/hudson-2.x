@@ -22,50 +22,22 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.maven.plugin.ui;
+package org.hudsonci.events;
 
-import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
+import com.google.inject.ImplementedBy;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
-import hudson.model.Hudson;
-import hudson.security.Permission;
+import org.hudsonci.events.internal.EventPublisherImpl;
+
+import java.util.EventObject;
 
 /**
- * UI delegate for {@link MavenConfigurationLink}.
+ * Publishes events.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-public class MavenConfigurationUI
-    extends UIComponentSupport<MavenConfigurationLink>
+@ImplementedBy(EventPublisherImpl.class)
+public interface EventPublisher
 {
-    public MavenConfigurationUI(final MavenConfigurationLink parent) {
-        super(parent);
-    }
-
-    public String getIconFileName() {
-        return getIconFileName("maven-icon-48x48.png");
-    }
-
-    public String getUrlName() {
-        return "maven";
-    }
-
-    public String getDisplayName() {
-        return "Maven Configuration";
-    }
-
-    public String getDescription() {
-        return "Manage Maven global configuration options.";
-    }
-
-    @JellyAccessible
-    public String getMainPanelId() {
-        return MavenConfigurationEntryPoint.MAIN_PANEL_ID;
-    }
-
-    public Permission getViewPermission() {
-        return Hudson.ADMINISTER;
-    }
+    void publish(EventObject event);
 }

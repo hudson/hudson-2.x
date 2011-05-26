@@ -24,7 +24,7 @@
 
 package org.hudsonci.plugins.snapshotmonitor;
 
-import org.hudsonci.utils.ui.JellyAccessible;
+import org.hudsonci.utils.plugin.ui.JellyAccessible;
 import hudson.Plugin;
 import hudson.model.Descriptor;
 import hudson.model.Items;

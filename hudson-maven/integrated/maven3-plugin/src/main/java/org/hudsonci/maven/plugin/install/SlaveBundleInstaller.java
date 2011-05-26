@@ -24,8 +24,9 @@
 
 package org.hudsonci.maven.plugin.install;
 
-import org.hudsonci.service.events.EventConsumer;
-import org.hudsonci.service.events.ready.ReadyEvent;
+import org.hudsonci.events.EventConsumer;
+import org.hudsonci.events.ready.ReadyEvent;
+
 import hudson.FilePath;
 import hudson.model.Computer;
 import hudson.model.Executor;
