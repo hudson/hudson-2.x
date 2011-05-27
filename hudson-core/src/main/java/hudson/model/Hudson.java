@@ -2133,7 +2133,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
      *      This method returns a non-null object for any user name, without validation.
      */
     public User getUser(String name) {
-        return User.get(name);
+        return User.get(name, false);
     }
 
     /**

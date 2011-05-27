@@ -52,14 +52,6 @@ public class FilteredChangeLogSet extends ChangeLogSet<Entry> {
         }
     }
 
-    public Iterator<Entry> iterator() {
-        return master.iterator();
-    }
-
-    public boolean isEmptySet() {
-        return master.isEmpty();
-    }
-
     public List<Entry> getLogs() {
         return master;
     }

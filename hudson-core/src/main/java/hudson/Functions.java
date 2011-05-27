@@ -45,6 +45,7 @@ import hudson.model.ParameterDefinition.ParameterDescriptor;
 import hudson.model.Project;
 import hudson.model.Run;
 import hudson.model.TopLevelItem;
+import hudson.model.User;
 import hudson.model.View;
 import hudson.model.JDK;
 import hudson.search.SearchableModelObject;
@@ -1320,6 +1321,16 @@ public class Functions {
         return Boolean.getBoolean("hudson.security.ArtifactsPermission");
     }
     
+    /**
+     * Returns true if current user is the author of the job.
+     * @param job job.
+     * @return returns true if current user is the author of the job.
+     */
+    public static boolean isAuthor(Job job) {
+        User user = User.current();
+        return !(user == null || job == null || job.getCreatedBy() == null) && job.getCreatedBy().equals(user.getId());
+    }
+
     /**
      * Resolves the target object for the given object.  
      * If the object is a StaplerProxy, then return the proxy target.

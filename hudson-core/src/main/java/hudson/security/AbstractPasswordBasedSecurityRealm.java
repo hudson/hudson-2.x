@@ -24,6 +24,7 @@
 package hudson.security;
 
 import groovy.lang.Binding;
+import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.cli.CLICommand;
 import hudson.model.Hudson;
@@ -141,7 +142,7 @@ public abstract class AbstractPasswordBasedSecurityRealm extends SecurityRealm i
      */
     protected UserDetails doAuthenticate(String username, String password) throws AuthenticationException {
         UserDetails userDetails = authenticate(username, password);
-        setHudsonUserEnvVar(userDetails.getUsername());
+        EnvVars.setHudsonUserEnvVar(userDetails.getUsername());
         return userDetails;
     }
 
