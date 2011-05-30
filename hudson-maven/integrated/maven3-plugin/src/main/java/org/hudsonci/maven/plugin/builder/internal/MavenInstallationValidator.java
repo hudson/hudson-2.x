@@ -146,7 +146,7 @@ public class MavenInstallationValidator
 
     private String getMavenVersion() throws Exception {
         if (mavenVersion == null) {
-            muxlog.info("Checking Maven installation version");
+            muxlog.info("Checking Maven 3 installation version");
 
             ArgumentListBuilder args = new ArgumentListBuilder();
             args.add(getExecutable());
@@ -174,16 +174,20 @@ public class MavenInstallationValidator
 
             if (result != 0) {
                 throw new AbortException(
-                    format("Failed to determine Maven installation version; unexpected exit code: %d, command output: %s", process.join(), output));
+                    format("Failed to determine Maven 3 installation version;" +
+                            " unexpected exit code: %d, command output: %s", process.join(), output));
             }
 
             BufferedReader reader = new BufferedReader(new StringReader(output));
             mavenVersion = new MavenVersionParser().parse(reader);
             if (mavenVersion == null) {
-                throw new AbortException(format("Failed to determine Maven installation version; unable to parse version from: %s", output));
+                throw new AbortException(format("Failed to determine Maven " +
+                        "3 installation version; unable to parse version " +
+                        "from: %s", output));
             }
 
-            muxlog.info("Detected Maven installation version: {}", mavenVersion);
+            muxlog.info("Detected Maven 3 installation version: {}",
+                    mavenVersion);
         }
         return mavenVersion;
     }
@@ -225,7 +229,7 @@ public class MavenInstallationValidator
      * @throws Exception
      */
     public void validate() throws Exception {
-        muxlog.info("Checking Maven installation environment");
+        muxlog.info("Checking Maven 3 installation environment");
 
         ArgumentListBuilder args = new ArgumentListBuilder();
         args.add(getExecutable());
@@ -253,7 +257,8 @@ public class MavenInstallationValidator
         }
 
         if (result == 0) {
-            throw new AbortException("Invalid Maven installation environment; unable to configure MAVEN_OPTS");
+            throw new AbortException("Invalid Maven 3 installation " +
+                    "environment; unable to configure MAVEN_OPTS");
         }
 
         // TODO: Launch something close to what needs to be run, using a special spy to help us make sure it works

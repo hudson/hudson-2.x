@@ -60,7 +60,7 @@ public class MavenBuildUI
     }
 
     public String getDisplayName() {
-        return "Maven";
+        return "Maven 3";
     }
 
     public String getUrlName() {

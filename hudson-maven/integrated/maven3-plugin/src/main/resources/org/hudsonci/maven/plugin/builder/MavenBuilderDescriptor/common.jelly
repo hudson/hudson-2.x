@@ -31,7 +31,7 @@ THE SOFTWARE.
     <!-- FIXME: Root from code, not from crappy jelly shit -->
     <j:set var="help" value="/plugin/maven3-plugin/help/mavenbuilder"/>
 
-    <f:entry title="Maven" help="${help}/installationId.html">
+    <f:entry title="Maven 3" help="${help}/installationId.html">
         <select class="setting-input" name="installationId">
             <option value="(Bundled)">(Bundled)</option>
             <j:forEach var="inst" items="${descriptor.installations}">

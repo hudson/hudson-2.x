@@ -103,7 +103,7 @@ public class MavenInstallation
 
         @Override
         public String getDisplayName() {
-            return "Maven";
+            return "Maven 3";
         }
 
         @Override
