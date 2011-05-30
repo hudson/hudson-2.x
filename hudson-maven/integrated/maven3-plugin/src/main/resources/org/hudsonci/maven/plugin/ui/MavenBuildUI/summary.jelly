@@ -48,6 +48,6 @@ THE SOFTWARE.
         <!--</j:choose>-->
 
         <!-- FIXME: For now just say something... figure out how/if we want to ^^^ later. -->
-        Maven Build Information
+        Maven 3 Build Information
     </t:summary>
 </j:jelly>

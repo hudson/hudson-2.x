@@ -101,7 +101,8 @@ public class DependencyTrigger
         @Override
         public String getDisplayName() {
             // TODO: i18n
-            return "Build when Maven dependencies have been updated";
+            return "Build when Maven dependencies have been updated by Maven " +
+                    "3 integration";
         }
     }
 }

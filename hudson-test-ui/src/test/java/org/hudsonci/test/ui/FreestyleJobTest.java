@@ -59,7 +59,7 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.click(SUBVERSION_LBL_SELECT_EXP);
         selenium.type("svn.remote.loc", "https://svn.java.net/svn/hudson~svn/trunk/hudson/plugins/subversion");
         selenium.click("//span[@id='yui-gen2']/span/button");
-        selenium.click("link=Invoke top-level Maven targets");
+        selenium.click("link=Invoke Maven 2 (Legacy)");
         selenium.type("textarea._.targets", "clean install -DskipTests");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
@@ -83,7 +83,7 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.click(GIT_LBL_SELECT_EXP);
         selenium.type("git.repo.url", "https://github.com/hudson-plugins/git-plugin.git");
         selenium.click("//span[@id='yui-gen2']/span/button");
-        selenium.click("link=Invoke top-level Maven targets");
+        selenium.click("link=Invoke Maven 2 (Legacy)");
         selenium.type("textarea._.targets", "clean install -DskipTests");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
