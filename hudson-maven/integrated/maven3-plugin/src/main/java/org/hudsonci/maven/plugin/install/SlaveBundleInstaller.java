@@ -70,7 +70,8 @@ public class SlaveBundleInstaller
         String resource = BUNDLE_ARCHIVE;
         URL url = SlaveBundleInstaller.class.getResource(resource);
         if (url == null) {
-            throw new RuntimeException("Unable to install Maven slave bundle; missing resource: " + resource);
+            throw new RuntimeException("Unable to install Maven 3 slave " +
+                    "bundle; missing resource: " + resource);
         }
 
         FilePath dir = new FilePath(root, BASE_PATH);

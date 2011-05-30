@@ -53,11 +53,11 @@ public class MavenConfigurationUI
     }
 
     public String getDisplayName() {
-        return "Maven Configuration";
+        return "Maven 3 Configuration";
     }
 
     public String getDescription() {
-        return "Manage Maven global configuration options.";
+        return "Manage Maven 3 global configuration options.";
     }
 
     @JellyAccessible

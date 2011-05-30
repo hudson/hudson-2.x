@@ -125,7 +125,7 @@ public class MavenBuilderDescriptor
 
     @Override
     public String getDisplayName() {
-        return "Invoke Maven";
+        return "Invoke Maven 3";
     }
 
     @Override

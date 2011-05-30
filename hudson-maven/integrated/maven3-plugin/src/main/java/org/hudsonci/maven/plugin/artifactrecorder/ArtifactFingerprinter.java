@@ -119,7 +119,7 @@ public class ArtifactFingerprinter
 
         @Override
         public String getDisplayName() {
-            return "Record fingerprints of Maven artifacts";
+            return "Record fingerprints of Maven 3 artifacts";
         }
     }
 }

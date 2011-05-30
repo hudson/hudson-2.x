@@ -76,7 +76,8 @@ public class MavenBuildUI
     }
 
     public String getPageTitle() {
-        return String.format("%s Maven Build Information", getBuild().getFullDisplayName());
+        return String.format("%s Maven 3 Build Information",
+                getBuild().getFullDisplayName());
     }
 
     @JellyAccessible
