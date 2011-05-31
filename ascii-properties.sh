@@ -1,6 +1,8 @@
+#!/bin/sh
+# 
 # The MIT License
 # 
-# Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+# Copyright (c) 2010-2011, Sonatype, Inc.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +21,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-failingFor=Fallando durante los \u00FAltimos {0} {0,choice,0#builds|1#build|1<builds}
-skippedFor=Omitidos durante los \u00FAltimos {0} {0,choice,0#builds|1#build|1<builds}
-took=Trad\u00F3 {0}.
-since.before=Desde'' ''
-since.after='' ''
-Standard\ Error=Salida de error
-Error\ Message=Mensaje de error
-Stacktrace=Traza
-Standard\ Output=Salida estandard
+# 
+for f in `find . -name "*.properties" -type f`
+do
+  enc=`file -b --mime-encoding $f`
+  if [ "$enc" != "us-ascii" ]
+  then
+    iconv -s -f $enc -t us-ascii --unicode-subst="\u%04X" $f > $f.tmp; mv $f.tmp $f
+  fi
+done
