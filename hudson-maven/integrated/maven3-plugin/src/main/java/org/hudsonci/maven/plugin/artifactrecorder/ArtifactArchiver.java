@@ -121,7 +121,7 @@ public class ArtifactArchiver
 
         @Override
         public String getDisplayName() {
-            return "Archive Maven artifacts";
+            return "Archive Maven 3 artifacts";
         }
     }
 }

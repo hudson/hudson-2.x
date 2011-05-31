@@ -150,7 +150,8 @@ public class DependencyNotifier
         @Override
         public String getDisplayName() {
             // TODO: i18n
-            return "Notify that Maven dependencies have been updated";
+            return "Notify that Maven dependencies have been updated by Maven" +
+                    " 3 integration";
         }
     }
 }

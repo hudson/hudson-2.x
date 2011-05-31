@@ -102,11 +102,12 @@ public class PerformBuild
         // Resolve and validate the installation
         MavenInstallation installation = owner.getMavenInstallation();
         if (installation == null) {
-            muxlog.info("Using bundled Maven installation");
+            muxlog.info("Using bundled Maven 3 installation");
             installation = new BundledMavenInstallation();
         }
         else {
-            muxlog.info("Using Maven installation: {}", installation.getName());
+            muxlog.info("Using Maven 3 installation: {}",
+                    installation.getName());
             installation = installation.forNode(owner.getNodes().getCurrentNode(), listener);
             installation = installation.forEnvironment(env);
         }

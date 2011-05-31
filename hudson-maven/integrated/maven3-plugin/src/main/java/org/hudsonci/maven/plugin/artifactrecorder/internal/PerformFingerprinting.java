@@ -84,7 +84,7 @@ public class PerformFingerprinting
             return true;
         }
         
-        muxlog.info("Recording Maven artifact fingerprints.");
+        muxlog.info("Recording Maven 3 artifact fingerprints.");
         
         FilePath workspace = build.getWorkspace();
         // Check if workspace exists.
@@ -110,7 +110,8 @@ public class PerformFingerprinting
         // TODO: consider it a failure if not all artifacts fingerprinted?
         // Note there can be duplicate artifact files/coords from different builders but the artifacts are not equal
         // due to other object attributes.  
-        muxlog.info("Recorded Maven artifact fingerprints: {} files of {} build artifacts for {} Maven builders.", Varargs.va( recordedFingerprints.size(), artifacts.size(), numberOfBuilders ) );
+        muxlog.info("Recorded Maven 3 artifact fingerprints: {} files of {} " +
+                "build artifacts for {} Maven builders.", Varargs.va( recordedFingerprints.size(), artifacts.size(), numberOfBuilders ) );
 
         if( ! recordedFingerprints.isEmpty() )
         {

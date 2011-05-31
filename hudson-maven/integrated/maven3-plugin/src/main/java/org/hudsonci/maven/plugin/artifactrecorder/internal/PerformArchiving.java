@@ -75,13 +75,13 @@ public class PerformArchiving
         }
         
         if (artifacts.isEmpty()) {
-            muxlog.info("No Maven artifacts to archive.");
+            muxlog.info("No Maven 3 artifacts to archive.");
             return true;
         }
 
-        muxlog.info("Archiving Maven artifacts.");
+        muxlog.info("Archiving Maven 3 artifacts.");
         int count = archiveArtifacts(artifacts);
-        muxlog.info("Archived Maven artifacts: {}.", count);
+        muxlog.info("Archived Maven 3 artifacts: {}.", count);
 
         // Don't stop the build.
         return true;
@@ -139,7 +139,8 @@ public class PerformArchiving
                         count++;
                     }
                     else {
-                        muxlog.error("Failed to archive Maven artifact {} - unresolved.", gav);
+                        muxlog.error("Failed to archive Maven 3 artifact {} -" +
+                                " unresolved.", gav);
                     }
                 }
             }
@@ -147,10 +148,10 @@ public class PerformArchiving
         // No need to stop the build due to these exceptions.
         catch (IOException e) {
             Util.displayIOException(e, listener);
-            muxlog.error("Failed to archive Maven artifacts", e);
+            muxlog.error("Failed to archive Maven 3 artifacts", e);
         }
         catch (InterruptedException e) {
-            muxlog.error("Failed to archive Maven artifacts", e);
+            muxlog.error("Failed to archive Maven 3 artifacts", e);
         }
 
         return count;
