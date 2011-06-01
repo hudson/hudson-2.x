@@ -81,7 +81,7 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.click("//button[@type='button']");
         selenium.waitForPageToLoad("30000");
         selenium.click(GIT_LBL_SELECT_EXP);
-        selenium.type("git.repo.url", "https://github.com/hudson-plugins/git-plugin.git");
+        selenium.type("git.repo.url", "git://github.com/hudson-plugins/git-plugin.git");
         selenium.click("//span[@id='yui-gen2']/span/button");
         selenium.click("link=Invoke top-level Maven targets");
         selenium.type("textarea._.targets", "clean install -DskipTests");
