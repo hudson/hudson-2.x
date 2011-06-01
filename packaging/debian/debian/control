@@ -8,6 +8,7 @@ Homepage: http://hudson-ci.org/
 
 Package: hudson
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, daemon, adduser, java-virtual-machine, java2-runtime, psmisc
+Depends: ${shlibs:Depends}, ${misc:Depends}, daemon, adduser, java6-runtime-headless, psmisc
+Suggests: default-jdk-headless
 Description: Continuous integration system written in Java
  Hudson is an extensible continuous build engine written in Java.
