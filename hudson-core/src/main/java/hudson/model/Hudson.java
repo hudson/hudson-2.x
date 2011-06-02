@@ -2763,13 +2763,14 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     }
 
     /**
-     * Reload a project to update its definition. (seems to be the only way to update information in items without deleting the old)
-     * @since 2.1.0
+     * Reload a project to update its definition.
+     * @since 2.x.x
      */
-    public void reloadProjectFromDisk(File jobDir) throws IOException {
+    public TopLevelItem reloadProjectFromDisk(File jobDir) throws IOException {
         TopLevelItem item = (TopLevelItem) Items.load(this, jobDir);
         items.put(item.getName(), item);
         rebuildDependencyGraph();
+        return item;
     }
 
     /**

@@ -35,16 +35,16 @@ import java.io.IOException;
 import org.kohsuke.args4j.Argument;
 
 /**
- * Creates a new job by reading stdin as a configuration XML file.
+ * Updates or creates a job by reading stdin as a configuration XML file.
  * 
- * @author Henrik Lynggaard <henrik@hlyh.dk>
+ * @author Henrik Lynggaard Hansen
  */
 @Extension
 public class UpdateJobCommand extends CLICommand {
 
     @Override
     public String getShortDescription() {
-        return "Updates a job by reading stdin as a configuration XML file. If the job does not exist it is created";
+        return "Updates and potentionally creates a job by reading stdin as a configuration XML file.";
     }
     
     @Argument(metaVar = "NAME", usage = "Name of the job to update", required = true)
@@ -65,18 +65,17 @@ public class UpdateJobCommand extends CLICommand {
         if (item == null) {
             h.checkPermission(Item.CREATE);
             h.createProjectFromXML(name, stdin);
-
         } else {
-            try {
+            try {               
                 h.checkPermission(Job.CONFIGURE);
+                               
                 File rootDirOfJob = new File(new File(h.getRootDir(), "jobs"), name);
                 // place it as config.xml
                 File configXml = Items.getConfigFile(rootDirOfJob).getFile();
                 IOUtils.copy(stdin, configXml);
                 
-                h.reloadProjectFromDisk(configXml.getParentFile());
+                item = h.reloadProjectFromDisk(configXml.getParentFile());                               
             } catch (IOException e) {
-                // if anything fails, delete the config file to avoid further confusion
                 throw e;
             }
         }
