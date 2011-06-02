@@ -24,6 +24,7 @@
 package hudson.security;
 
 import groovy.lang.Binding;
+import hudson.EnvVars;
 import hudson.Functions;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
@@ -93,7 +94,7 @@ public class PAMSecurityRealm extends SecurityRealm {
                 int i=0;
                 for (String g : grps)
                     groups[i++] = new GrantedAuthorityImpl(g);
-
+                EnvVars.setHudsonUserEnvVar(username);
                 // I never understood why Acegi insists on keeping the password...
                 return new UsernamePasswordAuthenticationToken(username, password, groups);
             } catch (PAMException e) {

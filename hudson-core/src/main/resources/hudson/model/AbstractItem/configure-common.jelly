@@ -26,46 +26,66 @@ THE SOFTWARE.
 <!--
   Parts of the configuration that applies to Project and MavenModuleSet.
 -->
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project" xmlns:this="this">
-  <p:config-disableBuild/>
-  <j:if test="${app.CONCURRENT_BUILD}">
-    <f:optionalBlock field="concurrentBuild" title="${%title.concurrentbuilds}" />
-  </j:if>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project" xmlns:this="this">
+    <p:config-disableBuild/>
+    <j:if test="${app.CONCURRENT_BUILD}">
+        <f:optionalBlock field="concurrentBuild" title="${%title.concurrentbuilds}"/>
+    </j:if>
 
-  <j:set var="jdks" value="${app.JDKs}" />
-  <j:if test="${jdks.size() gt 1}">
-    <!-- if there's only one JDK configured, always use that. -->
-    <f:entry title="JDK"
-             description="${%JDK to be used for this project}">
-      <select class="setting-input validated" name="jdk" checkUrl="'${rootURL}/defaultJDKCheck?value='+this.value">
-        <option>${%default.value}</option>
-        <j:forEach var="inst" items="${jdks}">
-          <f:option selected="${inst.name==it.JDK.name}" value="${inst.name}">${inst.name}</f:option>
-        </j:forEach>
-      </select>
-    </f:entry>
-  </j:if>
+    <j:set var="jdks" value="${app.JDKs}"/>
+    <j:if test="${jdks.size() gt 1}">
+        <!-- if there's only one JDK configured, always use that. -->
+        <f:entry title="JDK"
+                 description="${%JDK to be used for this project}">
+            <select class="setting-input validated" name="jdk"
+                    checkUrl="'${rootURL}/defaultJDKCheck?value='+this.value">
+                <option>${%default.value}</option>
+                <j:forEach var="inst" items="${jdks}">
+                    <f:option selected="${inst.name==it.JDK.name}" value="${inst.name}">${inst.name}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+    </j:if>
 
-  <!-- master/slave -->
-  <j:if test="${app.labels.size() gt 1 || app.clouds.size() gt 0 || (it.assignedLabel!=null and it.assignedLabel!=app.selfLabel)}">
-    <f:optionalBlock name="hasSlaveAffinity" title="${%Restrict where this project can be run}" checked="${it.assignedLabel!=null}"
-        help="/help/project-config/slave.html">
-      <f:entry title="${%Label Expression}" field="assignedLabelString">
-        <f:textbox autoCompleteDelimChar=" "/>
-      </f:entry>
-    </f:optionalBlock>
-  </j:if>
+    <!-- master/slave -->
+    <j:if test="${app.labels.size() gt 1 || app.clouds.size() gt 0 || (it.assignedLabel!=null and it.assignedLabel!=app.selfLabel)}">
+        <f:optionalBlock name="hasSlaveAffinity" title="${%Restrict where this project can be run}"
+                         checked="${it.assignedLabel!=null}"
+                         help="/help/project-config/slave.html">
+            <f:radioBlock name="affinityChooser" value="basic" title="${%Node and label menu}"
+                          checked="${!it.advancedAffinityChooser and it.assignedLabel!=null}">
+                <f:entry title="${%Node}">
+                    <select class="setting-input" name="slave">
+                        <j:forEach var="s" items="${app.labels}">
+                            <j:if test="${s.isAssignable()}">
+                                <f:option selected="${s==it.assignedLabel}" value="${s.name}">${s.name}
+                                    <j:if test="${!empty(s.description)}">(${s.description})</j:if>
+                                </f:option>
+                            </j:if>
+                        </j:forEach>
+                    </select>
+                </f:entry>
+            </f:radioBlock>
+            <f:radioBlock name="affinityChooser" value="advanced" title="${%Advanced Node and Label expressions}"
+                          checked="${it.advancedAffinityChooser and it.assignedLabel!=null}">
+                <f:entry title="${%Label Expression}" field="assignedLabelString">
+                    <f:textbox/>
+                </f:entry>
+            </f:radioBlock>
+        </f:optionalBlock>
+    </j:if>
 
-  <f:section title="${%Advanced Project Options configure-common}">
-    <f:advanced>
-      <p:config-quietPeriod />
-      <p:config-retryCount />
-      <p:config-blockWhenUpstreamBuilding />
-      <p:config-blockWhenDownstreamBuilding />
-      <st:include page="configure-advanced.jelly" optional="true" />
-      <p:config-cleanWorkspace />
-    </f:advanced>
-  </f:section>
+    <f:section title="${%Advanced Project Options configure-common}">
+        <f:advanced>
+            <p:config-quietPeriod/>
+            <p:config-retryCount/>
+            <p:config-blockWhenUpstreamBuilding/>
+            <p:config-blockWhenDownstreamBuilding/>
+            <st:include page="configure-advanced.jelly" optional="true"/>
+            <p:config-cleanWorkspace/>
+        </f:advanced>
+    </f:section>
 
-  <this:configure-scm/>
+    <this:configure-scm/>
 </j:jelly>

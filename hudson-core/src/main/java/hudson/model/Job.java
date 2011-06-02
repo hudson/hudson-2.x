@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov,
+ * Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,61 +24,59 @@
  */
 package hudson.model;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
-
+import com.google.common.collect.Sets;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import hudson.Extension;
 import hudson.ExtensionPoint;
 import hudson.PermalinkList;
-import hudson.Extension;
 import hudson.cli.declarative.CLIResolver;
 import hudson.model.Descriptor.FormException;
-import hudson.model.PermalinkProjectAction.Permalink;
-import hudson.model.Fingerprint.RangeSet;
 import hudson.model.Fingerprint.Range;
+import hudson.model.Fingerprint.RangeSet;
+import hudson.model.PermalinkProjectAction.Permalink;
 import hudson.search.QuickSilver;
 import hudson.search.SearchIndex;
 import hudson.search.SearchIndexBuilder;
 import hudson.search.SearchItem;
 import hudson.search.SearchItems;
 import hudson.security.ACL;
+import hudson.security.AuthorizationMatrixProperty;
+import hudson.security.Permission;
+import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
 import hudson.util.ChartUtil;
 import hudson.util.ColorPalette;
 import hudson.util.CopyOnWriteList;
 import hudson.util.DataSetBuilder;
+import hudson.util.Graph;
 import hudson.util.IOException2;
 import hudson.util.RunList;
 import hudson.util.ShiftedCategoryAxis;
 import hudson.util.StackedAreaRenderer2;
 import hudson.util.TextFile;
-import hudson.util.Graph;
 import hudson.widgets.HistoryWidget;
-import hudson.widgets.Widget;
 import hudson.widgets.HistoryWidget.Adapter;
-
-import java.awt.Color;
-import java.awt.Paint;
+import hudson.widgets.Widget;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URLEncoder;
-import java.util.AbstractList;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
-import java.util.LinkedList;
-
 import javax.servlet.ServletException;
-
-import net.sf.json.JSONObject;
 import net.sf.json.JSONException;
-
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -89,16 +88,19 @@ import org.jfree.chart.renderer.category.StackedAreaRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jvnet.localizer.Localizable;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.StaplerOverridable;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.args4j.Argument;
-import org.kohsuke.args4j.CmdLineException;
+
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 
 /**
  * A job is an runnable entity under the monitoring of Hudson.
- * 
+ *
  * <p>
  * Every time it "runs", it will be recorded as a {@link Run} object.
  *
@@ -106,10 +108,11 @@ import org.kohsuke.args4j.CmdLineException;
  * To create a custom job type, extend {@link TopLevelItemDescriptor} and put {@link Extension} on it.
  *
  * @author Kohsuke Kawaguchi
+ * @author Nikita Levyankov
  */
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
         extends AbstractItem implements ExtensionPoint, StaplerOverridable {
-
+    private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
     /**
      * Next build number. Kept in a separate file because this is the only
      * information that gets updated often. This allows the rest of the
@@ -137,6 +140,16 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private transient List<HealthReport> cachedBuildHealthReports = null;
 
     private boolean keepDependencies;
+
+    /**
+     * The author of the job;
+     */
+    protected volatile String createdBy;
+
+    /**
+     * The time when the job was created;
+     */
+    private volatile long creationTime;
 
     /**
      * List of {@link UserProperty}s configured for this project.
@@ -189,6 +202,34 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         synchronized (this) {
             this.nextBuildNumber = 1; // reset the next build number
             this.holdOffBuildUntilSave = true;
+            this.creationTime = new GregorianCalendar().getTimeInMillis();
+            User user = User.current();
+            if (user != null){
+                this.createdBy = user.getId();
+                grantProjectMatrixPermissions(user);
+            }
+        }
+    }
+
+    /**
+     * Grants project permissions to the user.
+     *
+     * @param user user
+     */
+    protected void grantProjectMatrixPermissions(User user) {
+        if (Hudson.getInstance().getAuthorizationStrategy() instanceof ProjectMatrixAuthorizationStrategy) {
+            Map<Permission, Set<String>> grantedPermissions = new HashMap<Permission, Set<String>>();
+            Set<String> users = Sets.newHashSet(user.getId());
+            grantedPermissions.put(Item.BUILD, users);
+            grantedPermissions.put(Item.CONFIGURE, users);
+            grantedPermissions.put(Item.DELETE, users);
+            grantedPermissions.put(Item.READ, users);
+            grantedPermissions.put(Item.WORKSPACE, users);
+            grantedPermissions.put(Run.DELETE, users);
+            grantedPermissions.put(Run.UPDATE, users);
+            AuthorizationMatrixProperty amp = new AuthorizationMatrixProperty(grantedPermissions);
+            amp.setOwner(this);
+            properties.add(amp);
         }
     }
 
@@ -281,12 +322,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Programatically updates the next build number.
-     * 
+     *
      * <p>
      * Much of Hudson assumes that the build number is unique and monotonic, so
      * this method can only accept a new value that's bigger than
      * {@link #getLastBuild()} returns. Otherwise it'll be no-op.
-     * 
+     *
      * @since 1.199 (before that, this method was package private.)
      */
     public synchronized void updateNextBuildNumber(int next) throws IOException {
@@ -353,7 +394,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Adds {@link JobProperty}.
-     * 
+     *
      * @since 1.188
      */
     public void addProperty(JobProperty<? super JobT> jobProp) throws IOException {
@@ -482,7 +523,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Gets the read-only view of all the builds.
-     * 
+     *
      * @return never null. The first entry is the latest build.
      */
     @Exported
@@ -563,7 +604,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Gets the youngest build #m that satisfies <tt>n&lt;=m</tt>.
-     * 
+     *
      * This is useful when you'd like to fetch a build but the exact build might
      * be already gone (deleted, rotated, etc.)
      */
@@ -577,7 +618,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Gets the latest build #m that satisfies <tt>m&lt;=n</tt>.
-     * 
+     *
      * This is useful when you'd like to fetch a build but the exact build might
      * be already gone (deleted, rotated, etc.)
      */
@@ -613,20 +654,27 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Directory for storing {@link Run} records.
-     * <p>
+     * <p/>
      * Some {@link Job}s may not have backing data store for {@link Run}s, but
      * those {@link Job}s that use file system for storing data should use this
      * directory for consistency.
-     * 
+     * This dir could be configured by setting HUDSON_BUILDS property in JNDI or Environment or System properties.
+     *
+     * @return result directory
      * @see RunMap
      */
     protected File getBuildDir() {
-        return new File(getRootDir(), "builds");
+        String resultDir = getConfiguredHudsonProperty(HUDSON_BUILDS_PROPERTY_KEY);
+        if (StringUtils.isNotBlank(resultDir)) {
+            return new File(resultDir + "/" + getSearchName());
+        } else {
+            return new File(getRootDir(), "builds");
+        }
     }
 
     /**
      * Gets all the runs.
-     * 
+     *
      * The resulting map must be immutable (by employing copy-on-write
      * semantics.) The map is descending order, with newest builds at the top.
      */
@@ -634,7 +682,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Called from {@link Run} to remove it from this job.
-     * 
+     *
      * The files are deleted already. So all the callee needs to do is to remove
      * a reference from this {@link Job}.
      */
@@ -669,7 +717,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * Returns the last successful build, if any. Otherwise null. A successful build
      * would include either {@link Result#SUCCESS} or {@link Result#UNSTABLE}.
-     * 
+     *
      * @see #getLastStableBuild()
      */
     @Exported
@@ -749,32 +797,32 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             r = r.getPreviousBuild();
         return r;
     }
-    
+
     /**
      * Returns the last 'numberOfBuilds' builds with a build result >= 'threshold'
-     * 
+     *
      * @return a list with the builds. May be smaller than 'numberOfBuilds' or even empty
      *   if not enough builds satisfying the threshold have been found. Never null.
      */
     public List<RunT> getLastBuildsOverThreshold(int numberOfBuilds, Result threshold) {
-        
+
         List<RunT> result = new ArrayList<RunT>(numberOfBuilds);
-        
+
         RunT r = getLastBuild();
         while (r != null && result.size() < numberOfBuilds) {
-            if (!r.isBuilding() && 
+            if (!r.isBuilding() &&
                  (r.getResult() != null && r.getResult().isBetterOrEqualTo(threshold))) {
                 result.add(r);
             }
             r = r.getPreviousBuild();
         }
-        
+
         return result;
     }
-    
+
     public final long getEstimatedDuration() {
         List<RunT> builds = getLastBuildsOverThreshold(3, Result.UNSTABLE);
-        
+
         if(builds.isEmpty())     return -1;
 
         long totalDuration = 0;
@@ -820,7 +868,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * Get the current health report for a job.
-     * 
+     *
      * @return the health report. Never returns null
      */
     public HealthReport getBuildHealth() {
@@ -945,7 +993,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 logRotator = LogRotator.DESCRIPTOR.newInstance(req,json.getJSONObject("logrotate"));
             else
                 logRotator = null;
-            
+
             int i = 0;
             for (JobPropertyDescriptor d : JobPropertyDescriptor
                     .getPropertyDescriptors(Job.this.getClass())) {
@@ -1221,4 +1269,44 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public BuildTimelineWidget getTimeline() {
         return new BuildTimelineWidget(getBuilds());
     }
+
+    /**
+     * Returns the author of the job.
+     *
+     * @return the author of the job.
+     * @since 2.0.1
+     */
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * Sets the author of the job.
+     *
+     * @param createdBy the author of the job.
+     */
+    protected void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * Returns time when the project was created.
+     *
+     * @return time when the project was created.
+     * @since 2.0.1
+     */
+    public long getCreationTime() {
+        return creationTime;
+    }
+
+    /**
+     * Sets time when the job was created.
+     *
+     * @param creationTime time when the job was created.
+     */
+    protected void setCreationTime(long creationTime) {
+        this.creationTime = creationTime;
+    }
+
+
 }

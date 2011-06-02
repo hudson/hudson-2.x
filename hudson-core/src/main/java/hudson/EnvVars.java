@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Arrays;
 import java.util.UUID;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Environment variables.
@@ -62,6 +63,11 @@ import java.util.UUID;
  * @author Kohsuke Kawaguchi
  */
 public class EnvVars extends TreeMap<String,String> {
+    /**
+     * Environment property which will be exposed. Value - name of currently logged user.
+     */
+    public static final String HUDSON_USER_ENV_KEY = "HUDSON_USER";
+
     /**
      * If this {@link EnvVars} object represents the whole environment variable set,
      * not just a partial list used for overriding later, then we need to know
@@ -186,6 +192,33 @@ public class EnvVars extends TreeMap<String,String> {
      */
     public static EnvVars createCookie() {
         return new EnvVars("HUDSON_COOKIE", UUID.randomUUID().toString());
+    }
+
+    /**
+     * Removes HUDSON_USER from EnvVars.
+     */
+    public static void clearHudsonUserEnvVar() {
+        masterEnvVars.remove(HUDSON_USER_ENV_KEY);
+    }
+
+    /**
+     * Sets current logged user to env vars.
+     *
+     * @param userName logged user.
+     */
+    public static void setHudsonUserEnvVar(String userName) {
+        if (!StringUtils.isEmpty(userName)) {
+            masterEnvVars.put(HUDSON_USER_ENV_KEY, userName);
+        }
+    }
+
+    /**
+     * Returns HUDSON_USER property value.
+     *
+     * @return property value or null if property is absent.
+     */
+    public static String getHudsonUserEnvValue() {
+        return masterEnvVars.get(HUDSON_USER_ENV_KEY);
     }
 
     /**
