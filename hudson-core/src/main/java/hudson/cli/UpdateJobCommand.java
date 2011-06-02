@@ -73,10 +73,8 @@ public class UpdateJobCommand extends CLICommand {
                 // place it as config.xml
                 File configXml = Items.getConfigFile(rootDirOfJob).getFile();
                 IOUtils.copy(stdin, configXml);
-                configXml.getParentFile().mkdirs();
-                // load it
-                TopLevelItem result = (TopLevelItem) Items.load(h, configXml.getParentFile());
-                Hudson.getInstance().rebuildDependencyGraph();
+                
+                h.reloadProjectFromDisk(configXml.getParentFile());
             } catch (IOException e) {
                 // if anything fails, delete the config file to avoid further confusion
                 throw e;
