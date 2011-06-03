@@ -41,6 +41,7 @@ import static org.junit.Assert.fail;
 public class ConfigureHudsonTest extends BaseUITest {
 
     private static final String GLOBAL_PROPS_LBL_SELECT_EXP = "//label[contains(text(),'Environment variables')]";
+    private static final String SUBVERSION_LBL_SELECT_EXP = "//label[contains(text(),'Subversion')]";
     private static final String BUILD_SUCCESS_TEXT = "Finished: SUCCESS";
     private static final String BUILD_FAILURE_TEXT = "Finished: FAILURE";
 
@@ -170,16 +171,13 @@ public class ConfigureHudsonTest extends BaseUITest {
             selenium.type("command", "echo %TEST%");
             selenium.click("//button[contains(text(), 'Save')]");
             selenium.waitForPageToLoad("30000");
-            selenium.click("link=Build Now");
         } else {
             //On non-windows use shell
-            //TBD - Test this on Mac
             selenium.click("link=Execute shell");
             waitForTextPresent("Execute shell", null);
             selenium.type("command", "echo $TEST");
             selenium.click("//button[contains(text(), 'Save')]");
             selenium.waitForPageToLoad("30000");
-            selenium.click("link=Build Now");
         }
         //Run and verify
         selenium.waitForPageToLoad("30000");
@@ -188,5 +186,84 @@ public class ConfigureHudsonTest extends BaseUITest {
         selenium.open("/job/global-prop-test/1/console");
         waitForTextPresent(BUILD_SUCCESS_TEXT, BUILD_FAILURE_TEXT);
         waitForTextPresent("Hello", null);
+    }
+
+    @Test
+    public void testReduceQuietPeriod() throws Exception {
+        Selenium selenium = getSelenium();
+        selenium.open("/");
+        //Navigate to Configure System page
+        waitForTextPresent("Manage Hudson", null);
+        selenium.click("link=Manage Hudson");
+        waitForTextPresent("Configure System", null);
+        selenium.click("link=Configure System");
+        waitForTextPresent("System Message", null);
+        selenium.type("quiet_period", "0");
+        selenium.click("//button[contains(text(), 'Save')]");
+
+        //Create a Job that should run immediately
+        waitForTextPresent("Manage Hudson", null);
+        selenium.open("/");
+        waitForTextPresent("New Job");
+        selenium.click("link=New Job");
+        selenium.waitForPageToLoad("30000");
+        selenium.type("name", "time-test");
+        selenium.click("mode");
+        selenium.click("//button[@type='button']");
+        selenium.waitForPageToLoad("30000");
+        selenium.click("//span[@id='yui-gen2']/span/button");
+        if (SystemUtils.isWindows()) {
+            //On windows use batch command
+            selenium.click("link=Execute Windows batch command");
+            waitForTextPresent("Execute Windows batch command", null);
+            selenium.type("command", "PING 1.1.1.1 -n 1 -w 3000  1>NUL");
+            selenium.click("//button[contains(text(), 'Save')]");
+            selenium.waitForPageToLoad("30000");
+        } else {
+            //On non-windows use shell
+            selenium.click("link=Execute shell");
+            waitForTextPresent("Execute shell", null);
+            selenium.type("command", "sleep 3");
+            selenium.click("//button[contains(text(), 'Save')]");
+            selenium.waitForPageToLoad("30000");
+        }
+        //Run and verify
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Build Now");
+        selenium.open("/job/time-test/1/console");
+    }
+
+    @Test
+    public void testIncreaseSCMRetryCount() {
+        Selenium selenium = getSelenium();
+        selenium.open("/");
+        //Navigate to Configure System page
+        waitForTextPresent("Manage Hudson", null);
+        selenium.click("link=Manage Hudson");
+        waitForTextPresent("Configure System", null);
+        selenium.click("link=Configure System");
+        waitForTextPresent("System Message", null);
+        selenium.type("retry_count", "1");
+        selenium.click("//button[contains(text(), 'Save')]");
+
+        //Create a Job that should run immediately
+        waitForTextPresent("Manage Hudson", null);
+        selenium.open("/");
+        waitForTextPresent("New Job");
+        selenium.click("link=New Job");
+        selenium.waitForPageToLoad("30000");
+        selenium.type("name", "scm-test");
+        selenium.click("mode");
+        selenium.click("//button[@type='button']");
+        selenium.click(SUBVERSION_LBL_SELECT_EXP);
+        selenium.type("svn.remote.loc", "http://not.there.com/");
+        selenium.click("//button[contains(text(), 'Save')]");
+        
+        //Run and verify
+        selenium.waitForPageToLoad("30000");
+        selenium.click("link=Build Now");
+        selenium.waitForPageToLoad("30000");
+        selenium.open("/job/scm-test/1/console");
+        waitForTextPresent("Retrying after 10 seconds", null);
     }
 }
