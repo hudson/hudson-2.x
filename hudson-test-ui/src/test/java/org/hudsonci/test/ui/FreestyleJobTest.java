@@ -58,9 +58,9 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.waitForPageToLoad("30000");
         selenium.click(SUBVERSION_LBL_SELECT_EXP);
         selenium.type("svn.remote.loc", "https://svn.java.net/svn/hudson~svn/trunk/hudson/plugins/subversion");
-        selenium.click("//span[@id='yui-gen2']/span/button");
-        selenium.click("link=Invoke top-level Maven targets");
-        selenium.type("textarea._.targets", "clean install -DskipTests");
+//        selenium.click("//span[@id='yui-gen2']/span/button");
+//        selenium.click("link=Invoke top-level Maven targets");
+//        selenium.type("textarea._.targets", "clean install -DskipTests");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Build Now");
@@ -82,9 +82,9 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.waitForPageToLoad("30000");
         selenium.click(GIT_LBL_SELECT_EXP);
         selenium.type("git.repo.url", "git://github.com/hudson-plugins/git-plugin.git");
-        selenium.click("//span[@id='yui-gen2']/span/button");
-        selenium.click("link=Invoke top-level Maven targets");
-        selenium.type("textarea._.targets", "clean install -DskipTests");
+//        selenium.click("//span[@id='yui-gen2']/span/button");
+//        selenium.click("link=Invoke top-level Maven targets");
+//        selenium.type("textarea._.targets", "clean install -DskipTests");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Build Now");
