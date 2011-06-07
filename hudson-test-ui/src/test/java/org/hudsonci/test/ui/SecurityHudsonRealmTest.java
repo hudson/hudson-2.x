@@ -79,9 +79,9 @@ public class SecurityHudsonRealmTest extends BaseUITest {
         selenium.waitForPageToLoad("30000");
         selenium.click(SUBVERSION_LBL_SELECT_EXP);
         selenium.type("svn.remote.loc", "https://svn.java.net/svn/hudson~svn/trunk/hudson/plugins/subversion");
-        selenium.click("//span[@id='yui-gen2']/span/button");
-        selenium.click("link=Invoke top-level Maven targets");
-        selenium.type("textarea._.targets", "clean");
+//        selenium.click("//span[@id='yui-gen2']/span/button");
+//        selenium.click("link=Invoke top-level Maven targets");
+//        selenium.type("textarea._.targets", "clean");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Build Now");
