@@ -153,7 +153,6 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-test-framework</artifactId>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
