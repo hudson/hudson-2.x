@@ -55,6 +55,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-framework</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.3.1</version>
