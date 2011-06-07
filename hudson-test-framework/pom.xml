@@ -34,7 +34,7 @@
   </parent>
 
   <artifactId>hudson-test-framework</artifactId>
-  <name>Hudson :: Test</name>
+  <name>Hudson :: Test Framework</name>
   <description>
     Contains common classes for testing.
   </description>
