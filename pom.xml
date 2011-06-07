@@ -72,6 +72,7 @@ THE SOFTWARE.
     <module>hudson-inject</module>
     <module>hudson-maven</module>
     <module>hudson-war</module>
+    <module>hudson-test-framework</module>
     <module>hudson-plugin-parent</module>
     <module>maven-hpi-plugin</module>
   </modules>
@@ -430,11 +431,17 @@ THE SOFTWARE.
 
       <dependency>
         <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-test-framework</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
         <artifactId>hudson-test-harness</artifactId>
         <version>${project.version}</version>
       </dependency>
 
-       <dependency>
+      <dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>hudson-test-ui</artifactId>
          <version>${project.version}</version>
