@@ -44,10 +44,17 @@ THE SOFTWARE.
     <st:attribute name="with">
       ','-separated list of fields that are sent to the server.
     </st:attribute>
+    <st:attribute name="checkUrl">
+      User-defined url for AJAX request. Default value is ${rootURL}/descriptor/${descriptor.clazz.name}
+    </st:attribute>
+    <st:attribute name="queryParams">
+      Additional query params for AJAX request
+    </st:attribute>
   </st:documentation>
   <f:nested>
     <div style="float:right">
-      <input type="button" value="${title}" class="yui-button" onclick="validateButton('${rootURL}/descriptor/${descriptor.clazz.name}/${method}','${with}',this)" />
+      <input type="button" value="${title}" class="yui-button"
+             onclick="validateButton('${checkUrl!=null? checkUrl : rootURL+'/descriptor/'+descriptor.clazz.name}/${method}${queryParams!=null? '?'+queryParams : ''}','${with}',this)" />
     </div>
     <div style="display:none;">
       <img src="${imagesURL}/spinner.gif" /> ${attrs.progress}
