@@ -31,6 +31,7 @@ import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.Result;
 import hudson.util.FormValidation;
@@ -68,6 +69,8 @@ public class ArtifactArchiver extends Recorder {
      * Just keep the last successful artifact set, no more.
      */
     private final boolean latestOnly;
+
+    private final boolean autoValidateFileMask;
     
     private static final Boolean allowEmptyArchive = 
     	Boolean.getBoolean(ArtifactArchiver.class.getName()+".warnOnEmpty");
@@ -79,14 +82,22 @@ public class ArtifactArchiver extends Recorder {
     public ArtifactArchiver(String artifacts, String excludes, boolean latestOnly) {
         this(artifacts, excludes, latestOnly, FilePath.TarCompression.GZIP.name());
     }
-
+    /**
+     * @deprecated as of 2.0.2
+     */
+    @Deprecated
+    public ArtifactArchiver(String artifacts, String excludes, boolean latestOnly, String compressionType) {
+        this(artifacts, excludes, latestOnly, compressionType, false);
+    }
 
     @DataBoundConstructor
-    public ArtifactArchiver(String artifacts, String excludes, boolean latestOnly, String compressionType) {
+    public ArtifactArchiver(String artifacts, String excludes, boolean latestOnly, String compressionType,
+                            boolean autoValidateFileMask) {
         this.artifacts = artifacts.trim();
         this.excludes = Util.fixEmptyAndTrim(excludes);
         this.latestOnly = latestOnly;
         setCompressionType(compressionType);
+        this.autoValidateFileMask = autoValidateFileMask;
     }
 
     public String getArtifacts() {
@@ -99,6 +110,10 @@ public class ArtifactArchiver extends Recorder {
 
     public boolean isLatestOnly() {
         return latestOnly;
+    }
+
+    public boolean isAutoValidateFileMask() {
+        return autoValidateFileMask;
     }
 
     /**
@@ -231,8 +246,13 @@ public class ArtifactArchiver extends Recorder {
         /**
          * Performs on-the-fly validation on the file mask wildcard.
          */
-        public FormValidation doCheckArtifacts(@AncestorInPath AbstractProject project, @QueryParameter String value) throws IOException {
-            return FilePath.validateFileMask(project.getSomeWorkspace(),value);
+        public FormValidation doCheckArtifacts(@AncestorInPath AbstractProject project,
+                                               @QueryParameter String artifacts,
+                                               @QueryParameter boolean force) throws IOException {
+            if (!force) {
+                return FormValidation.ok();
+            }
+            return FilePath.validateFileMask(project.getSomeWorkspace(), artifacts);
         }
 
         @Override

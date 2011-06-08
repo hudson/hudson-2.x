@@ -24,21 +24,27 @@ THE SOFTWARE.
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <f:entry title="${%Files to archive}" field="artifacts">
-        <f:textbox/>
+  <f:entry title="${%Files to archive}" field="artifacts">
+    <f:textbox
+            checkUrl="'descriptorByName/hudson.tasks.ArtifactArchiver/checkArtifacts?artifacts='+encodeURIComponent(this.value)+'&amp;force=${instance.autoValidateFileMask}'"/>
+  </f:entry>
+  <f:validateButton title="${%Validate}" checkUrl="${h.getNearestAncestorUrl(request,it)}/descriptorByName/hudson.tasks.ArtifactArchiver"
+                    method="checkArtifacts" with="artifacts" queryParams="force=true"/>
+  <f:advanced>
+    <f:entry title="" field="autoValidateFileMask">
+      <f:checkbox title="${%autoValidateFiles}"/>
     </f:entry>
-    <f:advanced>
-        <f:entry title="${%Excludes}" field="excludes">
-            <f:textbox/>
-        </f:entry>
-        <f:entry title="" field="latestOnly">
-            <f:checkbox title="${%lastBuildOnly}"/>
-        </f:entry>
-        <f:entry title="${%Compression type}" field="compressionType">
-            <select name="compressionType">
-                <f:option value="GZIP" selected="${instance.compressionType.name()=='GZIP'}">GZIP</f:option>
-                <f:option value="NONE" selected="${instance.compressionType.name()=='NONE'}">NONE</f:option>
-            </select>
-        </f:entry>
-    </f:advanced>
+    <f:entry title="${%Excludes}" field="excludes">
+      <f:textbox/>
+    </f:entry>
+    <f:entry title="" field="latestOnly">
+      <f:checkbox title="${%lastBuildOnly}"/>
+    </f:entry>
+    <f:entry title="${%Compression type}" field="compressionType">
+      <select name="compressionType">
+        <f:option value="GZIP" selected="${instance.compressionType.name()=='GZIP'}">GZIP</f:option>
+        <f:option value="NONE" selected="${instance.compressionType.name()=='NONE'}">NONE</f:option>
+      </select>
+    </f:entry>
+  </f:advanced>
 </j:jelly>
