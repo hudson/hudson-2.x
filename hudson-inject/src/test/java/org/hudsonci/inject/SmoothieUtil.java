@@ -58,15 +58,10 @@ public class SmoothieUtil
         else {
             log.info("Installed custom container: {}", container);
         }
-        resetInjectomaticAspectHelper();
-    }
-
-    private static void resetInjectomaticAspectHelper() throws NoSuchFieldException, IllegalAccessException {
-        setField(InjectomaticAspectHelper.class, "injecto", null, null);
-        log.info("Reset Injectomatic aspect helper");
     }
 
     public static void reset() throws NoSuchFieldException, IllegalAccessException {
         installContainer(null);
+        InjectomaticAspectHelper.setEnabled(false);
     }
 }
