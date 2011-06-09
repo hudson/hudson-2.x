@@ -38,6 +38,9 @@ import hudson.security.SecurityRealm;
 
 import javax.inject.Named;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * Configuration of bindings for Hudson components.
  *
@@ -57,25 +60,20 @@ public class HudsonModule
     @Provides
     private Hudson getHudson() {
         Hudson hudson = Hudson.getInstance();
-        if (hudson == null) {
-            throw new IllegalStateException();
-        }
+        checkState(hudson != null);
         return hudson;
     }
 
     private static PluginManager plugins;
 
     public static void bind(final PluginManager plugins) {
-        assert plugins != null;
-        HudsonModule.plugins = plugins;
+        HudsonModule.plugins = checkNotNull(plugins);
     }
 
     @Provides
     private PluginManager getPluginManager() {
         PluginManager target = plugins != null ? plugins : getHudson().getPluginManager();
-        if (target == null) {
-            throw new IllegalStateException();
-        }
+        checkState(target !=null);
         return target;
     }
 

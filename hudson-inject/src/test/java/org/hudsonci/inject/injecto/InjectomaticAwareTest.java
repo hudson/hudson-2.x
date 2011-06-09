@@ -26,6 +26,7 @@ package org.hudsonci.inject.injecto;
 
 import com.google.inject.Key;
 import org.hudsonci.inject.Smoothie;
+import org.hudsonci.inject.SmoothieContainer;
 import org.hudsonci.inject.SmoothieTestSupport;
 import org.junit.Test;
 
@@ -33,6 +34,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import static org.junit.Assert.*;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Tests for {@link InjectomaticAware}.
@@ -43,7 +46,7 @@ public class InjectomaticAwareTest
     extends SmoothieTestSupport
 {
     @Test
-    public void testInjectoAware() {
+    public void testInjectoAwareWithImplements() {
         Injectomatic injecto = Smoothie.getContainer().get(Key.get(Injectomatic.class));
         assertNotNull(injecto);
 
@@ -61,6 +64,31 @@ public class InjectomaticAwareTest
 
         public void setInjectomatic(Injectomatic injecto) {
             this.injecto = injecto;
+        }
+    }
+
+    @Test
+    public void testInjectoAwareWithExtends() {
+        SmoothieContainer container = Smoothie.getContainer();
+        assertNotNull(container);
+
+        Injectomatic injecto = container.get(Key.get(Injectomatic.class));
+        assertNotNull(injecto);
+        System.out.println(injecto);
+
+        TestInjectomaticAware aware = container.get(Key.get(TestInjectomaticAware2.class));
+        assertNotNull(aware.injecto);
+        assertEquals(injecto, aware.injecto);
+    }
+
+    @Named
+    @Singleton
+    public static class TestInjectomaticAware2
+        extends TestInjectomaticAware
+    {
+        public void setInjectomatic(Injectomatic injecto) {
+            checkState(this.injecto == null);
+            super.setInjectomatic(injecto);
         }
     }
 }
