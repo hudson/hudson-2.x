@@ -54,7 +54,7 @@ THE SOFTWARE.
   </scm>
 
   <properties>
-    <aspectjVersion>1.6.10</aspectjVersion>
+    <aspectjVersion>1.6.11</aspectjVersion>
     <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
     <sisuInjectVersion>2.2.2</sisuInjectVersion>
     <jetty-version>6.1.26</jetty-version>

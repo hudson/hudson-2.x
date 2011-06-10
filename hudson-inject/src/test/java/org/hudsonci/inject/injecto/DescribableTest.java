@@ -1,8 +1,8 @@
 /**
- * The MIT License
- *
+ * The MIT License 
+ * 
  * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,73 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+    
 package org.hudsonci.inject.injecto;
 
+import hudson.model.Describable;
+import hudson.model.Descriptor;
 import org.hudsonci.inject.SmoothieTestSupport;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import static org.junit.Assert.*;
-
-import static com.google.common.base.Preconditions.checkState;
+import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests for {@link Injectable} types.
+ * Tests for {@link Describable} types.
  */
-public class InjectableTest
+public class DescribableTest
     extends SmoothieTestSupport
 {
     @Test
-    public void testInjectableWithImplements() {
-        Thing thing = new InjectableThing();
+    public void testDescribable() {
+        Thing thing = new DescribableThing();
         assertNotNull(thing);
         assertNotNull(thing.component);
     }
 
-    public static class InjectableThing
+    public static class DescribableThing
         extends Thing
-        implements Injectable
+        implements Describable<DescribableThing>
     {
         @Inject
         public void setComponent(SimpleComponent component) {
             super.setComponent(component);
         }
+
+        public Descriptor<DescribableThing> getDescriptor() {
+            return null;
+        }
     }
 
     @Test
-    public void testInjectableWithExtends() {
-        Thing thing = new InjectableThing2();
+    public void testDescribableWithImplementsInjectable() {
+        Thing thing = new DescribableThing2();
         assertNotNull(thing);
         assertNotNull(thing.component);
     }
 
-    public static class InjectableThing2
-        extends InjectableThing
-    {
-    }
-
-    @Test
-    public void ensureInjectionWorksForInjectableSubInterface() {
-        Thing thing = new SuperInjectableThing();
-        assertNotNull(thing);
-        assertNotNull(thing.component);
-    }
-
-    public static interface SuperInjectable
-        extends Injectable
-    {
-    }
-
-    public static class SuperInjectableThing
+    public static class DescribableThing2
         extends Thing
-        implements SuperInjectable
+        implements Describable<DescribableThing>, Injectable
     {
         @Inject
         public void setComponent(SimpleComponent component) {
             super.setComponent(component);
+        }
+
+        public Descriptor<DescribableThing> getDescriptor() {
+            return null;
         }
     }
 }

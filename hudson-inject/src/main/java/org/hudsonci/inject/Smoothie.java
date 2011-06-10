@@ -28,6 +28,9 @@ import org.hudsonci.inject.internal.SmoothieContainerBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * Smoothie container access.
  *
@@ -48,14 +51,8 @@ public class Smoothie
      * @param instance  The container instance; must not be null
      */
     public static synchronized void setContainer(final SmoothieContainer instance) {
-        if (instance == null) {
-            throw new IllegalArgumentException();
-        }
-        if (container != null) {
-            throw new IllegalStateException();
-        }
-
-        container = instance;
+        checkState(container == null);
+        container = checkNotNull(instance);
         log.debug("Container installed: {}", container);
     }
 

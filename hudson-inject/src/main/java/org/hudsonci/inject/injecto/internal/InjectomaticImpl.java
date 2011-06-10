@@ -25,6 +25,7 @@
 package org.hudsonci.inject.injecto.internal;
 
 import com.google.inject.Injector;
+import com.google.inject.spi.InjectionPoint;
 import org.hudsonci.inject.SmoothieContainer;
 import org.hudsonci.inject.injecto.Injectable;
 import org.hudsonci.inject.injecto.Injectomatic;
@@ -43,7 +44,7 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Default {@link org.hudsonci.inject.injecto.Injectomatic} implementation.
+ * Default {@link Injectomatic} implementation.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 1.397
@@ -56,10 +57,6 @@ public class InjectomaticImpl
     private static final Logger log = LoggerFactory.getLogger(InjectomaticImpl.class);
 
     private final SmoothieContainer container;
-
-    //
-    // FIXME: Probably need to make these guys thread-safe, but not synchronized to avoid perf cost
-    //
 
     private final Set<Class> registered = new HashSet<Class>();
 
@@ -74,13 +71,13 @@ public class InjectomaticImpl
     }
 
     public void register(final Class type) {
-        assert type != null;
+        checkNotNull(type);
         log.debug("Registering type: {}", type);
         registered.add(type);
     }
 
     public boolean isInjectable(final Class type) {
-        assert type != null;
+        checkNotNull(type);
 
         // See if we have already cached if this type is injectable or not
         if (injectable.contains(type)) {
@@ -93,10 +90,13 @@ public class InjectomaticImpl
         // See if the type is assignable from a registered type
         for (Class rtype : registered) {
             if (rtype.isAssignableFrom(type)) {
-                // Add to injectable type cache
-                injectable.add(type);
-                log.trace("Detected injectable type: {}", type);
-                return true;
+                // Check if there are any method/field injection points (this will mark ctor-only objects as non-injectable, that is okay)
+                if (!InjectionPoint.forInstanceMethodsAndFields(type).isEmpty()) {
+                    // Add to injectable type cache
+                    injectable.add(type);
+                    log.trace("Detected injectable type: {}", type);
+                    return true;
+                }
             }
         }
 
@@ -107,7 +107,7 @@ public class InjectomaticImpl
     }
 
     public void inject(final Object component) {
-        assert component != null;
+        checkNotNull(component);
 
         Class type = component.getClass();
 
@@ -131,7 +131,7 @@ public class InjectomaticImpl
         }
 
         if (log.isTraceEnabled()) {
-            log.trace("Injecting: {} ({})", component, OID.get(component));
+            log.trace("Injecting: {}", OID.get(component));
         }
 
         injector.injectMembers(component);

@@ -29,6 +29,7 @@ import org.hudsonci.inject.Smoothie;
 import org.hudsonci.inject.injecto.Injectomatic;
 import org.hudsonci.inject.injecto.InjectomaticAware;
 import org.hudsonci.inject.internal.OID;
+import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,45 +45,55 @@ public class InjectomaticAspectHelper
 
     private static boolean enabled = false;
 
+    private static volatile Injectomatic injecto;
+
     public static boolean isEnabled() {
         return enabled;
     }
 
-    public static void setEnabled(final boolean flag) {
-        enabled = flag;
-        log.debug("Aspect-based injection {}", flag ? "enabled" : "disabled");
-    }
+    public static void setEnabled(final boolean enabled) {
+        InjectomaticAspectHelper.enabled = enabled;
+        log.debug("Aspect-based injection {}", enabled ? "enabled" : "disabled");
 
-    private static Injectomatic injecto;
-
-    private static Injectomatic getInjectomatic() {
-        if (injecto == null) {
+        // If enabled, look up the Injectomatic instance, else clear the cache
+        if (enabled) {
             injecto = Smoothie.getContainer().get(Key.get(Injectomatic.class));
+        } else {
+            injecto = null;
         }
-        return injecto;
     }
 
-    // Used by aspect
-    static void inject(final Object object) {
-        assert object != null;
-
-        if (!enabled) {
-            log.warn("Injection disabled; ignoring request to inject: {}", OID.get(object));
-            return;
+    /**
+     * Used by InjectomaticAspect.
+     */
+    @SuppressWarnings({"UnusedDeclaration"})
+    static void inject(final JoinPoint joinPoint) {
+        if (enabled) {
+            Object target = joinPoint.getThis();
+            if (log.isTraceEnabled()) {
+                log.trace("Requesting injecting; join-point: {}, target: {}", joinPoint, OID.get(target));
+            }
+            injecto.inject(target);
         }
-
-        getInjectomatic().inject(object);
+        else if (log.isTraceEnabled()) {
+            log.trace("Aspect-based injection is disabled; ignoring join-point: {}", joinPoint);
+        }
     }
 
-    // Used by aspect
-    static void install(final Object object) {
-        assert object != null;
-
-        if (!enabled) {
-            log.warn("Injection disabled; ignoring request to install injectomatic: {}", OID.get(object));
-            return;
+    /**
+     * Used by InjectomaticAspect.
+     */
+    @SuppressWarnings({"UnusedDeclaration"})
+    static void install(final JoinPoint joinPoint) {
+        if (enabled) {
+            Object target = joinPoint.getThis();
+            if (log.isTraceEnabled()) {
+                log.trace("Installing; join-point: {}, target: {}", joinPoint, OID.get(target));
+            }
+            InjectomaticAware.class.cast(target).setInjectomatic(injecto);
         }
-
-        ((InjectomaticAware)object).setInjectomatic(getInjectomatic());
+        else if (log.isTraceEnabled()) {
+            log.trace("Aspect-based injection is disabled; ignoring join-point: {}", joinPoint);
+        }
     }
 }
