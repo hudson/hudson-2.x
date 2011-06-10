@@ -31,72 +31,37 @@ THE SOFTWARE.
     <version>2.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>hudson-test-utils</artifactId>
-  <name>Hudson :: Test Utilities</name>
-
-  <description>
-    Contains test utility code, reusable outside Hudson.
-  </description>
+  <artifactId>hudson-service</artifactId>
+  <name>Hudson :: Service</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-plugin-utils</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.googlecode.junit-ext</groupId>
-      <artifactId>junit-ext</artifactId>
-      <classifier>junit45</classifier>
-      <version>1.0-RC3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit-dep</artifactId>
-      <version>${junit.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-library</artifactId>
-      <version>1.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>1.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-module-junit4</artifactId>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-api-mockito</artifactId>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>compile</scope>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <configuration>
+          <aspectLibraries>
+            <aspectLibrary>
+              <groupId>org.jvnet.hudson.main</groupId>
+              <artifactId>hudson-inject</artifactId>
+            </aspectLibrary>
+          </aspectLibraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
