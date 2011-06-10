@@ -78,7 +78,7 @@ THE SOFTWARE.
     <module>hudson-inject</module>
     <module>hudson-jaxb</module>
     <module>hudson-plugin-utils</module>
-    <module>hudson-maven</module>
+    <module>hudson-maven-legacy</module>
     <module>hudson-war</module>
     <module>hudson-test-framework</module>
     <module>hudson-plugin-parent</module>

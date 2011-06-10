@@ -34,7 +34,7 @@ THE SOFTWARE.
   
   <artifactId>hudson-war</artifactId>
   <packaging>war</packaging>
-  <name>Hudson Webapp</name>
+  <name>Hudson :: Webapp</name>
 
   <description>
     Creates a war file. Also includes additional static web resources, such as images, CSS, JavaScript, and
@@ -197,14 +197,14 @@ THE SOFTWARE.
               <name>stapler.resourcePath</name>
               <value>
                   ../hudson-core/src/main/resources;
-                  ../hudson-maven/maven-plugin/src/main/resources
+                  ../hudson-maven-legacy/maven-plugin/src/main/resources
               </value>
             </systemProperty>
             <systemProperty>
               <!-- enable the plugins in main by default -->
               <name>hudson.bundled.plugins</name>
               <value>
-                  ${basedir}/../hudson-maven/maven-plugin/target/test-classes/the.hpl,
+                  ${basedir}/../hudson-maven-legacy/maven-plugin/target/test-classes/the.hpl,
                </value>
             </systemProperty>
             <systemProperty>

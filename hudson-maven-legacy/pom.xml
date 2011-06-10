@@ -18,10 +18,10 @@
 
   <!-- TODO: Should really give these modules their own groupId -->
 
-  <artifactId>hudson-maven</artifactId>
+  <artifactId>hudson-maven-legacy</artifactId>
   <packaging>pom</packaging>
-  <name>Hudson Maven</name>
-  <description>Hudson Maven Integration</description>
+  <name>Hudson :: Maven (legacy)</name>
+  <description>Hudson Legacy Maven Integration</description>
 
   <properties>
     <mavenVersion>3.0.2</mavenVersion>
