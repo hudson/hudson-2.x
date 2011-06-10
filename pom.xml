@@ -54,6 +54,10 @@ THE SOFTWARE.
   </scm>
 
   <properties>
+    <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+    <build.timestamp>${maven.build.timestamp}</build.timestamp>
+    <build.number/>
+
     <aspectjVersion>1.6.11</aspectjVersion>
     <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
     <sisuInjectVersion>2.2.2</sisuInjectVersion>
