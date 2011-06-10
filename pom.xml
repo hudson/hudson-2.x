@@ -66,10 +66,13 @@ THE SOFTWARE.
 
   <modules>
     <module>hudson-parent</module>
+    <module>hudson-test-utils</module>
+    <module>hudson-utils</module>
     <module>hudson-remoting</module>
     <module>hudson-cli</module>
     <module>hudson-core</module>
     <module>hudson-inject</module>
+    <module>hudson-plugin-utils</module>
     <module>hudson-maven</module>
     <module>hudson-war</module>
     <module>hudson-test-framework</module>
@@ -336,11 +339,21 @@ THE SOFTWARE.
       </dependency>    
       
       <dependency>
+        <groupId>org.jvnet.hudson</groupId>
+        <artifactId>xstream</artifactId>
+        <version>1.3.1-hudson-8</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.4</version>
+      </dependency>
+      <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>1.4</version>
       </dependency>
-      
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
@@ -383,7 +396,26 @@ THE SOFTWARE.
         <scope>test</scope>
       </dependency>
 
+      <dependency>
+        <groupId>org.powermock</groupId>
+        <artifactId>powermock-api-mockito</artifactId>
+        <version>${powermock.version}</version>
+        <scope>test</scope>
+      </dependency>
+
       <!-- INTERNAL -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-test-utils</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-utils</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>hudson-core</artifactId>
@@ -400,6 +432,12 @@ THE SOFTWARE.
         <groupId>${project.groupId}</groupId>
         <artifactId>hudson-inject</artifactId>
         <classifier>tests</classifier>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>hudson-plugin-utils</artifactId>
         <version>${project.version}</version>
       </dependency>
 
