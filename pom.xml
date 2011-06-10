@@ -72,6 +72,7 @@ THE SOFTWARE.
     <module>hudson-cli</module>
     <module>hudson-core</module>
     <module>hudson-inject</module>
+    <module>hudson-jaxb</module>
     <module>hudson-plugin-utils</module>
     <module>hudson-maven</module>
     <module>hudson-war</module>
