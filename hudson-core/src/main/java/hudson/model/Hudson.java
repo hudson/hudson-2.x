@@ -36,6 +36,7 @@ import hudson.ExtensionListView;
 import hudson.ExtensionPoint;
 import hudson.FilePath;
 import hudson.Functions;
+import hudson.GlobalMessage;
 import hudson.Launcher;
 import hudson.Launcher.LocalLauncher;
 import hudson.LocalPluginManager;
@@ -184,6 +185,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import static hudson.init.InitMilestone.*;
+import hudson.stapler.WebAppController;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import java.io.File;
@@ -2936,7 +2938,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         checkPermission(ADMINISTER);
 
         // engage "loading ..." UI and then run the actual task in a separate thread
-        servletContext.setAttribute("app", new HudsonIsLoading());
+        WebAppController.get().install( new HudsonIsLoading());
 
         new Thread("Hudson config reload thread") {
 
@@ -2964,7 +2966,8 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     public void reload() throws IOException, InterruptedException, ReactorException {
         executeReactor(null, loadTasks());
         User.reload();
-        servletContext.setAttribute("app", this);
+        initLevel = InitMilestone.COMPLETED;
+        WebAppController.get().install( this);
     }
 
     /**
@@ -3111,7 +3114,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     public void restart() throws RestartNotSupportedException {
         final Lifecycle lifecycle = Lifecycle.get();
         lifecycle.verifyRestartable(); // verify that Hudson is restartable
-        servletContext.setAttribute("app", new HudsonIsRestarting());
+        WebAppController.get().install( new HudsonIsRestarting());
 
         new Thread("restart thread") {
 
@@ -3586,6 +3589,10 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
             throw e;
         }
         return this;
+    }
+    
+    public Iterator<GlobalMessage> getGlobalMessages() {
+        return Iterators.readOnly(getExtensionList(GlobalMessage.class).iterator());
     }
 
     /**

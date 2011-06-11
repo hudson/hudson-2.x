@@ -33,6 +33,7 @@ import hudson.model.AdministrativeMonitor;
 import hudson.model.Hudson;
 import hudson.model.TaskListener;
 import hudson.remoting.Callable;
+import hudson.stapler.WebAppController;
 import hudson.util.ForkOutputStream;
 import hudson.util.HudsonIsRestarting;
 import hudson.util.StreamTaskListener;
@@ -241,7 +242,7 @@ public class ZFSInstaller extends AdministrativeMonitor implements Serializable 
 
         // file system creation successful, so restart
 
-        hudson.servletContext.setAttribute("app",new HudsonIsRestarting());
+        WebAppController.get().install(new HudsonIsRestarting());
         // redirect the user to the manage page
         rsp.sendRedirect2(req.getContextPath()+"/manage");
 
