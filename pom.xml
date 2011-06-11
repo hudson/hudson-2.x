@@ -66,6 +66,17 @@ THE SOFTWARE.
     <easymock.version>3.0</easymock.version>
     <mockito-core.version>1.8.5</mockito-core.version>
     <powermock.version>1.4.9</powermock.version>
+
+    <gwt.draftCompile>false</gwt.draftCompile>
+    <gwt.style>OBFUSCATED</gwt.style>
+    <gwt.compiler.optimizationLevel>9</gwt.compiler.optimizationLevel>
+    <gwt.compiler.strict>true</gwt.compiler.strict>
+
+    <!--
+     Ensure the full list is in sync with GWT UserAgent.gwt.xml
+     http://code.google.com/p/google-web-toolkit/source/browse/trunk/user/src/com/google/gwt/user/UserAgent.gwt.xml
+     -->
+    <gwt.user.agent>ie6,ie8,gecko1_8,safari,opera</gwt.user.agent>
   </properties>
 
   <modules>
@@ -80,6 +91,7 @@ THE SOFTWARE.
     <module>hudson-plugin-utils</module>
     <module>hudson-service</module>
     <module>hudson-rest</module>
+    <module>hudson-gwt</module>
     <module>hudson-maven3</module>
     <module>hudson-maven-legacy</module>
     <module>hudson-war</module>
@@ -359,6 +371,12 @@ THE SOFTWARE.
       </dependency>
 
       <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>1.3.9</version>
+      </dependency>
+
+      <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.4</version>
@@ -551,6 +569,18 @@ THE SOFTWARE.
         <hudson.sign.alias>hudson</hudson.sign.alias>
         <hudson.sign.keystore>../dummy.keystore</hudson.sign.keystore>
         <hudson.sign.storepass>hudson</hudson.sign.storepass>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>gwt-debug</id>
+      <properties>
+        <!-- GWT development properties -->
+        <gwt.draftCompile>true</gwt.draftCompile>
+        <gwt.style>PRETTY</gwt.style>
+        <gwt.compiler.optimizationLevel>-1</gwt.compiler.optimizationLevel>
+        <gwt.compiler.strict>false</gwt.compiler.strict>
+        <gwt.user.agent>safari</gwt.user.agent>
       </properties>
     </profile>
 
