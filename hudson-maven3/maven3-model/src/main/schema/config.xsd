@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<xs:schema
+        version="1.0"
+        targetNamespace="http://hudson-ci.org/xsd/hudson/2.1.0/maven/config"
+        xmlns="http://hudson-ci.org/xsd/hudson/2.1.0/maven/config"
+        xmlns:common="http://hudson-ci.org/xsd/hudson/2.1.0/maven/common"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:ci="http://hudson-ci.org/jaxb/hudson/code-insert"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+            http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+        jaxb:version="2.1"
+        jaxb:extensionBindingPrefixes="ci">
+
+    <xs:import namespace="http://hudson-ci.org/xsd/hudson/2.1.0/maven/common" schemaLocation="common.xsd"/>
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.hudsonci.maven.model.config"/>
+                <jaxb:nameXmlTransform>
+                    <jaxb:elementName suffix="DTO"/>
+                    <jaxb:typeName suffix="DTO"/>
+                </jaxb:nameXmlTransform>
+            </jaxb:schemaBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+    <xs:complexType name="buildConfiguration">
+        <xs:sequence>
+            <xs:element name="installationId" type="xs:string" minOccurs="0"/>
+            <xs:element name="goals" type="xs:string" minOccurs="0"/>
+            <xs:element name="privateRepository" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="privateTmpdir" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="pomFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="properties" type="common:properties" minOccurs="0"/>
+            <xs:element name="errors" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="verbosity" type="verbosity" minOccurs="0"/>
+            <xs:element name="offline" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="snapshotUpdateMode" type="snapshotUpdateMode" minOccurs="0"/>
+            <xs:element name="profile" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="recursive" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="checksumMode" type="checksumMode" minOccurs="0"/>
+            <xs:element name="failMode" type="failMode" minOccurs="0"/>
+            <xs:element name="makeMode" type="makeMode" minOccurs="0"/>
+            <xs:element name="project" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="resumeFrom" type="xs:string" minOccurs="0"/>
+            <xs:element name="threading" type="xs:string" minOccurs="0"/>
+            <xs:element name="mavenOpts" type="xs:string" minOccurs="0"/>
+            <xs:element name="settingsId" type="xs:string" minOccurs="0"/>
+            <xs:element name="globalSettingsId" type="xs:string" minOccurs="0"/>
+            <xs:element name="toolChainsId" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="buildConfiguration" type="buildConfiguration"/>
+
+    <xs:simpleType name="verbosity">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="QUIET"/>
+            <xs:enumeration value="DEBUG"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="checksumMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="STRICT"/>
+            <xs:enumeration value="LAX"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="snapshotUpdateMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="FORCE"/>
+            <xs:enumeration value="SUPPRESS"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="failMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="AT_END"/>
+            <xs:enumeration value="FAST"/>
+            <xs:enumeration value="NEVER"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="makeMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NONE"/>
+            <xs:enumeration value="DEPENDENCIES"/>
+            <xs:enumeration value="DEPENDENTS"/>
+            <xs:enumeration value="BOTH"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="document">
+        <xs:annotation>
+            <xs:appinfo>
+                <ci:code>
+                    @Override
+                    public String toString() {
+                        return DocumentDTOHelper.asString(this);
+                    }
+
+                    public void setAttribute(final Object name, final Object value) {
+                        DocumentDTOHelper.setAttribute(this, name, value);
+                    }
+
+                    public DocumentDTO withAttribute(final Object name, final Object value) {
+                        setAttribute(name, value);
+                        return this;
+                    }
+
+                    public Object getAttribute(final Object name) {
+                        return DocumentDTOHelper.getAttribute(this, name);
+                    }
+                </ci:code>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="content" type="xs:string" minOccurs="0"/>
+            <xs:element name="attribute" type="documentAttribute" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="documentType" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="document" type="document"/>
+
+    <xs:complexType name="documentAttribute">
+        <xs:annotation>
+            <xs:appinfo>
+                <ci:code>
+                    @Override
+                    public String toString() {
+                        return DocumentAttributeDTOHelper.asString(this);
+                    }
+                </ci:code>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="documentStandardAttribute">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CREATED"/>
+            <xs:enumeration value="CREATED_BY"/>
+            <xs:enumeration value="UPDATED"/>
+            <xs:enumeration value="UPDATED_BY"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="documents">
+        <xs:sequence>
+            <xs:element name="document" type="document" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="documents" type="documents"/>
+
+    <xs:simpleType name="documentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SETTINGS"/>
+            <xs:enumeration value="TOOLCHAINS"/>
+            <xs:enumeration value="PROPERTIES"/>
+            <xs:enumeration value="CUSTOM"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

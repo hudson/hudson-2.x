@@ -79,6 +79,7 @@ THE SOFTWARE.
     <module>hudson-jaxb</module>
     <module>hudson-plugin-utils</module>
     <module>hudson-service</module>
+    <module>hudson-maven3</module>
     <module>hudson-maven-legacy</module>
     <module>hudson-war</module>
     <module>hudson-test-framework</module>
