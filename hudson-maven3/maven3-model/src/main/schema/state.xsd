@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<xs:schema
+        version="1.0"
+        targetNamespace="http://hudson-ci.org/xsd/hudson/2.1.0/maven/state"
+        xmlns="http://hudson-ci.org/xsd/hudson/2.1.0/maven/state"
+        xmlns:common="http://hudson-ci.org/xsd/hudson/2.1.0/maven/common"
+        xmlns:config="http://hudson-ci.org/xsd/hudson/2.1.0/maven/config"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:ci="http://hudson-ci.org/jaxb/hudson/code-insert"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+            http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+        jaxb:version="2.1"
+        jaxb:extensionBindingPrefixes="ci">
+
+    <xs:import namespace="http://hudson-ci.org/xsd/hudson/2.1.0/maven/common" schemaLocation="common.xsd"/>
+    <xs:import namespace="http://hudson-ci.org/xsd/hudson/2.1.0/maven/config" schemaLocation="config.xsd"/>
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.hudsonci.maven.model.state"/>
+                <jaxb:nameXmlTransform>
+                    <jaxb:elementName suffix="DTO"/>
+                    <jaxb:typeName suffix="DTO"/>
+                </jaxb:nameXmlTransform>
+            </jaxb:schemaBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+    <xs:complexType name="buildStates">
+        <xs:sequence>
+            <xs:element name="state" type="buildState" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="buildStates" type="buildStates"/>
+    
+    <xs:complexType name="buildState">
+        <xs:sequence>
+            <xs:element name="buildConfiguration" type="config:buildConfiguration"/>
+            <xs:element name="executionActivity" type="executionActivity" maxOccurs="unbounded"/>
+            <xs:element name="runtimeEnvironment" type="runtimeEnvironment"/>
+            <xs:element name="participatingProject" type="mavenProject" maxOccurs="unbounded"/>
+            <xs:element name="artifact" type="artifact" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <jaxb:property collectionType="org.hudsonci.maven.model.UniqueList"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="buildState" type="buildState"/>
+
+    <xs:complexType name="executionActivity">
+        <xs:attribute name="type" type="executionActivityType" use="required"/>
+        <xs:attribute name="timestamp" type="xs:dateTime" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="executionActivityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SCHEDULED"/>
+            <xs:enumeration value="STARTED"/>
+            <xs:enumeration value="EXECUTING"/>
+            <xs:enumeration value="ABORTED"/>
+            <xs:enumeration value="FINISHED"/>
+            <xs:enumeration value="UNKNOWN"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="runtimeEnvironment">
+        <xs:sequence>
+            <xs:element name="versionProperties" type="common:properties"/>
+            <xs:element name="userProperties" type="common:properties"/>
+            <xs:element name="systemProperties" type="common:properties"/>
+            <xs:element name="systemEnvironment" type="common:properties"/>
+            <xs:element name="workingDirectory" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="mavenProject">
+        <xs:annotation>
+            <xs:appinfo>
+                <ci:code>
+                    // TODO: change to asId to not be confused with a bean property.
+                    public String getId() {
+                        return MavenProjectDTOHelper.asId(this);
+                    }
+                </ci:code>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="coordinates" type="common:mavenCoordinates"/>
+            <xs:element name="profile" type="profile" maxOccurs="unbounded"/>
+            <xs:element name="buildSummary" type="buildSummary"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="profile">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="source" type="xs:string"/>
+            <xs:element name="active" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="buildSummary">
+        <xs:sequence>
+            <xs:element name="failureCause" type="common:throwable"/>
+            <!--
+                Only capture failure attributes that are relevant not the
+                entire object since it may contain other objects for debugging
+                that we're not interested in saving, or may not be serializable
+                with JAXB.
+                For example org.apache.maven.lifecycle.LifecycleExecutionException
+                includes the MavenProject.
+            -->
+        </xs:sequence>
+        <xs:attribute name="result" type="buildResult" use="required"/>
+        <xs:attribute name="duration" type="xs:long"/>
+    </xs:complexType>
+
+    <!-- TODO: replace running states with BuildActivity -->
+    <xs:simpleType name="buildResult">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SUCCESS"/>
+            <xs:enumeration value="FAILURE"/>
+            <xs:enumeration value="SKIPPED"/>
+            <xs:enumeration value="SCHEDULED"/>
+            <xs:enumeration value="BUILDING"/>
+            <xs:enumeration value="ABORTED"/>
+            <xs:enumeration value="UNKNOWN"/>
+        </xs:restriction>
+    </xs:simpleType>
+   
+    <xs:complexType name="artifact">
+        <xs:sequence>
+            <xs:element name="coordinates" type="common:mavenCoordinates"/>
+            <!--
+                Type comes from Aether and can be different than an artifacts extension
+                which is stored as mavenCoordinates.type.  E.g. 'maven-plugin'.
+            -->
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="action" type="artifactAction" maxOccurs="unbounded"/>
+            <xs:element name="repositoryFile" type="xs:string"/>
+            <!--
+                Dependent projects have the artifact declared as a dependency or 
+                is in the fully resolved dependency tree of the project.
+                
+                TODO: create a projectId type to encapsulate our specific meaning of id.
+            -->
+            <xs:element name="dependentProject" type="xs:string" maxOccurs="unbounded"/>
+            <!--
+                Consuming projects have the artifact used by aether, can be 
+                due to build dependencies or project dependencies.
+            -->
+            <xs:element name="consumingProject" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <!--
+            Purely for convenience of not having to loop through the actions
+            to find the project that created the artifact.
+        -->
+        <xs:attribute name="createdProject" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="artifactAction">
+        <xs:attribute name="projectId" type="xs:string" use="required"/>
+        <xs:attribute name="operation" type="artifactOperation" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="artifactOperation">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NOT_FOUND"/>
+            <xs:enumeration value="RESOLVED"/>
+            <xs:enumeration value="DOWNLOADED"/>
+            <xs:enumeration value="INSTALLED"/>
+            <xs:enumeration value="DEPLOYED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
