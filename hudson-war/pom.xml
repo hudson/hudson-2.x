@@ -134,7 +134,9 @@ THE SOFTWARE.
                 <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
                 
                 <!-- bundled plugins -->
+<!--
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
+-->
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="ssh-slaves" version="2.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="subversion" version="2.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
