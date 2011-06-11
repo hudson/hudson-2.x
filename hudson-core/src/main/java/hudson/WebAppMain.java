@@ -25,9 +25,10 @@ package hudson;
 
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.JVM;
-import com.sun.jna.Native;
 import hudson.model.Hudson;
 import hudson.model.User;
+import hudson.stapler.WebAppController;
+import hudson.stapler.WebAppController.DefaultInstallStrategy;
 import hudson.triggers.SafeTimerTask;
 import hudson.triggers.Trigger;
 import hudson.util.HudsonIsLoading;
@@ -41,7 +42,6 @@ import hudson.util.IncompatibleAntVersionDetected;
 import hudson.util.HudsonFailedToLoad;
 import hudson.util.ChartUtil;
 import hudson.util.AWTProblem;
-import hudson.util.JNADoublyLoaded;
 import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
@@ -73,7 +73,6 @@ import java.security.Security;
  */
 public final class WebAppMain implements ServletContextListener {
     private final RingBufferLogHandler handler = new RingBufferLogHandler();
-    private static final String APP = "app";
 
     /**
      * Creates the sole instance of {@link Hudson} and register it to the {@link ServletContext}.
@@ -81,6 +80,24 @@ public final class WebAppMain implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         try {
             final ServletContext context = event.getServletContext();
+
+            // Install the current servlet context, unless its already been set
+            final WebAppController controller = WebAppController.get();
+            try {
+                // Attempt to set the context
+                controller.setContext(context);
+            }
+            catch (IllegalStateException e) {
+                // context already set ignore
+            }
+
+            // Setup the default install strategy if not already configured
+            try {
+                controller.setInstallStrategy(new DefaultInstallStrategy());
+            }
+            catch (IllegalStateException e) {
+                // strategy already set ignore
+            }
 
             // use the current request to determine the language
             LocaleProvider.setProvider(new LocaleProvider() {
@@ -101,7 +118,7 @@ public final class WebAppMain implements ServletContextListener {
                 jvm = new JVM();
                 new URLClassLoader(new URL[0],getClass().getClassLoader());
             } catch(SecurityException e) {
-                context.setAttribute(APP,new InsufficientPermissionDetected(e));
+                controller.install(new InsufficientPermissionDetected(e));
                 return;
             }
 
@@ -113,20 +130,28 @@ public final class WebAppMain implements ServletContextListener {
 
             installLogger();
 
-            final File home = getHomeDir(event).getAbsoluteFile();
+            File dir = getHomeDir(event);
+            try {
+                dir = dir.getCanonicalFile();
+            }
+            catch (IOException e) {
+                dir = dir.getAbsoluteFile();
+            }
+            final File home = dir;
             home.mkdirs();
-            System.out.println("hudson home directory: "+home);
+
+            LOGGER.info("Home directory: " + home);
 
             // check that home exists (as mkdirs could have failed silently), otherwise throw a meaningful error
             if (! home.exists()) {
-                context.setAttribute(APP,new NoHomeDir(home));
+                controller.install(new NoHomeDir(home));
                 return;
             }
 
             // make sure that we are using XStream in the "enhanced" (JVM-specific) mode
             if(jvm.bestReflectionProvider().getClass()==PureJavaReflectionProvider.class) {
                 // nope
-                context.setAttribute(APP,new IncompatibleVMDetected());
+                controller.install(new IncompatibleVMDetected());
                 return;
             }
 
@@ -156,16 +181,16 @@ public final class WebAppMain implements ServletContextListener {
 //                String.valueOf(Native.POINTER_SIZE); // this meaningless operation forces the classloading and initialization
 //            } catch (LinkageError e) {
 //                if (e.getMessage().contains("another classloader"))
-//                    context.setAttribute(APP,new JNADoublyLoaded(e));
+//                    controller.install(new JNADoublyLoaded(e));
 //                else
-//                    context.setAttribute(APP,new HudsonFailedToLoad(e));
+//                    controller.install(new HudsonFailedToLoad(e));
 //            }
 
             // make sure this is servlet 2.4 container or above
             try {
                 ServletResponse.class.getMethod("setCharacterEncoding",String.class);
             } catch (NoSuchMethodException e) {
-                context.setAttribute(APP,new IncompatibleServletVersionDetected(ServletResponse.class));
+                controller.install(new IncompatibleServletVersionDetected(ServletResponse.class));
                 return;
             }
 
@@ -173,13 +198,13 @@ public final class WebAppMain implements ServletContextListener {
             try {
                 FileSet.class.getMethod("getDirectoryScanner");
             } catch (NoSuchMethodException e) {
-                context.setAttribute(APP,new IncompatibleAntVersionDetected(FileSet.class));
+                controller.install(new IncompatibleAntVersionDetected(FileSet.class));
                 return;
             }
 
             // make sure AWT is functioning, or else JFreeChart won't even load.
             if(ChartUtil.awtProblemCause!=null) {
-                context.setAttribute(APP,new AWTProblem(ChartUtil.awtProblemCause));
+                controller.install(new AWTProblem(ChartUtil.awtProblemCause));
                 return;
             }
 
@@ -190,7 +215,7 @@ public final class WebAppMain implements ServletContextListener {
                 File f = File.createTempFile("test", "test");
                 f.delete();
             } catch (IOException e) {
-                context.setAttribute(APP,new NoTempDir(e));
+                controller.install(new NoTempDir(e));
                 return;
             }
 
@@ -213,13 +238,17 @@ public final class WebAppMain implements ServletContextListener {
 
             installExpressionFactory(event);
 
-            context.setAttribute(APP,new HudsonIsLoading());
+            controller.install(new HudsonIsLoading());
 
             new Thread("hudson initialization thread") {
                 @Override
                 public void run() {
                     try {
-                        context.setAttribute(APP,new Hudson(home,context));
+                        // Creating of the god object performs most of the booting muck
+                        Hudson hudson = new Hudson(home,context);
+
+                        // once its done, hook up to stapler and things should be ready to go
+                        controller.install(hudson);
 
                         // trigger the loading of changelogs in the background,
                         // but give the system 10 seconds so that the first page
@@ -231,11 +260,11 @@ public final class WebAppMain implements ServletContextListener {
                         }, 1000*10);
                     } catch (Error e) {
                         LOGGER.log(Level.SEVERE, "Failed to initialize Hudson",e);
-                        context.setAttribute(APP,new HudsonFailedToLoad(e));
+                        controller.install(new HudsonFailedToLoad(e));
                         throw e;
                     } catch (Exception e) {
                         LOGGER.log(Level.SEVERE, "Failed to initialize Hudson",e);
-                        context.setAttribute(APP,new HudsonFailedToLoad(e));
+                        controller.install(new HudsonFailedToLoad(e));
                     }
                 }
             }.start();

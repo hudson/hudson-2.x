@@ -51,7 +51,7 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
-        <version>1.21</version>
+        <version>1.22</version>
         <executions>
           <execution>
             <goals>

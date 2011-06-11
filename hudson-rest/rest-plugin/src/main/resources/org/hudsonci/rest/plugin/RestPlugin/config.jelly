@@ -26,6 +26,8 @@ THE SOFTWARE.
     <f:section title="Hudson REST">
         <f:entry title="Enable">
             <f:checkbox name="enabled" checked="${it.enabled}"/>
+            <j:whitespace>  </j:whitespace>
+            <a href="${rootURL}/plugin/rest-plugin/api/index.html" target="API">REST API Reference</a>
         </f:entry>
     </f:section>
 
