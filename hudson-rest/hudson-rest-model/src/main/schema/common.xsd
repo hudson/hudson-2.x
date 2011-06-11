@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<xs:schema
+        version="1.0"
+        targetNamespace="http://hudson-ci.org/xsd/hudson/2.1.0/rest/common"
+        xmlns:common="http://hudson-ci.org/xsd/hudson/2.1.0/rest/common"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:annox="http://annox.dev.java.net"
+        xmlns:jackson="http://annox.dev.java.net/org.codehaus.jackson.annotate"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+            http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+        jaxb:version="2.1"
+        jaxb:extensionBindingPrefixes="xjc annox">
+
+    <!-- FIXME: Set xmlns="" to current schema -->
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.hudsonci.rest.model"/>
+                <jaxb:nameXmlTransform>
+                    <jaxb:elementName suffix="DTO"/>
+                    <jaxb:typeName suffix="DTO"/>
+                </jaxb:nameXmlTransform>
+            </jaxb:schemaBindings>
+        </xs:appinfo>
+    </xs:annotation>
+    
+    <xs:element name="permission" type="common:permission"/>
+
+    <xs:complexType name="permission">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>
+                    <jackson:JsonTypeInfo use="CLASS" include="PROPERTY" property="@class"/>
+                </annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="impliedBy" type="common:permission" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="permissions" type="common:permissions"/>
+
+    <xs:complexType name="permissions">
+        <xs:sequence>
+            <xs:element name="permission" type="common:permission" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="user" type="common:user"/>
+    
+    <xs:complexType name="user">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="fullName" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+
+            <!--
+            TODO: Add...
+
+                properties (UserProperty)... this should not be part of user, by default. 
+
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="userReference">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="status" type="common:status"/>
+
+    <xs:complexType name="status">
+        <xs:sequence>
+            <xs:element name="url" type="xs:string"/>
+            <xs:element name="version" type="xs:string"/>
+            <xs:element name="initLevel" type="common:initLevel"/>
+            <xs:element name="quietingDown" type="xs:boolean"/>
+            <xs:element name="terminating" type="xs:boolean"/>
+            <xs:element name="systemMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="user" type="common:user" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="initLevel">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STARTED"/>
+            <xs:enumeration value="PLUGINS_LISTED"/>
+            <xs:enumeration value="PLUGINS_PREPARED"/>
+            <xs:enumeration value="PLUGINS_STARTED"/>
+            <xs:enumeration value="JOB_LOADED"/>
+            <xs:enumeration value="COMPLETED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--
+    TODO: Do we want to distinguish between computers and nodes?
+    -->
+
+    <xs:element name="nodes" type="common:nodes"/>
+
+    <xs:complexType name="nodes">
+        <xs:sequence>
+            <xs:element name="node" type="common:node" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="node" type="common:node"/>
+    
+    <xs:complexType name="node">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="executors" type="xs:int"/>
+            <xs:element name="mode" type="common:nodeMode"/>
+            <!--<xs:element name="connected" type="xs:boolean"/>-->
+            <!--<xs:element name="online" type="xs:boolean"/>-->
+            <!--<xs:element name="offlineCause" type="xs:string" minOccurs="0"/>-->
+            <!--<xs:element name="connectTime" type="xs:long"/>-->
+
+            <!--
+            TODO: Add...
+
+                idle
+                idleStartTime
+                demandStartTime
+                busyExecutors
+                idelExecutors
+                rootDirectory
+                label
+                selfLabel
+                assignedLabels
+                clockDifference
+                loadStatistics
+                manualLaunchAllowed
+                connecting
+                jnlpAgent
+                launchSupported
+                enabled (ie !temporarilyOffline)
+                caption
+                tiedJobs
+                builds
+                oneOffExecutors
+                systemProperties
+                properties... NodeProperty*
+                environment (variables)
+                hostname
+                acceptingTasks
+
+            Add extra resource to:
+
+                threadDump
+
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="nodeReference">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="nodeMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NORMAL"/>
+            <xs:enumeration value="EXCLUSIVE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="labels" type="common:labels"/>
+
+    <xs:complexType name="labels">
+        <xs:sequence>
+            <xs:element name="label" type="common:label" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="label">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <!--
+            TODO: Add...
+
+                selfNode
+                assignable
+                configuredExecutors
+                executors
+                busyExecutors
+                idelExecutors
+                online
+                tiedJobs
+                clouds
+
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
