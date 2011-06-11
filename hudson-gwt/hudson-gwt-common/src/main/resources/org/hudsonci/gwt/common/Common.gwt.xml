@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.1.0//EN"
+    "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
+
+<module>
+    <!--
+        Eclipse GWT Dev mode includes the test classes and will produce compilation failures without GWT JUnit.
+        TODO: figure out how to exclude test classes but still work in dev mode and Maven GWT testing.
+    -->
+    <inherits name="com.google.gwt.junit.JUnit"/>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.resources.Resources"/>
+    <inherits name="com.google.gwt.event.Event"/>
+    <inherits name="com.google.gwt.inject.Inject"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG"/>
+    <inherits name="com.google.common.base.Base"/>
+    <inherits name="org.fusesource.restygwt.RestyGWT"/>
+
+    <!-- Enable GWT debug ids. TODO: en/disable based on build flavor (release, dev, test, etc.)-->
+    <inherits name="com.google.gwt.user.Debug"/>
+
+    <!--
+    Use build property to specify the user agents to compile.
+    This will apply to all modules that inherit this one if they
+    don't override this property.
+
+    An alternative solution is to use GWT module renaming to
+    alias a faster dev compile module to the same production
+    name. See http://code.google.com/webtoolkit/doc/latest/DevGuideOrganizingProjects.html#DevGuideModuleXml
+    "Renaming modules" for how to have a prod and dev module.
+    -->
+    <set-property name="user.agent" value="${gwt.user.agent}"/>
+
+    <!-- Disable embedding log output in a div.  Use the GWT browser plugin with the browsers console view to see events. -->
+    <set-property name="log_DivLogger" value="DISABLED"/>
+
+    <source path="">
+        <exclude name="**/*Test.java"/>
+    </source>
+</module>
