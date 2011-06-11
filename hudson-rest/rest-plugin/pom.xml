@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jvnet.hudson.main</groupId>
+    <artifactId>hudson-rest</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>rest-plugin</artifactId>
+  <name>Hudson :: REST :: Plugin</name>
+  <packaging>hpi</packaging>
+
+  <properties>
+    <pluginName>Hudson REST</pluginName>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonatype.sisu</groupId>
+      <artifactId>sisu-inject-bean</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson</groupId>
+      <artifactId>xstream</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-service</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-rest-server</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.cometd.java</groupId>
+      <artifactId>cometd-java-server</artifactId>
+    </dependency>
+  </dependencies>
+    
+  <build>
+    <!-- Strip off the version; so its easier to drop in plugins for testing -->
+    <finalName>${project.artifactId}</finalName>
+        
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>install-docs</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.jvnet.hudson.main</groupId>
+                  <artifactId>hudson-rest-api</artifactId>
+                  <classifier>docs</classifier>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jvnet.hudson.tools</groupId>
+        <artifactId>maven-hpi-plugin</artifactId>
+        <version>1.55</version>
+        <extensions>true</extensions>
+        <configuration>
+          <showDeprecation>true</showDeprecation>
+          <disabledTestInjection>true</disabledTestInjection>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

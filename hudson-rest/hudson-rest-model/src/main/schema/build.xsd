@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<xs:schema
+        version="1.0"
+        targetNamespace="http://hudson-ci.org/xsd/hudson/2.1.0/rest/build"
+        xmlns:build="http://hudson-ci.org/xsd/hudson/2.1.0/rest/build"
+        xmlns:common="http://hudson-ci.org/xsd/hudson/2.1.0/rest/common"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:annox="http://annox.dev.java.net"
+        xmlns:jackson="http://annox.dev.java.net/org.codehaus.jackson.annotate"
+        xsi:schemaLocation="
+            http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd
+            http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+        jaxb:version="2.1"
+        jaxb:extensionBindingPrefixes="xjc annox">
+
+    <!-- FIXME: Set xmlns="" to current schema -->
+
+    <xs:import namespace="http://hudson-ci.org/xsd/hudson/2.1.0/rest/common" schemaLocation="common.xsd"/>
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.hudsonci.rest.model.build"/>
+                <jaxb:nameXmlTransform>
+                    <jaxb:elementName suffix="DTO"/>
+                    <jaxb:typeName suffix="DTO"/>
+                </jaxb:nameXmlTransform>
+            </jaxb:schemaBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+    <xs:element name="builds" type="build:builds"/>
+
+    <xs:complexType name="builds">
+        <xs:sequence>
+            <xs:element name="build" type="build:build" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="build" type="build:build"/>
+
+    <xs:complexType name="build">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="url" type="xs:string"/>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="number" type="xs:int"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="projectName" type="xs:string"/>
+            <xs:element name="duration" type="xs:long" minOccurs="0"/>
+            <xs:element name="timeStamp" type="xs:long"/>
+            <xs:element name="result" type="build:buildResult" minOccurs="0"/>
+            <xs:element name="state" type="build:buildState" minOccurs="0"/>
+            <xs:element name="kept" type="xs:boolean"/>
+            <xs:element name="causes" type="build:cause" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="participants" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="culprits" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="changesAvailable" type="xs:boolean"/>
+            <xs:element name="testsAvailable" type="xs:boolean"/>
+
+            <!--
+            TODO: Add...
+
+                previousBuild ?
+                nextBuild ?
+                actions ?
+                rootDir ?
+                artifactsDir ?
+                summary (isWorse + message) ?
+                upstream
+                downstream
+
+            Probably separate structure + resources:
+                artifacts ?
+                logFile ?
+
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="buildReference">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="number" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="buildState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="NOT_STARTED"/>
+            <xs:enumeration value="BUILDING"/>
+            <xs:enumeration value="POST_PRODUCTION"/>
+            <xs:enumeration value="COMPLETED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="buildResult">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SUCCESS"/>
+            <xs:enumeration value="FAILURE"/>
+            <xs:enumeration value="UNSTABLE"/>
+            <xs:enumeration value="NOT_BUILT"/>
+            <xs:enumeration value="ABORTED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="cause">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>
+                    <jackson:JsonTypeInfo use="CLASS" include="PROPERTY" property="@class"/>
+                </annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--
+    TODO: May want to expose a set of detail objects on the Cause type, instead of sub-classing, to enrich the data
+          where possible ?  Since we have to support a fairly dynamic set of types of various components, attaching
+          more data may scale more than sub-classing.
+    -->
+
+    <xs:complexType name="userCause">
+        <xs:complexContent>
+            <xs:extension base="build:cause">
+                <xs:sequence>
+                    <xs:element name="userId" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="changes" type="build:changes"/>
+
+    <xs:complexType name="changes">
+        <xs:sequence>
+            <xs:element name="kind" type="xs:string"/>
+            <xs:element name="entry" type="build:changeEntry" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="changeEntry">
+        <xs:sequence>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="author" type="common:user"/>
+            <xs:element name="path" type="xs:string" maxOccurs="unbounded"/>
+            <xs:element name="file" type="build:changeFile" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="changeFile">
+        <xs:sequence>
+            <xs:element name="path" type="xs:string"/>
+            <xs:element name="type" type="build:changeType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="changeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ADD"/>
+            <xs:enumeration value="EDIT"/>
+            <xs:enumeration value="DELETE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="tests" type="build:tests"/>
+
+    <xs:complexType name="tests">
+        <xs:sequence>
+            <xs:element name="total" type="xs:int"/>
+            <xs:element name="failed" type="xs:int"/>
+            <xs:element name="skipped" type="xs:int"/>
+            <xs:element name="suite" type="build:testSuite" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="testSuite">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="timeStamp" type="xs:string" minOccurs="0"/>
+            <xs:element name="duration" type="xs:float"/>
+            <xs:element name="case" type="build:testCase" maxOccurs="unbounded"/>
+            <!--
+            TODO:
+                stdout/stderr
+                file
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="testCase">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="className" type="xs:string"/>
+            <xs:element name="duration" type="xs:float"/>
+            <xs:element name="errorStackTrace" type="xs:string"/>
+            <xs:element name="errorDetails" type="xs:string"/>
+            <xs:element name="status" type="build:testCaseStatus"/>
+            <xs:element name="age" type="xs:int"/>
+            <!--
+            TODO:
+                failedSince
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="testCaseStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PASSED"/>
+            <xs:enumeration value="SKIPPED"/>
+            <xs:enumeration value="FAILED"/>
+            <xs:enumeration value="FIXED"/>
+            <xs:enumeration value="REGRESSION"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="buildEvent">
+        <xs:sequence>
+            <xs:element name="type" type="build:buildEventType"/>
+            <xs:element name="projectName" type="xs:string"/>
+            <xs:element name="buildNumber" type="xs:int"/>
+            <!--
+            TODO:
+                Include Project UUID? If we expose this, then must expose REST resource to get access to it
+                Include href, to point at Project resource and build resource?
+            -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="buildEventType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STARTED"/>
+            <xs:enumeration value="STOPPED"/>
+            <xs:enumeration value="DELETED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="console">
+        <xs:sequence>
+            <xs:element name="exists" type="xs:boolean"/>
+            <xs:element name="length" type="xs:long" minOccurs="0"/>
+            <xs:element name="lastModified" type="xs:long" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="console" type="build:console"/>
+
+</xs:schema>
