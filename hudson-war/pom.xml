@@ -136,6 +136,8 @@ THE SOFTWARE.
                 <!-- bundled plugins -->
 <!--
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
 -->
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.jvnet.hudson.plugins" artifactId="ssh-slaves" version="2.0.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
@@ -207,6 +209,9 @@ THE SOFTWARE.
               <!-- enable the plugins in main by default -->
               <name>hudson.bundled.plugins</name>
               <value>
+                  ${basedir}/../hudson-rest/rest-plugin/target/test-classes/the.hpl,
+                  ${basedir}/../hudson-maven3/maven3-plugin/target/test-classes/the.hpl,
+                  ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl,
                   ${basedir}/../hudson-maven-legacy/maven-plugin/target/test-classes/the.hpl,
                </value>
             </systemProperty>
@@ -268,6 +273,18 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>rest-plugin</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-plugin</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-snapshots</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

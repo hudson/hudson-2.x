@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+
+    <!--
+    Requires ${config} and ${defaults} to be set.
+    -->
+
+    <!-- FIXME: Root from code, not from crappy jelly shit -->
+    <j:set var="help" value="/plugin/maven3-plugin/help/mavenbuilder"/>
+
+    <f:entry title="Maven 3" help="${help}/installationId.html">
+        <select class="setting-input" name="installationId">
+            <option value="(Bundled)">(Bundled)</option>
+            <j:forEach var="inst" items="${descriptor.installations}">
+                <f:option selected="${descriptor.isSelected(inst.name, config.installationId, defaults.installationId)}" value="${inst.name}">${inst.name}</f:option>
+            </j:forEach>
+        </select>
+    </f:entry>
+
+    <f:entry title="Goals" help="${help}/goals.html">
+        <f:expandableTextbox name="goals" value="${descriptor.valueOf(config.goals, defaults.goals)}"/>
+    </f:entry>
+
+    <f:entry title="Properties" help="${help}/properties.html">
+        <f:expandableTextbox name="properties" value="${descriptor.valueOf(config.properties, defaults.properties)}"/>
+    </f:entry>
+
+    <f:advanced title="Advanced">
+
+        <f:entry title="POM File" help="${help}/pomFile.html">
+            <f:textbox name="pomFile" value="${config.pomFile}" default="${defaults.pomFile}"/>
+        </f:entry>
+
+        <f:entry title="Private repository" help="${help}/privateRepository.html">
+            <f:checkbox name="privateRepository" checked="${config.privateRepository}" default="${defaults.privateRepository}"/>
+        </f:entry>
+
+        <f:entry title="Private temporary directory" help="${help}/privateTmpdir.html">
+            <f:checkbox name="privateTmpdir" checked="${config.privateTmpdir}" default="${defaults.privateTmpdir}"/>
+        </f:entry>
+
+        <f:entry title="Offline" help="${help}/offline.html">
+            <f:checkbox name="offline" checked="${config.offline}" default="${defaults.offline}"/>
+        </f:entry>
+
+        <f:entry title="Profiles" help="${help}/profiles.html">
+            <f:expandableTextbox name="profiles" value="${descriptor.valueOf(config.profiles, defaults.profiles)}"/>
+        </f:entry>
+
+        <f:entry title="Show Errors" help="${help}/errors.html">
+            <f:checkbox name="errors" checked="${config.errors}" default="${defaults.errors}"/>
+        </f:entry>
+
+        <f:entry title="Verbosity" help="${help}/verbosity.html">
+            <select class="setting-input" name="verbosity">
+                <j:forEach var="v" items="${descriptor.verbosityValues}">
+                    <f:option value="${v.name}" selected="${descriptor.isSelected(v, config.verbosity, defaults.verbosity)}">${v.displayName}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Checksum Mode" help="${help}/checksumMode.html">
+            <select class="setting-input" name="checksumMode">
+                <j:forEach var="v" items="${descriptor.checksumModeValues}">
+                    <f:option value="${v.name}" selected="${descriptor.isSelected(v, config.checksumMode, defaults.checksumMode)}">${v.displayName}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Snapshot Updates" help="${help}/snapshotUpdateMode.html">
+            <select class="setting-input" name="snapshotUpdateMode">
+                <j:forEach var="v" items="${descriptor.snapshotUpdateModeValues}">
+                    <f:option value="${v.name}" selected="${descriptor.isSelected(v, config.snapshotUpdateMode, defaults.snapshotUpdateMode)}">${v.displayName}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Recursive" help="${help}/recursive.html">
+            <f:checkbox name="recursive" checked="${config.recursive}" default="${defaults.recursive}"/>
+        </f:entry>
+
+        <f:entry title="Projects" help="${help}/projects.html">
+            <f:expandableTextbox name="projects" value="${descriptor.valueOf(config.projects, defaults.projects)}"/>
+        </f:entry>
+
+        <f:entry title="Resume From" help="${help}/resumeFrom.html">
+            <f:textbox name="resumeFrom" value="${config.resumeFrom}" default="${defaults.resumeFrom}"/>
+        </f:entry>
+
+        <f:entry title="Fail Mode" help="${help}/failMode.html">
+            <select class="setting-input" name="failMode">
+                <j:forEach var="v" items="${descriptor.failModeValues}">
+                    <f:option value="${v.name}" selected="${descriptor.isSelected(v, config.failMode, defaults.failMode)}">${v.displayName}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Make Mode" help="${help}/makeMode.html">
+            <select class="setting-input" name="makeMode">
+                <j:forEach var="v" items="${descriptor.makeModeValues}">
+                    <f:option value="${v.name}" selected="${descriptor.isSelected(v, config.makeMode, defaults.makeMode)}">${v.displayName}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Threading" help="${help}/threading.html">
+            <f:textbox name="threading" value="${config.threading}" default="${defaults.threading}"/>
+        </f:entry>
+
+        <f:entry title="Settings" help="${help}/settings.html">
+            <select class="setting-input" name="settingsId">
+                <f:option>NONE</f:option>
+                <j:forEach var="v" items="${descriptor.settingsDocuments}">
+                    <f:option value="${v.id}" selected="${descriptor.isSelected(v.id, config.settingsId, defaults.settingsId)}">${v.name}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="Global Settings" help="${help}/globalSettings.html">
+            <select class="setting-input" name="globalSettingsId">
+                <f:option>NONE</f:option>
+                <j:forEach var="v" items="${descriptor.settingsDocuments}">
+                    <f:option value="${v.id}" selected="${descriptor.isSelected(v.id, config.globalSettingsId, defaults.globalSettingsId)}">${v.name}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+         <f:entry title="Tool Chains" help="${help}/toolChains.html">
+            <select class="setting-input" name="toolChainsId">
+                <f:option>NONE</f:option>
+                <j:forEach var="v" items="${descriptor.toolChainsDocuments}">
+                    <f:option value="${v.id}" selected="${descriptor.isSelected(v.id, config.toolChainsId, defaults.toolChainsId)}">${v.name}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="JVM Options" help="${help}/mavenOpts.html">
+            <f:expandableTextbox name="mavenOpts" value="${config.mavenOpts}" default="${defaults.mavenOpts}"/>
+        </f:entry>
+
+    </f:advanced>
+
+</j:jelly>

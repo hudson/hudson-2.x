@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:t="/lib/hudson">
+    <t:summary icon="/plugin/maven3-plugin/images/maven-icon-48x48.png" href="${it.urlName}">
+        <!--<j:choose>-->
+            <!--<j:when test="${it.building}">-->
+                <!--<j:set var="build.state.message" value="building..."/>-->
+            <!--</j:when>-->
+            <!--<j:otherwise>-->
+                <!--<j:set var="build.state.message" value="built."/>-->
+            <!--</j:otherwise>-->
+        <!--</j:choose>-->
+        
+        <!--<j:set var="projects" value="${it.participatingProjects}"/>-->
+        <!--<j:choose>-->
+            <!--<j:when test="${it.building and empty( projects )}">-->
+                <!--Waiting to analyze modules...-->
+            <!--</j:when>-->
+            <!--<j:when test="${empty( projects )}">-->
+                <!--There were no modules built.-->
+            <!--</j:when>-->
+            <!--<j:otherwise>-->
+                <!--${projects.size()} modules ${build.state.message}-->
+                <!--&lt;!&ndash;  TODO: #pass/fail/skip &ndash;&gt;-->
+            <!--</j:otherwise>-->
+        <!--</j:choose>-->
+
+        <!-- FIXME: For now just say something... figure out how/if we want to ^^^ later. -->
+        Maven 3 Build Information
+    </t:summary>
+</j:jelly>

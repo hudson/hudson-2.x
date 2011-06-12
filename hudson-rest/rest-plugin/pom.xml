@@ -35,7 +35,7 @@ THE SOFTWARE.
   <packaging>hpi</packaging>
 
   <properties>
-    <pluginName>Hudson REST</pluginName>
+    <pluginName>Hudson REST Support</pluginName>
   </properties>
 
   <dependencies>

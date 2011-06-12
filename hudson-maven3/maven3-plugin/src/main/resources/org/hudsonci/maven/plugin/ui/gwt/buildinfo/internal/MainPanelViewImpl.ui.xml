@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+    xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+    xmlns:m="urn:import:org.hudsonci.maven.plugin.ui.gwt.buildinfo"
+    xmlns:w="urn:import:org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget">
+
+    <ui:style>
+        .infront { position: relative; z-index: 1000; }
+        .right { text-align: right; }
+    </ui:style>
+
+    <g:LayoutPanel debugId="mainPanel">
+        <!--
+            Place left of all tabs, ensuring there is enough space for them.
+            Use a style on the list box to ensure the picker is on top of other 
+            widgets so that it gets click/selection events.
+        -->
+        <g:layer right="20PX" width="30%" top="0" height="2EM">
+            <g:HTMLPanel debugId="statePickerPanel" ui:field="statePickerPanel" addStyleNames="{style.right}">Builder: <g:ListBox ui:field="statePicker" styleName="{style.infront}"/></g:HTMLPanel>
+        </g:layer>
+        <!-- Various tricks to get the refresh image on top to receive click events, but not obscure other widgets events. -->
+        <g:layer right="0" width="16PX" top="0" height="2EM">
+            <g:HTMLPanel debugId="refreshPanel" styleName="{style.infront}"><g:Image ui:field="refresh"/></g:HTMLPanel>
+        </g:layer>
+        <g:layer>
+            <g:TabLayoutPanel ui:field="tabPanel" barUnit="EM" barHeight="2">
+                <g:tab>
+                    <g:header>Summary</g:header>
+                    <g:IsWidget ui:field="summaryInfo"/>
+                </g:tab>
+                <g:tab>
+                    <g:header>Runtime</g:header>
+                    <!--
+                        Working directory
+                        Properties:
+                            Version
+                            User
+                            System
+                            Environment
+                    -->
+                    <g:TabLayoutPanel barUnit="EM" barHeight="2" addStyleNames="sonatype-nestedTabLayoutPanel">
+                        <g:tab>
+                            <g:header>Version</g:header>
+                            <g:ScrollPanel>
+                                <w:PropertiesTable ui:field="versionInfo"/>
+                            </g:ScrollPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>User</g:header>
+                            <g:ScrollPanel>
+                                <w:PropertiesTable ui:field="userInfo"/>
+                            </g:ScrollPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>System</g:header>
+                            <g:ScrollPanel>
+                                <w:PropertiesTable ui:field="systemInfo"/>
+                            </g:ScrollPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>Environment</g:header>
+                            <g:ScrollPanel>
+                                <w:PropertiesTable ui:field="environmentInfo"/>
+                            </g:ScrollPanel>
+                        </g:tab>
+                    </g:TabLayoutPanel>
+                </g:tab>
+                <g:tab>
+                    <g:header>Modules</g:header>
+                    <m:ModuleInfoPresenter.ModuleInfoView ui:field="moduleInfo" />
+                </g:tab>
+                <g:tab>
+                    <g:header>Artifacts</g:header>
+                    <g:LayoutPanel>
+                        <g:layer top="0" bottom="2em">
+                            <g:ScrollPanel>
+                                <m:ArtifactInfoTable ui:field="artifactInfo" pageSize="100" width="100%"/>
+                            </g:ScrollPanel>
+                        </g:layer>
+                        <g:layer bottom="0" height="2em" left="30%" right="30%">
+                            <c:SimplePager ui:field="artifactPager" location="CENTER"/>                        
+                        </g:layer>
+                    </g:LayoutPanel>
+                </g:tab>
+            </g:TabLayoutPanel>
+        </g:layer>
+    </g:LayoutPanel>
+</ui:UiBinder> 
