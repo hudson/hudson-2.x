@@ -95,6 +95,27 @@ THE SOFTWARE.
         <version>${project.version}</version>
         <type>zip</type>
       </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>maven3-plugin</artifactId>
+        <version>${project.version}</version>
+        <type>hpi</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>maven3-plugin</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jvnet.hudson.main</groupId>
+        <artifactId>maven3-snapshots</artifactId>
+        <version>${project.version}</version>
+        <type>hpi</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -111,6 +132,8 @@ THE SOFTWARE.
     <module>maven3-eventspy-common</module>
     <module>maven3-eventspy-3.0</module>
     <module>maven3-slavebundle</module>
+    <module>maven3-plugin</module>
+    <module>maven3-snapshots</module>
   </modules>
 
 </project>
