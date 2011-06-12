@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License
+
+Copyright (c) 2010-2011, Sonatype, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+    xmlns:m="urn:import:org.hudsonci.maven.plugin.ui.gwt.buildinfo"
+    xmlns:x="urn:import:org.hudsonci.gwt.common">
+    
+    <g:SplitLayoutPanel>
+        <g:north size="200">
+            <!--
+                Wrap in LayoutPanel to handle isWidget interface used in MVP pattern
+                and to inform contained widgets of sizing/resize events since
+                we're not currently attached to a RootLayoutPanel.
+                
+                In GWT 2.2.1 SplitLayoutPanel doesn't handle isWidget interface 
+                for addWest and others (signature is addWest(Widget, double)).
+            -->
+            <g:LayoutPanel>
+                <g:layer>
+                    <m:ModuleInfoPickerPresenter.ModuleInfoPickerView ui:field="modulePicker"/>
+                </g:layer>
+            </g:LayoutPanel>
+        </g:north>
+        <g:center>
+            <x:TogglePanel ui:field="togglePanel" summary="Select a module to view more information.">
+                <x:detail>
+                    <!-- TODO: extract to separate component for reusability and testability. -->
+                    <g:TabLayoutPanel ui:field="moduleDetailPanel" barHeight="2" barUnit="EM">
+                        <g:tab>
+                            <g:header>Summary</g:header>
+                            <g:HTMLPanel>
+                                <!-- General info like success, duration, profiles, mojos exec, output artifacts, used artifacts -->
+                                <div><g:Image ui:field="statusIcon"/><span ui:field="buildSummary"/></div>
+                                <div ui:field="coordinatesText"/>
+                                <div><span ui:field="profileSummary"/></div>
+                                <x:MaximizedCellTable ui:field="producedArtifacts"/>
+                            </g:HTMLPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>Artifacts</g:header>
+                            <g:ScrollPanel>
+                                <m:ArtifactInfoTable ui:field="artifactInfo"/>
+                            </g:ScrollPanel>
+                        </g:tab>
+                        <!--
+                        <g:tab>
+                            <g:header>Mojo</g:header>
+                            <g:HTML>Mojo/Plugin info: name, duration, config, required artifacts</g:HTML>
+                        </g:tab>
+                        -->
+                    </g:TabLayoutPanel>
+                </x:detail>
+            </x:TogglePanel>
+        </g:center>
+    </g:SplitLayoutPanel>
+</ui:UiBinder> 
