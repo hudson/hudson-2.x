@@ -40,7 +40,7 @@ import org.jvnet.localizer.Localizable;
  * Each permission is represented by a specific instance of {@link Permission}.
  *
  * @author Kohsuke Kawaguchi
- * @see http://wiki.hudson-ci.com/display/HUDSON/Making+your+plugin+behave+in+secured+Hudson
+ * @see http://wiki.hudson-ci.org/display/HUDSON/Making+your+plugin+behave+in+secured+Hudson
  */
 public final class Permission {
 
