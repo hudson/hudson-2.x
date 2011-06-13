@@ -375,7 +375,7 @@ public class Launcher {
                 System.out.println(
                         "WARNING: Are you running slave agent from an interactive console?\n" +
                         "If so, you are probably using it incorrectly.\n" +
-                        "See http://wiki.hudson-ci.com/display/HUDSON/Launching+slave.jar+from+from+console");
+                        "See http://wiki.hudson-ci.org/display/HUDSON/Launching+slave.jar+from+from+console");
             }
         } catch (LinkageError e) {
             // we are probably running on JDK5 that doesn't have System.console()

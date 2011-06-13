@@ -3499,7 +3499,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
 
     /**
      * Checks if container uses UTF-8 to decode URLs. See
-     * http://wiki.hudson-ci.com/display/HUDSON/Tomcat#Tomcat-i18n
+     * http://wiki.hudson-ci.org/display/HUDSON/Tomcat#Tomcat-i18n
      */
     public FormValidation doCheckURIEncoding(StaplerRequest request) throws IOException {
         // expected is non-ASCII String

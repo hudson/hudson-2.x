@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * Obtains the structured form data from {@link StaplerRequest}.
- * See http://wiki.hudson-ci.com/display/HUDSON/Structured+Form+Submission
+ * See http://wiki.hudson-ci.org/display/HUDSON/Structured+Form+Submission
  *
  * @author Kohsuke Kawaguchi
  */
