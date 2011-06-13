@@ -24,6 +24,7 @@
 package hudson.matrix;
 
 import hudson.Util;
+import hudson.security.ACL;
 import hudson.util.DescribableList;
 import hudson.model.AbstractBuild;
 import hudson.model.Cause;
@@ -69,6 +70,7 @@ public class MatrixConfiguration extends Project<MatrixConfiguration,MatrixRun> 
     public MatrixConfiguration(MatrixProject parent, Combination c) {
         super(parent,c.toString());
         setCombination(c);
+        updateTransientActions();
     }
 
     @Override
@@ -236,6 +238,9 @@ public class MatrixConfiguration extends Project<MatrixConfiguration,MatrixRun> 
         return getParent().getBuildWrappers();
     }
 
+    /**
+     * @since 2.1.0
+     */
     @Override
     public DescribableList<BuildWrapper, Descriptor<BuildWrapper>> getBuildWrappersList() {
         return getParent().getBuildWrappersList();
@@ -291,6 +296,14 @@ public class MatrixConfiguration extends Project<MatrixConfiguration,MatrixRun> 
      */
     public boolean isActiveConfiguration() {
         return getParent().getActiveConfigurations().contains(this);
+    }
+
+    /**
+     * @since 2.1.0
+     */
+    @Override
+    public ACL getACL() {
+        return getParent().getACL();
     }
 
     /**

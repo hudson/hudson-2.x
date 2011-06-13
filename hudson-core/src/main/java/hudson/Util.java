@@ -1040,6 +1040,7 @@ public class Util {
             NativeUtils.getInstance().chmod(f, mask);
         } catch (NativeAccessException exc) {
             LOGGER.log(Level.WARNING, "Native function chmod failed ({0}). Using Ant''s chmod task instead.", NativeUtils.getInstance().getLastUnixError());
+            _chmodAnt(f, mask);
         }
     }
 

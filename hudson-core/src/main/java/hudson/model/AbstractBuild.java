@@ -256,7 +256,8 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
      * <p>
      * This list at least always include people who made changes in this build, but
      * if the previous build was a failure it also includes the culprit list from there.
-     *
+     * Culprits of unstable build are also included
+     * see <a href="http://issues.hudson-ci.org/browse/HUDSON-4617">HUDSON-4617</a> for details
      * @return
      *      can be empty but never null.
      */
@@ -267,7 +268,7 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
             R p = getPreviousCompletedBuild();
             if (p !=null && isBuilding()) {
                 Result pr = p.getResult();
-                if (pr!=null && pr.isWorseThan(Result.UNSTABLE)) {
+                if (pr!=null && pr.isWorseOrEqualTo(Result.UNSTABLE)) {
                     // we are still building, so this is just the current latest information,
                     // but we seems to be failing so far, so inherit culprits from the previous build.
                     // isBuilding() check is to avoid recursion when loading data from old Hudson, which doesn't record
@@ -280,8 +281,9 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
 
             if (upstreamCulprits) {
                 // If we have dependencies since the last successful build, add their authors to our list
-                if (getPreviousNotFailedBuild() != null) {
-                    Map <AbstractProject,AbstractBuild.DependencyChange> depmap = getDependencyChanges(getPreviousNotFailedBuild());
+                R previousBuild = getPreviousSuccessfulBuild();
+                if (previousBuild != null) {
+                    Map <AbstractProject,AbstractBuild.DependencyChange> depmap = getDependencyChanges(previousBuild);
                     for (AbstractBuild.DependencyChange dep : depmap.values()) {
                         for (AbstractBuild<?,?> b : dep.getBuilds()) {
                             for (Entry entry : b.getChangeSet()) {
@@ -798,6 +800,8 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
                 if (v!=null) r.put(p.getName(),v);
             }
         }
+        
+        customizeBuildVariables(r);
 
         // allow the BuildWrappers to contribute additional build variables
         if (project instanceof BuildableItemWithBuildWrappers) {
@@ -807,6 +811,14 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
 
         return r;
     }
+    
+    /**
+     * @since 2.1.0
+     */
+    protected void customizeBuildVariables(final Map<String, String> vars) {
+        // nop
+    }
+
 
     /**
      * Creates {@link VariableResolver} backed by {@link #getBuildVariables()}.

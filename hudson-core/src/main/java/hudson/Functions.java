@@ -45,6 +45,7 @@ import hudson.model.ParameterDefinition.ParameterDescriptor;
 import hudson.model.Project;
 import hudson.model.Run;
 import hudson.model.TopLevelItem;
+import hudson.model.User;
 import hudson.model.View;
 import hudson.model.JDK;
 import hudson.search.SearchableModelObject;
@@ -82,6 +83,7 @@ import org.jvnet.animal_sniffer.IgnoreJRERequirement;
 import org.jvnet.tiger_types.Types;
 import org.kohsuke.stapler.Ancestor;
 import org.kohsuke.stapler.Stapler;
+import org.kohsuke.stapler.StaplerProxy;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -113,8 +115,10 @@ import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Date;
@@ -698,6 +702,17 @@ public class Functions {
         return result;
     }
 
+    private static final Set<String> globalConfigIgnoredDescriptors = new HashSet<String>();
+
+    /**
+     * Set of descriptor class names to ignore in the global /configure page.
+     *
+     * @since 2.1.0
+     */
+    public static Set<String> getGlobalConfigIgnoredDescriptors() {
+        return globalConfigIgnoredDescriptors;
+    }
+
     /**
      * Gets all the descriptors sorted by their inheritance tree of {@link Describable}
      * so that descriptors of similar types come nearby.
@@ -705,6 +720,9 @@ public class Functions {
     public static Collection<Descriptor> getSortedDescriptorsForGlobalConfig() {
         Map<String,Descriptor> r = new TreeMap<String, Descriptor>();
         for (Descriptor<?> d : Hudson.getInstance().getExtensionList(Descriptor.class)) {
+            if (globalConfigIgnoredDescriptors.contains(d.getClass().getName())) {
+                continue;
+            }
             if (d.getGlobalConfigPage()==null)  continue;
             r.put(buildSuperclassHierarchy(d.clazz, new StringBuilder()).toString(),d);
         }
@@ -1317,4 +1335,25 @@ public class Functions {
         return Boolean.getBoolean("hudson.security.ArtifactsPermission");
     }
 
+    /**
+     * Returns true if current user is the author of the job.
+     * @param job job.
+     * @return returns true if current user is the author of the job.
+     */
+    public static boolean isAuthor(Job job) {
+        User user = User.current();
+        return !(user == null || job == null || job.getCreatedBy() == null) && job.getCreatedBy().equals(user.getId());
+    }
+
+    /**
+     * Resolves the target object for the given object.  If the object is a StaplerProxy, then return the proxy target.
+     *
+     * @since 2.1.0
+     */
+    public static Object resolveStaplerObject(final Object obj) {
+        if (obj instanceof StaplerProxy) {
+            return ((StaplerProxy)obj).getTarget();
+        }
+        return obj;
+    }
 }

@@ -32,6 +32,8 @@ import javax.inject.Named;
 
 import static org.junit.Assert.*;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * Tests for {@link Injectable} types.
  */
@@ -39,29 +41,53 @@ public class InjectableTest
     extends SmoothieTestSupport
 {
     @Test
-    public void testInjectoAware() {
-        InjectableThing thing = new InjectableThing();
+    public void testInjectableWithImplements() {
+        Thing thing = new InjectableThing();
         assertNotNull(thing);
         assertNotNull(thing.component);
     }
 
-    @Named
-    public static class MyComponent
+    public static class InjectableThing
+        extends Thing
+        implements Injectable
     {
-        public MyComponent() {
-            System.out.println("Created component");
+        @Inject
+        public void setComponent(SimpleComponent component) {
+            super.setComponent(component);
         }
     }
 
-    public static class InjectableThing
-        implements Injectable
-    {
-        MyComponent component;
+    @Test
+    public void testInjectableWithExtends() {
+        Thing thing = new InjectableThing2();
+        assertNotNull(thing);
+        assertNotNull(thing.component);
+    }
 
+    public static class InjectableThing2
+        extends InjectableThing
+    {
+    }
+
+    @Test
+    public void ensureInjectionWorksForInjectableSubInterface() {
+        Thing thing = new SuperInjectableThing();
+        assertNotNull(thing);
+        assertNotNull(thing.component);
+    }
+
+    public static interface SuperInjectable
+        extends Injectable
+    {
+    }
+
+    public static class SuperInjectableThing
+        extends Thing
+        implements SuperInjectable
+    {
         @Inject
-        public void setComponent(MyComponent component) {
-            System.out.println("Installed component: " + component);
-            this.component = component;
+        public void setComponent(SimpleComponent component) {
+            super.setComponent(component);
         }
     }
 }

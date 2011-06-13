@@ -50,15 +50,15 @@ public class SmoothieContainerBootstrap
     public SmoothieContainer bootstrap(final ClassLoader classLoader, final Class... types) {
         log.info("Bootstrapping Smoothie");
 
-        // Enable aspect-based injection
-        InjectomaticAspectHelper.setEnabled(true);
-
         // Build the root space for the given types
         ClassSpace space = new ClassSpaceFactory().create(classLoader, types);
 
         // Start up the container
         SmoothieContainer container = new SmoothieContainerImpl(new ExtensionModule(space, true));
         Smoothie.setContainer(container);
+
+        // Enable aspect-based injection
+        InjectomaticAspectHelper.setEnabled(true);
 
         return container;
     }

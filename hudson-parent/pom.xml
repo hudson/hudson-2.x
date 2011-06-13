@@ -10,7 +10,7 @@
 
   <groupId>org.jvnet.hudson</groupId>
   <artifactId>hudson-parent</artifactId>
-  <version>1.14-SNAPSHOT</version>
+  <version>2.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Hudson Parent</name>

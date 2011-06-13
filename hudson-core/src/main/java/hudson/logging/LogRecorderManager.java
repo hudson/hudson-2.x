@@ -128,13 +128,13 @@ public class LogRecorderManager extends AbstractModelObject {
      * RSS feed for log entries.
      */
     public void doRss( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
-        doRss(req, rsp, Hudson.logRecords);
+        doRss(req, rsp, getDisplayName(), Hudson.logRecords);
     }
 
     /**
      * Renders the given log recorders as RSS.
      */
-    /*package*/ static void doRss(StaplerRequest req, StaplerResponse rsp, List<LogRecord> logs) throws IOException, ServletException {
+    /*package*/ static void doRss(StaplerRequest req, StaplerResponse rsp, String recorderName, List<LogRecord> logs) throws IOException, ServletException {
         // filter log records based on the log level
         String level = req.getParameter("level");
         if(level!=null) {
@@ -147,7 +147,7 @@ public class LogRecorderManager extends AbstractModelObject {
             logs = filtered;
         }
 
-        RSS.forwardToRss("Hudson log","", logs, new FeedAdapter<LogRecord>() {
+        RSS.forwardToRss("Hudson " + recorderName + " log","", logs, new FeedAdapter<LogRecord>() {
             public String getEntryTitle(LogRecord entry) {
                 return entry.getMessage();
             }

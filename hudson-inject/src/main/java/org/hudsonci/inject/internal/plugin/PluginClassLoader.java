@@ -25,12 +25,13 @@
 package org.hudsonci.inject.internal.plugin;
 
 import hudson.PluginWrapper;
+import org.aspectj.weaver.loadtime.WeavingURLClassLoader;
 
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Plugin class-loader.
@@ -39,11 +40,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 1.397
  */
 public class PluginClassLoader
-    extends URLClassLoader
+    extends WeavingURLClassLoader
 {
-    // FIXME: Re-implement AspectJ LTW here once 1.6.11 is released, previous release has bug with spaces in directory names.
-    // FIXME: ... https://bugs.eclipse.org/bugs/show_bug.cgi?id=282379
-
     private PluginWrapper plugin;
 
     public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
@@ -51,18 +49,13 @@ public class PluginClassLoader
     }
 
     public PluginWrapper getPlugin() {
-        if (plugin == null) {
-            throw new IllegalStateException();
-        }
+        checkState(plugin != null);
         return plugin;
     }
 
     void setPlugin(final PluginWrapper plugin) {
-        checkNotNull(plugin);
-        if (this.plugin != null) {
-            throw new IllegalStateException();
-        }
-        this.plugin = plugin;
+        checkState(this.plugin == null);
+        this.plugin = checkNotNull(plugin);
     }
 
     @Override

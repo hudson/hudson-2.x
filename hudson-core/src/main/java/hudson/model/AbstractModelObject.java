@@ -23,6 +23,11 @@
  */
 package hudson.model;
 
+import hudson.EnvVars;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.Stapler;
@@ -39,6 +44,7 @@ import hudson.search.SearchIndex;
  * {@link ModelObject} with some convenience methods.
  * 
  * @author Kohsuke Kawaguchi
+ * @author Nikita Levyankov
  */
 public abstract class AbstractModelObject implements SearchableModelObject {
     /**
@@ -81,6 +87,51 @@ public abstract class AbstractModelObject implements SearchableModelObject {
         String method = req.getMethod();
         if(!method.equalsIgnoreCase("POST"))
             throw new ServletException("Must be POST, Can't be "+method);
+    }
+
+    /**
+     * Checks jndi,environment, hudson environment and system properties for specified key.
+     * Property is checked in direct order:
+     * <ol>
+     * <li>JNDI ({@link InitialContext#lookup(String)})</li>
+     * <li>Hudson environment ({@link EnvVars#masterEnvVars})</li>
+     * <li>System properties ({@link System#getProperty(String)})</li>
+     * </ol>
+     * @param key - the name of the configured property.
+     * @return the string value of the configured property, or null if there is no property with that key.
+     */
+    protected String getConfiguredHudsonProperty(String key) {
+        if (StringUtils.isNotBlank(key)) {
+            String resultValue;
+            try {
+                InitialContext iniCtxt = new InitialContext();
+                Context env = (Context) iniCtxt.lookup("java:comp/env");
+                resultValue = StringUtils.trimToNull((String) env.lookup(key));
+                if (null != resultValue) {
+                    return resultValue;
+                }
+                // look at one more place. See http://issues.hudson-ci.org/browse/HUDSON-1314
+                resultValue = StringUtils.trimToNull((String) iniCtxt.lookup(key));
+                if (null != resultValue) {
+                    return resultValue;
+                }
+            } catch (NamingException e) {
+                // ignore
+            }
+
+            // look at the env var next
+            resultValue = StringUtils.trimToNull(EnvVars.masterEnvVars.get(key));
+            if (null != resultValue) {
+                return resultValue;
+            }
+
+            // finally check the system property
+            resultValue = StringUtils.trimToNull(System.getProperty(key));
+            if (null != resultValue) {
+                return resultValue;
+            }
+        }
+        return null;
     }
 
     /**

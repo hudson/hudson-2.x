@@ -3,7 +3,8 @@
  * 
  * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi,
  * Eric Lefevre-Ardant, Erik Ramfelt, Michael B. Donohue, Alan Harder,
- * Manufacture Francaise des Pneumatiques Michelin, Romain Seguy, Winston Prakash
+ * Manufacture Francaise des Pneumatiques Michelin, Romain Seguy, 
+ * Winston Prakash, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,44 +28,32 @@ package hudson;
 
 import hudson.Launcher.LocalLauncher;
 import hudson.Launcher.RemoteLauncher;
-import hudson.model.Hudson;
-import hudson.model.TaskListener;
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.Item;
+import hudson.model.TaskListener;
 import hudson.remoting.Callable;
 import hudson.remoting.Channel;
 import hudson.remoting.DelegatingCallable;
 import hudson.remoting.Future;
 import hudson.remoting.Pipe;
+import hudson.remoting.RemoteInputStream;
 import hudson.remoting.RemoteOutputStream;
 import hudson.remoting.VirtualChannel;
-import hudson.remoting.RemoteInputStream;
 import hudson.util.DirScanner;
-import hudson.util.IOException2;
-import hudson.util.HeadBufferingStream;
 import hudson.util.FormValidation;
+import hudson.util.HeadBufferingStream;
+import hudson.util.IOException2;
 import hudson.util.IOUtils;
 
 import hudson.util.jna.NativeUtils;
 
-import static hudson.Util.fixEmpty;
-import static hudson.FilePath.TarCompression.GZIP;
 import hudson.org.apache.tools.tar.TarInputStream;
+import hudson.util.jna.NativeAccessException;
+
+
 import hudson.util.io.Archiver;
 import hudson.util.io.ArchiverFactory;
-import hudson.util.jna.NativeAccessException;
-import java.util.logging.Level;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.taskdefs.Copy;
-import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.tar.TarEntry;
-import org.apache.commons.io.input.CountingInputStream;
-import org.apache.commons.fileupload.FileItem;
-import org.kohsuke.stapler.Stapler;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -77,27 +66,43 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
-import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.zip.GZIPOutputStream;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipInputStream;
 
 import java.util.logging.Logger;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Copy;
+import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.tar.TarEntry;
+import org.kohsuke.stapler.Stapler;
+
+import static hudson.FilePath.TarCompression.GZIP;
+import static hudson.Util.fixEmpty;
+
 
 /**
  * {@link File} like object with remoting support.
@@ -217,7 +222,8 @@ public final class FilePath implements Serializable {
         if(base.isUnix()) {
             this.remote = normalize(base.remote+'/'+rel);
         } else {
-            this.remote = normalize(base.remote+'\\'+rel);
+            //Normalize rel path for windows environment. See http://issues.hudson-ci.org/browse/HUDSON-5084
+            this.remote = normalize(base.remote+'\\'+ StringUtils.replace(rel, "/", "\\"));
         }
     }
 
@@ -531,7 +537,7 @@ public final class FilePath implements Serializable {
             public InputStream extract(InputStream _in) throws IOException {
                 HeadBufferingStream in = new HeadBufferingStream(_in,SIDE_BUFFER_SIZE);
                 try {
-                    return new GZIPInputStream(in,8192);
+                    return new GZIPInputStream(in, BUFFER_SIZE);
                 } catch (IOException e) {
                     // various people reported "java.io.IOException: Not in GZIP format" here, so diagnose this problem better
                     in.fillSide();
@@ -542,6 +548,7 @@ public final class FilePath implements Serializable {
                 return new GZIPOutputStream(new BufferedOutputStream(out));
             }
         };
+        private static final int BUFFER_SIZE = 8192;
 
         public abstract InputStream extract(InputStream in) throws IOException;
         public abstract OutputStream compress(OutputStream in) throws IOException;
@@ -1416,6 +1423,14 @@ public final class FilePath implements Serializable {
     }
 
     /**
+     * {@see copyRecursiveTo(String fileMask, String excludes, FilePath target, FilePath.TarCompression remoteCompressionType)}
+     */
+    public int copyRecursiveTo(final String fileMask, final String excludes, final FilePath target)
+        throws IOException, InterruptedException {
+        return copyRecursiveTo(fileMask, excludes, target, FilePath.TarCompression.GZIP);
+    }
+
+    /**
      * Copies the files that match the given file mask to the specified target node.
      *
      * @param fileMask
@@ -1425,16 +1440,21 @@ public final class FilePath implements Serializable {
      *      "abc, def" and "abc,def" to mean the same thing.
      * @param excludes
      *      Files to be excluded. Can be null.
+     * @param remoteCompressionType compression type which will be used before master<->slave files transfer.
      * @return
      *      the number of files copied.
      */
-    public int copyRecursiveTo(final String fileMask, final String excludes, final FilePath target) throws IOException, InterruptedException {
-        if(this.channel==target.channel) {
+    public int copyRecursiveTo(final String fileMask, final String excludes, final FilePath target,
+                               final FilePath.TarCompression remoteCompressionType)
+        throws IOException, InterruptedException {
+        if (this.channel == target.channel) {
             // local to local copy.
             return act(new FileCallable<Integer>() {
                 public Integer invoke(File base, VirtualChannel channel) throws IOException {
-                    if(!base.exists())  return 0;
-                    assert target.channel==null;
+                    if (!base.exists()) {
+                        return 0;
+                    }
+                    assert target.channel == null;
 
                     try {
                         class CopyImpl extends Copy {
@@ -1457,33 +1477,35 @@ public final class FilePath implements Serializable {
 
                         CopyImpl copyTask = new CopyImpl();
                         copyTask.setTodir(new File(target.remote));
-                        copyTask.addFileset(Util.createFileSet(base,fileMask,excludes));
+                        copyTask.addFileset(Util.createFileSet(base, fileMask, excludes));
                         copyTask.setOverwrite(true);
                         copyTask.setIncludeEmptyDirs(false);
 
                         copyTask.execute();
                         return copyTask.getNumCopied();
                     } catch (BuildException e) {
-                        throw new IOException2("Failed to copy "+base+"/"+fileMask+" to "+target,e);
+                        throw new IOException2("Failed to copy " + base + "/" + fileMask + " to " + target, e);
                     }
                 }
             });
-        } else
-        if(this.channel==null) {
+        } else if (this.channel == null) {
             // local -> remote copy
             final Pipe pipe = Pipe.createLocalToRemote();
 
             Future<Void> future = target.actAsync(new FileCallable<Void>() {
                 public Void invoke(File f, VirtualChannel channel) throws IOException {
                     try {
-                        readFromTar(remote+'/'+fileMask, f,TarCompression.GZIP.extract(pipe.getIn()));
+                        readFromTar(remote + '/' + fileMask, f, (remoteCompressionType != null?
+                            remoteCompressionType.extract(pipe.getIn()) :
+                            FilePath.TarCompression.GZIP.extract(pipe.getIn())));
                         return null;
                     } finally {
                         pipe.getIn().close();
                     }
                 }
             });
-            int r = writeToTar(new File(remote),fileMask,excludes,TarCompression.GZIP.compress(pipe.getOut()));
+            int r = writeToTar(new File(remote), fileMask, excludes, (remoteCompressionType != null?
+                remoteCompressionType.compress(pipe.getOut()) : FilePath.TarCompression.GZIP.compress(pipe.getOut())));
             try {
                 future.get();
             } catch (ExecutionException e) {
@@ -1497,21 +1519,26 @@ public final class FilePath implements Serializable {
             Future<Integer> future = actAsync(new FileCallable<Integer>() {
                 public Integer invoke(File f, VirtualChannel channel) throws IOException {
                     try {
-                        return writeToTar(f,fileMask,excludes,TarCompression.GZIP.compress(pipe.getOut()));
+                        return writeToTar(f, fileMask, excludes, (remoteCompressionType != null?
+                            remoteCompressionType.compress(pipe.getOut()) :
+                            FilePath.TarCompression.GZIP.compress(pipe.getOut())));
                     } finally {
                         pipe.getOut().close();
                     }
                 }
             });
             try {
-                readFromTar(remote+'/'+fileMask,new File(target.remote),TarCompression.GZIP.extract(pipe.getIn()));
+                //it's possible to get NPE if on slave works old process
+                readFromTar(remote + '/' + fileMask, new File(target.remote),
+                    (remoteCompressionType != null? remoteCompressionType.extract(pipe.getIn()) :
+                        FilePath.TarCompression.GZIP.extract(pipe.getIn())));
             } catch (IOException e) {// BuildException or IOException
                 try {
-                    future.get(3,TimeUnit.SECONDS);
+                    future.get(3, TimeUnit.SECONDS);
                     throw e;    // the remote side completed successfully, so the error must be local
                 } catch (ExecutionException x) {
                     // report both errors
-                    throw new IOException2(Functions.printThrowable(e),x);
+                    throw new IOException2(Functions.printThrowable(e), x);
                 } catch (TimeoutException _) {
                     // remote is hanging
                     throw e;

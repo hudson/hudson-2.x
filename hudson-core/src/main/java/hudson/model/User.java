@@ -272,12 +272,12 @@ public class User extends AbstractModelObject implements AccessControlled, Savea
                                 .replace('>','_');  // 4 replace() still faster than regex
         if (Functions.isWindows()) id = id.replace(':','_');
 
-        synchronized(byName) {
+        synchronized (byName) {
             User u = byName.get(id);
-            if(u==null) {
+            if (null == u) {
                 User tmp = new User(id, idOrFullName);
                 if (create || tmp.getConfigFile().exists()) {
-                    byName.put(id,u=tmp);
+                    byName.put(id, u = tmp);
                 }
             }
             return u;

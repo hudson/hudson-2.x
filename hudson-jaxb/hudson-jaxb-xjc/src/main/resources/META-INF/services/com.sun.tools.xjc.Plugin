@@ -1,0 +1,9 @@
+org.hudsonci.jaxb.BooleanGetterPlugin
+org.hudsonci.jaxb.XStreamAliasPlugin
+org.hudsonci.jaxb.XStreamAsAttributePlugin
+org.hudsonci.jaxb.GeneratedPlugin
+org.hudsonci.jaxb.CodeInsertPlugin
+org.hudsonci.jaxb.JsonPropertyPlugin
+org.hudsonci.jaxb.EqualsBuilderPlugin
+org.hudsonci.jaxb.HashCodeBuilderPlugin
+org.hudsonci.jaxb.CloneablePlugin

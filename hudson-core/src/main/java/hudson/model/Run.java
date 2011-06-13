@@ -98,6 +98,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jelly.XMLOutput;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.QueryParameter;
@@ -600,7 +601,11 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
 
     @Override
     public String toString() {
-        return getFullDisplayName();
+        return getFullName();
+    }
+
+    public String getFullName() {
+        return project.getFullName()+" #"+number;
     }
 
     @Exported
@@ -1762,31 +1767,41 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
     public EnvVars getEnvironment(TaskListener log) throws IOException, InterruptedException {
         EnvVars env = getCharacteristicEnvVars();
         Computer c = Computer.currentComputer();
-        if (c!=null)
+        if (c != null) {
             env = c.getEnvironment().overrideAll(env);
-        String rootUrl = Hudson.getInstance().getRootUrl();
-        if(rootUrl!=null) {
-            env.put("HUDSON_URL", rootUrl);
-            env.put("BUILD_URL", rootUrl+getUrl());
-            env.put("JOB_URL", rootUrl+getParent().getUrl());
         }
-        
-        if(!env.containsKey("HUDSON_HOME"))
-            env.put("HUDSON_HOME", Hudson.getInstance().getRootDir().getPath() );
+        String rootUrl = Hudson.getInstance().getRootUrl();
+        if (rootUrl != null) {
+            env.put("HUDSON_URL", rootUrl);
+            env.put("BUILD_URL", rootUrl + getUrl());
+            env.put("JOB_URL", rootUrl + getParent().getUrl());
+        }
+
+        if (!env.containsKey("HUDSON_HOME")) {
+            env.put("HUDSON_HOME", Hudson.getInstance().getRootDir().getPath());
+        }
+        //Update HUDSON_USER property if it is not set. (see HUDSON-4463 discussion)
+        if (!env.containsKey(EnvVars.HUDSON_USER_ENV_KEY)) {
+            String value = EnvVars.getHudsonUserEnvValue();
+            if (null != value) {
+                env.put(EnvVars.HUDSON_USER_ENV_KEY, value);
+            }
+        }
 
         Thread t = Thread.currentThread();
         if (t instanceof Executor) {
             Executor e = (Executor) t;
-            env.put("EXECUTOR_NUMBER",String.valueOf(e.getNumber()));
-            env.put("NODE_NAME",e.getOwner().getName());
+            env.put("EXECUTOR_NUMBER", String.valueOf(e.getNumber()));
+            env.put("NODE_NAME", e.getOwner().getName());
             Node n = e.getOwner().getNode();
-            if (n!=null)
-                env.put("NODE_LABELS",Util.join(n.getAssignedLabels()," "));
+            if (n != null) {
+                env.put("NODE_LABELS", Util.join(n.getAssignedLabels(), " "));
+            }
         }
 
-        for (EnvironmentContributor ec : EnvironmentContributor.all())
-            ec.buildEnvironmentFor(this,env,log);
-
+        for (EnvironmentContributor ec : EnvironmentContributor.all()) {
+            ec.buildEnvironmentFor(this, env, log);
+        }
         return env;
     }
 
@@ -1911,6 +1926,9 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
                                                               Functions.isArtifactsPermissionEnabled());
 
     private static class DefaultFeedAdapter implements FeedAdapter<Run> {
+
+        private static final String DESCRIPTION_SUFIX = "description:";
+
         public String getEntryTitle(Run entry) {
             return entry+" ("+entry.getBuildStatusSummary().message+")";
         }
@@ -1926,8 +1944,7 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
         }
 
         public String getEntryDescription(Run entry) {
-            // TODO: this could provide some useful details
-            return null;
+            return (entry.getDescription()!= null ? DESCRIPTION_SUFIX + entry.getDescription(): null);
         }
 
         public Calendar getEntryTimestamp(Run entry) {

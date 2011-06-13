@@ -220,6 +220,11 @@ public class ArgumentListBuilder implements Serializable {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return args.toString();
+    }
+
     public String[] toCommandArray() {
         return args.toArray(new String[args.size()]);
     }

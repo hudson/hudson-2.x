@@ -23,13 +23,12 @@
  */
 package hudson.pages;
 
-import static com.gargoylesoftware.htmlunit.WebAssert.assertElementPresent;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import hudson.model.PageDecorator;
 import net.sf.json.JSONObject;
-import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.Bug;
+import org.jvnet.hudson.test.HudsonTestCase;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class SystemConfigurationTestCase extends HudsonTestCase {
@@ -47,11 +46,11 @@ public class SystemConfigurationTestCase extends HudsonTestCase {
      * Asserts that bug#2289 is fixed.
      */
     @Bug(2289)
-    //TODO - Revisit this test case
+    //TODO- Revisit this test case
     public void ignore_testPageDecoratorIsListedInPage() throws Exception {
         pageDecoratorImpl = new PageDecoratorImpl();
         PageDecorator.ALL.add(pageDecoratorImpl);
-        
+
         HtmlPage page = new WebClient().goTo("configure");
         assertXPath(page,"//tr[@name='hudson-pages-SystemConfigurationTestCase$PageDecoratorImpl']");
 
@@ -59,6 +58,11 @@ public class SystemConfigurationTestCase extends HudsonTestCase {
         form.getInputByName("_.decoratorId").setValueAttribute("this_is_a_profile");
         submit(form);
         assertEquals("The decorator field was incorrect", "this_is_a_profile", pageDecoratorImpl.getDecoratorId());
+    }
+
+    //TODO remove me when testPageDecoratorIsListedInPage will be fixed
+    public void testStub(){
+        assertTrue(true);
     }
 
     /**

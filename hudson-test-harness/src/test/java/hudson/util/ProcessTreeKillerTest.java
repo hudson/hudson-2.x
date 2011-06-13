@@ -12,8 +12,7 @@ import org.kohsuke.stapler.StaplerResponse;
 
 public class ProcessTreeKillerTest extends HudsonTestCase {
 
-    //TODO - Revisit this test case
-    public void ignore_testManualAbortProcess() throws Exception {
+    public void testManualAbortProcess() throws Exception {
         ProcessTree.enabled = true;
         FreeStyleProject project = createFreeStyleProject();
 
