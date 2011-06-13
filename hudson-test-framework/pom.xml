@@ -65,6 +65,21 @@
 
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>rest-plugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-plugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven3-snapshots</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven-plugin</artifactId>
       <version>${project.version}</version>
     </dependency>
