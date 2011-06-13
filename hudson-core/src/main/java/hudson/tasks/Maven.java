@@ -319,7 +319,7 @@ public class Maven extends Builder {
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
         @CopyOnWrite
         private volatile MavenInstallation[] installations = new MavenInstallation[0];
-        public static boolean isEnabled = false;
+        public static boolean isEnabled = true;
 
         public DescriptorImpl() {
             DESCRIPTOR = this;
