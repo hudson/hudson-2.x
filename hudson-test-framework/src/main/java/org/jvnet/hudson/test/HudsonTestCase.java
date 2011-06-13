@@ -323,7 +323,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
             }
 
             hudson.cleanUp();
-            env.dispose();
+
             ExtensionList.clearLegacyInstances();
             DescriptorExtensionList.clearLegacyInstances();
 
@@ -335,6 +335,8 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
             // at some later point, leading to possible file descriptor overflow. So encourage GC now.
             // see http://bugs.sun.com/view_bug.do?bug_id=4950148
             System.gc();
+
+            env.dispose();
         }
     }
 
