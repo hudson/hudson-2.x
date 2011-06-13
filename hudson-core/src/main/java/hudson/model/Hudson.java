@@ -3165,7 +3165,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
 
                     // Make sure isQuietingDown is still true.
                     if (isQuietingDown) {
-                        servletContext.setAttribute("app", new HudsonIsRestarting());
+                        WebAppController.get().install(new HudsonIsRestarting());
                         // give some time for the browser to load the "reloading" page
                         LOGGER.info("Restart in 10 seconds");
                         Thread.sleep(10000);
@@ -3591,6 +3591,9 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         return this;
     }
     
+    /**
+     * @since 2.1.0
+     */
     public Iterator<GlobalMessage> getGlobalMessages() {
         return Iterators.readOnly(getExtensionList(GlobalMessage.class).iterator());
     }

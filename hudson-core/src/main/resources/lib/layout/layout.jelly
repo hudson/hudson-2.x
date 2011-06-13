@@ -232,9 +232,26 @@ THE SOFTWARE.
             </j:if>
           </div>
         </td>
-        <td id="main-panel" width="80%" height="100%">
-          <j:set var="mode" value="main-panel" />
-          <d:invokeBody/>
+        <td id="main-panel-container" width="80%" height="100%">
+          <table width="100%" height="100%" border="0">
+            <tr>
+              <td id="global-messages" width="100%">
+                <j:forEach var="message" items="${app.globalMessages}">
+                  <j:if test="${message.enabled}">
+                    <div class="global-message">
+                      <st:include page="detail.jelly" it="${message}"/>
+                    </div>
+                  </j:if>
+                </j:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td id="main-panel" width="100%" height="100%">
+                <j:set var="mode" value="main-panel" />
+                <d:invokeBody/>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
     </table>

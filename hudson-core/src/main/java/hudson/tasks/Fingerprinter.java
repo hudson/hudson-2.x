@@ -120,8 +120,6 @@ public class Fingerprinter extends Recorder implements Serializable {
                 record(build, listener, record, aa.getArtifacts() );
             }
 
-            //build.getActions().add(new FingerprintAction(build,record));
-            
             FingerprintAction.add(build, record);
 
         } catch (IOException e) {
@@ -238,7 +236,7 @@ public class Fingerprinter extends Recorder implements Serializable {
     /**
      * Action for displaying fingerprints.
      * 
-     * To ensure there is only one per build use {@link FingerprintAction#addToBuild(AbstractBuild, Map)}.
+     * To ensure there is only one per build use {@link FingerprintAction#add(AbstractBuild, Map)}.
      * This allows for additional fingerprint contributions outside of the {@link Fingerprinter}.
      */
     public static final class FingerprintAction implements RunAction {
@@ -247,42 +245,45 @@ public class Fingerprinter extends Recorder implements Serializable {
         /**
          * From file name to the digest.
          */
-        private /*almost final*/ PackedMap<String,String> record;
+        private /*almost final*/ Map<String,String> record;
 
         private transient WeakReference<Map<String,Fingerprint>> ref;
 
         public FingerprintAction(AbstractBuild build, Map<String, String> record) {
-            this.build = build;
-            this.record = PackedMap.of(record);
-            onLoad();   // make compact
+            this.build = checkNotNull(build);
+            this.record = PackedMap.of(checkNotNull(record));
         }
 
+        /**
+         * Add fingerprint records to this Action.  Assumes the records came from the same build that initially
+         * created the {@link FingerprintAction}.
+         */
         public void add(Map<String,String> moreRecords) {
             Map<String,String> r = new HashMap<String, String>(record);
             r.putAll(moreRecords);
             record = PackedMap.of(checkNotNull(r));
             ref = null;
         }
-        
+
         /**
-        * Adds the record to a {@link FingerprintAction} corresponding to the build.
-         * 
-        * Safely consolidates multiple sources of records (e.g. from different post build actions) into a single 
+         * Adds the record to a {@link FingerprintAction} corresponding to the build.
+         *
+         * Safely consolidates multiple sources of records (e.g. from different post build actions) into a single
          * {@link FingerprintAction}.
-        * 
-        * @param build to add the FingerprintAction and records to
-        * @param record to add
-         * 
+         *
+         * @param build to add the FingerprintAction and records to
+         * @param record to add
+         *
          * @since 2.1.0
          */
         public static void add(final AbstractBuild build, final Map<String, String> record) {
             checkNotNull(build);
             checkNotNull(record);
-           
+
             FingerprintAction action = build.getAction(FingerprintAction.class);
-           if(action != null) {
+            if(action != null) {
                 action.add(record);
-           } else {
+            } else {
                 build.addAction(new FingerprintAction(build,record));
             }
         }

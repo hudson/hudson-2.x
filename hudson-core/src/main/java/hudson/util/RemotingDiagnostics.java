@@ -132,7 +132,7 @@ public final class RemotingDiagnostics {
             try {
                 Object output = shell.evaluate(script);
                 if(output!=null)
-                pw.println("Result: "+output);
+                pw.print(output);
             } catch (Throwable t) {
                 t.printStackTrace(pw);
             }
