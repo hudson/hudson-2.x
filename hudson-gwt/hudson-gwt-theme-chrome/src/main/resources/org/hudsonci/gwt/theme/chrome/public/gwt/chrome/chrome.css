@@ -1194,15 +1194,15 @@ td.datePickerMonth {
 /**
  * Additional classes for Hudson theme, overriding previously defined styles. 
  */
-.sonatype-nestedTabLayoutPanel .gwt-TabLayoutPanelTab {
+.hudson-nestedTabLayoutPanel .gwt-TabLayoutPanelTab {
     border: none;
     background: none;
 }
 
-.sonatype-nestedTabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+.hudson-nestedTabLayoutPanel .gwt-TabLayoutPanelTab-selected {
     background: none;
 }
 
-.sonatype-nestedTabLayoutPanel .gwt-TabLayoutPanelContent {
+.hudson-nestedTabLayoutPanel .gwt-TabLayoutPanelContent {
     border-style: solid none none;
 }
