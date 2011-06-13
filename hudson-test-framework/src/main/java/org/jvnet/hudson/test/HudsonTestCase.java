@@ -50,6 +50,8 @@ import hudson.security.csrf.CrumbIssuer;
 import hudson.slaves.CommandLauncher;
 import hudson.slaves.DumbSlave;
 import hudson.slaves.RetentionStrategy;
+import hudson.stapler.WebAppController;
+import hudson.stapler.WebAppController.DefaultInstallStrategy;
 import hudson.tasks.Mailer;
 import hudson.tasks.Maven;
 import hudson.tasks.Ant;
@@ -257,7 +259,22 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
         
         hudson.setCrumbIssuer(new TestCrumbIssuer());
 
-        hudson.servletContext.setAttribute("app",hudson);
+        final WebAppController controller = WebAppController.get();
+        try {
+            controller.setContext(hudson.servletContext);
+        } catch (IllegalStateException e) {
+            // handle tests which run several times inside the same JVM
+            Field f = WebAppController.class.getDeclaredField("context");
+            f.setAccessible(true);
+            f.set(controller,hudson.servletContext);
+        }
+        try {
+            controller.setInstallStrategy(new DefaultInstallStrategy());
+        } catch (IllegalStateException e) {
+            // strategy already set ignore
+        }
+        controller.install(hudson);
+
         hudson.servletContext.setAttribute("version","?");
         WebAppMain.installExpressionFactory(new ServletContextEvent(hudson.servletContext));
 
