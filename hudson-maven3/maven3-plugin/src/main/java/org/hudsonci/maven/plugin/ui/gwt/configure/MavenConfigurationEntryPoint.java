@@ -42,7 +42,7 @@ import org.fusesource.restygwt.client.Defaults;
 public class MavenConfigurationEntryPoint
     implements EntryPoint
 {
-    public static final String MAIN_PANEL_ID = "sonatype-mavenConfigurationPanel";
+    public static final String MAIN_PANEL_ID = "hudson-mavenConfigurationPanel";
 
     private final MavenConfigurationInjector injector = GWT.create(MavenConfigurationInjector.class);
 

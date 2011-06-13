@@ -800,6 +800,8 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
                 if (v!=null) r.put(p.getName(),v);
             }
         }
+        
+        customizeBuildVariables(r);
 
         // allow the BuildWrappers to contribute additional build variables
         if (project instanceof BuildableItemWithBuildWrappers) {
@@ -809,6 +811,14 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
 
         return r;
     }
+    
+    /**
+     * @since 2.1.0
+     */
+    protected void customizeBuildVariables(final Map<String, String> vars) {
+        // nop
+    }
+
 
     /**
      * Creates {@link VariableResolver} backed by {@link #getBuildVariables()}.

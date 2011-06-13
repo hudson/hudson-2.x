@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 
 import hudson.model.Hudson;
 
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.FINEST;
 
 /**
  * Discovers initialization tasks from {@link Initializer}.
@@ -86,16 +86,16 @@ public class InitializerFinder extends TaskBuilder {
      * Obtains the display name of the given initialization task
      */
     protected String getDisplayNameOf(Method e, Initializer i) {
+        Class<?> c = e.getDeclaringClass();
         try {
-            Class<?> c = e.getDeclaringClass();
             ResourceBundleHolder rb = ResourceBundleHolder.get(c.getClassLoader().loadClass(c.getPackage().getName() + ".Messages"));
 
             String key = i.displayName();
             if (key.length()==0)  return c.getSimpleName()+"."+e.getName();
             return rb.format(key);
         } catch (ClassNotFoundException x) {
-            LOGGER.log(WARNING, "Failed to load "+x.getMessage()+" for "+e.toString(),x);
-            return "";
+            LOGGER.log(FINEST, "Failed to load "+x.getMessage()+" for "+e.toString(),x);
+            return c.getSimpleName()+"."+e.getName();
         }
     }
 

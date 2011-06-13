@@ -84,6 +84,14 @@ public class MatrixRun extends Build<MatrixConfiguration,MatrixRun> {
     public MatrixBuild getParentBuild() {
         return getParent().getParent().getBuildByNumber(getNumber());
     }
+    
+    @Override
+    public void checkPermission(hudson.security.Permission p) {
+        MatrixBuild parentBuild = getParentBuild();
+        if(parentBuild != null) {
+            parentBuild.checkPermission(p);
+        }
+    };
 
     @Override
     public String getDisplayName() {
@@ -101,19 +109,20 @@ public class MatrixRun extends Build<MatrixConfiguration,MatrixRun> {
         return super.getDisplayName();
     }
 
+    /**
+     * @since 2.1.0
+     */
     @Override
-    public Map<String,String> getBuildVariables() {
-        Map<String,String> r = super.getBuildVariables();
-        // pick up user axes
+    protected void customizeBuildVariables(final Map<String, String> vars) {
         AxisList axes = getParent().getParent().getAxes();
         for (Map.Entry<String,String> e : getParent().getCombination().entrySet()) {
             Axis a = axes.find(e.getKey());
-            if (a!=null)
-                a.addBuildVariable(e.getValue(),r);
-            else
-                r.put(e.getKey(), e.getValue());
+            if (a!=null) {
+                a.addBuildVariable(e.getValue(),vars);
+            }else {
+                vars.put(e.getKey(), e.getValue());
+            }
         }
-        return r;
     }
 
     /**
@@ -154,7 +163,7 @@ public class MatrixRun extends Build<MatrixConfiguration,MatrixRun> {
                 FilePath ws = n.getRootPath().child(getEnvironment(listener).expand(customWorkspace));
                 // We allow custom workspaces to be used concurrently between jobs.
                 return Lease.createDummyLease(ws.child(subtree));
-            } else {
+            } else {   
                 // Use default workspace as assigned by Hudson.
                 Node node = getBuiltOn();
                 FilePath ws = node.getWorkspaceFor(getParent().getParent());

@@ -486,7 +486,7 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
     }
 
     public String toString() {
-        return super.toString()+'['+getFullName()+']';
+        return getClass().getSimpleName()+'['+getFullName()+']';
     }
 
     /**

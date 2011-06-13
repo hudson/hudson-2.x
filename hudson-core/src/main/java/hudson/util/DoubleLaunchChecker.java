@@ -23,7 +23,6 @@
  */
 package hudson.util;
 
-import hudson.WebAppMain;
 import hudson.model.Hudson;
 import hudson.stapler.WebAppController;
 import hudson.triggers.SafeTimerTask;
