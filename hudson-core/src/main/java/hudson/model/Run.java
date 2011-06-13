@@ -601,7 +601,11 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
 
     @Override
     public String toString() {
-        return getFullDisplayName();
+        return getFullName();
+    }
+
+    public String getFullName() {
+        return project.getFullName()+" #"+number;
     }
 
     @Exported

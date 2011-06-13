@@ -220,7 +220,7 @@ public class LogRecorder extends AbstractModelObject implements Saveable {
      * RSS feed for log entries.
      */
     public void doRss( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
-        LogRecorderManager.doRss(req,rsp,getLogRecords());
+        LogRecorderManager.doRss(req,rsp,getDisplayName(),getLogRecords());
     }
 
     /**

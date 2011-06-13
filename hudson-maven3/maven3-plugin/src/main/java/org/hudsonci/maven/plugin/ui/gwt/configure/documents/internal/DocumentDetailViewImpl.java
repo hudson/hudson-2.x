@@ -168,7 +168,7 @@ public class DocumentDetailViewImpl
 
         ScrollPanel attributesTableScroller = new ScrollPanel();
         attributesTableScroller.setSize("100%", "100%");
-        // HACK: Seems like we have to always show the bar here, or the layout gets all *ucked up :-\
+        // HACK: Seems like we have to always show the bar here, or the layout gets all messed up :-\
         // attributesTableScroller.setAlwaysShowScrollBars(true); leaving out for now to see if we can fix... pffff
         attributesTableScroller.setWidget(attributesTable);
         fieldsTable.setWidget(row, 1, attributesTableScroller);

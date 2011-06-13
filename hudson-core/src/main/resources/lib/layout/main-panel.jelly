@@ -28,9 +28,6 @@ THE SOFTWARE.
   </st:documentation>
 
   <j:if test="${mode=='main-panel'}">
-    <j:if test="${app.isQuietingDown()}">
-      <div id='shutdown-msg'>${%Hudson is going to shut down}</div>
-    </j:if>
     <a name="skip2content" />
     <d:invokeBody />
   </j:if>

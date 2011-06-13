@@ -122,7 +122,7 @@ public final class WebAppMain implements ServletContextListener {
                 return;
             }
 
-            try {// remove Sun PKCS11 provider if present. See http://wiki.hudson-ci.com/wiki/display/HUDSON/Solaris+Issue+6276483
+            try {// remove Sun PKCS11 provider if present. See http://wiki.hudson-ci.org/display/HUDSON/Solaris+Issue+6276483
                 Security.removeProvider("SunPKCS11-Solaris");
             } catch (SecurityException e) {
                 // ignore this error.

@@ -319,6 +319,7 @@ public class Maven extends Builder {
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
         @CopyOnWrite
         private volatile MavenInstallation[] installations = new MavenInstallation[0];
+        public static boolean isEnabled = true;
 
         public DescriptorImpl() {
             DESCRIPTOR = this;
@@ -326,7 +327,7 @@ public class Maven extends Builder {
         }
 
         public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-            return true;
+            return isEnabled;
         }
 
         @Override

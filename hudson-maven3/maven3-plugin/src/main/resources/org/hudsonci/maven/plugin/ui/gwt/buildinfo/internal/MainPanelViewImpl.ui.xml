@@ -63,7 +63,7 @@ THE SOFTWARE.
                             System
                             Environment
                     -->
-                    <g:TabLayoutPanel barUnit="EM" barHeight="2" addStyleNames="sonatype-nestedTabLayoutPanel">
+                    <g:TabLayoutPanel barUnit="EM" barHeight="2" addStyleNames="hudson-nestedTabLayoutPanel">
                         <g:tab>
                             <g:header>Version</g:header>
                             <g:ScrollPanel>
