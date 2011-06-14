@@ -1,4 +1,4 @@
-package hudson.cli;
+package org.eclipse.hudson.cli;
 
 import java.io.OutputStream;
 import java.io.IOException;
