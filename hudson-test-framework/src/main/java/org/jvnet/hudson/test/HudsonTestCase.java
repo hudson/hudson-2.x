@@ -61,6 +61,8 @@ import hudson.util.PersistedList;
 import hudson.util.ReflectionUtils;
 import hudson.util.StreamTaskListener;
 
+import hudson.model.Node.Mode;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

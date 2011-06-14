@@ -34,7 +34,6 @@ import hudson.remoting.Engine;
 import hudson.remoting.Channel.Listener;
 import hudson.remoting.Channel.Mode;
 import hudson.cli.CliManagerImpl;
-import hudson.cli.CliEntryPoint;
 import hudson.util.IOException2;
 
 import java.io.ByteArrayInputStream;
@@ -55,6 +54,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.eclipse.hudson.cli.CliEntryPoint;
 
 /**
  * Listens to incoming TCP connections from JNLP slave agents and CLI.

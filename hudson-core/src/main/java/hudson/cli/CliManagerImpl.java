@@ -30,6 +30,7 @@ import org.apache.commons.discovery.resource.classes.DiscoverClasses;
 import org.apache.commons.discovery.resource.names.DiscoverServiceNames;
 import org.apache.commons.discovery.ResourceNameIterator;
 import org.apache.commons.discovery.ResourceClassIterator;
+import org.eclipse.hudson.cli.CliEntryPoint;
 import org.kohsuke.args4j.spi.OptionHandler;
 import org.kohsuke.args4j.CmdLineParser;
 import org.jvnet.tiger_types.Types;

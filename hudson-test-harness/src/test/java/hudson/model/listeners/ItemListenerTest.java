@@ -23,8 +23,9 @@
  */
 package hudson.model.listeners;
 
-import hudson.cli.CLI;
 import hudson.model.Item;
+
+import org.eclipse.hudson.cli.CLI;
 import org.jvnet.hudson.test.HudsonTestCase;
 
 import java.io.ByteArrayInputStream;

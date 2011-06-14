@@ -25,6 +25,8 @@ package hudson.cli;
 
 import hudson.model.FreeStyleProject;
 import java.io.IOException;
+
+import org.eclipse.hudson.cli.CLI;
 import org.jvnet.hudson.test.HudsonTestCase;
 
 /**

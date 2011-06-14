@@ -1,6 +1,5 @@
 package hudson.security;
 
-import hudson.cli.CLI;
 import hudson.cli.CLICommand;
 import hudson.cli.CliManagerImpl;
 import hudson.cli.ClientAuthenticationCache;
@@ -8,6 +7,7 @@ import hudson.cli.LoginCommand;
 import hudson.cli.LogoutCommand;
 import hudson.model.Hudson;
 import org.acegisecurity.Authentication;
+import org.eclipse.hudson.cli.CLI;
 import org.jvnet.hudson.test.For;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.TestExtension;
