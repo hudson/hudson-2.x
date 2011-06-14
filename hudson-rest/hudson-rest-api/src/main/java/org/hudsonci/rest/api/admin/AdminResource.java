@@ -25,8 +25,10 @@
 package org.hudsonci.rest.api.admin;
 
 import javax.inject.Inject;
-import org.hudsonci.service.SecurityService;
-import org.hudsonci.service.SystemService;
+
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.service.SystemService;
+
 import hudson.XmlFile;
 import hudson.lifecycle.RestartNotSupportedException;
 

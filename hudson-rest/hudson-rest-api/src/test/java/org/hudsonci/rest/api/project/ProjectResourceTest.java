@@ -24,9 +24,9 @@
 
 package org.hudsonci.rest.api.project;
 
+import org.eclipse.hudson.service.ProjectNotFoundException;
+import org.eclipse.hudson.service.ProjectService;
 import org.hudsonci.rest.model.project.ProjectDTO;
-import org.hudsonci.service.ProjectNotFoundException;
-import org.hudsonci.service.ProjectService;
 import hudson.model.AbstractProject;
 
 import org.hudsonci.rest.api.project.ProjectConverter;

@@ -24,8 +24,8 @@
 
 package org.hudsonci.rest.plugin;
 
-import org.hudsonci.events.EventConsumer;
-import org.hudsonci.events.ready.ReadyEvent;
+import org.eclipse.hudson.events.EventConsumer;
+import org.eclipse.hudson.events.ready.ReadyEvent;
 
 import hudson.Plugin;
 import hudson.model.Descriptor;

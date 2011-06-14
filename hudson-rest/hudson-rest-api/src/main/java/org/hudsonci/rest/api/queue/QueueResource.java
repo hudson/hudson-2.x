@@ -24,8 +24,9 @@
 
 package org.hudsonci.rest.api.queue;
 
-import org.hudsonci.service.QueueService;
-import org.hudsonci.service.SecurityService;
+import org.eclipse.hudson.service.QueueService;
+import org.eclipse.hudson.service.SecurityService;
+
 import hudson.model.Hudson;
 import javax.inject.Inject;
 

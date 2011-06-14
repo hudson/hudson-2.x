@@ -24,11 +24,11 @@
 
 package org.hudsonci.rest.api.project;
 
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.service.SystemService;
+import org.eclipse.hudson.service.internal.ProjectServiceImpl;
 import org.hudsonci.rest.model.project.ProjectsDTO;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
-import org.hudsonci.service.SystemService;
-import org.hudsonci.service.internal.ProjectServiceImpl;
 
 import org.hudsonci.rest.api.build.BuildConverter;
 import org.hudsonci.rest.api.internal.PermissionsFactory;

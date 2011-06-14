@@ -35,11 +35,11 @@ import javax.ws.rs.PathParam;
 
 import javax.inject.Inject;
 
+import org.eclipse.hudson.service.NodeService;
 import org.hudsonci.rest.api.internal.ResourceSupport;
 
 import org.hudsonci.rest.model.NodeDTO;
 import org.hudsonci.rest.model.NodesDTO;
-import org.hudsonci.service.NodeService;
 
 /**
  * Access Nodes

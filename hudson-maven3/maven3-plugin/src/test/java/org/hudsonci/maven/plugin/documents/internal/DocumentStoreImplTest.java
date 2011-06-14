@@ -24,9 +24,9 @@
 
 package org.hudsonci.maven.plugin.documents.internal;
 
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.config.DocumentTypeDTO;
-import org.hudsonci.service.SystemService;
 import org.hudsonci.utils.test.TestUtil;
 
 import org.hudsonci.maven.plugin.documents.internal.DocumentStoreImpl;

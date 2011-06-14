@@ -24,12 +24,12 @@
 
 package org.hudsonci.maven.plugin.builder;
 
+import org.eclipse.hudson.service.NodeService;
+import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
 import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.service.NodeService;
-import org.hudsonci.service.SecurityService;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 

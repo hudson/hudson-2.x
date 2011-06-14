@@ -24,8 +24,8 @@
 
 package org.hudsonci.maven.plugin.dependencymonitor.internal;
 
+import org.eclipse.hudson.service.ProjectService;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.service.ProjectService;
 import hudson.model.AbstractProject;
 
 import org.hudsonci.maven.plugin.dependencymonitor.ArtifactsExtractor;

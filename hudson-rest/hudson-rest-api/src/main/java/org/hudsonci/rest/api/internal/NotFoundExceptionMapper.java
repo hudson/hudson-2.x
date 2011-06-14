@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.api.internal;
 
-import org.hudsonci.service.NotFoundException;
+import org.eclipse.hudson.service.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

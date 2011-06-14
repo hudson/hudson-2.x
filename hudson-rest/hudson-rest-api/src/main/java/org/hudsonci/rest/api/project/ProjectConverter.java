@@ -26,13 +26,13 @@ package org.hudsonci.rest.api.project;
 
 import javax.inject.Inject;
 
+import org.eclipse.hudson.service.SystemService;
 import org.eclipse.hudson.utils.tasks.JobUuid;
 import org.hudsonci.rest.api.build.BuildConverter;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
 import org.hudsonci.rest.model.project.ProjectDTO;
 import org.hudsonci.rest.model.project.ProjectReferenceDTO;
-import org.hudsonci.service.SystemService;
 
 import hudson.matrix.MatrixConfiguration;
 import hudson.matrix.MatrixProject;

@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder;
 
-import org.hudsonci.service.NotFoundException;
+import org.eclipse.hudson.service.NotFoundException;
 
 /**
  * Thrown when a requested build-state or a collection of build-states is not found.

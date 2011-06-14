@@ -24,11 +24,11 @@
 
 package org.hudsonci.maven.plugin.documents.internal;
 
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.utils.io.Closer;
 import org.hudsonci.utils.marshal.Marshaller;
 import org.hudsonci.utils.marshal.XStreamMarshaller;
 import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.service.SystemService;
 import com.thoughtworks.xstream.XStream;
 
 import org.hudsonci.maven.plugin.documents.DocumentStore;

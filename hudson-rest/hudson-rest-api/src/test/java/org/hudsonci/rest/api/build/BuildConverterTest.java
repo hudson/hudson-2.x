@@ -24,7 +24,8 @@
 
 package org.hudsonci.rest.api.build;
 
-import org.hudsonci.service.SystemService;
+import org.eclipse.hudson.service.SystemService;
+
 import hudson.model.ItemGroup;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;

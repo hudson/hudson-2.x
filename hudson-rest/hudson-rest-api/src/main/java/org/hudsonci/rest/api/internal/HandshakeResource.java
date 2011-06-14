@@ -24,7 +24,8 @@
 
 package org.hudsonci.rest.api.internal;
 
-import org.hudsonci.service.SystemService;
+import org.eclipse.hudson.service.SystemService;
+
 import javax.inject.Inject;
 import hudson.init.InitMilestone;
 

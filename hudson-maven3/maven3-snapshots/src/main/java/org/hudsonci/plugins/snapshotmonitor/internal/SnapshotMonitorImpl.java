@@ -25,8 +25,9 @@
 package org.hudsonci.plugins.snapshotmonitor.internal;
 
 import com.google.common.collect.Sets;
+
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.service.SystemService;
 import hudson.matrix.MatrixRun;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;

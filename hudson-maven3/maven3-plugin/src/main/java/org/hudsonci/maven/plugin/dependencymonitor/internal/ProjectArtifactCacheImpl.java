@@ -28,8 +28,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+
+import org.eclipse.hudson.service.ProjectService;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.service.ProjectService;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 

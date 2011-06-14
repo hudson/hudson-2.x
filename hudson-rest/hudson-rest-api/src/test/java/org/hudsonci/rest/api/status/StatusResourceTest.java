@@ -29,6 +29,10 @@ import static org.mockito.Mockito.*;
 import hudson.init.InitMilestone;
 import hudson.model.Hudson;
 
+import org.eclipse.hudson.service.NodeService;
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.status.StatusConverter;
 import org.hudsonci.rest.api.status.StatusResource;
 import org.hudsonci.rest.api.user.UserConverter;
@@ -40,10 +44,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import org.hudsonci.rest.model.InitLevelDTO;
 import org.hudsonci.rest.model.StatusDTO;
-import org.hudsonci.service.NodeService;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
-import org.hudsonci.service.SystemService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StatusResourceTest

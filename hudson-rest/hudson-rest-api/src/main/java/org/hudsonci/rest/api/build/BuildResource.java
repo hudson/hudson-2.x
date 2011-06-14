@@ -24,9 +24,10 @@
 
 package org.hudsonci.rest.api.build;
 
-import org.hudsonci.service.BuildService;
+import org.eclipse.hudson.service.BuildService;
+import org.eclipse.hudson.service.ProjectService;
+
 import hudson.model.AbstractProject;
-import org.hudsonci.service.ProjectService;
 import javax.inject.Inject;
 import org.hudsonci.utils.io.OffsetLimitInputStream;
 import org.hudsonci.rest.model.build.BuildDTO;

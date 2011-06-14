@@ -32,12 +32,12 @@ import javax.ws.rs.Path;
 
 import javax.inject.Inject;
 
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.internal.ResourceSupport;
 import org.hudsonci.rest.api.user.UserConverter;
 
 import org.hudsonci.rest.model.StatusDTO;
-import org.hudsonci.service.SecurityService;
-import org.hudsonci.service.SystemService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

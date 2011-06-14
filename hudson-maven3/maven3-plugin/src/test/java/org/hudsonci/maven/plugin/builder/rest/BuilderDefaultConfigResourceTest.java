@@ -24,11 +24,11 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
+import org.eclipse.hudson.service.BuildService;
+import org.eclipse.hudson.service.DescriptorService;
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
-import org.hudsonci.service.BuildService;
-import org.hudsonci.service.DescriptorService;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
 
 import org.hudsonci.maven.plugin.builder.MavenBuilderDescriptor;
 import org.hudsonci.maven.plugin.builder.MavenBuilderService;

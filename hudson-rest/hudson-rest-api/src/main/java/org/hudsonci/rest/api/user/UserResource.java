@@ -35,10 +35,10 @@ import javax.ws.rs.PathParam;
 
 import javax.inject.Inject;
 
+import org.eclipse.hudson.service.SecurityService;
 import org.hudsonci.rest.api.internal.ResourceSupport;
 
 import org.hudsonci.rest.model.UserDTO;
-import org.hudsonci.service.SecurityService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

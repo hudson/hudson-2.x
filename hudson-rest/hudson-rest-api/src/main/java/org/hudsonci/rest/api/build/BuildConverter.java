@@ -34,12 +34,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
 import org.hudsonci.rest.model.build.BuildDTO;
 import org.hudsonci.rest.model.build.BuildResultDTO;
 import org.hudsonci.rest.model.build.BuildStateDTO;
-import org.hudsonci.service.SystemService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

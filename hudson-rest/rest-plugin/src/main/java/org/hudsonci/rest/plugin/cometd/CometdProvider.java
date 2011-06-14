@@ -24,13 +24,13 @@
 
 package org.hudsonci.rest.plugin.cometd;
 
-import org.hudsonci.servlets.ServletContainer;
-import org.hudsonci.servlets.ServletContainerAware;
-import org.hudsonci.servlets.ServletRegistration;
 import org.cometd.Bayeux;
 import org.cometd.Channel;
 import org.cometd.server.continuation.ContinuationCometdServlet;
 import org.cometd.server.ext.AcknowledgedMessagesExtension;
+import org.eclipse.hudson.servlets.ServletContainer;
+import org.eclipse.hudson.servlets.ServletContainerAware;
+import org.eclipse.hudson.servlets.ServletRegistration;
 import org.hudsonci.rest.plugin.ApiProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

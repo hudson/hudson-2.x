@@ -24,13 +24,13 @@
 
 package org.hudsonci.rest.api.project;
 
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
 import org.hudsonci.utils.io.Closer;
 import org.hudsonci.rest.model.PermissionsDTO;
 import org.hudsonci.rest.model.build.BuildsDTO;
 import org.hudsonci.rest.model.project.ProjectDTO;
 import org.hudsonci.rest.model.project.ProjectsDTO;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
 import hudson.XmlFile;
 import hudson.model.AbstractProject;
 import hudson.model.Cause;

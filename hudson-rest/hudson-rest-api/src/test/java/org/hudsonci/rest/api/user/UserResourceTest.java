@@ -27,6 +27,10 @@ package org.hudsonci.rest.api.user;
 import hudson.model.User;
 import hudson.security.Permission;
 
+import org.eclipse.hudson.service.NodeService;
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.user.UserConverter;
 import org.hudsonci.rest.api.user.UserResource;
 import org.junit.Assert;
@@ -37,10 +41,6 @@ import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import org.hudsonci.rest.model.UserDTO;
-import org.hudsonci.service.NodeService;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
-import org.hudsonci.service.SystemService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserResourceTest

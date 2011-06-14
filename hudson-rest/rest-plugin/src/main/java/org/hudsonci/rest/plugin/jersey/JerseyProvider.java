@@ -24,11 +24,11 @@
 
 package org.hudsonci.rest.plugin.jersey;
 
+import org.eclipse.hudson.servlets.ServletContainer;
+import org.eclipse.hudson.servlets.ServletContainerAware;
+import org.eclipse.hudson.servlets.ServletRegistration;
 import org.hudsonci.utils.id.OID;
 import org.hudsonci.rest.server.internal.jersey.RestServlet;
-import org.hudsonci.servlets.ServletContainer;
-import org.hudsonci.servlets.ServletContainerAware;
-import org.hudsonci.servlets.ServletRegistration;
 
 import org.hudsonci.rest.plugin.ApiProvider;
 import org.hudsonci.rest.plugin.RestComponentProvider;

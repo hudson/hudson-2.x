@@ -26,13 +26,13 @@ package org.hudsonci.maven.plugin.builder.internal;
 
 import com.google.common.collect.Lists;
 
+import org.eclipse.hudson.service.BuildService;
+import org.eclipse.hudson.service.DescriptorService;
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.tasks.MetaProject;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.service.BuildService;
-import org.hudsonci.service.DescriptorService;
-import org.hudsonci.service.ProjectService;
-import org.hudsonci.service.SecurityService;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
 import hudson.model.Item;
