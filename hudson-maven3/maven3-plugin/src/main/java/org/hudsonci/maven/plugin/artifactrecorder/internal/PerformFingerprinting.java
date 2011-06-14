@@ -24,11 +24,11 @@
 
 package org.hudsonci.maven.plugin.artifactrecorder.internal;
 
+import org.eclipse.hudson.utils.tasks.PerformOperation;
 import org.hudsonci.utils.common.Varargs;
 import org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.ArtifactDTOHelper;
-import org.hudsonci.utils.tasks.PerformOperation;
 
 import hudson.FilePath;
 import hudson.Launcher;

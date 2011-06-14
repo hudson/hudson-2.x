@@ -24,7 +24,8 @@
 
 package org.hudsonci.maven.plugin.builder;
 
-import org.hudsonci.utils.tasks.MetaProject;
+import org.eclipse.hudson.utils.tasks.MetaProject;
+
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.TransientProjectActionFactory;

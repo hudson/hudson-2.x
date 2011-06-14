@@ -24,7 +24,8 @@
 
 package org.hudsonci.plugins.snapshotmonitor;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import hudson.matrix.MatrixProject;
 import hudson.model.AbstractProject;

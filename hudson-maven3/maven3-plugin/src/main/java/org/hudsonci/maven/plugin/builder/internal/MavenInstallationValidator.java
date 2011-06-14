@@ -24,12 +24,12 @@
 
 package org.hudsonci.maven.plugin.builder.internal;
 
+import org.eclipse.hudson.utils.tasks.Chmod;
+import org.eclipse.hudson.utils.tasks.FetchClassLocation;
+import org.eclipse.hudson.utils.tasks.TaskListenerLogger;
 import org.hudsonci.maven.plugin.install.MavenInstallation;
 import org.hudsonci.maven.plugin.install.SlaveBundleInstaller;
 import org.sonatype.gossip.support.MuxLoggerFactory;
-import org.hudsonci.utils.tasks.Chmod;
-import org.hudsonci.utils.tasks.FetchClassLocation;
-import org.hudsonci.utils.tasks.TaskListenerLogger;
 import hudson.AbortException;
 import hudson.EnvVars;
 import hudson.FilePath;

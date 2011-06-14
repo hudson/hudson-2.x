@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.dependencymonitor.internal;
 
-import org.hudsonci.utils.tasks.MetaProject;
+import org.eclipse.hudson.utils.tasks.MetaProject;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import org.hudsonci.service.DependencyGraphService;
 import hudson.model.AbstractBuild;

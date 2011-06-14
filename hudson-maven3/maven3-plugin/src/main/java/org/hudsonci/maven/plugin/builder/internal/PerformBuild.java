@@ -24,6 +24,8 @@
 
 package org.hudsonci.maven.plugin.builder.internal;
 
+import org.eclipse.hudson.utils.tasks.OpenServerSocket;
+import org.eclipse.hudson.utils.tasks.PerformOperation;
 import org.hudsonci.maven.model.PropertiesDTO;
 import org.hudsonci.maven.model.state.BuildResultDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
@@ -31,8 +33,6 @@ import org.hudsonci.maven.model.state.BuildSummaryDTO;
 import org.hudsonci.maven.model.state.ExecutionActivityDTO;
 import org.hudsonci.maven.model.state.ExecutionActivityTypeDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.utils.tasks.OpenServerSocket;
-import org.hudsonci.utils.tasks.PerformOperation;
 import hudson.AbortException;
 import hudson.EnvVars;
 import hudson.FilePath;

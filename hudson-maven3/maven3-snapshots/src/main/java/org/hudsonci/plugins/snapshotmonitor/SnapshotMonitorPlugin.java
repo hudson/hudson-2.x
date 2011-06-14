@@ -24,12 +24,12 @@
 
 package org.hudsonci.plugins.snapshotmonitor;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
 import hudson.Plugin;
 import hudson.model.Descriptor;
 import hudson.model.Items;
 import net.sf.json.JSONObject;
 import org.codehaus.plexus.util.StringUtils;
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
 import org.kohsuke.stapler.StaplerRequest;
 
 import javax.inject.Named;

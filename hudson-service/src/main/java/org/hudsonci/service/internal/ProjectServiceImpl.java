@@ -42,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.eclipse.hudson.utils.tasks.JobUuid;
 import org.hudsonci.service.ProjectNotFoundException;
 import org.hudsonci.service.ProjectService;
 import org.hudsonci.service.SecurityService;
@@ -50,7 +51,6 @@ import org.hudsonci.service.SystemIntegrityViolationException;
 
 import com.google.common.base.Preconditions;
 
-import org.hudsonci.utils.tasks.JobUuid;
 
 /**
  * Default {@link ProjectService} implementation.

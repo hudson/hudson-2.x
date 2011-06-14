@@ -25,7 +25,9 @@
 package org.hudsonci.plugins.snapshotmonitor.internal;
 
 import com.google.common.collect.Sets;
-import org.hudsonci.utils.tasks.MetaProject;
+
+import org.eclipse.hudson.utils.tasks.MetaProject;
+import org.eclipse.hudson.utils.tasks.TaskListenerLogger;
 
 import org.hudsonci.maven.plugin.dependencymonitor.ArtifactsExtractor;
 import org.hudsonci.maven.plugin.dependencymonitor.ArtifactsPair;
@@ -33,7 +35,6 @@ import org.hudsonci.maven.plugin.dependencymonitor.ProjectArtifactCache;
 import org.hudsonci.plugins.snapshotmonitor.SnapshotMonitor;
 import org.hudsonci.plugins.snapshotmonitor.SnapshotTrigger;
 import org.sonatype.gossip.support.MuxLoggerFactory;
-import org.hudsonci.utils.tasks.TaskListenerLogger;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import org.hudsonci.maven.model.MavenCoordinatesDTOHelper;
 import hudson.matrix.MatrixRun;

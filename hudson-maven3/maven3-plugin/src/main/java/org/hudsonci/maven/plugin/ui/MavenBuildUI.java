@@ -24,8 +24,8 @@
 
 package org.hudsonci.maven.plugin.ui;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
+import org.eclipse.hudson.utils.plugin.ui.UIComponentSupport;
 import org.hudsonci.rest.common.ProjectNameCodec;
 import org.hudsonci.inject.injecto.Injectable;
 import org.hudsonci.maven.plugin.builder.MavenBuildAction;

@@ -24,8 +24,8 @@
 
 package org.hudsonci.maven.plugin.artifactrecorder;
 
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
 import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import org.hudsonci.maven.plugin.artifactrecorder.internal.PerformArchiving;

@@ -24,7 +24,8 @@
 
 package org.hudsonci.maven.plugin.install;
 
-import org.hudsonci.utils.plugin.ui.StaplerAccessible;
+import org.eclipse.hudson.utils.plugin.ui.StaplerAccessible;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamInclude;
 import hudson.EnvVars;

@@ -25,7 +25,8 @@
 package org.hudsonci.maven.plugin.builder.internal;
 
 import com.google.common.collect.Lists;
-import org.hudsonci.utils.tasks.MetaProject;
+
+import org.eclipse.hudson.utils.tasks.MetaProject;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.service.BuildService;

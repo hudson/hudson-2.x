@@ -24,6 +24,8 @@
 
 package org.hudsonci.maven.plugin.builder;
 
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
+import org.eclipse.hudson.utils.plugin.ui.RenderableEnum;
 import org.hudsonci.maven.model.PropertiesDTO;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
 import org.hudsonci.maven.model.config.ChecksumModeDTO;
@@ -34,8 +36,6 @@ import org.hudsonci.maven.model.config.MakeModeDTO;
 import org.hudsonci.maven.model.config.SnapshotUpdateModeDTO;
 import org.hudsonci.maven.model.config.VerbosityDTO;
 import org.hudsonci.service.SecurityService;
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.RenderableEnum;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import hudson.XmlFile;

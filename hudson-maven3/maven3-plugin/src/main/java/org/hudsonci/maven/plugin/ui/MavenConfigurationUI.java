@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.plugin.ui;
 
+import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
+import org.eclipse.hudson.utils.plugin.ui.UIComponentSupport;
 import org.hudsonci.maven.plugin.ui.gwt.configure.MavenConfigurationEntryPoint;
 
-import org.hudsonci.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.utils.plugin.ui.UIComponentSupport;
 import hudson.model.Hudson;
 import hudson.security.Permission;
 
