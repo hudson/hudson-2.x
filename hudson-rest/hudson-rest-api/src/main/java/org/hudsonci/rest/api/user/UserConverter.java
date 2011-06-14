@@ -26,7 +26,7 @@ package org.hudsonci.rest.api.user;
 
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.UserDTO;
+import org.eclipse.hudson.rest.model.UserDTO;
 
 /**
  * Converts {@link hudson.model.User} into {@link UserDTO} objects.

@@ -26,8 +26,8 @@ package org.hudsonci.rest.api.node;
 
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.NodeDTO;
-import org.hudsonci.rest.model.NodeModeDTO;
+import org.eclipse.hudson.rest.model.NodeDTO;
+import org.eclipse.hudson.rest.model.NodeModeDTO;
 
 /**
  * Converts {@link hudson.model.Node} to {@link NodeDTO} objects.

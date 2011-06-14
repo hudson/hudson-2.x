@@ -31,8 +31,8 @@ import org.eclipse.hudson.utils.tasks.JobUuid;
 import org.hudsonci.rest.api.build.BuildConverter;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.project.ProjectDTO;
-import org.hudsonci.rest.model.project.ProjectReferenceDTO;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.rest.model.project.ProjectReferenceDTO;
 
 import hudson.matrix.MatrixConfiguration;
 import hudson.matrix.MatrixProject;

@@ -27,7 +27,7 @@ package org.hudsonci.rest.api.project;
 import javax.inject.Inject;
 
 import org.eclipse.hudson.service.ProjectService;
-import org.hudsonci.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
 import hudson.model.AbstractProject;
 
 import javax.ws.rs.GET;

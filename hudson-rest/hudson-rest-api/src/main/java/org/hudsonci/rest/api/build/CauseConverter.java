@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.api.build;
 
-import org.hudsonci.rest.model.build.CauseDTO;
+import org.eclipse.hudson.rest.model.build.CauseDTO;
 
 import java.util.ArrayList;
 import java.util.List;

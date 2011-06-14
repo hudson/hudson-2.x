@@ -26,12 +26,12 @@ package org.hudsonci.rest.client.internal.ext;
 
 import com.google.common.base.Preconditions;
 import javax.inject.Inject;
-import org.hudsonci.rest.model.build.BuildDTO;
-import org.hudsonci.rest.model.build.BuildEventDTO;
-import org.hudsonci.rest.model.build.BuildsDTO;
-import org.hudsonci.rest.model.build.ChangesDTO;
-import org.hudsonci.rest.model.build.ConsoleDTO;
-import org.hudsonci.rest.model.build.TestsDTO;
+import org.eclipse.hudson.rest.model.build.BuildDTO;
+import org.eclipse.hudson.rest.model.build.BuildEventDTO;
+import org.eclipse.hudson.rest.model.build.BuildsDTO;
+import org.eclipse.hudson.rest.model.build.ChangesDTO;
+import org.eclipse.hudson.rest.model.build.ConsoleDTO;
+import org.eclipse.hudson.rest.model.build.TestsDTO;
 import com.sun.jersey.api.client.ClientResponse;
 import org.cometd.Client;
 import org.cometd.Message;

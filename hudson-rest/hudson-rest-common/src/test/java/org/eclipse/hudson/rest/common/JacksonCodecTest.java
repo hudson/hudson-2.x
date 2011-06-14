@@ -26,8 +26,8 @@ package org.eclipse.hudson.rest.common;
 
 import org.eclipse.hudson.rest.common.JacksonCodec;
 import org.eclipse.hudson.rest.common.JsonCodec;
-import org.hudsonci.rest.model.build.BuildEventDTO;
-import org.hudsonci.rest.model.build.BuildEventTypeDTO;
+import org.eclipse.hudson.rest.model.build.BuildEventDTO;
+import org.eclipse.hudson.rest.model.build.BuildEventTypeDTO;
 
 import org.junit.Before;
 import org.junit.Test;

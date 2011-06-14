@@ -29,10 +29,10 @@ import javax.inject.Inject;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 import org.hudsonci.rest.api.user.UserConverter;
 
-import org.hudsonci.rest.model.build.ChangeEntryDTO;
-import org.hudsonci.rest.model.build.ChangeFileDTO;
-import org.hudsonci.rest.model.build.ChangeTypeDTO;
-import org.hudsonci.rest.model.build.ChangesDTO;
+import org.eclipse.hudson.rest.model.build.ChangeEntryDTO;
+import org.eclipse.hudson.rest.model.build.ChangeFileDTO;
+import org.eclipse.hudson.rest.model.build.ChangeTypeDTO;
+import org.eclipse.hudson.rest.model.build.ChangesDTO;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.EditType;
 

@@ -42,8 +42,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import org.hudsonci.rest.model.build.BuildDTO;
-import org.hudsonci.rest.model.build.BuildStateDTO;
+import org.eclipse.hudson.rest.model.build.BuildDTO;
+import org.eclipse.hudson.rest.model.build.BuildStateDTO;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 

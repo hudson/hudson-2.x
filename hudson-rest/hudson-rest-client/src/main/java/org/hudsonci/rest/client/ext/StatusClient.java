@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.client.ext;
 
-import org.hudsonci.rest.model.StatusDTO;
+import org.eclipse.hudson.rest.model.StatusDTO;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

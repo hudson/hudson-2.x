@@ -24,9 +24,9 @@
 
 package org.hudsonci.rest.client.ext;
 
-import org.hudsonci.rest.model.project.ProjectDTO;
-import org.hudsonci.rest.model.project.ProjectReferenceDTO;
-import org.hudsonci.rest.model.PermissionDTO;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.rest.model.project.ProjectReferenceDTO;
+import org.eclipse.hudson.rest.model.PermissionDTO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

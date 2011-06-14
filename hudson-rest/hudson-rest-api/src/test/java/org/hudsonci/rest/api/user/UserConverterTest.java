@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import org.hudsonci.rest.model.UserDTO;
+import org.eclipse.hudson.rest.model.UserDTO;
 import hudson.model.User;
 import org.junit.Test;
 import org.mockito.runners.MockitoJUnitRunner;

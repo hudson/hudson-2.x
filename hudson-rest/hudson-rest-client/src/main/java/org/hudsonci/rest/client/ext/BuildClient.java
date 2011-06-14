@@ -24,11 +24,11 @@
 
 package org.hudsonci.rest.client.ext;
 
-import org.hudsonci.rest.model.build.BuildDTO;
-import org.hudsonci.rest.model.build.ChangesDTO;
-import org.hudsonci.rest.model.build.TestsDTO;
-import org.hudsonci.rest.model.build.BuildEventDTO;
-import org.hudsonci.rest.model.build.ConsoleDTO;
+import org.eclipse.hudson.rest.model.build.BuildDTO;
+import org.eclipse.hudson.rest.model.build.ChangesDTO;
+import org.eclipse.hudson.rest.model.build.TestsDTO;
+import org.eclipse.hudson.rest.model.build.BuildEventDTO;
+import org.eclipse.hudson.rest.model.build.ConsoleDTO;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

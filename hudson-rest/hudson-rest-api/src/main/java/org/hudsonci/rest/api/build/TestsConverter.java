@@ -26,10 +26,10 @@ package org.hudsonci.rest.api.build;
 
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.build.TestCaseDTO;
-import org.hudsonci.rest.model.build.TestCaseStatusDTO;
-import org.hudsonci.rest.model.build.TestSuiteDTO;
-import org.hudsonci.rest.model.build.TestsDTO;
+import org.eclipse.hudson.rest.model.build.TestCaseDTO;
+import org.eclipse.hudson.rest.model.build.TestCaseStatusDTO;
+import org.eclipse.hudson.rest.model.build.TestSuiteDTO;
+import org.eclipse.hudson.rest.model.build.TestsDTO;
 import hudson.tasks.junit.CaseResult;
 import hudson.tasks.junit.SuiteResult;
 import hudson.tasks.junit.TestResult;

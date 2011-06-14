@@ -30,10 +30,10 @@ import org.eclipse.hudson.service.ProjectService;
 import hudson.model.AbstractProject;
 import javax.inject.Inject;
 import org.hudsonci.utils.io.OffsetLimitInputStream;
-import org.hudsonci.rest.model.build.BuildDTO;
-import org.hudsonci.rest.model.build.ChangesDTO;
-import org.hudsonci.rest.model.build.TestsDTO;
-import org.hudsonci.rest.model.build.ConsoleDTO;
+import org.eclipse.hudson.rest.model.build.BuildDTO;
+import org.eclipse.hudson.rest.model.build.ChangesDTO;
+import org.eclipse.hudson.rest.model.build.TestsDTO;
+import org.eclipse.hudson.rest.model.build.ConsoleDTO;
 import hudson.model.AbstractBuild;
 import hudson.tasks.test.AbstractTestResultAction;
 

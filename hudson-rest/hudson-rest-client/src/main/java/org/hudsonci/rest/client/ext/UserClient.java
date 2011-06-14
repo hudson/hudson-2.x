@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.client.ext;
 
-import org.hudsonci.rest.model.UserDTO;
+import org.eclipse.hudson.rest.model.UserDTO;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

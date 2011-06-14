@@ -37,7 +37,7 @@ import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.internal.ResourceSupport;
 import org.hudsonci.rest.api.user.UserConverter;
 
-import org.hudsonci.rest.model.StatusDTO;
+import org.eclipse.hudson.rest.model.StatusDTO;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

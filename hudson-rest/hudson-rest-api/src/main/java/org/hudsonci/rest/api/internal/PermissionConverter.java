@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.api.internal;
 
-import org.hudsonci.rest.model.PermissionDTO;
+import org.eclipse.hudson.rest.model.PermissionDTO;
 
 /**
  * Converts {@link hudson.security.Permission} to {@link PermissionDTO} objects.

@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.client.internal.ext;
 
-import org.hudsonci.rest.model.StatusDTO;
+import org.eclipse.hudson.rest.model.StatusDTO;
 import com.sun.jersey.api.client.ClientResponse;
 
 import javax.ws.rs.core.UriBuilder;

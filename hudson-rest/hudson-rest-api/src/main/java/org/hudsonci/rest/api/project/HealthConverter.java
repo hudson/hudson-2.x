@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.project.HealthDTO;
+import org.eclipse.hudson.rest.model.project.HealthDTO;
 import hudson.model.HealthReport;
 
 import static com.google.common.base.Preconditions.checkNotNull;

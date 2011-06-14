@@ -24,7 +24,7 @@
 
 package org.hudsonci.rest.api.status;
 
-import org.hudsonci.rest.model.InitLevelDTO;
+import org.eclipse.hudson.rest.model.InitLevelDTO;
 import hudson.init.InitMilestone;
 import hudson.util.VersionNumber;
 

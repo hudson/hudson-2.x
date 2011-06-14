@@ -42,8 +42,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import org.hudsonci.rest.model.InitLevelDTO;
-import org.hudsonci.rest.model.StatusDTO;
+import org.eclipse.hudson.rest.model.InitLevelDTO;
+import org.eclipse.hudson.rest.model.StatusDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StatusResourceTest

@@ -40,7 +40,7 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import org.hudsonci.rest.model.UserDTO;
+import org.eclipse.hudson.rest.model.UserDTO;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserResourceTest

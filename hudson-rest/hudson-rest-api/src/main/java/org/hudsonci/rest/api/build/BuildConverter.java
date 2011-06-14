@@ -37,9 +37,9 @@ import javax.inject.Inject;
 import org.eclipse.hudson.service.SystemService;
 import org.hudsonci.rest.api.internal.ConverterSupport;
 
-import org.hudsonci.rest.model.build.BuildDTO;
-import org.hudsonci.rest.model.build.BuildResultDTO;
-import org.hudsonci.rest.model.build.BuildStateDTO;
+import org.eclipse.hudson.rest.model.build.BuildDTO;
+import org.eclipse.hudson.rest.model.build.BuildResultDTO;
+import org.eclipse.hudson.rest.model.build.BuildStateDTO;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

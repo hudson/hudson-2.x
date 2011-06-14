@@ -24,11 +24,11 @@
 
 package org.hudsonci.rest.client.internal.ext;
 
-import org.hudsonci.rest.model.project.ProjectDTO;
-import org.hudsonci.rest.model.project.ProjectReferenceDTO;
-import org.hudsonci.rest.model.project.ProjectsDTO;
-import org.hudsonci.rest.model.PermissionDTO;
-import org.hudsonci.rest.model.PermissionsDTO;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.rest.model.project.ProjectReferenceDTO;
+import org.eclipse.hudson.rest.model.project.ProjectsDTO;
+import org.eclipse.hudson.rest.model.PermissionDTO;
+import org.eclipse.hudson.rest.model.PermissionsDTO;
 import com.sun.jersey.api.client.ClientResponse;
 
 import javax.ws.rs.core.UriBuilder;
