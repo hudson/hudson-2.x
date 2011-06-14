@@ -24,14 +24,14 @@
 
 package org.hudsonci.rest.plugin.components;
 
+import org.eclipse.hudson.rest.api.internal.AcegiSecurityExceptionMapper;
+import org.eclipse.hudson.rest.api.internal.FaultExceptionMapper;
+import org.eclipse.hudson.rest.api.internal.GenericExceptionMapper;
+import org.eclipse.hudson.rest.api.internal.HandshakeResource;
+import org.eclipse.hudson.rest.api.internal.NotFoundExceptionMapper;
+import org.eclipse.hudson.rest.api.internal.WebApplicationExceptionMapper;
+import org.eclipse.hudson.rest.api.status.StatusResource;
 import org.eclipse.hudson.rest.common.JacksonProvider;
-import org.hudsonci.rest.api.internal.FaultExceptionMapper;
-import org.hudsonci.rest.api.internal.GenericExceptionMapper;
-import org.hudsonci.rest.api.internal.AcegiSecurityExceptionMapper;
-import org.hudsonci.rest.api.internal.HandshakeResource;
-import org.hudsonci.rest.api.internal.NotFoundExceptionMapper;
-import org.hudsonci.rest.api.internal.WebApplicationExceptionMapper;
-import org.hudsonci.rest.api.status.StatusResource;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

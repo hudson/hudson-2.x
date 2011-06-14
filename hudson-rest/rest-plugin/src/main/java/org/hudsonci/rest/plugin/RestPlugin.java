@@ -65,7 +65,7 @@ public class RestPlugin
     public RestPlugin(final List<ApiProvider> providers) {
         this.providers = checkNotNull(providers);
 
-        log.debug("API version: {}", org.hudsonci.rest.api.Version.get());
+        log.debug("API version: {}", org.eclipse.hudson.rest.api.Version.get());
 
         if (log.isDebugEnabled()) {
             log.debug("Providers:");

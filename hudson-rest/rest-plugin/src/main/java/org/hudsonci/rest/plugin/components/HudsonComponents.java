@@ -24,13 +24,13 @@
 
 package org.hudsonci.rest.plugin.components;
 
-import org.hudsonci.rest.api.admin.AdminResource;
-import org.hudsonci.rest.api.build.BuildResource;
-import org.hudsonci.rest.api.project.ProjectResource;
-import org.hudsonci.rest.api.project.ProjectsResource;
-import org.hudsonci.rest.api.node.NodeResource;
-import org.hudsonci.rest.api.queue.QueueResource;
-import org.hudsonci.rest.api.user.UserResource;
+import org.eclipse.hudson.rest.api.admin.AdminResource;
+import org.eclipse.hudson.rest.api.build.BuildResource;
+import org.eclipse.hudson.rest.api.node.NodeResource;
+import org.eclipse.hudson.rest.api.project.ProjectResource;
+import org.eclipse.hudson.rest.api.project.ProjectsResource;
+import org.eclipse.hudson.rest.api.queue.QueueResource;
+import org.eclipse.hudson.rest.api.user.UserResource;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

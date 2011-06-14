@@ -142,7 +142,7 @@ public class RestServlet
     }
 
     private String getApiVersion() {
-        return org.hudsonci.rest.api.Version.get().getVersion();
+        return org.eclipse.hudson.rest.api.Version.get().getVersion();
     }
 
     public synchronized void addApplication(final Application application) {
