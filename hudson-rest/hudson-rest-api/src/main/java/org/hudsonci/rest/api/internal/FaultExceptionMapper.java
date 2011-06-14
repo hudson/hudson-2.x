@@ -25,8 +25,8 @@
 package org.hudsonci.rest.api.internal;
 
 import org.eclipse.hudson.rest.common.Constants;
+import org.eclipse.hudson.rest.model.fault.FaultException;
 import org.hudsonci.rest.model.fault.FaultDTO;
-import org.hudsonci.rest.model.fault.FaultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

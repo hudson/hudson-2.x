@@ -24,9 +24,9 @@
 
 package org.hudsonci.rest.client.internal.jersey;
 
+import org.eclipse.hudson.rest.model.fault.FaultException;
 import org.hudsonci.rest.model.fault.FaultDTO;
 import org.hudsonci.rest.model.fault.FaultDetailDTO;
-import org.hudsonci.rest.model.fault.FaultException;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;

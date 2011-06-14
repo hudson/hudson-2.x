@@ -46,7 +46,7 @@ THE SOFTWARE.
     <xs:annotation>
         <xs:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="org.hudsonci.rest.model.build"/>
+                <jaxb:package name="org.eclipse.hudson.rest.model.build"/>
                 <jaxb:nameXmlTransform>
                     <jaxb:elementName suffix="DTO"/>
                     <jaxb:typeName suffix="DTO"/>
