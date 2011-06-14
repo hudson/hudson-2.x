@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.plugin.ui.gwt.buildinfo.event;
 
+import org.eclipse.hudson.gwt.common.EventSupport;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.event.ModuleSelectedEvent.Handler;
 
 import com.google.gwt.event.shared.EventHandler;
-import org.hudsonci.gwt.common.EventSupport;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
 
 /**

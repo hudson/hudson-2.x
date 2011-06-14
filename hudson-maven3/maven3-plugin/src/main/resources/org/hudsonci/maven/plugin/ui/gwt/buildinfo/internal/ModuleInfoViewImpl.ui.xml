@@ -27,7 +27,7 @@ THE SOFTWARE.
     xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:c="urn:import:com.google.gwt.user.cellview.client"
     xmlns:m="urn:import:org.hudsonci.maven.plugin.ui.gwt.buildinfo"
-    xmlns:x="urn:import:org.hudsonci.gwt.common">
+    xmlns:x="urn:import:org.eclipse.hudson.gwt.common">
     
     <g:SplitLayoutPanel>
         <g:north size="200">

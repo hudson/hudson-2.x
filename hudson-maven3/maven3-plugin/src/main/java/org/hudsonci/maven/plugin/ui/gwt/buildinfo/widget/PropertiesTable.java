@@ -25,7 +25,8 @@
 package org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget;
 
 import com.google.gwt.user.cellview.client.TextColumn;
-import org.hudsonci.gwt.common.MaximizedCellTable;
+
+import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.hudsonci.maven.model.PropertiesDTO;
 import org.hudsonci.maven.model.PropertiesDTO.Entry;
 

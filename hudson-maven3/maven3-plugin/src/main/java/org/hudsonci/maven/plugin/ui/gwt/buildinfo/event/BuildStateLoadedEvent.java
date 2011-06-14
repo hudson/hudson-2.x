@@ -25,7 +25,8 @@
 package org.hudsonci.maven.plugin.ui.gwt.buildinfo.event;
 
 import com.google.gwt.event.shared.EventHandler;
-import org.hudsonci.gwt.common.EventSupport;
+
+import org.eclipse.hudson.gwt.common.EventSupport;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.maven.model.state.BuildStatesDTO;
 

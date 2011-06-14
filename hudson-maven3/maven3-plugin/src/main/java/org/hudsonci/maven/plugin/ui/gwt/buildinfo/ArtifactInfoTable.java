@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.plugin.ui.gwt.buildinfo;
 
+import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget.ArtifactCoordinatesColumn;
 
 import com.google.gwt.user.cellview.client.TextColumn;
-import org.hudsonci.gwt.common.MaximizedCellTable;
 import org.hudsonci.maven.model.state.ArtifactActionDTO;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 

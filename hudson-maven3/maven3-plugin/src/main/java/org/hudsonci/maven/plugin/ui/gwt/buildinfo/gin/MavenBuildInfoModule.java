@@ -30,7 +30,8 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Provides;
-import org.hudsonci.gwt.common.LoggingEventBus;
+
+import org.eclipse.hudson.gwt.common.LoggingEventBus;
 
 import javax.inject.Singleton;
 

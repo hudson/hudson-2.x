@@ -26,10 +26,10 @@ THE SOFTWARE.
         "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
 
 <module rename-to="MavenConfiguration">
-    <inherits name="org.hudsonci.gwt.common.Common"/>
+    <inherits name="org.eclipse.hudson.gwt.common.Common"/>
     <inherits name="org.hudsonci.gwt.theme.chrome.Chrome"/>
     <inherits name="org.hudsonci.maven.model.Model"/>
-    <inherits name="org.hudsonci.gwt.icons.silk.SilkIcons"/>
+    <inherits name="org.eclipse.hudson.gwt.icons.silk.SilkIcons"/>
 
     <!--<inherits name="org.slf4j.Slf4j"/>-->
     <!--<set-property name="gwt.logging.logLevel" value="FINEST"/>-->

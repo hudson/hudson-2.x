@@ -29,7 +29,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
-import org.hudsonci.gwt.common.LoggingEventBus;
+
+import org.eclipse.hudson.gwt.common.LoggingEventBus;
 
 import javax.inject.Singleton;
 

@@ -25,12 +25,12 @@
 package org.hudsonci.maven.plugin.ui.gwt.buildinfo.internal;
 
 import com.google.gwt.event.shared.EventBus;
-import org.hudsonci.gwt.common.restygwt.ServiceFailureNotifier;
-import org.hudsonci.gwt.common.waitdialog.WaitPresenter;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.maven.model.state.BuildStatesDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
 
+import org.eclipse.hudson.gwt.common.restygwt.ServiceFailureNotifier;
+import org.eclipse.hudson.gwt.common.waitdialog.WaitPresenter;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.BuildCoordinates;

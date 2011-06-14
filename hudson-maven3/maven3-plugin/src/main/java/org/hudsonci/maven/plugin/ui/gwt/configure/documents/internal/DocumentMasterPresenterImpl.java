@@ -30,7 +30,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import org.hudsonci.gwt.common.confirmdialog.ConfirmDialogPresenter;
+
+import org.eclipse.hudson.gwt.common.confirmdialog.ConfirmDialogPresenter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

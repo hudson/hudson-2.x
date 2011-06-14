@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.plugin.ui.gwt.configure.documents.event;
 
+import org.eclipse.hudson.gwt.common.EventSupport;
 import org.hudsonci.maven.plugin.ui.gwt.configure.documents.Document;
 
 import com.google.gwt.event.shared.EventHandler;
-import org.hudsonci.gwt.common.EventSupport;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

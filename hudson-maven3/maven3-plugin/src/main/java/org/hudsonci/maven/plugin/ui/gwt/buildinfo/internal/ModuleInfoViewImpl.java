@@ -35,7 +35,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import org.hudsonci.gwt.common.TogglePanel;
+
+import org.eclipse.hudson.gwt.common.TogglePanel;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.BuildResultDTO;
 

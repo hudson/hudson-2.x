@@ -33,7 +33,8 @@ import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.RowCountChangeEvent;
-import org.hudsonci.gwt.common.MaximizedCellTable;
+
+import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;

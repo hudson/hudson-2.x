@@ -27,13 +27,13 @@ package org.hudsonci.maven.plugin.ui.gwt.configure.documents.internal;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.resources.client.ImageResource;
-import org.hudsonci.gwt.common.restygwt.ServiceFailureNotifier;
-import org.hudsonci.gwt.common.waitdialog.WaitPresenter;
-import org.hudsonci.gwt.icons.silk.SilkIcons;
 import org.hudsonci.maven.model.config.DocumentAttributeDTO;
 import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.config.DocumentTypeDTO;
 import org.hudsonci.maven.model.config.DocumentsDTO;
+import org.eclipse.hudson.gwt.common.restygwt.ServiceFailureNotifier;
+import org.eclipse.hudson.gwt.common.waitdialog.WaitPresenter;
+import org.eclipse.hudson.gwt.icons.silk.SilkIcons;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.hudsonci.maven.plugin.ui.gwt.configure.documents.Document;
@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.gwt.common.UUID.uuid;
+import static org.eclipse.hudson.gwt.common.UUID.uuid;
 
 /**
  * Default implementation of {@link DocumentManagerLiaison}.

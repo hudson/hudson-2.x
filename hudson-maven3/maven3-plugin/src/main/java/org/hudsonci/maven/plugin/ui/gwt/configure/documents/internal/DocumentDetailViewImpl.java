@@ -39,8 +39,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.view.client.HasData;
-import org.hudsonci.gwt.common.EnumListBox;
-import org.hudsonci.gwt.common.MaximizedCellTable;
+
+import org.eclipse.hudson.gwt.common.EnumListBox;
+import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.hudsonci.maven.model.config.DocumentAttributeDTO;
 import org.hudsonci.maven.model.config.DocumentTypeDTO;
 

@@ -30,11 +30,11 @@ package org.hudsonci.maven.plugin.ui.gwt.buildinfo.widget;
  * @author Jamie Whitehouse
  * @since 2.1.0
  */
+import org.eclipse.hudson.gwt.common.ImageResourceColumn;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.BuildInfoResources;
 import org.hudsonci.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
 
 import com.google.gwt.resources.client.ImageResource;
-import org.hudsonci.gwt.common.ImageResourceColumn;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
 
 public class ModuleStatusIconColumn

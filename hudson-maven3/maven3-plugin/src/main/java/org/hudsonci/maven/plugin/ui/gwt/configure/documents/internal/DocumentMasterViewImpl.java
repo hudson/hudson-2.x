@@ -37,12 +37,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.HasData;
-import org.hudsonci.gwt.common.ImageResourceColumn;
-import org.hudsonci.gwt.common.ImageTextButton;
-import org.hudsonci.gwt.common.MaximizedCellTable;
-import org.hudsonci.gwt.common.TogglePanel;
-import org.hudsonci.gwt.common.ToolBar;
-import org.hudsonci.gwt.icons.silk.SilkIcons;
+
+import org.eclipse.hudson.gwt.common.ImageResourceColumn;
+import org.eclipse.hudson.gwt.common.ImageTextButton;
+import org.eclipse.hudson.gwt.common.MaximizedCellTable;
+import org.eclipse.hudson.gwt.common.TogglePanel;
+import org.eclipse.hudson.gwt.common.ToolBar;
+import org.eclipse.hudson.gwt.icons.silk.SilkIcons;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
