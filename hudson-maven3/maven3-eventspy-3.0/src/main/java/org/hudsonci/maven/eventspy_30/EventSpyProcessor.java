@@ -25,7 +25,7 @@
 package org.hudsonci.maven.eventspy_30;
 
 import org.sonatype.gossip.support.DC;
-import org.hudsonci.utils.event.EventProcessorSupport;
+import org.eclipse.hudson.utils.event.EventProcessorSupport;
 import org.apache.maven.BuildAbort;
 
 import java.util.List;

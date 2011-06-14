@@ -24,9 +24,10 @@
 
 package org.hudsonci.plugins.snapshotmonitor.internal;
 
-import org.hudsonci.utils.io.Closer;
-import org.hudsonci.utils.marshal.Marshaller;
-import org.hudsonci.utils.marshal.XStreamMarshaller;
+import org.eclipse.hudson.utils.io.Closer;
+import org.eclipse.hudson.utils.marshal.Marshaller;
+import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
+
 import com.thoughtworks.xstream.XStream;
 import hudson.model.Job;
 

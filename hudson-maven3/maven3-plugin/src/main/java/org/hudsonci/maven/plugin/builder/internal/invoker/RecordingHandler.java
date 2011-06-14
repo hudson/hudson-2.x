@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder.internal.invoker;
 
-import org.hudsonci.utils.io.Closer;
+import org.eclipse.hudson.utils.io.Closer;
 import org.hudsonci.maven.model.InvocationDTO;
 import com.thoughtworks.xstream.XStream;
 

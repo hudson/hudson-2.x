@@ -45,7 +45,7 @@ import java.util.Set;
 import org.hudsonci.maven.plugin.artifactrecorder.ArtifactArchiver;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 
 /**
  * @author Jamie Whitehouse

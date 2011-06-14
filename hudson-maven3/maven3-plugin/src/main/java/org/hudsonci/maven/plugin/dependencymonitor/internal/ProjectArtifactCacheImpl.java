@@ -49,7 +49,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 
 /**
  * Default implementation of {@link ProjectArtifactCache}.

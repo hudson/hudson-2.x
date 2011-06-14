@@ -25,7 +25,8 @@
 package org.hudsonci.maven.plugin.artifactrecorder.internal;
 
 import com.google.common.collect.Sets;
-import org.hudsonci.utils.io.FileUtil;
+
+import org.eclipse.hudson.utils.io.FileUtil;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 
 import org.hudsonci.maven.plugin.artifactrecorder.internal.DigestCollector;

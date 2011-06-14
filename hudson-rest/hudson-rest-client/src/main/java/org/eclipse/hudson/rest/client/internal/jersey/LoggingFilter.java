@@ -24,7 +24,8 @@
 
 package org.eclipse.hudson.rest.client.internal.jersey;
 
-import org.hudsonci.utils.io.PrintBuffer;
+import org.eclipse.hudson.utils.io.PrintBuffer;
+
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;

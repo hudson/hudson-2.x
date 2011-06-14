@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder.internal;
 
-import org.hudsonci.utils.common.TestAccessible;
+import org.eclipse.hudson.utils.common.TestAccessible;
 import org.hudsonci.maven.eventspy.common.Callback;
 import org.hudsonci.maven.eventspy.common.DocumentReference;
 import org.hudsonci.maven.model.config.DocumentDTO;

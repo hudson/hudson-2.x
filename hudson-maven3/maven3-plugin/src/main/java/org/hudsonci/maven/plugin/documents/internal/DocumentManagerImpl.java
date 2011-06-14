@@ -25,7 +25,7 @@
 package org.hudsonci.maven.plugin.documents.internal;
 
 import org.eclipse.hudson.service.SecurityService;
-import org.hudsonci.utils.common.Iso8601Date;
+import org.eclipse.hudson.utils.common.Iso8601Date;
 import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.config.DocumentTypeDTO;
 

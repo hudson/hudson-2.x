@@ -25,7 +25,8 @@
 package org.hudsonci.plugins.snapshotmonitor.internal;
 
 import hudson.util.IOException2;
-import org.hudsonci.utils.io.Closer;
+
+import org.eclipse.hudson.utils.io.Closer;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import com.thoughtworks.xstream.core.util.Base64Encoder;
 import org.apache.maven.artifact.repository.metadata.Metadata;

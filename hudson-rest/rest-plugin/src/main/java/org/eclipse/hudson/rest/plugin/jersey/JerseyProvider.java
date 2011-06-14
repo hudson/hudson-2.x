@@ -30,7 +30,7 @@ import org.eclipse.hudson.rest.server.internal.jersey.RestServlet;
 import org.eclipse.hudson.servlets.ServletContainer;
 import org.eclipse.hudson.servlets.ServletContainerAware;
 import org.eclipse.hudson.servlets.ServletRegistration;
-import org.hudsonci.utils.id.OID;
+import org.eclipse.hudson.utils.id.OID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

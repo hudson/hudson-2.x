@@ -27,7 +27,8 @@ package org.eclipse.hudson.service.internal;
 import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.service.ServiceRuntimeException;
 import org.eclipse.hudson.service.SystemService;
-import org.hudsonci.utils.io.FileUtil;
+import org.eclipse.hudson.utils.io.FileUtil;
+
 import hudson.XmlFile;
 import hudson.init.InitMilestone;
 import hudson.lifecycle.RestartNotSupportedException;

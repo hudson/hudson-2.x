@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 
 /**
  * Default {@link Invoker}.

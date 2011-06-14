@@ -40,7 +40,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 
 /**
  * Creates {@link BayeuxClient} instances.

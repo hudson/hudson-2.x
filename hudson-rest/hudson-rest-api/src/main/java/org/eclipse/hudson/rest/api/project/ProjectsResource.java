@@ -26,7 +26,7 @@ package org.eclipse.hudson.rest.api.project;
 
 import org.eclipse.hudson.service.ProjectService;
 import org.eclipse.hudson.service.SecurityService;
-import org.hudsonci.utils.io.Closer;
+import org.eclipse.hudson.utils.io.Closer;
 import org.eclipse.hudson.rest.api.build.BuildConverter;
 import org.eclipse.hudson.rest.api.internal.PermissionsFactory;
 import org.eclipse.hudson.rest.api.internal.ProjectBuildHelper;

@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.rest.api;
 
-import org.hudsonci.utils.common.VersionSupport;
+import org.eclipse.hudson.utils.common.VersionSupport;
 
 /**
  * REST API version.

@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.eventspy_30;
 
+import org.eclipse.hudson.utils.event.EventHandlerSupport;
 import org.hudsonci.maven.eventspy.common.Callback;
 import org.hudsonci.maven.eventspy_30.recorder.BuildRecorder;
 
-import org.hudsonci.utils.event.EventHandlerSupport;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

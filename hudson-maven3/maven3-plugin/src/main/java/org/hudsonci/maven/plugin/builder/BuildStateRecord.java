@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder;
 
-import org.hudsonci.utils.marshal.xref.XReference;
+import org.eclipse.hudson.utils.marshal.xref.XReference;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamInclude;

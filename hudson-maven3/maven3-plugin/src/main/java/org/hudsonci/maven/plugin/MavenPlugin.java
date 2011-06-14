@@ -25,10 +25,11 @@
 package org.hudsonci.maven.plugin;
 
 import com.google.inject.Key;
-import org.hudsonci.utils.marshal.XStreamMarshaller;
-import org.hudsonci.utils.marshal.xref.FileXReferenceStore;
-import org.hudsonci.utils.marshal.xref.XReferenceConverter;
-import org.hudsonci.utils.marshal.xref.XReferenceStoreConverter;
+
+import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
+import org.eclipse.hudson.utils.marshal.xref.FileXReferenceStore;
+import org.eclipse.hudson.utils.marshal.xref.XReferenceConverter;
+import org.eclipse.hudson.utils.marshal.xref.XReferenceStoreConverter;
 import org.hudsonci.maven.model.UniqueList;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.inject.Smoothie;

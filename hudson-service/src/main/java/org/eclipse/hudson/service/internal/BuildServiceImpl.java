@@ -25,7 +25,7 @@
 package org.eclipse.hudson.service.internal;
 
 import static org.eclipse.hudson.service.internal.ServicePreconditions.*;
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 import hudson.model.Item;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;

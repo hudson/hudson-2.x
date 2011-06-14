@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.artifactrecorder.internal;
 
-import org.hudsonci.utils.common.TestAccessible;
+import org.eclipse.hudson.utils.common.TestAccessible;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.ArtifactDTOHelper;
 

@@ -24,7 +24,6 @@
 
 package org.hudsonci.maven.eventspy_30;
 
-import org.hudsonci.utils.common.TestAccessible;
 import org.apache.maven.eventspy.internal.EventSpyDispatcher;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
@@ -33,6 +32,7 @@ import org.apache.maven.lifecycle.internal.ProjectBuildList;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
+import org.eclipse.hudson.utils.common.TestAccessible;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

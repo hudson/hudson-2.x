@@ -36,7 +36,7 @@ import java.rmi.MarshalledObject;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.hudsonci.utils.common.Varargs.$;
+import static org.eclipse.hudson.utils.common.Varargs.$;
 
 /**
  * Handles de-typed invocation from local to remote via {@link Invoker}.
