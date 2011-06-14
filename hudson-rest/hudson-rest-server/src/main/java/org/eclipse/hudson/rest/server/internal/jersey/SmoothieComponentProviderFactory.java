@@ -25,7 +25,9 @@
 package org.eclipse.hudson.rest.server.internal.jersey;
 
 import com.google.inject.Key;
-import org.hudsonci.inject.SmoothieContainer;
+
+import org.eclipse.hudson.inject.SmoothieContainer;
+
 import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProvider;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;

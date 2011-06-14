@@ -39,7 +39,7 @@
     </appender>
 
     <logger name="hudson" level="DEBUG"/>
-    <logger name="org.hudsonci.inject" level="DEBUG"/>
+    <logger name="org.eclipse.hudson.inject" level="DEBUG"/>
     <logger name="org.jvnet.hudson" level="DEBUG"/>
 
     <root level="INFO">

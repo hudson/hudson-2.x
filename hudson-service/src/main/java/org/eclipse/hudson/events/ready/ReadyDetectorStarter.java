@@ -24,7 +24,8 @@
 
 package org.eclipse.hudson.events.ready;
 
-import org.hudsonci.inject.Priority;
+import org.eclipse.hudson.inject.Priority;
+
 import hudson.model.listeners.ItemListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

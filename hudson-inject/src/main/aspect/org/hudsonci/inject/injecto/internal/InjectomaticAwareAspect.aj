@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.inject.injecto.internal;
+package org.eclipse.hudson.inject.injecto.internal;
 
-import org.hudsonci.inject.injecto.InjectomaticAware;
-import static org.hudsonci.inject.injecto.internal.InjectomaticAspectHelper.install;
+import org.eclipse.hudson.inject.injecto.InjectomaticAware;
+import static org.eclipse.hudson.inject.injecto.internal.InjectomaticAspectHelper.install;
 
 /**
  * Install the {@link Injectomatic} component into {@link InjectomaticAware} objects after they have been created.

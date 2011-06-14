@@ -27,9 +27,9 @@
 
 <aspectj>
     <aspects>
-        <aspect name="org.hudsonci.inject.injecto.internal.InjectomaticAwareAspect"/>
-        <aspect name="org.hudsonci.inject.injecto.internal.InjectableAspect"/>
-        <aspect name="org.hudsonci.inject.injecto.internal.DescribableInjectionAspect"/>
+        <aspect name="org.eclipse.hudson.inject.injecto.internal.InjectomaticAwareAspect"/>
+        <aspect name="org.eclipse.hudson.inject.injecto.internal.InjectableAspect"/>
+        <aspect name="org.eclipse.hudson.inject.injecto.internal.DescribableInjectionAspect"/>
     </aspects>
 
     <weaver options="-Xlint:ignore -warn:none -XaddSerialVersionUID"/>

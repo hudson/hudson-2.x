@@ -34,7 +34,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.hudsonci.inject" level="TRACE"/>
+    <logger name="org.eclipse.hudson.inject" level="TRACE"/>
 
     <root level="TRACE">
         <appender-ref ref="CONSOLE"/>

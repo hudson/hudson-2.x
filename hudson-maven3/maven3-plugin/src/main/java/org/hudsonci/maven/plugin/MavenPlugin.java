@@ -26,13 +26,13 @@ package org.hudsonci.maven.plugin;
 
 import com.google.inject.Key;
 
+import org.eclipse.hudson.inject.Smoothie;
 import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
 import org.eclipse.hudson.utils.marshal.xref.FileXReferenceStore;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceConverter;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceStoreConverter;
 import org.hudsonci.maven.model.UniqueList;
 import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.inject.Smoothie;
 import org.hudsonci.maven.plugin.artifactrecorder.ArtifactArchiver;
 import org.hudsonci.maven.plugin.artifactrecorder.ArtifactFingerprinter;
 import org.hudsonci.maven.plugin.builder.BuildStateRecord;

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.hudsonci.inject.injecto.internal;
+package org.eclipse.hudson.inject.injecto.internal;
 
 /**
  * Support for injection aspects.

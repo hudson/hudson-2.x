@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.utils.plugin.ui;
 
-import org.hudsonci.inject.internal.plugin.PluginClassLoader;
+import org.eclipse.hudson.inject.internal.plugin.PluginClassLoader;
 
 import hudson.PluginWrapper;
 import hudson.model.Action;

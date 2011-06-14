@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */     
 
-package org.hudsonci.inject.injecto.internal;
+package org.eclipse.hudson.inject.injecto.internal;
 
-import org.hudsonci.inject.injecto.Injectable;
+import org.eclipse.hudson.inject.injecto.Injectable;
 import hudson.model.Describable;
 
 /**

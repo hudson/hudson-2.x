@@ -24,10 +24,10 @@
 
 package org.hudsonci.maven.plugin.ui;
 
+import org.eclipse.hudson.inject.injecto.Injectable;
 import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
 import org.eclipse.hudson.utils.plugin.ui.UIComponentSupport;
-import org.hudsonci.inject.injecto.Injectable;
 import org.hudsonci.maven.plugin.builder.MavenBuildAction;
 
 import hudson.model.AbstractBuild;
