@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.documents.rest;
 
-import org.hudsonci.rest.plugin.RestComponentProvider;
+import org.eclipse.hudson.rest.plugin.RestComponentProvider;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
