@@ -24,7 +24,8 @@
 
 package org.hudsonci.rest.plugin.jersey;
 
-import org.hudsonci.rest.server.internal.jersey.RestServlet;
+import org.eclipse.hudson.rest.server.internal.jersey.RestServlet;
+
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 import hudson.model.Hudson;
 import hudson.tasks.Mailer;
