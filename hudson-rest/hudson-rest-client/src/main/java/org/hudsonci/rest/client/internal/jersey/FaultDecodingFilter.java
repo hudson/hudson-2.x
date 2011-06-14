@@ -36,10 +36,10 @@ import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static org.eclipse.hudson.rest.common.Constants.FAULT_v1_JSON_TYPE;
+import static org.eclipse.hudson.rest.common.Constants.FAULT_v1_XML_TYPE;
 import static org.hudsonci.rest.client.internal.ResponseUtil.isCompatible;
 import static org.hudsonci.rest.client.internal.ResponseUtil.isStatus;
-import static org.hudsonci.rest.common.Constants.FAULT_v1_JSON_TYPE;
-import static org.hudsonci.rest.common.Constants.FAULT_v1_XML_TYPE;
 
 /**
  * Throws {@link FaultException} when a fault has been detected.

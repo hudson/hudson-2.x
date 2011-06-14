@@ -24,9 +24,9 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 import org.hudsonci.maven.model.state.BuildStatesDTO;
-import org.hudsonci.rest.common.ProjectNameCodec;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -41,9 +41,9 @@ import org.hudsonci.maven.plugin.builder.MavenBuilderService;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.rest.common.RestPreconditions.checkBuildNumber;
-import static org.hudsonci.rest.common.RestPreconditions.checkBuilderIndex;
-import static org.hudsonci.rest.common.RestPreconditions.checkProjectName;
+import static org.eclipse.hudson.rest.common.RestPreconditions.checkBuildNumber;
+import static org.eclipse.hudson.rest.common.RestPreconditions.checkBuilderIndex;
+import static org.eclipse.hudson.rest.common.RestPreconditions.checkProjectName;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 

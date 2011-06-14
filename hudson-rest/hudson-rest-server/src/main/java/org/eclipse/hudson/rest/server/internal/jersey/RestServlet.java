@@ -49,8 +49,8 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static org.eclipse.hudson.rest.common.Constants.HUDSON_HEADER;
 import static org.hudsonci.utils.common.Varargs.$;
-import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
 
 /**
  * Augmented Jersey REST servlet.

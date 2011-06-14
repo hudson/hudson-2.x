@@ -25,13 +25,13 @@
 package org.hudsonci.rest.plugin;
 
 import com.google.inject.AbstractModule;
-import org.hudsonci.rest.common.ObjectMapperProvider;
 import hudson.Plugin;
 import hudson.model.Descriptor;
 import net.sf.json.JSONObject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.hudson.events.EventConsumer;
 import org.eclipse.hudson.events.ready.ReadyEvent;
+import org.eclipse.hudson.rest.common.ObjectMapperProvider;
 import org.kohsuke.stapler.StaplerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

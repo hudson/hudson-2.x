@@ -24,6 +24,7 @@
 
 package org.hudsonci.rest.api.internal;
 
+import org.eclipse.hudson.rest.common.Constants;
 import org.eclipse.hudson.service.SystemService;
 
 import javax.inject.Inject;
@@ -37,12 +38,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.hudsonci.rest.common.Constants;
 
 import static javax.ws.rs.core.MediaType.*;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.Response.Status.*;
-import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
+import static org.eclipse.hudson.rest.common.Constants.HUDSON_HEADER;
 
 /**
  * Resource to help clients figure out if they can talk to the server or not.

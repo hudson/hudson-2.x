@@ -30,8 +30,8 @@ import com.ning.http.client.Realm;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.core.spi.component.ioc.IoCComponentProviderFactory;
 
+import org.eclipse.hudson.rest.common.JacksonProvider;
 import org.hudsonci.rest.client.OpenOptions;
-import org.hudsonci.rest.common.JacksonProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonatype.spice.jersey.client.ahc.AhcHttpClient;

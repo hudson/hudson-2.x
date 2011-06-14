@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
-import org.hudsonci.rest.common.ProjectNameCodec;
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 
 import org.hudsonci.maven.plugin.builder.MavenBuilderService;
 import org.hudsonci.maven.plugin.builder.rest.BuilderConfigResource;

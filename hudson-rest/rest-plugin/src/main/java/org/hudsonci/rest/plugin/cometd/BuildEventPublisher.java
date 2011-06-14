@@ -24,13 +24,13 @@
 
 package org.hudsonci.rest.plugin.cometd;
 
-import org.hudsonci.rest.common.JsonCodec;
 import org.hudsonci.rest.model.build.BuildEventDTO;
 import org.hudsonci.rest.model.build.BuildEventTypeDTO;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 import org.cometd.Channel;
+import org.eclipse.hudson.rest.common.JsonCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

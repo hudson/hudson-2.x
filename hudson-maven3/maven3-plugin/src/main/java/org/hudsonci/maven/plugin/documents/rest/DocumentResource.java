@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.documents.rest;
 
-import static org.hudsonci.rest.common.RestPreconditions.*;
+import static org.eclipse.hudson.rest.common.RestPreconditions.*;
 import static javax.ws.rs.core.MediaType.*;
 
 import javax.inject.Inject;

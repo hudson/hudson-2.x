@@ -29,6 +29,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import org.eclipse.hudson.rest.common.Constants;
 import org.hudsonci.rest.client.HandshakeException;
 import org.hudsonci.rest.client.HandshakeFailedException;
 import org.hudsonci.rest.client.HudsonClient;
@@ -36,7 +37,6 @@ import org.hudsonci.rest.client.HudsonClientException;
 import org.hudsonci.rest.client.OpenOptions;
 import org.hudsonci.rest.client.internal.jersey.JerseyClientFactory;
 import org.hudsonci.rest.client.internal.ssl.TrustAllX509TrustManager;
-import org.hudsonci.rest.common.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +54,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.rest.common.Constants.BASE_REST_PATH;
-import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
+import static org.eclipse.hudson.rest.common.Constants.BASE_REST_PATH;
+import static org.eclipse.hudson.rest.common.Constants.HUDSON_HEADER;
 
 /**
  * Hudson client implementation.

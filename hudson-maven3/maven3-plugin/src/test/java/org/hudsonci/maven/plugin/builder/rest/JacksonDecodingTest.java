@@ -24,9 +24,9 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
+import org.eclipse.hudson.rest.common.JacksonCodec;
 import org.hudsonci.maven.model.state.ExecutionActivityDTO;
 import org.hudsonci.maven.model.state.ExecutionActivityTypeDTO;
-import org.hudsonci.rest.common.JacksonCodec;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

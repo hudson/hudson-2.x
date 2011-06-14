@@ -24,10 +24,10 @@
 
 package org.hudsonci.rest.api.internal;
 
+import org.eclipse.hudson.rest.common.Constants;
 import org.hudsonci.rest.model.fault.FaultBuilder;
 import org.hudsonci.rest.model.fault.FaultDTO;
 
-import org.hudsonci.rest.common.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -24,11 +24,11 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.eclipse.hudson.service.BuildService;
 import org.eclipse.hudson.service.DescriptorService;
 import org.eclipse.hudson.service.ProjectService;
 import org.eclipse.hudson.service.SecurityService;
-import org.hudsonci.rest.common.ProjectNameCodec;
 import hudson.model.AbstractBuild;
 
 import org.hudsonci.maven.plugin.builder.BuildStateNotFoundException;

@@ -24,13 +24,13 @@
 
 package org.hudsonci.rest.api.internal;
 
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.eclipse.hudson.service.BuildService;
 import org.eclipse.hudson.service.ProjectService;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 
-import org.hudsonci.rest.common.ProjectNameCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

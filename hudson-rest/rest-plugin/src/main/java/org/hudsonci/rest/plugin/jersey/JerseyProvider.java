@@ -46,7 +46,7 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static org.hudsonci.rest.common.Constants.BASE_REST_PATH;
+import static org.eclipse.hudson.rest.common.Constants.BASE_REST_PATH;
 
 /**
  * JAX-RS API {@link ApiProvider} backed by Jersey.

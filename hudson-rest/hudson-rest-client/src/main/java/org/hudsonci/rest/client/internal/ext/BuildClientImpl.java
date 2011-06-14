@@ -37,11 +37,11 @@ import org.cometd.Client;
 import org.cometd.Message;
 import org.cometd.MessageListener;
 import org.cometd.client.BayeuxClient;
+import org.eclipse.hudson.rest.common.JsonCodec;
 import org.hudsonci.rest.client.HudsonClientException;
 import org.hudsonci.rest.client.ext.BuildClient;
 import org.hudsonci.rest.client.ext.NotificationClient;
 import org.hudsonci.rest.client.internal.HudsonClientExtensionSupport;
-import org.hudsonci.rest.common.JsonCodec;
 
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;

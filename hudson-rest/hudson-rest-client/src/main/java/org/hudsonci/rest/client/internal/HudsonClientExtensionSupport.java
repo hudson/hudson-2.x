@@ -27,8 +27,8 @@ package org.hudsonci.rest.client.internal;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.hudsonci.rest.client.HudsonClient;
-import org.hudsonci.rest.common.ProjectNameCodec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

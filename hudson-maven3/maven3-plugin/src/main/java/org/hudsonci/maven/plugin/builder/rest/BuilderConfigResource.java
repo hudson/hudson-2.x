@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.plugin.builder.rest;
 
-import static org.hudsonci.rest.common.RestPreconditions.*;
+import static org.eclipse.hudson.rest.common.RestPreconditions.*;
 import static javax.ws.rs.core.MediaType.*;
 
 import java.io.IOException;
@@ -38,13 +38,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 
+import org.eclipse.hudson.rest.common.ProjectNameCodec;
 import org.hudsonci.maven.plugin.Constants;
 import org.hudsonci.maven.plugin.builder.MavenBuilder;
 import org.hudsonci.maven.plugin.builder.MavenBuilderService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
-import org.hudsonci.rest.common.ProjectNameCodec;
 
 /**
  * Provides access to {@link MavenBuilder}'s {@link BuildConfigurationDTO} resources.
