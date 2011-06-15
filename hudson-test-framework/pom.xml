@@ -65,6 +65,11 @@
 
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>rest-plugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven-plugin</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -72,18 +77,6 @@
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-cli</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>1.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.cometd.java</groupId>
-      <artifactId>cometd-java-server</artifactId>
-      <version>1.1.2</version>
     </dependency>
 
     <dependency>
