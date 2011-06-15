@@ -28,7 +28,7 @@ THE SOFTWARE.
         xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.20.xsd">
 
     <api-classes>
-        <include pattern="org.hudsonci.maven.plugin.**.rest.**"/>
+        <include pattern="org.eclipse.hudson.maven.plugin.**.rest.**"/>
     </api-classes>
 
     <namespaces>

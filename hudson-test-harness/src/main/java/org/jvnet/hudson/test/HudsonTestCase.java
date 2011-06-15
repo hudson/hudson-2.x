@@ -60,7 +60,6 @@ import hudson.tasks.Maven.MavenInstallation;
 import hudson.util.PersistedList;
 import hudson.util.ReflectionUtils;
 import hudson.util.StreamTaskListener;
-import hudson.util.jna.GNUCLibrary;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -477,7 +476,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
         mvn.unzip(new FilePath(mvnHome));
         // TODO: switch to tar that preserves file permissions more easily
         if(!Functions.isWindows())
-            GNUCLibrary.LIBC.chmod(new File(mvnHome,mavenVersion+"/bin/mvn").getPath(),0755);
+            Util.chmod(new File(mvnHome,mavenVersion+"/bin/mvn"), 0755);
 
         MavenInstallation mavenInstallation = new MavenInstallation("default",
                 new File(mvnHome,mavenVersion).getAbsolutePath(), NO_PROPERTIES);
@@ -501,7 +500,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
             ant.unzip(new FilePath(antHome));
             // TODO: switch to tar that preserves file permissions more easily
             if(!Functions.isWindows())
-                GNUCLibrary.LIBC.chmod(new File(antHome,"apache-ant-1.8.1/bin/ant").getPath(),0755);
+                Util.chmod(new File(antHome,"apache-ant-1.8.1/bin/ant"), 0755);
 
             antInstallation = new AntInstallation("default", new File(antHome,"apache-ant-1.8.1").getAbsolutePath(),NO_PROPERTIES);
         }
