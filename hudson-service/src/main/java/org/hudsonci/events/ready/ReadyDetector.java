@@ -106,8 +106,12 @@ public class ReadyDetector
         }
 
         // At this point we _should_ be ready, see if the app root object is installed... fingers crossed!
-        Object app = controller.current(); // FIXME: This may actually be the only check needed?
-        return app instanceof hudson.model.Hudson;
+        try {
+            Object app = controller.current(); // FIXME: This may actually be the only check needed?
+            return app instanceof hudson.model.Hudson;
+        } catch (IllegalStateException e) {
+            return false; // context not yet available
+        }
     }
 
     private Filter getDelegate(final HudsonFilter filter) {
