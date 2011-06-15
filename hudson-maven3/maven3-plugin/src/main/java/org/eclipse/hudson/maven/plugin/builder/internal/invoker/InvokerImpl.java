@@ -25,7 +25,8 @@
 package org.eclipse.hudson.maven.plugin.builder.internal.invoker;
 
 import org.sonatype.gossip.support.DC;
-import org.hudsonci.maven.eventspy.common.Callback;
+import org.model.hudson.maven.eventspy.common.Callback;
+
 import hudson.remoting.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

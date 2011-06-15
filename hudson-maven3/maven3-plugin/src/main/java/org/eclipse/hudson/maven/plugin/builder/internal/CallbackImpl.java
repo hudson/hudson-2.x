@@ -26,8 +26,6 @@ package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilder;
 import org.eclipse.hudson.utils.common.TestAccessible;
-import org.hudsonci.maven.eventspy.common.Callback;
-import org.hudsonci.maven.eventspy.common.DocumentReference;
 import org.hudsonci.maven.model.config.DocumentDTO;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.BuildStateDTO;
@@ -35,6 +33,8 @@ import org.hudsonci.maven.model.state.ExecutionActivityDTO;
 import org.hudsonci.maven.model.state.ExecutionActivityTypeDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
 import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
+import org.model.hudson.maven.eventspy.common.Callback;
+import org.model.hudson.maven.eventspy.common.DocumentReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

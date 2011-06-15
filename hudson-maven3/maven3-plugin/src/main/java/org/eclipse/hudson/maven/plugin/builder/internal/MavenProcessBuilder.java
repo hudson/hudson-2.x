@@ -45,7 +45,7 @@ import static org.eclipse.hudson.maven.model.ModelUtil.isSet;
 import static org.eclipse.hudson.maven.plugin.builder.internal.MavenConstants.*;
 import static org.eclipse.hudson.maven.plugin.builder.internal.PathNormalizer.Platform.UNIX;
 import static org.eclipse.hudson.maven.plugin.builder.internal.PathNormalizer.Platform.WINDOWS;
-import static org.hudsonci.maven.eventspy.common.Constants.PORT_PROPERTY;
+import static org.model.hudson.maven.eventspy.common.Constants.PORT_PROPERTY;
 
 /**
  * Helper to build the arguments and environment for launching Maven.

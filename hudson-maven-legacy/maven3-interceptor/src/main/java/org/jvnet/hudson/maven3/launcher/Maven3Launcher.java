@@ -6,7 +6,7 @@ import org.eclipse.hudson.maven.interceptor.listeners.HudsonMavenExecutionResult
 
 
 /**
- * Exists for backward compatibility
+ * Exists solely for backward compatibility
  * @author Winston Prakash
  * @see org.eclipse.hudson.maven.interceptor.launcher.Maven3Launcher
  */

@@ -4,7 +4,7 @@ package org.jvnet.hudson.maven3.listeners;
 import org.apache.maven.execution.MavenExecutionResult;
 
 /**
- * Exists for backward compatibility
+ * Exists solely for backward compatibility
  * @author Winston Prakash
  * @see org.eclipse.hudson.maven.interceptor.listeners.HudsonMavenExecutionResult
  */

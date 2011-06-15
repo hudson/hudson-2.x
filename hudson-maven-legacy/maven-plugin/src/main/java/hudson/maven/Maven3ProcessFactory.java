@@ -41,8 +41,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import org.eclipse.hudson.maven.agent.Maven3Main;
 import org.eclipse.hudson.maven.interceptor.launcher.Maven3Launcher;
-import org.jvnet.hudson.maven3.agent.Maven3Main;
 
 /**
  * @author Olivier Lamy

@@ -61,7 +61,7 @@ import java.util.List;
 import static org.eclipse.hudson.maven.plugin.builder.internal.MavenConstants.JAVA_HOME;
 import static org.eclipse.hudson.maven.plugin.builder.internal.MavenConstants.MAVEN_REPO;
 import static org.eclipse.hudson.maven.plugin.builder.internal.MavenConstants.MAVEN_TMP;
-import static org.hudsonci.maven.eventspy.common.Constants.INVOKE_RECORD_FILE;
+import static org.model.hudson.maven.eventspy.common.Constants.INVOKE_RECORD_FILE;
 
 /**
  * {@link MavenBuilder} perform build operation.
