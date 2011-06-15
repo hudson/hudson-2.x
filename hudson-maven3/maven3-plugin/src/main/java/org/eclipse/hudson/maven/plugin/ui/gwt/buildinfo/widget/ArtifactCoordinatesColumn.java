@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget;
 import com.google.gwt.user.cellview.client.TextColumn;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 
-import static org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
+import static org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
 
 /**
  * Column to display {@link ArtifactDTO} coordinates.

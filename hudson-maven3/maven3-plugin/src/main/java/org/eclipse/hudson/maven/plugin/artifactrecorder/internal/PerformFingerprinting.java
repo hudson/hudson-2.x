@@ -24,12 +24,12 @@
 
 package org.eclipse.hudson.maven.plugin.artifactrecorder.internal;
 
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
+import org.eclipse.hudson.maven.model.state.ArtifactDTOHelper;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.ArtifactFingerprinter;
 import org.eclipse.hudson.utils.common.Varargs;
 import org.eclipse.hudson.utils.tasks.PerformOperation;
-import org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
 import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.ArtifactDTOHelper;
 
 import hudson.FilePath;
 import hudson.Launcher;

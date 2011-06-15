@@ -24,8 +24,8 @@
 
 package org.hudsonci.maven.eventspy_30;
 
+import org.eclipse.hudson.maven.model.ThrowableDTOHelper;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.ThrowableDTOHelper;
 import org.hudsonci.maven.model.state.BuildResultDTO;
 import org.hudsonci.maven.model.state.BuildSummaryDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;

@@ -44,7 +44,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hudsonci.maven.model.test.CannedDtos.fakeArtifact;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeArtifact;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;

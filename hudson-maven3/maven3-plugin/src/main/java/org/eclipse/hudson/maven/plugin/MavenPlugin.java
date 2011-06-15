@@ -27,6 +27,7 @@ package org.eclipse.hudson.maven.plugin;
 import com.google.inject.Key;
 
 import org.eclipse.hudson.inject.Smoothie;
+import org.eclipse.hudson.maven.model.UniqueList;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.ArtifactArchiver;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.ArtifactFingerprinter;
 import org.eclipse.hudson.maven.plugin.builder.BuildStateRecord;
@@ -40,7 +41,6 @@ import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
 import org.eclipse.hudson.utils.marshal.xref.FileXReferenceStore;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceConverter;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceStoreConverter;
-import org.hudsonci.maven.model.UniqueList;
 import org.hudsonci.maven.model.state.BuildStateDTO;
 
 import com.thoughtworks.xstream.XStream;

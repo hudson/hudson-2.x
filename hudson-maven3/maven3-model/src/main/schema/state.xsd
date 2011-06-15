@@ -44,7 +44,7 @@ THE SOFTWARE.
     <xs:annotation>
         <xs:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="org.hudsonci.maven.model.state"/>
+                <jaxb:package name="org.eclipse.hudson.maven.model.state"/>
                 <jaxb:nameXmlTransform>
                     <jaxb:elementName suffix="DTO"/>
                     <jaxb:typeName suffix="DTO"/>
@@ -70,7 +70,7 @@ THE SOFTWARE.
             <xs:element name="artifact" type="artifact" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:appinfo>
-                        <jaxb:property collectionType="org.hudsonci.maven.model.UniqueList"/>
+                        <jaxb:property collectionType="org.eclipse.hudson.maven.model.UniqueList"/>
                     </xs:appinfo>
                 </xs:annotation>
             </xs:element>

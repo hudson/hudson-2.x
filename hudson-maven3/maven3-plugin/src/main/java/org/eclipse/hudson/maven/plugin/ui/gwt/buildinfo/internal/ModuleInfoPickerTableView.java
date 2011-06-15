@@ -42,7 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 
-import static org.hudsonci.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
+import static org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
 
 /**
  * Table based view for {@link ModuleInfoPickerView}.

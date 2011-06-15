@@ -35,8 +35,8 @@ import org.junit.Test;
 
 import java.util.Collections;
 
-import static org.hudsonci.maven.model.test.CannedDtos.fakeArtifact;
-import static org.hudsonci.maven.model.test.CannedDtos.fakeCoordinates;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeArtifact;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeCoordinates;
 
 
 import static org.hamcrest.Matchers.nullValue;

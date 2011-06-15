@@ -24,6 +24,7 @@
 
 package org.hudsonci.maven.eventspy_30.recorder;
 
+import org.eclipse.hudson.maven.model.state.MavenProjectDTOHelper;
 import org.eclipse.hudson.utils.common.TestAccessible;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import org.hudsonci.maven.model.state.ArtifactActionDTO;
@@ -31,7 +32,6 @@ import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.ArtifactOperationDTO;
 import org.hudsonci.maven.model.state.BuildResultDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTOHelper;
 
 import org.apache.maven.execution.BuildSummary;
 import org.apache.maven.project.MavenProject;

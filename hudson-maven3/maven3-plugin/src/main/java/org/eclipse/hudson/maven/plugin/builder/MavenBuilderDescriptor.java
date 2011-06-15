@@ -62,8 +62,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.maven.model.ModelUtil.renderList;
-import static org.hudsonci.maven.model.ModelUtil.renderProperties;
+import static org.eclipse.hudson.maven.model.ModelUtil.renderList;
+import static org.eclipse.hudson.maven.model.ModelUtil.renderProperties;
 import static org.hudsonci.maven.model.config.DocumentTypeDTO.SETTINGS;
 import static org.hudsonci.maven.model.config.DocumentTypeDTO.TOOLCHAINS;
 

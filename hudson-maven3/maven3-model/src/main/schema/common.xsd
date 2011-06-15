@@ -42,7 +42,7 @@ THE SOFTWARE.
     <xs:annotation>
         <xs:appinfo>
             <jaxb:schemaBindings>
-                <jaxb:package name="org.hudsonci.maven.model"/>
+                <jaxb:package name="org.eclipse.hudson.maven.model"/>
                 <jaxb:nameXmlTransform>
                     <jaxb:elementName suffix="DTO"/>
                     <jaxb:typeName suffix="DTO"/>

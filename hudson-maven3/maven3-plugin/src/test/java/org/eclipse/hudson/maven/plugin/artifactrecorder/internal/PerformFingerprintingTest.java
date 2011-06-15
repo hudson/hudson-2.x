@@ -49,7 +49,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.hudsonci.maven.model.test.CannedDtos.fakeArtifact;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeArtifact;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

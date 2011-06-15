@@ -25,7 +25,7 @@ THE SOFTWARE.
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.1.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.1.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to="MavenBuildInfo">
     <inherits name="org.eclipse.hudson.gwt.common.Common"/>
-    <inherits name="org.hudsonci.maven.model.Model"/>
+    <inherits name="org.eclipse.hudson.maven.model.Model"/>
     <inherits name="com.google.common.collect.Collect"/>
     <inherits name="org.hudsonci.gwt.theme.chrome.Chrome"/>
     

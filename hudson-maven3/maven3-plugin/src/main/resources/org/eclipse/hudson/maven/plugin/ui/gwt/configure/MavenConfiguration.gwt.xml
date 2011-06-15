@@ -28,7 +28,7 @@ THE SOFTWARE.
 <module rename-to="MavenConfiguration">
     <inherits name="org.eclipse.hudson.gwt.common.Common"/>
     <inherits name="org.hudsonci.gwt.theme.chrome.Chrome"/>
-    <inherits name="org.hudsonci.maven.model.Model"/>
+    <inherits name="org.eclipse.hudson.maven.model.Model"/>
     <inherits name="org.eclipse.hudson.gwt.icons.silk.SilkIcons"/>
 
     <!--<inherits name="org.slf4j.Slf4j"/>-->

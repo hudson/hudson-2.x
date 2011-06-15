@@ -36,8 +36,8 @@ import net.sf.json.JSONObject;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.maven.model.ModelUtil.parseList;
-import static org.hudsonci.maven.model.ModelUtil.parseProperties;
+import static org.eclipse.hudson.maven.model.ModelUtil.parseList;
+import static org.eclipse.hudson.maven.model.ModelUtil.parseProperties;
 
 /**
  * Helper to extract build configuration details from a {@link JSONObject}.

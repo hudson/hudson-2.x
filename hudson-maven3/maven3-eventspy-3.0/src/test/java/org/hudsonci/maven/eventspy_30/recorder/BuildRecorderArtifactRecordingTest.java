@@ -25,11 +25,12 @@
 package org.hudsonci.maven.eventspy_30.recorder;
 
 import com.google.common.collect.ImmutableList;
+
+import org.eclipse.hudson.maven.model.state.MavenProjectDTOHelper;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import org.hudsonci.maven.model.state.ArtifactDTO;
 import org.hudsonci.maven.model.state.ArtifactOperationDTO;
 import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTOHelper;
 import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
 
 import org.apache.maven.project.MavenProject;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.hudsonci.maven.model.test.CannedDtos.fakeArtifact;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeArtifact;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;

@@ -24,7 +24,7 @@
 
 package org.hudsonci.maven.eventspy_30;
 
-import org.hudsonci.maven.model.PropertiesDTOHelper;
+import org.eclipse.hudson.maven.model.PropertiesDTOHelper;
 import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
 import org.apache.maven.BuildAbort;
 import org.hudsonci.maven.eventspy.common.Callback;

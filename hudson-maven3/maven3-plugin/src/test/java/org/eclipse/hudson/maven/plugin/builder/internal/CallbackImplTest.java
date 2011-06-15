@@ -37,7 +37,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hudsonci.maven.model.test.CannedDtos.fakeCoordinates;
+import static org.eclipse.hudson.maven.model.test.CannedDtos.fakeCoordinates;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
