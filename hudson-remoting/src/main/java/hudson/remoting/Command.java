@@ -21,17 +21,17 @@ import java.io.Serializable;
 /**
  * One-way command to be sent over to the remote system and executed there.
  * This is layer 0, the lower most layer.
- *
- * <p>
+ * <p/>
+ * <p/>
  * At this level, remoting of class files are not provided, so both {@link Channel}s
  * need to have the definition of {@link Command}-implementation.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 abstract class Command implements Serializable {
     /**
      * This exception captures the stack trace of where the Command object is created.
-     * This is useful for diagnosing the error when command fails to execute on the remote peer. 
+     * This is useful for diagnosing the error when command fails to execute on the remote peer.
      */
     public final Exception createdAt;
 
@@ -40,24 +40,27 @@ abstract class Command implements Serializable {
         this(true);
     }
 
+    protected Command(Throwable cause) {
+        this.createdAt = new Source(cause);
+    }
+
     /**
-     * @param recordCreatedAt
-     *      If false, skip the recording of where the command is created. This makes the trouble-shooting
-     *      and cause/effect correlation hard in case of a failure, but it will reduce the amount of the data
-     *      transferred.
+     * @param recordCreatedAt If false, skip the recording of where the command is created. This makes the trouble-shooting
+     * and cause/effect correlation hard in case of a failure, but it will reduce the amount of the data
+     * transferred.
      */
     protected Command(boolean recordCreatedAt) {
-        if(recordCreatedAt)
+        if (recordCreatedAt) {
             this.createdAt = new Source();
-        else
+        } else {
             this.createdAt = null;
+        }
     }
 
     /**
      * Called on a remote system to perform this command.
      *
-     * @param channel
-     *      The {@link Channel} of the remote system.
+     * @param channel The {@link Channel} of the remote system.
      */
     protected abstract void execute(Channel channel);
 
@@ -67,8 +70,12 @@ abstract class Command implements Serializable {
         public Source() {
         }
 
+        private Source(Throwable cause) {
+            super(cause);
+        }
+
         public String toString() {
-            return "Command "+Command.this.toString()+" created at";
+            return "Command " + Command.this.toString() + " created at";
         }
 
         private static final long serialVersionUID = 1L;

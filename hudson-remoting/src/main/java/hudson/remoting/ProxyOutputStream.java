@@ -28,6 +28,8 @@ import java.util.logging.Logger;
  * {@link OutputStream} on a remote machine.
  */
 final class ProxyOutputStream extends OutputStream {
+    private static final Logger LOGGER = Logger.getLogger(ProxyOutputStream.class.getName());
+
     private Channel channel;
     private int oid;
 
@@ -47,7 +49,7 @@ final class ProxyOutputStream extends OutputStream {
     /**
      * Creates unconnected {@link ProxyOutputStream}.
      * The returned stream accepts data right away, and
-     * when it's {@link #connect(Channel,int) connected} later,
+     * when it's {@link #connect(Channel, int) connected} later,
      * the data will be sent at once to the remote stream.
      */
     public ProxyOutputStream() {
@@ -56,43 +58,47 @@ final class ProxyOutputStream extends OutputStream {
     /**
      * Creates an already connected {@link ProxyOutputStream}.
      *
-     * @param oid
-     *      The object id of the exported {@link OutputStream}.
+     * @param oid The object id of the exported {@link OutputStream}.
      */
     public ProxyOutputStream(Channel channel, int oid) throws IOException {
-        connect(channel,oid);
+        connect(channel, oid);
     }
 
     /**
      * Connects this stream to the specified remote object.
      */
     synchronized void connect(Channel channel, int oid) throws IOException {
-        if(this.channel!=null)
+        if (this.channel != null) {
             throw new IllegalStateException("Cannot connect twice");
-        if(oid==0)
+        }
+        if (oid == 0) {
             throw new IllegalArgumentException("oid=0");
+        }
         this.channel = channel;
         this.oid = oid;
 
-        window =  channel.getPipeWindow(oid);
+        window = channel.getPipeWindow(oid);
 
         // if we already have bytes to write, do so now.
-        if(tmp!=null) {
+        if (tmp != null) {
             byte[] b = tmp.toByteArray();
             tmp = null;
-            _write(b,0,b.length);
+            _write(b, 0, b.length);
         }
-        if(closed)  // already marked closed?
+        if (closed)  // already marked closed?
+        {
             doClose();
+        }
     }
 
     public void write(int b) throws IOException {
-        write(new byte[]{(byte)b},0,1);
+        write(new byte[]{(byte) b}, 0, 1);
     }
 
     public void write(byte b[], int off, int len) throws IOException {
-        if(closed)
+        if (closed) {
             throw new IOException("stream is already closed");
+        }
         _write(b, off, len);
     }
 
@@ -100,36 +106,70 @@ final class ProxyOutputStream extends OutputStream {
      * {@link #write(byte[])} without the close check.
      */
     private synchronized void _write(byte[] b, int off, int len) throws IOException {
-        if(channel==null) {
-            if(tmp==null)
+        if (channel == null) {
+            if (tmp == null) {
                 tmp = new ByteArrayOutputStream();
-            tmp.write(b,off,len);
+            }
+            tmp.write(b, off, len);
         } else {
-            while (len>0) {
+            while (len > 0) {
                 int sendable;
                 try {
-                    sendable = Math.min(window.get(),len);
+                    sendable = Math.min(window.get(), len);
                 } catch (InterruptedException e) {
-                    throw (IOException)new InterruptedIOException().initCause(e);
+                    throw (IOException) new InterruptedIOException().initCause(e);
                 }
 
-                channel.send(new Chunk(oid,b,off,sendable));
+                channel.send(new Chunk(oid, b, off, sendable));
                 window.decrease(sendable);
-                off+=sendable;
-                len-=sendable;
+                off += sendable;
+                len -= sendable;
             }
         }
     }
 
     public synchronized void flush() throws IOException {
-        if(channel!=null)
+        if (channel != null) {
             channel.send(new Flush(oid));
+        }
     }
 
     public synchronized void close() throws IOException {
         closed = true;
-        if(channel!=null)
+        if (channel != null) {
             doClose();
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        // if we haven't done so, release the exported object on the remote side.
+        if (channel != null) {
+            channel.send(new Unexport(oid));
+            channel = null;
+            oid = -1;
+        }
+    }
+
+    /**
+     * I/O operations in remoting gets executed by a separate pipe thread asynchronously.
+     * So if a closure performs some I/O (such as writing to the RemoteOutputStream) then returns,
+     * it is possible that the calling thread unblocks before the I/O actually completes.
+     * <p/>
+     * So the goal of this code is to automatically ensure the proper ordering of the return from
+     * the {@link Request#call(Channel)} and the I/O operations done during the call. We do this
+     * by attributing I/O call to a {@link Request}, then keeping track of the last I/O operation
+     * performed.
+     */
+    private static void markForIoSync(Channel channel, int requestId, java.util.concurrent.Future<?> ioOp) {
+        Request<?, ?> call = channel.pendingCalls.get(requestId);
+        // call==null if:
+        //  1) the remote peer uses old version that doesn't set the requestId field
+        //  2) a bug in the code, but in that case we are being defensive
+        if (call != null) {
+            call.lastIo = ioOp;
+        }
     }
 
     private void doClose() throws IOException {
@@ -138,23 +178,13 @@ final class ProxyOutputStream extends OutputStream {
         oid = -1;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        // if we haven't done so, release the exported object on the remote side.
-        if(channel!=null) {
-            channel.send(new Unexport(oid));
-            channel = null;
-            oid = -1;
-        }
-    }
-
     /**
      * {@link Command} for sending bytes.
      */
     private static final class Chunk extends Command {
         private final int oid;
         private final byte[] buf;
+        private final int requestId = Request.getCurrentRequestId();
 
         public Chunk(int oid, byte[] buf, int start, int len) {
             // to improve the performance when a channel is used purely as a pipe,
@@ -162,39 +192,49 @@ final class ProxyOutputStream extends OutputStream {
             // takes up about 1.5K.
             super(false);
             this.oid = oid;
-            if (start==0 && len==buf.length)
+            if (start == 0 && len == buf.length) {
                 this.buf = buf;
-            else {
+            } else {
                 this.buf = new byte[len];
-                System.arraycopy(buf,start,this.buf,0,len);
+                System.arraycopy(buf, start, this.buf, 0, len);
             }
         }
 
         protected void execute(final Channel channel) {
             final OutputStream os = (OutputStream) channel.getExportedObject(oid);
-            channel.pipeWriter.submit(new Runnable() {
+            markForIoSync(channel, requestId, channel.pipeWriter.submit(new Runnable() {
                 public void run() {
                     try {
                         os.write(buf);
                     } catch (IOException e) {
-                        // ignore errors
-                        LOGGER.log(Level.WARNING, "Failed to write to stream",e);
+                        try {
+                            channel.send(new NotifyDeadWriter(e, oid));
+                        } catch (ChannelClosedException x) {
+                            // the other direction can be already closed if the connection
+                            // shut down is initiated from this side. In that case, remain silent.
+                        } catch (IOException x) {
+                            LOGGER.log(Level.WARNING, "Failed to notify the sender that the write end is dead", x);
+                            LOGGER.log(Level.WARNING, "... the failed write was:", e);
+                        }
                     } finally {
                         if (channel.remoteCapability.supportsPipeThrottling()) {
                             try {
-                                channel.send(new Ack(oid,buf.length));
+                                channel.send(new Ack(oid, buf.length));
+                            } catch (ChannelClosedException x) {
+                                // the other direction can be already closed if the connection
+                                // shut down is initiated from this side. In that case, remain silent.
                             } catch (IOException e) {
                                 // ignore errors
-                                LOGGER.log(Level.WARNING, "Failed to ack the stream",e);
+                                LOGGER.log(Level.WARNING, "Failed to ack the stream", e);
                             }
                         }
                     }
                 }
-            });
+            }));
         }
 
         public String toString() {
-            return "Pipe.Chunk("+oid+","+buf.length+")";
+            return "Pipe.Chunk(" + oid + "," + buf.length + ")";
         }
 
         private static final long serialVersionUID = 1L;
@@ -225,7 +265,7 @@ final class ProxyOutputStream extends OutputStream {
         }
 
         public String toString() {
-            return "Pipe.Flush("+oid+")";
+            return "Pipe.Flush(" + oid + ")";
         }
 
         private static final long serialVersionUID = 1L;
@@ -233,8 +273,7 @@ final class ProxyOutputStream extends OutputStream {
 
     /**
      * {@link Command} for releasing an export table.
-     *
-     * <p>
+     * <p/>
      * Unlike {@link EOF}, this just unexports but not closes the stream.
      */
     private static class Unexport extends Command {
@@ -253,7 +292,7 @@ final class ProxyOutputStream extends OutputStream {
         }
 
         public String toString() {
-            return "Pipe.Unexport("+oid+")";
+            return "Pipe.Unexport(" + oid + ")";
         }
 
         private static final long serialVersionUID = 1L;
@@ -285,7 +324,7 @@ final class ProxyOutputStream extends OutputStream {
         }
 
         public String toString() {
-            return "Pipe.EOF("+oid+")";
+            return "Pipe.EOF(" + oid + ")";
         }
 
         private static final long serialVersionUID = 1L;
@@ -316,11 +355,33 @@ final class ProxyOutputStream extends OutputStream {
         }
 
         public String toString() {
-            return "Pipe.Ack("+oid+','+size+")";
+            return "Pipe.Ack(" + oid + ',' + size + ")";
         }
 
         private static final long serialVersionUID = 1L;
     }
 
-    private static final Logger LOGGER = Logger.getLogger(ProxyOutputStream.class.getName());
+    /**
+     * {@link Command} to notify the sender that the receiver is dead.
+     */
+    private static final class NotifyDeadWriter extends Command {
+        private final int oid;
+
+        private NotifyDeadWriter(Throwable cause, int oid) {
+            super(cause);
+            this.oid = oid;
+        }
+
+        @Override
+        protected void execute(Channel channel) {
+            PipeWindow w = channel.getPipeWindow(oid);
+            w.dead(createdAt.getCause());
+        }
+
+        public String toString() {
+            return "Pipe.Dead(" + oid + ")";
+        }
+
+        private static final long serialVersionUID = 1L;
+    }
 }
