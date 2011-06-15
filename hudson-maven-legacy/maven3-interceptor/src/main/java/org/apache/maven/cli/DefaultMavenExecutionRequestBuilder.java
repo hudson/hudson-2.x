@@ -30,6 +30,15 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
+import org.apache.maven.cli.BatchModeMavenTransferListener;
+import org.apache.maven.cli.CLIManager;
+import org.apache.maven.cli.CLIReportingUtils;
+import org.apache.maven.cli.ConsoleMavenTransferListener;
+import org.apache.maven.cli.ExecutionEventLogger;
+import org.apache.maven.cli.MavenCli;
+import org.apache.maven.cli.PrintStreamLogger;
+import org.apache.maven.cli.QuietMavenTransferListener;
+import org.apache.maven.cli.MavenCli.ExitException;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequestPopulationException;
@@ -102,7 +111,7 @@ public class DefaultMavenExecutionRequestBuilder
 
     /**
      * @throws MavenExecutionRequestPopulationException 
-     * @see org.jvnet.hudson.maven3.MavenExecutionRequestBuilder.MavenExecutionRequestsBuilder#getMavenExecutionRequest(java.lang.String[])
+     * @see org.eclipse.hudson.maven.interceptor.MavenExecutionRequestBuilder.MavenExecutionRequestsBuilder#getMavenExecutionRequest(java.lang.String[])
      */
     public MavenExecutionRequest getMavenExecutionRequest( String[] args, PrintStream printStream )
         throws MavenExecutionRequestPopulationException, SettingsBuildingException,
