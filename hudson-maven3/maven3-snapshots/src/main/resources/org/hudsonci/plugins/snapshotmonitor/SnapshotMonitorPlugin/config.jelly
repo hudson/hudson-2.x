@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:section title="Maven3 SNAPSHOT Monitor">
+    <f:section title="Maven 3 SNAPSHOT Monitor">
         <f:entry title="Maven Repository URL">
             <f:textbox name="url" value="${it.url}"/>
         </f:entry>
