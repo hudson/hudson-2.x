@@ -6,11 +6,11 @@ import org.apache.maven.execution.MavenExecutionResult;
 /**
  * Exists solely for backward compatibility
  * @author Winston Prakash
- * @see org.eclipse.hudson.maven.interceptor.listeners.HudsonMavenExecutionResult
+ * @see org.eclipse.hudson.legacy.maven3.interceptor.listeners.HudsonMavenExecutionResult
  */
 public class HudsonMavenExecutionResult
 		extends
-		org.eclipse.hudson.maven.interceptor.listeners.HudsonMavenExecutionResult {
+		org.eclipse.hudson.legacy.maven3.interceptor.listeners.HudsonMavenExecutionResult {
 
 	public static final long serialVersionUID = -2236073185655598257L;
 

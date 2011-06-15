@@ -41,8 +41,8 @@ import java.io.PrintStream;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Zip;
 import org.codehaus.plexus.classworlds.ClassWorld;
-import org.eclipse.hudson.maven.agent.Maven3Main;
-import org.eclipse.hudson.maven.interceptor.launcher.Maven3Launcher;
+import org.eclipse.hudson.legacy.maven3.agent.Maven3Main;
+import org.eclipse.hudson.legacy.maven3.interceptor.launcher.Maven3Launcher;
 
 /**
  * When a slave is connected, copy <tt>maven-agent.jar</tt> and <tt>maven-intercepter.jar</tt>

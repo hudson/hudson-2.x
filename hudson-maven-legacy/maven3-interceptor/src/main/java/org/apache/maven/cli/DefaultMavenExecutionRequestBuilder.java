@@ -111,7 +111,7 @@ public class DefaultMavenExecutionRequestBuilder
 
     /**
      * @throws MavenExecutionRequestPopulationException 
-     * @see org.eclipse.hudson.maven.interceptor.MavenExecutionRequestBuilder.MavenExecutionRequestsBuilder#getMavenExecutionRequest(java.lang.String[])
+     * @see org.eclipse.hudson.legacy.maven3.interceptor.MavenExecutionRequestBuilder.MavenExecutionRequestsBuilder#getMavenExecutionRequest(java.lang.String[])
      */
     public MavenExecutionRequest getMavenExecutionRequest( String[] args, PrintStream printStream )
         throws MavenExecutionRequestPopulationException, SettingsBuildingException,

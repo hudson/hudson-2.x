@@ -60,9 +60,9 @@ import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
 import org.codehaus.plexus.configuration.xml.XmlPlexusConfiguration;
-import org.eclipse.hudson.maven.agent.Maven3Main;
-import org.eclipse.hudson.maven.interceptor.launcher.Maven3Launcher;
-import org.eclipse.hudson.maven.interceptor.listeners.HudsonMavenExecutionResult;
+import org.eclipse.hudson.legacy.maven3.agent.Maven3Main;
+import org.eclipse.hudson.legacy.maven3.interceptor.launcher.Maven3Launcher;
+import org.eclipse.hudson.legacy.maven3.interceptor.listeners.HudsonMavenExecutionResult;
 
 /**
  * @author Olivier Lamy
