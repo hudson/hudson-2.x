@@ -24,9 +24,9 @@
 
 package org.eclipse.hudson.plugins.snapshotmonitor.internal;
 
-import org.hudsonci.maven.plugin.dependencymonitor.ArtifactsExtractor;
-import org.hudsonci.maven.plugin.dependencymonitor.ArtifactsPair;
-import org.hudsonci.maven.plugin.dependencymonitor.ProjectArtifactCache;
+import org.eclipse.hudson.maven.plugin.dependencymonitor.ArtifactsExtractor;
+import org.eclipse.hudson.maven.plugin.dependencymonitor.ArtifactsPair;
+import org.eclipse.hudson.maven.plugin.dependencymonitor.ProjectArtifactCache;
 import com.google.common.collect.Sets;
 
 import org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper;

@@ -27,7 +27,7 @@ THE SOFTWARE.
     <inherits name="org.eclipse.hudson.gwt.common.Common"/>
     <inherits name="org.eclipse.hudson.maven.model.Model"/>
     <inherits name="com.google.common.collect.Collect"/>
-    <inherits name="org.hudsonci.gwt.theme.chrome.Chrome"/>
+    <inherits name="org.eclipse.hudson.gwt.theme.chrome.Chrome"/>
     
     <!-- "" is the current directory. -->
     <source path="">

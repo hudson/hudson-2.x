@@ -28,7 +28,7 @@ import com.google.common.collect.Sets;
 
 import org.eclipse.hudson.maven.plugin.artifactrecorder.ArtifactFingerprinter;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.internal.PerformFingerprinting;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import org.junit.Before;
 import org.junit.Ignore;

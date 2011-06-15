@@ -31,7 +31,7 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.gin.MavenBuildInfoInjector;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.gin.MavenBuildInfoModule;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
