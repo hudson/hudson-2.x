@@ -24,9 +24,9 @@
 
 package org.model.hudson.maven.eventspy.common;
 
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.RuntimeEnvironmentDTO;
 
 import java.io.File;
 import java.util.Collection;

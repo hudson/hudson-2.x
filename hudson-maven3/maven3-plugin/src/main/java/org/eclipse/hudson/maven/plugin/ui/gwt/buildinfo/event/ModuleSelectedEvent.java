@@ -28,7 +28,7 @@ import org.eclipse.hudson.gwt.common.EventSupport;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.ModuleSelectedEvent.Handler;
 
 import com.google.gwt.event.shared.EventHandler;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 /**
  * Indicates that a {@link MavenProjectDTO} has been selected.

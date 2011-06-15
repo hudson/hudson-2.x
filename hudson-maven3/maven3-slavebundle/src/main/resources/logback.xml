@@ -47,7 +47,7 @@ THE SOFTWARE.
         </filter>
     </appender>
 
-    <logger name="org.hudsonci.maven" level="${hudson.eventspy.logger.maven:-INFO}"/>
+    <logger name="org.eclipse.hudson.maven" level="${hudson.eventspy.logger.maven:-INFO}"/>
 
     <root level="${hudson.eventspy.logger.root:-INFO}">
         <appender-ref ref="CONSOLE"/>

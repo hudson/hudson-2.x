@@ -48,8 +48,8 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildSummaryPresenter.Bu
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.MainPanelPresenter.MainPanelView;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPresenter.ModuleInfoView;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget.PropertiesTable;
-import org.hudsonci.maven.model.PropertiesDTO.Entry;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO.Entry;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

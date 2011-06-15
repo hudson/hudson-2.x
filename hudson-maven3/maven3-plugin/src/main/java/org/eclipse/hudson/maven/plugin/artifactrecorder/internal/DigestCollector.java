@@ -26,7 +26,7 @@ package org.eclipse.hudson.maven.plugin.artifactrecorder.internal;
 
 import org.eclipse.hudson.maven.model.state.ArtifactDTOHelper;
 import org.eclipse.hudson.utils.common.TestAccessible;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

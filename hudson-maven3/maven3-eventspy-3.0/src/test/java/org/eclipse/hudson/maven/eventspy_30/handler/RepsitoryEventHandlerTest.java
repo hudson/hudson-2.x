@@ -25,7 +25,7 @@
 package org.eclipse.hudson.maven.eventspy_30.handler;
 
 import org.eclipse.hudson.maven.eventspy_30.handler.RepositoryEventHandler;
-import org.hudsonci.maven.model.state.ArtifactOperationDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactOperationDTO;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

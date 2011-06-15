@@ -28,8 +28,8 @@ import com.google.gwt.event.shared.EventHandler;
 
 import org.eclipse.hudson.gwt.common.EventSupport;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.BuildStateLoadedEvent.Handler;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.BuildStatesDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStatesDTO;
 
 import java.util.List;
 

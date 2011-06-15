@@ -24,8 +24,8 @@
 
 package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo;
 
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import java.util.Arrays;
 import java.util.Collection;

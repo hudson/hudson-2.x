@@ -29,7 +29,7 @@ import org.eclipse.hudson.maven.plugin.dependencymonitor.DependencyNotifier;
 import org.eclipse.hudson.maven.plugin.dependencymonitor.ProjectArtifactCache;
 import org.eclipse.hudson.service.DependencyGraphService;
 import org.eclipse.hudson.utils.tasks.MetaProject;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;

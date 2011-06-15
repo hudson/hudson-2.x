@@ -32,7 +32,7 @@ import org.eclipse.hudson.service.BuildService;
 import org.eclipse.hudson.service.DescriptorService;
 import org.eclipse.hudson.service.ProjectService;
 import org.eclipse.hudson.service.SecurityService;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 
 import org.junit.Before;
 import org.junit.Test;

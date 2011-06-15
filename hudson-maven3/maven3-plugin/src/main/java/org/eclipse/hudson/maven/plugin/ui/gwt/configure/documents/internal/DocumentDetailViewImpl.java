@@ -44,8 +44,8 @@ import org.eclipse.hudson.gwt.common.EnumListBox;
 import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.DocumentDetailPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.DocumentDetailView;
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

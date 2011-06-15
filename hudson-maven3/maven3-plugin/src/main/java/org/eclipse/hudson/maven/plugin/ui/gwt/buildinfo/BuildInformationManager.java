@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo;
 import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.BuildInformationManagerImpl;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import java.util.Collection;
 

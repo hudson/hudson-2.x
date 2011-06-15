@@ -29,8 +29,8 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 /**
  * Display of MavenProjectDTO {@link Cell}s.

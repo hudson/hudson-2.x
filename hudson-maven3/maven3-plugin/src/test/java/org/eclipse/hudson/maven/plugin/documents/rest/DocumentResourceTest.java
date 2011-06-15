@@ -40,7 +40,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import org.hudsonci.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
 
 /**
  * Tests for {@link DocumentResource}.

@@ -36,7 +36,7 @@ import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPickerPresenter.ModuleInfoPickerView;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget.ModuleDurationColumn;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget.ModuleStatusIconColumn;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

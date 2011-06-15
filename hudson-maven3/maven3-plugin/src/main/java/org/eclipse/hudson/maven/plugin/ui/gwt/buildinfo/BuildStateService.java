@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo;
 
-import org.hudsonci.maven.model.state.BuildStatesDTO;
+import org.eclipse.hudson.maven.model.state.BuildStatesDTO;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 

@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.plugin.documents;
 import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.documents.internal.DocumentManagerImpl;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 import java.util.Collection;
 

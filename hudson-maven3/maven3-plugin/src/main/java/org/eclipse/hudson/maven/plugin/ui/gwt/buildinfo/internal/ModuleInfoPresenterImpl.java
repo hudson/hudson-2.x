@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildInformationManager;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPresenter;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

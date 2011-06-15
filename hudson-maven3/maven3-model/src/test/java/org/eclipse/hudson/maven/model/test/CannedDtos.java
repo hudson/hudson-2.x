@@ -24,8 +24,8 @@
 
 package org.eclipse.hudson.maven.model.test;
 
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 /**
  * Various DTOs created in a known state for use in testing.

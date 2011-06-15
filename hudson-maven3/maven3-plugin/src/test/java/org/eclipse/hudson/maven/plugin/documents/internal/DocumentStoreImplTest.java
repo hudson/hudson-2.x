@@ -24,11 +24,11 @@
 
 package org.eclipse.hudson.maven.plugin.documents.internal;
 
+import org.hudsonci.utils.test.TestUtil;
 import org.eclipse.hudson.maven.plugin.documents.internal.DocumentStoreImpl;
 import org.eclipse.hudson.service.SystemService;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
-import org.hudsonci.utils.test.TestUtil;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 import org.junit.Before;
 import org.junit.Test;

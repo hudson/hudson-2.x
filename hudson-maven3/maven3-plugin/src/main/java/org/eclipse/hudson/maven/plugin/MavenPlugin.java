@@ -41,7 +41,7 @@ import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
 import org.eclipse.hudson.utils.marshal.xref.FileXReferenceStore;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceConverter;
 import org.eclipse.hudson.utils.marshal.xref.XReferenceStoreConverter;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 
 import com.thoughtworks.xstream.XStream;
 

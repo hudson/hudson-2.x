@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
 
 import com.google.gwt.user.cellview.client.TextColumn;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 /**
  * Column to display the duration of a {@link MavenProjectDTO} build.

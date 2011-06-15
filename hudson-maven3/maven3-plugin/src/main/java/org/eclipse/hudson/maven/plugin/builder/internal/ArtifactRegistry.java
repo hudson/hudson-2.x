@@ -25,8 +25,8 @@
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import com.google.common.collect.ImmutableList;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import java.util.Collection;
 import java.util.HashMap;

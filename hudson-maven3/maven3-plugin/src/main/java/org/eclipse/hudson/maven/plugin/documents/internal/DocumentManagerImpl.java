@@ -31,8 +31,8 @@ import org.eclipse.hudson.maven.plugin.documents.DocumentStore;
 import org.eclipse.hudson.maven.plugin.documents.DuplicateDocumentException;
 import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.common.Iso8601Date;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 import hudson.model.User;
 
@@ -52,10 +52,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.CREATED;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.CREATED_BY;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.UPDATED;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.UPDATED_BY;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.CREATED;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.CREATED_BY;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.UPDATED;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.UPDATED_BY;
 import static hudson.model.Hudson.ADMINISTER;
 
 /**

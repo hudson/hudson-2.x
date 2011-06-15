@@ -25,11 +25,11 @@
 package org.eclipse.hudson.maven.eventspy_30;
 
 import org.eclipse.hudson.maven.model.ThrowableDTOHelper;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.BuildSummaryDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.ProfileDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.BuildSummaryDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.ProfileDTO;
 
 import org.apache.maven.execution.BuildFailure;
 import org.apache.maven.execution.BuildSuccess;

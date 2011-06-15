@@ -33,7 +33,7 @@ import org.eclipse.hudson.maven.plugin.dependencymonitor.ArtifactsExtractor;
 import org.eclipse.hudson.maven.plugin.dependencymonitor.ArtifactsPair;
 import org.eclipse.hudson.maven.plugin.dependencymonitor.ProjectArtifactCache;
 import org.eclipse.hudson.service.ProjectService;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 

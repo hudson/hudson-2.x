@@ -28,8 +28,8 @@ import org.eclipse.hudson.maven.plugin.Constants;
 import org.eclipse.hudson.maven.plugin.builder.BuildStateNotFoundException;
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilderService;
 import org.eclipse.hudson.rest.common.ProjectNameCodec;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.BuildStatesDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStatesDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

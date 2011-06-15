@@ -26,8 +26,8 @@ package org.eclipse.hudson.maven.model;
 
 import java.util.List;
 
-import org.hudsonci.maven.model.StackTraceDTO;
-import org.hudsonci.maven.model.ThrowableDTO;
+import org.eclipse.hudson.maven.model.StackTraceDTO;
+import org.eclipse.hudson.maven.model.ThrowableDTO;
 
 /**
  * Helper for {@link ThrowableDTO}.

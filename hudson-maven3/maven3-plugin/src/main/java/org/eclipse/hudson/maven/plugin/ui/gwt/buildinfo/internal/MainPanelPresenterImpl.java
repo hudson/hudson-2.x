@@ -33,10 +33,10 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildInformationManager;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.MainPanelPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.BuildStateSelectedEvent;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.gin.FirstShownInfoDisplay;
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.PropertiesDTO.Entry;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO.Entry;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.RuntimeEnvironmentDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

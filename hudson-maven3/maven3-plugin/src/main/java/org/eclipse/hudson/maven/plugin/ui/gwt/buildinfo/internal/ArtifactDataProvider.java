@@ -25,7 +25,7 @@
 package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal;
 
 import com.google.gwt.view.client.ListDataProvider;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import javax.inject.Singleton;
 

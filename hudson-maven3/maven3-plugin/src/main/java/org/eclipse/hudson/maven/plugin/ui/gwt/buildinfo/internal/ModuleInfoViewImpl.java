@@ -43,8 +43,8 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPickerPresente
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPickerPresenter.ModuleInfoPickerView;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPresenter.ModuleInfoView;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget.ArtifactCoordinatesColumn;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

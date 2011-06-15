@@ -25,8 +25,8 @@
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import org.eclipse.hudson.utils.common.TestAccessible;
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 import hudson.AbortException;
 import hudson.EnvVars;
 import hudson.FilePath;

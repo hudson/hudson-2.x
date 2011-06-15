@@ -30,8 +30,8 @@ import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.MainPanelPresenterImpl;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.MainPanelViewImpl;
-import org.hudsonci.maven.model.PropertiesDTO.Entry;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO.Entry;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 
 import java.util.List;
 

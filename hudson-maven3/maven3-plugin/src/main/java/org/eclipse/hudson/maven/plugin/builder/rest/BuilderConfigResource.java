@@ -44,7 +44,7 @@ import org.eclipse.hudson.maven.plugin.builder.MavenBuilderService;
 import org.eclipse.hudson.rest.common.ProjectNameCodec;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 
 /**
  * Provides access to {@link MavenBuilder}'s {@link BuildConfigurationDTO} resources.

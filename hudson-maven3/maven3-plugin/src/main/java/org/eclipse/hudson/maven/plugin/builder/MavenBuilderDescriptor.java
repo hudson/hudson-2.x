@@ -30,15 +30,15 @@ import org.eclipse.hudson.maven.plugin.install.MavenInstallation;
 import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
 import org.eclipse.hudson.utils.plugin.ui.RenderableEnum;
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
-import org.hudsonci.maven.model.config.ChecksumModeDTO;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
-import org.hudsonci.maven.model.config.FailModeDTO;
-import org.hudsonci.maven.model.config.MakeModeDTO;
-import org.hudsonci.maven.model.config.SnapshotUpdateModeDTO;
-import org.hudsonci.maven.model.config.VerbosityDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.ChecksumModeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.FailModeDTO;
+import org.eclipse.hudson.maven.model.config.MakeModeDTO;
+import org.eclipse.hudson.maven.model.config.SnapshotUpdateModeDTO;
+import org.eclipse.hudson.maven.model.config.VerbosityDTO;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import hudson.XmlFile;
@@ -64,8 +64,8 @@ import java.util.concurrent.Callable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.eclipse.hudson.maven.model.ModelUtil.renderList;
 import static org.eclipse.hudson.maven.model.ModelUtil.renderProperties;
-import static org.hudsonci.maven.model.config.DocumentTypeDTO.SETTINGS;
-import static org.hudsonci.maven.model.config.DocumentTypeDTO.TOOLCHAINS;
+import static org.eclipse.hudson.maven.model.config.DocumentTypeDTO.SETTINGS;
+import static org.eclipse.hudson.maven.model.config.DocumentTypeDTO.TOOLCHAINS;
 
 /**
  * {@link MavenBuilder} descriptor.

@@ -26,9 +26,9 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.resources.client.ImageResource;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.ProfileDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.ProfileDTO;
 
 import java.util.Date;
 import java.util.List;

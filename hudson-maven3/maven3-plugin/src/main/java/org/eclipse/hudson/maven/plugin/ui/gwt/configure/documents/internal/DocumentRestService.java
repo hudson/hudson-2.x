@@ -24,8 +24,8 @@
 
 package org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.internal;
 
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentsDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentsDTO;
 import org.eclipse.hudson.maven.plugin.documents.rest.DocumentResource;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;

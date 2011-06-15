@@ -26,8 +26,8 @@ package org.eclipse.hudson.maven.model.state;
 
 import org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper;
 import org.eclipse.hudson.maven.model.MavenCoordinatesDTOHelper.RenderStyle;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 /**
  * Helper for {@link MavenProjectDTO}.

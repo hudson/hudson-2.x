@@ -31,8 +31,8 @@ import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.HasData;
 import com.google.inject.ImplementedBy;
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 /**
  * Provides the UI for editing a document.

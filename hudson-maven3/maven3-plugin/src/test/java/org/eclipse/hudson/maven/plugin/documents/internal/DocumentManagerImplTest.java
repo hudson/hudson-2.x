@@ -30,8 +30,8 @@ import org.eclipse.hudson.maven.plugin.documents.DuplicateDocumentException;
 import org.eclipse.hudson.maven.plugin.documents.internal.DocumentManagerImpl;
 import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.common.Iso8601Date;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 import hudson.model.User;
 
 import org.junit.Before;
@@ -43,10 +43,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.text.ParseException;
 import java.util.Collection;
 
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.CREATED;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.CREATED_BY;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.UPDATED;
-import static org.hudsonci.maven.model.config.DocumentStandardAttributeDTO.UPDATED_BY;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.CREATED;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.CREATED_BY;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.UPDATED;
+import static org.eclipse.hudson.maven.model.config.DocumentStandardAttributeDTO.UPDATED_BY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;

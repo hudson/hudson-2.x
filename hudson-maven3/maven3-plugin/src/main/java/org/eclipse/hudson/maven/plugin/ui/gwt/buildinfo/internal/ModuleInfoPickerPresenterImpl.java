@@ -31,7 +31,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPickerPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.ModuleSelectedEvent;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

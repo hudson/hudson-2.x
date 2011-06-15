@@ -25,7 +25,7 @@
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import org.eclipse.hudson.maven.plugin.builder.internal.MavenProcessBuilder;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.util.ArgumentListBuilder;

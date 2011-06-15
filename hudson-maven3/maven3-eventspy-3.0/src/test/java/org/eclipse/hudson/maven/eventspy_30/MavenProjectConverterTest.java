@@ -25,9 +25,9 @@
 package org.eclipse.hudson.maven.eventspy_30;
 
 import org.eclipse.hudson.maven.eventspy_30.MavenProjectConverter;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.BuildSummaryDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.BuildSummaryDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.apache.maven.execution.BuildFailure;
 import org.apache.maven.execution.BuildSuccess;
@@ -177,7 +177,7 @@ public class MavenProjectConverterTest
         MavenProject project = createProjectStub();
         MavenProjectDTO projectDTO = MavenProjectConverter.convertMavenProject( project );
         assertThat( projectDTO.getName(), equalTo( project.getName() ) );
-        assertThat( projectDTO.getId(), equalTo( "org.hudsonci.example:example-project:jar:1.0-SNAPSHOT") );
+        assertThat( projectDTO.getId(), equalTo( "org.eclipse.hudson.example:example-project:jar:1.0-SNAPSHOT") );
         
         // TODO: no name set
     }
@@ -186,7 +186,7 @@ public class MavenProjectConverterTest
     {
         MavenProject project = new MavenProject();
         project.setName( "Project for testing" );
-        project.setGroupId( "org.hudsonci.example" );
+        project.setGroupId( "org.eclipse.hudson.example" );
         project.setArtifactId( "example-project" );
         project.setVersion( "1.0-SNAPSHOT" );
         return project;

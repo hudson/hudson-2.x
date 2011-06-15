@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.model;
 import com.thoughtworks.xstream.XStream;
 
 import org.eclipse.hudson.maven.model.UniqueList;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

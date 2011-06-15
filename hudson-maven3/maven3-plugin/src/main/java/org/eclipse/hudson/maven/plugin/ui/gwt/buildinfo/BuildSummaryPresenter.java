@@ -30,7 +30,7 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleDataProvi
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 
 /**
  * Display summary information about a build.

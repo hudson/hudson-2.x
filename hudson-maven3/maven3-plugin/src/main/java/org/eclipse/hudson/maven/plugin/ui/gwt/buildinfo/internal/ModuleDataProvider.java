@@ -28,7 +28,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Singleton;
 

@@ -29,7 +29,7 @@ import org.eclipse.hudson.maven.model.state.ArtifactDTOHelper;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.ArtifactFingerprinter;
 import org.eclipse.hudson.utils.common.Varargs;
 import org.eclipse.hudson.utils.tasks.PerformOperation;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import hudson.FilePath;
 import hudson.Launcher;

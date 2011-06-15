@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.maven.model.config;
 
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
 
 /**
  * Helper for {@link DocumentAttributeDTO}.

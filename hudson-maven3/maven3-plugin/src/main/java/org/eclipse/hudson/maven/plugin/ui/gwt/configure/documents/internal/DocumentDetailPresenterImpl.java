@@ -35,7 +35,7 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.DocumentManage
 import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.event.DocumentAddedEvent;
 import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.event.DocumentSelectedEvent;
 import org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents.event.DocumentUpdatedEvent;
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

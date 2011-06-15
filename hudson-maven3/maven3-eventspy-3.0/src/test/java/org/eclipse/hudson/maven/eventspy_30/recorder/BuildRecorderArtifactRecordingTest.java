@@ -24,15 +24,15 @@
 
 package org.eclipse.hudson.maven.eventspy_30.recorder;
 
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 import com.google.common.collect.ImmutableList;
 
 import org.eclipse.hudson.maven.eventspy_30.recorder.BuildRecorder;
 import org.eclipse.hudson.maven.model.state.MavenProjectDTOHelper;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.ArtifactOperationDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactOperationDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.RuntimeEnvironmentDTO;
 
 import org.apache.maven.project.MavenProject;
 import org.hamcrest.Matchers;

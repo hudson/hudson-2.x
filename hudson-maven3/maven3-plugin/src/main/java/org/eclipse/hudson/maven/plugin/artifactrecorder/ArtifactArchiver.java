@@ -28,7 +28,7 @@ import org.eclipse.hudson.maven.plugin.artifactrecorder.internal.PerformArchivin
 import org.eclipse.hudson.maven.plugin.builder.BuildStateRecord;
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilder;
 import org.eclipse.hudson.utils.plugin.ui.JellyAccessible;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import org.kohsuke.stapler.DataBoundConstructor;

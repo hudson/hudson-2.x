@@ -29,7 +29,7 @@ import org.eclipse.hudson.service.SystemService;
 import org.eclipse.hudson.utils.io.Closer;
 import org.eclipse.hudson.utils.marshal.Marshaller;
 import org.eclipse.hudson.utils.marshal.XStreamMarshaller;
-import org.hudsonci.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
 import com.thoughtworks.xstream.XStream;
 
 import org.slf4j.Logger;

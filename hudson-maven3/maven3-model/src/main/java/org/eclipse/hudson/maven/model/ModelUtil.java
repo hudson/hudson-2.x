@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.hudsonci.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
 
 /**
  * Various model utilities.

@@ -36,8 +36,8 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.BuildStateSelected
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.ModuleSelectedEvent;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ArtifactDataProvider;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleDataProvider;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

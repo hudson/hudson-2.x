@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.builder.rest;
 import org.eclipse.hudson.maven.plugin.Constants;
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilderDescriptor;
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilderService;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;

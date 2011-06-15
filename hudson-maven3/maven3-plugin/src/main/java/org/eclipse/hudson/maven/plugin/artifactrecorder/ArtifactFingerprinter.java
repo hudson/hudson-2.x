@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.artifactrecorder;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.internal.PerformFingerprinting;
 import org.eclipse.hudson.maven.plugin.builder.BuildStateRecord;
 import org.eclipse.hudson.maven.plugin.builder.MavenBuilder;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 

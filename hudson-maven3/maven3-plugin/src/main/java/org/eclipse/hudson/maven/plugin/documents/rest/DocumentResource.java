@@ -43,8 +43,8 @@ import org.eclipse.hudson.maven.plugin.Constants;
 import org.eclipse.hudson.maven.plugin.documents.DocumentManager;
 
 import com.google.common.base.Preconditions;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentsDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentsDTO;
 
 /**
  * Provides REST access to the {@link DocumentManager}.

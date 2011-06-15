@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.maven.model;
 
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
 
 /**
  * Helper for {@link MavenCoordinatesDTO}.

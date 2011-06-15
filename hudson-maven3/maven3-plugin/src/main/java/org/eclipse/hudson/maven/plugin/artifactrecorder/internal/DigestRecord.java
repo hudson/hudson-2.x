@@ -24,7 +24,7 @@
 
 package org.eclipse.hudson.maven.plugin.artifactrecorder.internal;
 
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import java.io.Serializable;
 

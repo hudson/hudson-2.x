@@ -28,8 +28,8 @@ import org.eclipse.hudson.gwt.common.MaximizedCellTable;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget.ArtifactCoordinatesColumn;
 
 import com.google.gwt.user.cellview.client.TextColumn;
-import org.hudsonci.maven.model.state.ArtifactActionDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactActionDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 /**
  * Table to display {@link ArtifactDTO} information.

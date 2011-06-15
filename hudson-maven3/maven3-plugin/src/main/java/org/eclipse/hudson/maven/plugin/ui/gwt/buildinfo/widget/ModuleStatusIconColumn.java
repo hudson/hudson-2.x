@@ -35,7 +35,7 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildInfoResources;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
 
 import com.google.gwt.resources.client.ImageResource;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 public class ModuleStatusIconColumn
     extends ImageResourceColumn<MavenProjectDTO>

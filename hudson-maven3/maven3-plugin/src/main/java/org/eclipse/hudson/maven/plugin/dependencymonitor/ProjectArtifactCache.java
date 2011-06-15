@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.plugin.dependencymonitor;
 import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.dependencymonitor.internal.ProjectArtifactCacheImpl;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 

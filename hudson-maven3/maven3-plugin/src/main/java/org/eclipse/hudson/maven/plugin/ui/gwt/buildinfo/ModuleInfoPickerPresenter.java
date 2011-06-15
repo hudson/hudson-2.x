@@ -31,7 +31,7 @@ import com.google.inject.ImplementedBy;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleDataProvider;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoPickerPresenterImpl;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoPickerTableView;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.sonatype.inject.Nullable;
 

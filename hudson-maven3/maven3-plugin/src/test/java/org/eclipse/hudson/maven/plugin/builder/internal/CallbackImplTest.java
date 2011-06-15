@@ -25,9 +25,9 @@
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import org.eclipse.hudson.maven.plugin.builder.internal.CallbackImpl;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
-import org.hudsonci.maven.model.state.RuntimeEnvironmentDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.RuntimeEnvironmentDTO;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;

@@ -28,8 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.PropertiesDTO.Entry;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO.Entry;
 
 /**
  * Helper for {@link PropertiesDTO}.

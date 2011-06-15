@@ -33,9 +33,9 @@ import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleInfoPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.BuildStateSelectedEvent;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ArtifactDataProvider;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleDataProvider;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

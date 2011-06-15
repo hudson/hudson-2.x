@@ -28,12 +28,12 @@ import org.eclipse.hudson.maven.eventspy_30.MavenArtifactConverter;
 import org.eclipse.hudson.maven.eventspy_30.MavenProjectConverter;
 import org.eclipse.hudson.maven.model.state.MavenProjectDTOHelper;
 import org.eclipse.hudson.utils.common.TestAccessible;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactActionDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.ArtifactOperationDTO;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactActionDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactOperationDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.apache.maven.execution.BuildSummary;
 import org.apache.maven.project.MavenProject;

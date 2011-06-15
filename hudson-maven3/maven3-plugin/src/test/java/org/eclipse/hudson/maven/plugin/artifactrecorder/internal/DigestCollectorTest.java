@@ -29,7 +29,7 @@ import com.google.common.collect.Sets;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.internal.DigestCollector;
 import org.eclipse.hudson.maven.plugin.artifactrecorder.internal.DigestRecord;
 import org.eclipse.hudson.utils.io.FileUtil;
-import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
 
 import org.junit.Ignore;
 import org.junit.Test;

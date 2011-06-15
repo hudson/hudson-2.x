@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.model;
 import com.thoughtworks.xstream.XStream;
 
 import org.eclipse.hudson.maven.model.ThrowableDTOHelper;
-import org.hudsonci.maven.model.ThrowableDTO;
+import org.eclipse.hudson.maven.model.ThrowableDTO;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.widget;
 import com.google.gwt.user.cellview.client.TextColumn;
 
 import org.eclipse.hudson.gwt.common.MaximizedCellTable;
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.PropertiesDTO.Entry;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO.Entry;
 
 /**
  * Table to display {@link PropertiesDTO.Entry} items.

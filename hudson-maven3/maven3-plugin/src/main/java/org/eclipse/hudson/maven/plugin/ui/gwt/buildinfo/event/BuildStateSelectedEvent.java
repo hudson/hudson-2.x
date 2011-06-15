@@ -28,7 +28,7 @@ import org.eclipse.hudson.gwt.common.EventSupport;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.event.BuildStateSelectedEvent.Handler;
 
 import com.google.gwt.event.shared.EventHandler;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 
 /**
  * Indicates that a {@link BuildStateDTO} has been selected.

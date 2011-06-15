@@ -26,7 +26,7 @@ package org.eclipse.hudson.maven.eventspy_30.handler;
 
 import org.eclipse.hudson.maven.eventspy_30.EventSpyHandler;
 import org.eclipse.hudson.maven.eventspy_30.handler.MavenExecutionResultHandler;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.MavenExecutionResult;

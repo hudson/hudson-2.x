@@ -26,8 +26,8 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.configure.documents;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.view.client.ProvidesKey;
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
-import org.hudsonci.maven.model.config.DocumentTypeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentTypeDTO;
 
 import java.util.List;
 

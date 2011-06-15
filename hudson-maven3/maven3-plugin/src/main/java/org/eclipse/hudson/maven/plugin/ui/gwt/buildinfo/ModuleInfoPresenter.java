@@ -29,9 +29,9 @@ import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoPresenterImpl;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal.ModuleInfoViewImpl;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.BuildResultDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.BuildResultDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import java.util.Collection;
 

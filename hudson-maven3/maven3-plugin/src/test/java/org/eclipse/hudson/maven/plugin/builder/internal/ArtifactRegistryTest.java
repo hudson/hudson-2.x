@@ -25,9 +25,9 @@
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
 import org.eclipse.hudson.maven.plugin.builder.internal.ArtifactRegistry;
-import org.hudsonci.maven.model.state.ArtifactActionDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.ArtifactOperationDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactActionDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactOperationDTO;
 
 import org.junit.After;
 import org.junit.Before;

@@ -25,8 +25,8 @@
 package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal;
 
 import com.google.gwt.event.shared.EventBus;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.BuildStatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.BuildStatesDTO;
 import org.eclipse.hudson.gwt.common.restygwt.ServiceFailureNotifier;
 import org.eclipse.hudson.gwt.common.waitdialog.WaitPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildCoordinates;

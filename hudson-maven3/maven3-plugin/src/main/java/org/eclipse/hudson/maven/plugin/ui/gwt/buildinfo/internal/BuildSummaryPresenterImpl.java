@@ -26,8 +26,8 @@ package org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.internal;
 
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.BuildSummaryPresenter;
 import org.eclipse.hudson.maven.plugin.ui.gwt.buildinfo.ModuleFormatter;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.ExecutionActivityDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.ExecutionActivityDTO;
 
 import javax.inject.Inject;
 

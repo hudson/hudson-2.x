@@ -24,13 +24,13 @@
 
 package org.eclipse.hudson.maven.plugin.builder.internal;
 
-import org.hudsonci.maven.model.PropertiesDTO;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
-import org.hudsonci.maven.model.config.ChecksumModeDTO;
-import org.hudsonci.maven.model.config.FailModeDTO;
-import org.hudsonci.maven.model.config.MakeModeDTO;
-import org.hudsonci.maven.model.config.SnapshotUpdateModeDTO;
-import org.hudsonci.maven.model.config.VerbosityDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.ChecksumModeDTO;
+import org.eclipse.hudson.maven.model.config.FailModeDTO;
+import org.eclipse.hudson.maven.model.config.MakeModeDTO;
+import org.eclipse.hudson.maven.model.config.SnapshotUpdateModeDTO;
+import org.eclipse.hudson.maven.model.config.VerbosityDTO;
 import net.sf.json.JSONObject;
 
 import java.util.List;

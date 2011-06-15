@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.eventspy_30.handler;
 import org.eclipse.hudson.maven.eventspy_30.EventSpyHandler;
 import org.eclipse.hudson.maven.eventspy_30.MavenArtifactConverter;
 import org.eclipse.hudson.utils.common.TestAccessible;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.ArtifactOperationDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactOperationDTO;
 
 import org.sonatype.aether.RepositoryEvent;
 import org.sonatype.aether.RepositoryEvent.EventType;

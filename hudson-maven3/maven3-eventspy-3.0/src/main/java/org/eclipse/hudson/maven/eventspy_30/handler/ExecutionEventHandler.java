@@ -25,9 +25,9 @@
 package org.eclipse.hudson.maven.eventspy_30.handler;
 
 import org.eclipse.hudson.maven.eventspy_30.EventSpyHandler;
-import org.hudsonci.maven.model.MavenCoordinatesDTO;
-import org.hudsonci.maven.model.state.ArtifactDTO;
-import org.hudsonci.maven.model.state.MavenProjectDTO;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
+import org.eclipse.hudson.maven.model.state.ArtifactDTO;
+import org.eclipse.hudson.maven.model.state.MavenProjectDTO;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.BuildSummary;

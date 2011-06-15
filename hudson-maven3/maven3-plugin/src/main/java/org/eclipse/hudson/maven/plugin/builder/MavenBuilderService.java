@@ -27,8 +27,8 @@ package org.eclipse.hudson.maven.plugin.builder;
 import com.google.inject.ImplementedBy;
 
 import org.eclipse.hudson.maven.plugin.builder.internal.MavenBuilderServiceImpl;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 
 import hudson.model.AbstractBuild;
 

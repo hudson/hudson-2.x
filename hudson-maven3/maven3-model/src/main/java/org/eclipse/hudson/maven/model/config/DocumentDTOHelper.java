@@ -26,8 +26,8 @@ package org.eclipse.hudson.maven.model.config;
 
 import java.util.Iterator;
 
-import org.hudsonci.maven.model.config.DocumentAttributeDTO;
-import org.hudsonci.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentAttributeDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
 
 /**
  * Helper for {@link DocumentDTO}.

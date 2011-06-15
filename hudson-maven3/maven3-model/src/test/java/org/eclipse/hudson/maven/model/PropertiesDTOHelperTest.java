@@ -27,7 +27,7 @@ package org.eclipse.hudson.maven.model;
 import com.thoughtworks.xstream.XStream;
 
 import org.eclipse.hudson.maven.model.PropertiesDTOHelper;
-import org.hudsonci.maven.model.PropertiesDTO;
+import org.eclipse.hudson.maven.model.PropertiesDTO;
 import org.junit.Assert;
 import org.junit.Test;
 

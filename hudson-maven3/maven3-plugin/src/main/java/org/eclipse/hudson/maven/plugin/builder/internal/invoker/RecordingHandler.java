@@ -25,7 +25,7 @@
 package org.eclipse.hudson.maven.plugin.builder.internal.invoker;
 
 import org.eclipse.hudson.utils.io.Closer;
-import org.hudsonci.maven.model.InvocationDTO;
+import org.eclipse.hudson.maven.model.InvocationDTO;
 import com.thoughtworks.xstream.XStream;
 
 import java.io.BufferedWriter;
