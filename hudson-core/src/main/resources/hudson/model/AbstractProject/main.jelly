@@ -50,8 +50,13 @@
   <!-- merge fragments from the actions -->
   <j:forEach var="a" items="${it.actions}">
     <!-- Force StaplerProxy to resolve, st:include doesn't respect it. -->
-    <j:set var="a" value="${h.resolveStaplerObject(a)}"/>
-    <st:include page="jobMain.jelly" it="${a}" optional="true" />
+    <j:set var="b" value="${h.resolveStaplerObject(a)}"/>
+    <st:include page="jobMain.jelly" it="${b}" optional="true">
+      <j:if test="${a != b}">
+        <!-- No luck with proxy's target, fall back to original object -->
+        <st:include page="jobMain.jelly" it="${a}" optional="true" />
+      </j:if>
+    </st:include>
   </j:forEach>
 
   <p:upstream-downstream />
