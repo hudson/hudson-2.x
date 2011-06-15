@@ -42,7 +42,7 @@ THE SOFTWARE.
     <modules>
         <docs disabled="false"
               docsDir="api"
-              title="Hudson Maven Plugin REST API"
+              title="Hudson Maven 3 Plugin REST API"
               copyright="Sonatype, Inc."
               includeDefaultDownloads="false"
               includeExampleXml="true"
