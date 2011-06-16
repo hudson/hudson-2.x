@@ -104,8 +104,8 @@ public class ConfigureHudsonTest extends BaseUITest {
         Selenium selenium = getSelenium();
         selenium.open("/");
         //Check that we have two executors to start with
-        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[3]/td[1]");
-        assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[3]/td[1]"), "2");
+        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[1]/th[1]");
+        assertEquals("Status 0/2", selenium.getText("//table[@id='executors']/tbody[2]/tr[1]/th[1]"));
         //Navigate to Configure System page
         selenium.click("link=Manage Hudson");
         waitForTextPresent("Configure System", null);
@@ -118,8 +118,8 @@ public class ConfigureHudsonTest extends BaseUITest {
         selenium.click("//button[contains(text(), 'Save')]");
         waitForTextPresent("Manage Hudson", null);
         //Verify the number of excutors now
-        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[2]/td[1]");
-        assertEquals(selenium.getText("//table[@id='executors']/tbody[2]/tr[2]/td[1]"), "1");
+        waitForElementPresence("//table[@id='executors']/tbody[2]/tr[1]/th[1]");
+        assertEquals("Status 0/1", selenium.getText("//table[@id='executors']/tbody[2]/tr[1]/th[1]"));
     }
 
     @Test
