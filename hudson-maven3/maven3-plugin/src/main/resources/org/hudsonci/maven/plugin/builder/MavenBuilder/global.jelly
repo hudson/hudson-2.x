@@ -24,7 +24,7 @@ THE SOFTWARE.
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
 
-    <f:section title="Maven Builder Defaults">
+    <f:section title="Maven 3 Builder Defaults">
         <j:set var="config" value="${descriptor.defaults}"/>
         <j:set var="defaults" value="${descriptor.DEFAULTS}"/>
         <st:include page="common.jelly" from="${descriptor}"/>
