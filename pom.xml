@@ -51,8 +51,8 @@
     <build.number/>
 
     <aspectjVersion>1.6.11</aspectjVersion>
-    <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
-    <sisuInjectVersion>2.2.2</sisuInjectVersion>
+    <sisuGuiceVersion>3.0.3</sisuGuiceVersion>
+    <sisuInjectVersion>2.2.3</sisuInjectVersion>
     <jetty-version>6.1.26</jetty-version>
     <junit.version>4.8.1</junit.version>
     <easymock.version>3.0</easymock.version>
