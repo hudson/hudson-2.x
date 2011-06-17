@@ -43,7 +43,7 @@
         <configuration>
             <workingDirectory>${project.build.directory}</workingDirectory>
             <forkMode>always</forkMode>
-            <forkedProcessTimeoutInSeconds>500</forkedProcessTimeoutInSeconds>
+            <forkedProcessTimeoutInSeconds>800</forkedProcessTimeoutInSeconds>
             <argLine>-ea -XX:MaxPermSize=192m -Xmx256m</argLine>
             <systemPropertyVariables>
                 <file.encoding>UTF-8</file.encoding>
