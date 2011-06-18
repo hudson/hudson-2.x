@@ -23,13 +23,13 @@
  */
 package org.apache.maven.lifecycle;
 
-import hudson.maven.agent.AbortException;
 import org.apache.maven.BuildFailureException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.ReactorManager;
 import org.apache.maven.monitor.event.EventDispatcher;
 import org.apache.maven.monitor.event.EventMonitor;
 import org.apache.maven.monitor.event.MavenEvents;
+import org.eclipse.hudson.legacy.maven.interceptor.AbortException;
 
 import java.io.IOException;
 
