@@ -7,7 +7,7 @@
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License. You can obtain
- * a copy of the License at https://glassfishjava.net/public/CDDL+GPL.html
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -35,7 +35,6 @@
  */
 package hudson.util;
 
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -79,7 +78,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
 
         int i=0;
         while( tokens.hasMoreTokens() ) {
-            String token = tokens.nextToken().toLowerCase(Locale.ENGLISH);
+            String token = tokens.nextToken().toLowerCase();
             if(token.equals("*")) {
                 digits[i++] = 1000;
             } else
@@ -94,18 +93,20 @@ public class VersionNumber implements Comparable<VersionNumber> {
                 else
                     digits[i++] = -1000 + Integer.parseInt(token.substring(2)); // "eaNNN"
             } else {
-                digits[i++] = Integer.parseInt(token);
+                int n =0;
+                try {
+                    n = Integer.parseInt(token);
+                } catch (NumberFormatException e) {
+                    // ignore
+                }
+                digits[i++] = n;
             }
         }
     }
 
-    public int digit(int idx) {
-        return digits[idx];
-    }
-
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for( int i=0; i<digits.length; i++ ) {
             if(i!=0)    buf.append('.');
             buf.append( Integer.toString(digits[i]) );
