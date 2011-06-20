@@ -123,16 +123,6 @@ public class FastPipedInputStream extends InputStream {
             throw new IOException("Unconnected pipe");
         }
 
-        //TODO analyze how it works with ProxyOutputStream.Chunk#execute
-        // Fix for http://issues.hudson-ci.org/browse/HUDSON-7809
-        // If a transaction has already started (say a large file transfer) and the sender
-        // keep sending bytes, closing the receiver makes the sender (FastPipedOutputStream)
-        // to throw "Pipe is already closed" exception
-        final byte[] flushBuffer = new byte[4096];
-        while (read(flushBuffer) != -1) {
-            // Flush all the pending writes
-        }
-
         synchronized(buffer) {
             closed = new ClosedBy();
             // Release any pending writers.

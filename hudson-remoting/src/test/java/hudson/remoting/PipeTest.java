@@ -23,12 +23,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 import junit.framework.Test;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
-import org.jvnet.hudson.test.Bug;
-import org.jvnet.hudson.test.For;
 
 /**
  * Test {@link Pipe}.
@@ -241,52 +238,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
         return buildSuite(PipeTest.class);
     }
 
-    /**
-     * Have the reader close the read end of the pipe while the writer is still writing.
-     * The writer should pick up a failure.
-     */
-    //TODO it conflicts with FastPipedInputStream#close flush processing
-    @Bug(8592)
-    @For(Pipe.class)
-    public void ignore_testReaderCloseWhileWriterIsStillWriting() throws Exception {
-        final Pipe p = Pipe.createRemoteToLocal();
-        final Future<Void> f = channel.callAsync(new InfiniteWriter(p));
-        final InputStream in = p.getIn();
-        assertEquals(in.read(), 0);
-        in.close();
-
-        try {
-            f.get();
-            fail();
-        } catch (ExecutionException e) {
-            // should have resulted in an IOException
-            if (!(e.getCause() instanceof IOException)) {
-                e.printStackTrace();
-                fail();
-            }
-        }
-    }
-
-    /**
-     * Just writes forever to the pipe
-     */
-    private static class InfiniteWriter implements Callable<Void, Exception> {
-        private final Pipe pipe;
-
-        public InfiniteWriter(Pipe pipe) {
-            this.pipe = pipe;
-        }
-
-        public Void call() throws Exception {
-            while (true) {
-                pipe.getOut().write(0);
-                Thread.sleep(10);
-            }
-        }
-    }
-
-
-    private Object writeReplace() {
+     private Object writeReplace() {
         return null;
     }
 }
