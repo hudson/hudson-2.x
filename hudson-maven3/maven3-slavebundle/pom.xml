@@ -32,6 +32,7 @@ THE SOFTWARE.
   </parent>
 
   <artifactId>maven3-slavebundle</artifactId>
+  <version>2.1.0-BETA-1</version>
   <name>Hudson :: Maven 3 :: Slave Bundle</name>
   <packaging>pom</packaging>
 

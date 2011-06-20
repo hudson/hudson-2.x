@@ -32,6 +32,7 @@ THE SOFTWARE.
   </parent>
 
   <artifactId>hudson-rest-api</artifactId>
+  <version>2.1.0-BETA-1</version>
   <name>Hudson :: REST :: API</name>
 
   <dependencies>

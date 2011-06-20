@@ -31,6 +31,7 @@ THE SOFTWARE.
   </parent>
 
   <artifactId>rest-plugin</artifactId>
+  <version>2.1.0-BETA-1</version>
   <name>Hudson :: REST :: Plugin</name>
   <packaging>hpi</packaging>
 

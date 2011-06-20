@@ -32,6 +32,7 @@ THE SOFTWARE.
   </parent>
 
   <artifactId>maven3-eventspy-3.0</artifactId>
+  <version>2.1.0-BETA-1</version>
   <name>Hudson :: Maven 3 :: Event Spy 3.0</name>
 
   <dependencies>
