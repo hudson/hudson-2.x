@@ -361,6 +361,11 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * @return true - advanced chooser, false - simple textfield.
      */
     public boolean isAdvancedAffinityChooser() {
+        //For newly created project advanced chooser is not used.
+        //Set value to false in order to avoid NullPointerException
+        if (null == advancedAffinityChooser) {
+            advancedAffinityChooser = false;
+        }
         return advancedAffinityChooser;
     }
 
@@ -1658,7 +1663,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
         if (req.getParameter("hasSlaveAffinity") != null) {
             // New logic for handling whether this choice came from the dropdown or textfield.
-            if (req.getParameter("slave") != null) {
+            if ("basic".equals(req.getParameter("affinityChooser"))) {
                 assignedNode = Util.fixEmptyAndTrim(req.getParameter("slave"));
                 advancedAffinityChooser = false;
             } else {
