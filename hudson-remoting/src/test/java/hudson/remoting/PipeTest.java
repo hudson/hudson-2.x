@@ -23,18 +23,16 @@
  */
 package hudson.remoting;
 
-import hudson.remoting.ChannelRunner.InProcessCompatibilityMode;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
 import junit.framework.Test;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Test {@link Pipe}.
@@ -53,7 +51,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
 
         int r = f.get();
         System.out.println("result=" + r);
-        assertEquals(5,r);
+        assertEquals(5, r);
     }
 
     private static class WritingCallable implements Callable<Integer, IOException> {
@@ -80,7 +78,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
 
         int r = f.get();
         System.out.println("result=" + r);
-        assertEquals(5,r);
+        assertEquals(5, r);
     }
 
     public void testLocalWrite2() throws Exception {
@@ -92,12 +90,14 @@ public class PipeTest extends RmiTestBase implements Serializable {
 
         int r = f.get();
         System.out.println("result=" + r);
-        assertEquals(5,r);
+        assertEquals(5, r);
     }
 
     public interface ISaturationTest {
         void ensureConnected() throws IOException;
+
         int readFirst() throws IOException;
+
         void readRest() throws IOException;
     }
 
@@ -142,7 +142,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
 //        target.readRest();
 //    }
 
-    private static class CreateSaturationTestProxy implements Callable<ISaturationTest,IOException> {
+    private static class CreateSaturationTestProxy implements Callable<ISaturationTest, IOException> {
         private final Pipe pipe;
 
         public CreateSaturationTestProxy(Pipe pipe) {
@@ -152,6 +152,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
         public ISaturationTest call() throws IOException {
             return Channel.current().export(ISaturationTest.class, new ISaturationTest() {
                 private InputStream in;
+
                 public void ensureConnected() throws IOException {
                     in = pipe.getIn();
                     in.available();
@@ -162,7 +163,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
                 }
 
                 public void readRest() throws IOException {
-                    new DataInputStream(in).readFully(new byte[Channel.PIPE_WINDOW_SIZE*2]);
+                    new DataInputStream(in).readFully(new byte[Channel.PIPE_WINDOW_SIZE * 2]);
                 }
             });
         }
@@ -185,18 +186,19 @@ public class PipeTest extends RmiTestBase implements Serializable {
     private static void write(Pipe pipe) throws IOException {
         OutputStream os = pipe.getOut();
         byte[] buf = new byte[384];
-        for( int i=0; i<256; i++ ) {
-            Arrays.fill(buf,(byte)i);
-            os.write(buf,0,256);
+        for (int i = 0; i < 256; i++) {
+            Arrays.fill(buf, (byte) i);
+            os.write(buf, 0, 256);
         }
         os.close();
     }
 
     private static void read(Pipe p) throws IOException {
         InputStream in = p.getIn();
-        for( int cnt=0; cnt<256*256; cnt++ )
-            assertEquals(cnt/256,in.read());
-        assertEquals(-1,in.read());
+        for (int cnt = 0; cnt < 256 * 256; cnt++) {
+            assertEquals(cnt / 256, in.read());
+        }
+        assertEquals(-1, in.read());
         in.close();
     }
 
@@ -204,8 +206,9 @@ public class PipeTest extends RmiTestBase implements Serializable {
     public void _testSendBigStuff() throws Exception {
         OutputStream f = channel.call(new DevNullSink());
 
-        for (int i=0; i<1024*1024; i++)
+        for (int i = 0; i < 1024 * 1024; i++) {
             f.write(new byte[8000]);
+        }
         f.close();
     }
 
@@ -228,7 +231,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
         // at this point the async executable kicks in.
         // TODO: introduce a lock to ensure the ordering.
 
-        assertEquals(1,(int)f.get());
+        assertEquals(1, (int) f.get());
     }
 
     private static class DevNullSink implements Callable<OutputStream, IOException> {
@@ -242,7 +245,7 @@ public class PipeTest extends RmiTestBase implements Serializable {
         return buildSuite(PipeTest.class);
     }
 
-    private Object writeReplace() {
+     private Object writeReplace() {
         return null;
     }
 }
