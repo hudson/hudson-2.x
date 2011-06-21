@@ -43,6 +43,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collection;
+import java.util.HashSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -63,7 +65,9 @@ public class WatchedDependenciesLoader
 
     public WatchedDependenciesLoader() {
         XStream xs = new XStream();
+        xs.setClassLoader(getClass().getClassLoader());
         xs.processAnnotations(WatchedDependencies.class);
+        xs.addDefaultImplementation(HashSet.class,Collection.class);
         marshaller = new XStreamMarshaller(xs);
     }
 
