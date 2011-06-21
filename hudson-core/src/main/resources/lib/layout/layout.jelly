@@ -228,10 +228,10 @@
           <table width="100%" height="100%" border="0">
             <tr>
               <td id="global-messages" width="100%">
-                <j:forEach var="message" items="${app.globalMessages}">
-                  <j:if test="${message.enabled}">
+                <j:forEach var="globalMessage" items="${app.globalMessages}">
+                  <j:if test="${globalMessage.enabled}">
                     <div class="global-message">
-                      <st:include page="detail.jelly" it="${message}"/>
+                      <st:include page="detail.jelly" it="${globalMessage}"/>
                     </div>
                   </j:if>
                 </j:forEach>
