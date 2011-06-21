@@ -122,6 +122,9 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return compareTo(rhs)>0;
     }
 
+    public int digit(int idx) {
+        return digits[idx];
+    }
 
     @Override
     public boolean equals( Object o ) {
