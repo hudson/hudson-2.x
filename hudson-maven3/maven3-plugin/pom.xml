@@ -84,12 +84,6 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson</groupId>
-      <artifactId>xstream</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-util</artifactId>
       <version>1.11</version>
@@ -216,7 +210,6 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.55</version>
         <extensions>true</extensions>
         <configuration>
           <showDeprecation>true</showDeprecation>

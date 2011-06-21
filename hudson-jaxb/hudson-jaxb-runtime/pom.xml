@@ -60,6 +60,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>xstream</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
