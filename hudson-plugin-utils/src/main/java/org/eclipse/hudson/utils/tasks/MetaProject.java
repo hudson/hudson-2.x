@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.utils.tasks;
 
@@ -89,7 +89,7 @@ public class MetaProject
         }
         else {
             type = Type.UNSUPPORTED;
-            log.warn("Unsupported project type: {}", project.getClass().getName());
+            log.debug("Unsupported project type: {}", project.getClass().getName());
         }
     }
 

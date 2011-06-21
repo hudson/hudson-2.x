@@ -7,18 +7,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.plugins.snapshotmonitor.model;
 
-import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.eclipse.hudson.maven.model.MavenCoordinatesDTO;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -28,7 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
-@XStreamAlias("dependency")
 public class WatchedDependency
     extends MavenCoordinatesDTO
 {
