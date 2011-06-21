@@ -49,12 +49,6 @@
       <artifactId>jackson-mapper-asl</artifactId>
       <optional>true</optional>
     </dependency>
-
-    <dependency>
-      <groupId>org.jvnet.hudson</groupId>
-      <artifactId>xstream</artifactId>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <build>

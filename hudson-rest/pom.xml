@@ -171,6 +171,27 @@
   </dependencyManagement>
 
   <dependencies>
+    <!--
+     | Provided by Hudson core
+    -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-inject</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-service</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+     | Test dependencies
+    -->
     <dependency>
       <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-test-utils</artifactId>

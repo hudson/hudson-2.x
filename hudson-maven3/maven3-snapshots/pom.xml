@@ -33,21 +33,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-service</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-repository-metadata</artifactId>
       <version>${mavenVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -59,12 +47,6 @@
           <artifactId>hudson-rest-plugin</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jvnet.hudson</groupId>
-      <artifactId>xstream</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 

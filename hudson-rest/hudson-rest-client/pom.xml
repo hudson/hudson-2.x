@@ -39,11 +39,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-utils</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.sonatype.spice</groupId>
       <artifactId>jersey-ahc-client</artifactId>
     </dependency>
