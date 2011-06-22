@@ -27,6 +27,7 @@ package org.hudsonci.maven.plugin.builder.rest;
 import org.hudsonci.maven.model.config.BuildConfigurationDTO;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -47,6 +48,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path(Constants.URI_PREFIX + "/builderDefaultConfig")
 @Produces({APPLICATION_JSON, APPLICATION_XML})
 public class BuilderDefaultConfigResource

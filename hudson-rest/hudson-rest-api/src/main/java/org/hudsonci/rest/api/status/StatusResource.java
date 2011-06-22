@@ -31,6 +31,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.hudsonci.rest.api.internal.ResourceSupport;
 import org.hudsonci.rest.api.user.UserConverter;
@@ -47,6 +48,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("status")
 public class StatusResource
         extends ResourceSupport
