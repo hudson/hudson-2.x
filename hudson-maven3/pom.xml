@@ -44,8 +44,8 @@ THE SOFTWARE.
       <dependency>
         <groupId>org.jvnet.hudson.main</groupId>
         <artifactId>hudson-jaxb</artifactId>
-        <type>pom</type>
         <version>${project.version}</version>
+        <type>pom</type>
         <scope>import</scope>
       </dependency>
 
@@ -121,26 +121,8 @@ THE SOFTWARE.
 
   <dependencies>
     <!--
-     | Provided by Hudson core
+     | Don't add dependencies here, unless you want them in the slavebundle
     -->
-    <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-inject</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-service</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-     | Test dependencies
-    -->
-    <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
-      <artifactId>hudson-test-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <modules>

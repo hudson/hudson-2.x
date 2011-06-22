@@ -41,15 +41,6 @@ THE SOFTWARE.
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-eventspy-3.0</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>apache-maven</artifactId>
-      <classifier>bin</classifier>
-      <type>zip</type>
-      <version>${mavenVersion}</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -59,6 +50,7 @@ THE SOFTWARE.
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
+            <id>unpack-maven</id>
             <phase>generate-resources</phase>
             <goals>
               <goal>unpack</goal>
@@ -69,20 +61,81 @@ THE SOFTWARE.
                 <artifactItem>
                   <groupId>org.apache.maven</groupId>
                   <artifactId>apache-maven</artifactId>
+                  <version>${mavenVersion}</version>
                   <classifier>bin</classifier>
                   <type>zip</type>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack-runtime-classes</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/runtime-classes</outputDirectory>
+              <excludes>META-INF/**,**/*.java</excludes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
-            
+
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>jarjar-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>jarjar-runtime-classes</id>
+            <goals>
+              <goal>jarjar</goal>
+            </goals>
+            <configuration>
+              <input>${project.build.directory}/runtime-classes</input>
+              <includes/>
+              <rules>
+                <zap>
+                  <pattern>**.eventspy_30.**</pattern>
+                </zap>
+                <keep>
+                  <pattern>org.hudsonci.maven.**</pattern>
+                </keep>
+                <keep>
+                  <pattern>ch.qos.logback.**</pattern>
+                </keep>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>repack-runtime-classes</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classesDirectory>${project.build.directory}/runtime-classes</classesDirectory>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <finalName>maven3-eventspy-runtime</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
+            <id>assemble-slavebundle</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>

@@ -75,6 +75,12 @@ THE SOFTWARE.
       <artifactId>maven3-model</artifactId>
       <type>test-jar</type>
     </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -98,9 +104,10 @@ THE SOFTWARE.
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-            </manifest>
+            <manifestEntries>
+              <!-- this is assembled by the maven slavebundle -->
+              <Class-Path>maven3-eventspy-runtime.jar</Class-Path>
+            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

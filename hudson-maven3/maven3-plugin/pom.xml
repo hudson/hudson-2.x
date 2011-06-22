@@ -79,6 +79,12 @@ THE SOFTWARE.
 
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-service</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>hudson-rest-api</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -130,6 +136,12 @@ THE SOFTWARE.
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-model</artifactId>
       <type>test-jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -210,6 +222,7 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
+        <version>1.55</version>
         <extensions>true</extensions>
         <configuration>
           <showDeprecation>true</showDeprecation>

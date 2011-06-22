@@ -286,6 +286,7 @@ THE SOFTWARE.
       <artifactId>animal-sniffer-annotation</artifactId>
       <version>1.0</version>
       <optional>true</optional><!-- no need to have this at runtime -->
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
