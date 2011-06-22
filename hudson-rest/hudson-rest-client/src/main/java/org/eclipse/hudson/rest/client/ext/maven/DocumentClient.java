@@ -26,8 +26,8 @@ package org.eclipse.hudson.rest.client.ext.maven;
 
 import org.eclipse.hudson.rest.client.HudsonClient;
 
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentsDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentsDTO;
 
 /**
  * Client for {@link org.hudsonci.maven.plugin.documents.rest.DocumentResource}

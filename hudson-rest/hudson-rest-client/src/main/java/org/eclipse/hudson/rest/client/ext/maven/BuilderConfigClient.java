@@ -26,7 +26,7 @@ package org.eclipse.hudson.rest.client.ext.maven;
 
 import org.eclipse.hudson.rest.client.HudsonClient;
 
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 
 /**
  * Client for

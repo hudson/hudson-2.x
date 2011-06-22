@@ -26,8 +26,8 @@ package org.eclipse.hudson.rest.client.internal.ext.maven;
 
 import org.eclipse.hudson.rest.client.ext.maven.BuildStateClient;
 import org.eclipse.hudson.rest.client.internal.HudsonClientExtensionSupport;
-import org.hudsonci.maven.model.state.BuildStateDTO;
-import org.hudsonci.maven.model.state.BuildStatesDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStatesDTO;
 import com.sun.jersey.api.client.ClientResponse;
 
 import javax.ws.rs.core.UriBuilder;

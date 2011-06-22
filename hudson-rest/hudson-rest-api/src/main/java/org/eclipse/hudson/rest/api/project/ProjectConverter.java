@@ -24,12 +24,12 @@
 
 package org.eclipse.hudson.rest.api.project;
 
+import org.eclipse.hudson.rest.api.build.BuildConverter;
 import javax.inject.Inject;
 
 import org.eclipse.hudson.service.SystemService;
 import org.eclipse.hudson.utils.tasks.JobUuid;
 
-import org.eclipse.hudson.rest.api.build.BuildConverter;
 import org.eclipse.hudson.rest.api.internal.ConverterSupport;
 import org.eclipse.hudson.rest.model.project.ProjectDTO;
 import org.eclipse.hudson.rest.model.project.ProjectReferenceDTO;

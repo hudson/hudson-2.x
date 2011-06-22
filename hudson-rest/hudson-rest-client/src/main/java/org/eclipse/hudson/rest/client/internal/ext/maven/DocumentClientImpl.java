@@ -26,8 +26,8 @@ package org.eclipse.hudson.rest.client.internal.ext.maven;
 
 import org.eclipse.hudson.rest.client.ext.maven.DocumentClient;
 import org.eclipse.hudson.rest.client.internal.HudsonClientExtensionSupport;
-import org.hudsonci.maven.model.config.DocumentDTO;
-import org.hudsonci.maven.model.config.DocumentsDTO;
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentsDTO;
 import com.sun.jersey.api.client.ClientResponse;
 
 import javax.ws.rs.core.MediaType;

@@ -25,7 +25,7 @@
 package org.eclipse.hudson.rest.client.ext.maven;
 
 import org.eclipse.hudson.rest.client.HudsonClient;
-import org.hudsonci.maven.model.state.BuildStateDTO;
+import org.eclipse.hudson.maven.model.state.BuildStateDTO;
 import java.util.List;
 
 

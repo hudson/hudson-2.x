@@ -28,7 +28,7 @@ import com.google.common.base.Preconditions;
 
 import org.eclipse.hudson.rest.client.ext.maven.BuilderDefaultConfigClient;
 import org.eclipse.hudson.rest.client.internal.HudsonClientExtensionSupport;
-import org.hudsonci.maven.model.config.BuildConfigurationDTO;
+import org.eclipse.hudson.maven.model.config.BuildConfigurationDTO;
 import com.sun.jersey.api.client.ClientResponse;
 
 import javax.ws.rs.core.MediaType;
