@@ -29,6 +29,7 @@ import org.hudsonci.maven.model.state.BuildStatesDTO;
 import org.hudsonci.rest.common.ProjectNameCodec;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -53,6 +54,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path(Constants.URI_PREFIX + "/buildState/{projectName}/{buildNumber:\\d*}")
 @Produces({APPLICATION_JSON, APPLICATION_XML})
 public class BuildStateResource

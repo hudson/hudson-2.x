@@ -38,6 +38,7 @@ import hudson.model.Run;
 import hudson.security.Permission;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -72,6 +73,7 @@ import static javax.ws.rs.core.Response.Status.CONFLICT;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/projects")
 public class ProjectsResource
     extends ResourceSupport

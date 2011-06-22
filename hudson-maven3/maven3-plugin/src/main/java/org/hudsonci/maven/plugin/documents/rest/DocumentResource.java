@@ -28,6 +28,7 @@ import static org.hudsonci.rest.common.RestPreconditions.*;
 import static javax.ws.rs.core.MediaType.*;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -53,6 +54,7 @@ import org.hudsonci.maven.model.config.DocumentsDTO;
  * @since 2.1.0
  * @todo should we verify the document id inside document dto or make id strongly typed to uuid
  */
+@Named
 @Path(Constants.URI_PREFIX + "/documents")
 @Produces({APPLICATION_JSON, APPLICATION_XML})
 @Consumes({APPLICATION_JSON, APPLICATION_XML})
