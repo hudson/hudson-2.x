@@ -28,6 +28,7 @@ import org.hudsonci.service.QueueService;
 import org.hudsonci.service.SecurityService;
 import hudson.model.Hudson;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -43,6 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/queue")
 public class QueueResource extends ResourceSupport {
     private final QueueService queueService;

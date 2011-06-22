@@ -26,6 +26,7 @@ package org.hudsonci.rest.api.internal;
 
 import org.hudsonci.service.SystemService;
 import javax.inject.Inject;
+import javax.inject.Named;
 import hudson.init.InitMilestone;
 
 import javax.ws.rs.GET;
@@ -49,6 +50,7 @@ import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("handshake")
 @Produces({TEXT_PLAIN})
 public class HandshakeResource

@@ -28,6 +28,7 @@ import org.hudsonci.service.BuildService;
 import hudson.model.AbstractProject;
 import org.hudsonci.service.ProjectService;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.hudsonci.utils.io.OffsetLimitInputStream;
 import org.hudsonci.rest.model.build.BuildDTO;
 import org.hudsonci.rest.model.build.ChangesDTO;
@@ -66,6 +67,7 @@ import static javax.ws.rs.core.Response.Status.*;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/projects/{projectName}/{buildNumber:\\d*}")
 public class BuildResource
     extends ResourceSupport

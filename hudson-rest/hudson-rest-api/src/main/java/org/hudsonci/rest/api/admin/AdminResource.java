@@ -25,6 +25,7 @@
 package org.hudsonci.rest.api.admin;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.hudsonci.service.SecurityService;
 import org.hudsonci.service.SystemService;
 import hudson.XmlFile;
@@ -50,6 +51,7 @@ import static javax.ws.rs.core.Response.Status.*;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/admin")
 public class AdminResource
     extends ResourceSupport
