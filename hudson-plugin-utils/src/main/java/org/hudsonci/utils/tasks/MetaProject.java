@@ -97,7 +97,7 @@ public class MetaProject
         }
         else {
             type = Type.UNSUPPORTED;
-            log.warn("Unsupported project type: {}", project.getClass().getName());
+            log.debug("Unsupported project type: {}", project.getClass().getName());
         }
     }
 
