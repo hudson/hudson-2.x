@@ -165,6 +165,7 @@ public abstract class ListViewColumn implements ExtensionPoint, Describable<List
         LastSuccessColumn.class,
         LastFailureColumn.class,
         LastDurationColumn.class,
+        ConsoleColumn.class,
         BuildButtonColumn.class
     );
 
