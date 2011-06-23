@@ -120,12 +120,20 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
 
     private String mavenVersionUsed;
 
+    private transient Object notifyBuildLock = new Object();
+
     public MavenModuleSetBuild(MavenModuleSet job) throws IOException {
         super(job);
     }
 
     public MavenModuleSetBuild(MavenModuleSet project, File buildDir) throws IOException {
         super(project, buildDir);
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        notifyBuildLock = new Object();
     }
 
     /**
@@ -425,7 +433,8 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
 
             // actions need to be replaced atomically especially
             // given that two builds might complete simultaneously.
-            synchronized(this) {
+            // see http://issues.hudson-ci.org/browse/HUDSON-4220 for details
+            synchronized(notifyBuildLock){
                 boolean modified = false;
 
                 List<Action> actions = getActions();
