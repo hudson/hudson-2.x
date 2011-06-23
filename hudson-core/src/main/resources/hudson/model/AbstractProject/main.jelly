@@ -45,6 +45,11 @@
         <t:test-result it="${tr}" />
       </t:summary>
     </j:if>
+    <j:if test="${it.lastBuild!=null}">
+      <t:summary icon="terminal.gif" href="lastBuild/console">
+        ${%Latest Console output}
+      </t:summary>
+    </j:if>
   </table>
 
   <!-- merge fragments from the actions -->
