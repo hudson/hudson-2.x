@@ -181,7 +181,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      * There's no need to override this, except for {@link LegacySecurityRealm}.
      */
     public String getAuthenticationGatewayUrl() {
-        return "j_acegi_security_check";
+        return "/j_acegi_security_check";
     }
 
     /**

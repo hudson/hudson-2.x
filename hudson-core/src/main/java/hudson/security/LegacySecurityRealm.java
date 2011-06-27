@@ -62,7 +62,7 @@ public final class LegacySecurityRealm extends SecurityRealm implements Authenti
      */
     @Override
     public String getAuthenticationGatewayUrl() {
-        return "j_security_check";
+        return "/j_security_check";
     }
 
     @Override
