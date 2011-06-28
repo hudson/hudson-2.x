@@ -555,11 +555,11 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
         public final void post(BuildListener listener) throws Exception {
             try {
                 post2(listener);
-
-                if (result.isBetterOrEqualTo(Result.UNSTABLE))
+                //Resolve issue with invalid symlinks for maven (see http://issues.hudson-ci.org/browse/HUDSON-8340)
+                if (getResult().isBetterOrEqualTo(Result.UNSTABLE))
                     createSymlink(listener, "lastSuccessful");
 
-                if (result.isBetterOrEqualTo(Result.SUCCESS))
+                if (getResult().isBetterOrEqualTo(Result.SUCCESS))
                     createSymlink(listener, "lastStable");
             } finally {
                 // update the culprit list
