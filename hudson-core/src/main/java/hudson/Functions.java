@@ -1351,4 +1351,18 @@ public class Functions {
         }
         return obj;
     }
+
+    /**
+     * Returns true if the {@link Item#WIPEOUT} permission is enabled.
+     *
+     * By default the "Wipe Out Workspace" action is available on job when user has {@link Item#BUILD} permission
+     * (if user can trigger builds). If this behavior is not acceptable for project you can enable the
+     * {@code hudson.security.WipeOutPermission} system property. It will add "WipeOut" permission checkbox into
+     * permission control panel to manage "Wipe Out Workspace" action.
+     *
+     * @return true if the {@link Item#WIPEOUT} permission is enabled.
+     */
+    public static boolean isWipeOutPermissionEnabled() {
+        return Boolean.getBoolean("hudson.security.WipeOutPermission");
+    }
 }
