@@ -31,6 +31,7 @@ import hudson.AbortException;
 import hudson.CopyOnWrite;
 import hudson.FeedAdapter;
 import hudson.FilePath;
+import hudson.Functions;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.cli.declarative.CLIMethod;
@@ -1748,6 +1749,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * Wipes out the workspace.
      */
     public HttpResponse doDoWipeOutWorkspace() throws IOException, ServletException, InterruptedException {
+        checkPermission(Functions.isWipeOutPermissionEnabled() ? WIPEOUT : BUILD);
         if (cleanWorkspace()){
             return new HttpRedirect(".");
         }else{
