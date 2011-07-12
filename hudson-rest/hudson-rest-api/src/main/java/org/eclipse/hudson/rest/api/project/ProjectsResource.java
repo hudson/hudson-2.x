@@ -24,10 +24,10 @@
 
 package org.eclipse.hudson.rest.api.project;
 
+import org.eclipse.hudson.rest.api.build.BuildConverter;
 import org.eclipse.hudson.service.ProjectService;
 import org.eclipse.hudson.service.SecurityService;
 import org.eclipse.hudson.utils.io.Closer;
-import org.eclipse.hudson.rest.api.build.BuildConverter;
 import org.eclipse.hudson.rest.api.internal.PermissionsFactory;
 import org.eclipse.hudson.rest.api.internal.ProjectBuildHelper;
 import org.eclipse.hudson.rest.api.internal.ResourceSupport;
@@ -39,7 +39,6 @@ import hudson.XmlFile;
 import hudson.model.AbstractProject;
 import hudson.model.Cause;
 import hudson.model.Run;
-import hudson.security.Permission;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
