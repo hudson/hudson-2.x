@@ -7,12 +7,12 @@
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
 #
-# Contributors: 
+# Contributors:
 #
-#   
-#        
 #
-#************************************************************************** --> 
+#
+#
+#************************************************************************** -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
     <!--<![CDATA[<!doctype html>]]>-->
@@ -38,7 +38,7 @@
         <j:set var="images" value="${it.imagesPath}"/>
 
         <l:main-panel>
-            <div id="${it.mainPanelId}"/>
+            <div id="${it.mainPanelId}" name="${it.mainPanelId}"/>
         </l:main-panel>
     </l:layout>
 </j:jelly>
