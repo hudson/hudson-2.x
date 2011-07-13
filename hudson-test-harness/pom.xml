@@ -112,7 +112,6 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.kohsuke.gmaven</groupId>
         <artifactId>gmaven-plugin</artifactId>
-        <version>1.0-rc-5-patch-2</version>
         <executions>
           <execution>
             <id>preset-packager</id>

@@ -17,6 +17,12 @@ import org.jvnet.hudson.test.Email;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
 
+import org.eclipse.hudson.legacy.maven.plugin.MavenBuild;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import  org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
+import org.eclipse.hudson.legacy.maven.plugin.RedeployPublisher;
+import org.eclipse.hudson.legacy.maven.plugin.MavenReporter;
+
 /**
  * @author Olivier Lamy
  */

@@ -47,7 +47,7 @@ import java.util.ArrayList;
  *
  * @author Kohsuke Kawaguchi
  */
-final class PomInfo implements Serializable {
+public final class PomInfo implements Serializable {
 
     public final ModuleName name;
 

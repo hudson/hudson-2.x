@@ -25,7 +25,7 @@ package hudson.bugs.seasar;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import hudson.maven.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
 import hudson.model.FreeStyleProject;
 import hudson.tasks.BuildTrigger;
 import hudson.tasks.BuildTrigger.DescriptorImpl;

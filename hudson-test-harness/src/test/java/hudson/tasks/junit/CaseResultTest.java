@@ -28,10 +28,8 @@ import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.FreeStyleBuild;
-import hudson.maven.MavenModuleSet;
-import hudson.maven.MavenModuleSetBuild;
+
 import hudson.maven.MavenBuild;
-import hudson.maven.reporters.SurefireReport;
 import hudson.Launcher;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.Email;
@@ -42,6 +40,10 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import java.io.IOException;
+
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
+import org.eclipse.hudson.legacy.maven.plugin.reporters.SurefireReport;
 
 /**
  * @author Kohsuke Kawaguchi

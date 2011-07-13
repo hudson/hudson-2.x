@@ -23,19 +23,20 @@
  */
 package hudson.maven.reporters;
 
-import hudson.maven.MavenBuild;
-import hudson.maven.MavenModuleSet;
-import hudson.maven.MavenModuleSetBuild;
-import hudson.maven.MavenProjectActionBuilder;
-import hudson.maven.reporters.SurefireArchiver.FactoryImpl;
+import org.eclipse.hudson.legacy.maven.plugin.MavenBuild;
+import org.eclipse.hudson.legacy.maven.plugin.MavenProjectActionBuilder;
 import hudson.model.Result;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
+import org.eclipse.hudson.legacy.maven.plugin.reporters.SurefireArchiver;
 
 /**
  * @author Kohsuke Kawaguchi
  */
 public class SurefireArchiverTest extends HudsonTestCase {
+
     public void testSerialization() throws Exception {
         configureDefaultMaven();
         MavenModuleSet m = createMavenProject();
@@ -47,16 +48,17 @@ public class SurefireArchiverTest extends HudsonTestCase {
 
 
         MavenBuild mb = b.getModuleLastBuilds().values().iterator().next();
-        boolean foundFactory=false,foundSurefire=false;
+        boolean foundFactory = false, foundSurefire = false;
         for (MavenProjectActionBuilder x : mb.getProjectActionBuilders()) {
-            if (x instanceof FactoryImpl)
+            if (x instanceof SurefireArchiver.FactoryImpl) { 
                 foundFactory = true;
-            if (x instanceof SurefireArchiver)
+            }
+            if (x instanceof SurefireArchiver) {
                 foundSurefire = true;
+            }
         }
 
         assertTrue(foundFactory);
         assertFalse(foundSurefire);
     }
-
 }

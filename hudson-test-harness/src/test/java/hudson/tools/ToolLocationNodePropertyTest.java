@@ -25,7 +25,6 @@
 package hudson.tools;
 
 import hudson.Functions;
-import hudson.model.*;
 import hudson.model.labels.LabelAtom;
 import hudson.slaves.DumbSlave;
 import hudson.tasks.Maven;
@@ -35,7 +34,6 @@ import hudson.tasks.Shell;
 import hudson.tasks.Ant.AntInstallation;
 import hudson.tasks.Maven.MavenInstallation;
 import hudson.EnvVars;
-import hudson.maven.MavenModuleSet;
 
 import java.io.IOException;
 
@@ -47,6 +45,14 @@ import org.jvnet.hudson.test.ExtractResourceSCM;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import hudson.model.Build;
+import hudson.model.FreeStyleProject;
+import hudson.model.Hudson;
+import hudson.model.JDK;
+import hudson.model.Result;
+import hudson.model.Run;
+
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
 
 /**
  * This class tests that environment variables from node properties are applied,

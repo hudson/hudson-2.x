@@ -3,8 +3,6 @@ package hudson.tasks;
 import hudson.EnvVars;
 import hudson.model.labels.LabelAtom;
 import hudson.tools.ToolProperty;
-import hudson.maven.MavenModuleSet;
-import hudson.maven.MavenModuleSetBuild;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.JDK;
@@ -20,6 +18,9 @@ import java.util.Collections;
 import org.apache.tools.ant.taskdefs.condition.Os;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
+
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
 
 public class EnvVarsInConfigTasksTest extends HudsonTestCase {
 	public static final String DUMMY_LOCATION_VARNAME = "TOOLS_DUMMY_LOCATION";

@@ -3,6 +3,8 @@ package hudson.maven;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
 
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+
 /**
  * @author Andrew Bayer
  */

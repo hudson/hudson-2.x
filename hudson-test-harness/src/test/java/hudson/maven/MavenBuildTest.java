@@ -14,6 +14,9 @@ import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.Email;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import  org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
+import org.eclipse.hudson.legacy.maven.plugin.MavenBuild;
 
 /**
  * @author Kohsuke Kawaguchi

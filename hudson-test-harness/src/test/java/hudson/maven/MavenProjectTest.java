@@ -31,6 +31,8 @@ import org.jvnet.hudson.test.HudsonTestCase;
 
 import java.io.File;
 
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+
 /**
  * @author huybrechts
  */

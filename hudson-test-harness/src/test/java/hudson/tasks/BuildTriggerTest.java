@@ -25,8 +25,6 @@ package hudson.tasks;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import hudson.maven.MavenModuleSet;
-import hudson.maven.MavenModuleSetBuild;
 import hudson.model.Build;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
@@ -34,6 +32,9 @@ import hudson.model.Run;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.MockBuilder;
+
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
 
 /**
  * Tests for hudson.tasks.BuildTrigger

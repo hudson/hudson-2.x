@@ -36,6 +36,10 @@ import org.jvnet.hudson.test.Email;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSet;
+import org.eclipse.hudson.legacy.maven.plugin.MavenModuleSetBuild;
+import org.eclipse.hudson.legacy.maven.plugin.RedeployPublisher;
+
 /**
  * @author Kohsuke Kawaguchi
  */

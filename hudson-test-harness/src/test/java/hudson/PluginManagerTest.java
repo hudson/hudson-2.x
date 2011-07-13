@@ -82,6 +82,6 @@ public class PluginManagerTest extends HudsonTestCase {
         // this actually doesn't really test what we need, though, because
         // I thought test harness is loading the maven classes by itself.
         // TODO: write a separate test that tests the optional dependency loading
-        tasks.classLoader.loadClass(hudson.maven.agent.AbortException.class.getName());
+        tasks.classLoader.loadClass(org.eclipse.hudson.legacy.maven.interceptor.AbortException.class.getName());
     }
 }
