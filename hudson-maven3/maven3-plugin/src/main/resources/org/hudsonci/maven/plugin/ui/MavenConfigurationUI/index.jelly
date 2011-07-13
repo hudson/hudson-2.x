@@ -30,6 +30,7 @@ THE SOFTWARE.
     <l:layout title="${it.pageTitle}" permission="${it.viewPermission}" norefresh="true">
         <l:header>
             <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=8" />
             <script type="text/javascript" language="javascript">
                 var baseRestURI = "${it.baseRestURI}";
             </script>
@@ -38,6 +39,7 @@ THE SOFTWARE.
                 #hudson-mavenConfigurationPanel {
                     width: 100%;
                     height: 100%;
+                    zoom: 1;
                 }
             </style>
         </l:header>
@@ -46,7 +48,7 @@ THE SOFTWARE.
         <j:set var="images" value="${it.imagesPath}"/>
 
         <l:main-panel>
-            <div id="${it.mainPanelId}"/>
+            <div id="${it.mainPanelId}" name="${it.mainPanelId}"/>
         </l:main-panel>
     </l:layout>
 </j:jelly>
