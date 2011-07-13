@@ -9,9 +9,10 @@ work
 =======
 
 # eclipse project file
-.settings
-.classpath
-.project
+#.settings
+#.classpath
+#.project
+
 build
 
 war/images/16x16
