@@ -6,7 +6,11 @@ package hudson.maven;
  * @author Winston Prakash
  * @see org.eclipse.hudson.legacy.maven.plugin.MavenReporterDescriptor
  */
-public abstract class MavenReporterDescriptor extends
-		org.eclipse.hudson.legacy.maven.plugin.MavenReporterDescriptor {
+public abstract class MavenReporterDescriptor extends org.eclipse.hudson.legacy.maven.plugin.MavenReporterDescriptor {
 
+    public MavenReporterDescriptor(Class<? extends MavenReporter> clazz) {
+        super(clazz);
+    }
+    public MavenReporterDescriptor() {
+    }
 }

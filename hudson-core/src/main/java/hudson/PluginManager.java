@@ -274,14 +274,16 @@ public abstract class PluginManager extends AbstractModelObject {
                         g.followedBy().notFatal().attains(PLUGINS_PREPARED).add("Loading plugin " + p.getShortName(), new Executable() {
                             public void run(Reactor session) throws Exception {
                                 try {
+                                    LOGGER.info("Loading plugin - " + p.getShortName());
                                     p.resolvePluginDependencies();
                                     strategy.load(p);
-                                } catch (IOException e) {
+                                } catch (Exception e) {
+                                    LOGGER.info("Failed to load plugin - " + p.getShortName() + " because of error " + e.getLocalizedMessage());
                                     failedPlugins.add(new FailedPlugin(p.getShortName(), e));
                                     activePlugins.remove(p);
                                     plugins.remove(p);
                                     throw e;
-                                }
+                                } 
                             }
                         });
                     }
