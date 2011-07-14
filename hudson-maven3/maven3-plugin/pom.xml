@@ -26,7 +26,7 @@ THE SOFTWARE.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jvnet.hudson.main</groupId>
+    <groupId>org.eclipse.hudson.main</groupId>
     <artifactId>hudson-maven3</artifactId>
     <version>2.1.0-SNAPSHOT</version>
   </parent>
@@ -42,7 +42,7 @@ THE SOFTWARE.
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>org.eclipse.hudson.main</groupId>
         <artifactId>hudson-rest</artifactId>
         <type>pom</type>
         <version>${project.version}</version>
@@ -50,7 +50,7 @@ THE SOFTWARE.
       </dependency>
 
       <dependency>
-        <groupId>org.jvnet.hudson.main</groupId>
+        <groupId>org.eclipse.hudson.main</groupId>
         <artifactId>hudson-gwt</artifactId>
         <type>pom</type>
         <version>${project.version}</version>
@@ -67,17 +67,17 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>maven3-eventspy-common</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>rest-plugin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-rest-api</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -95,26 +95,26 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>maven3-slavebundle</artifactId>
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-gwt-common</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-gwt-icons-silk</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-gwt-theme-chrome</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -126,13 +126,13 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-gwt-test-support</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson.main</groupId>
+      <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>maven3-model</artifactId>
       <type>test-jar</type>
     </dependency>
@@ -175,7 +175,7 @@ THE SOFTWARE.
               <stripVersion>true</stripVersion>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.jvnet.hudson.main</groupId>
+                  <groupId>org.eclipse.hudson.main</groupId>
                   <artifactId>maven3-slavebundle</artifactId>
                   <type>zip</type>
                 </artifactItem>
@@ -215,7 +215,6 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.55</version>
         <extensions>true</extensions>
         <configuration>
           <showDeprecation>true</showDeprecation>

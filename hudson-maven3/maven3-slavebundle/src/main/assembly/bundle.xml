@@ -57,7 +57,7 @@ THE SOFTWARE.
             <outputDirectory>lib</outputDirectory>
             <useStrictFiltering>true</useStrictFiltering>
             <excludes>
-                <exclude>org.jvnet.hudson.main:maven3-eventspy-3.0</exclude>
+                <exclude>org.eclipse.hudson.main:maven3-eventspy-3.0</exclude>
             </excludes>
         </dependencySet>
 
@@ -69,7 +69,7 @@ THE SOFTWARE.
             <useStrictFiltering>true</useStrictFiltering>
             <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <includes>
-                <include>org.jvnet.hudson.main:maven3-eventspy-3.0</include>
+                <include>org.eclipse.hudson.main:maven3-eventspy-3.0</include>
             </includes>
         </dependencySet>
     </dependencySets>
