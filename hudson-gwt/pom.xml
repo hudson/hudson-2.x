@@ -36,7 +36,7 @@ THE SOFTWARE.
   <packaging>pom</packaging>
 
   <properties>
-    <gwtVersion>2.2.0</gwtVersion>
+    <gwtVersion>2.3.0</gwtVersion>
   </properties>
 
   <dependencyManagement>
@@ -145,7 +145,7 @@ THE SOFTWARE.
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>gwt-maven-plugin</artifactId>
-          <version>2.2.0</version>
+          <version>${gwt-maven-plugin.version}</version>
           <configuration>
             <mode>htmlunit</mode>
             <gen>${project.build.directory}/gwt-generated</gen>

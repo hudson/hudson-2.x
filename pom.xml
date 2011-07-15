@@ -71,6 +71,7 @@ THE SOFTWARE.
     <gwt.style>OBFUSCATED</gwt.style>
     <gwt.compiler.optimizationLevel>9</gwt.compiler.optimizationLevel>
     <gwt.compiler.strict>true</gwt.compiler.strict>
+    <gwt-maven-plugin.version>2.3.0-1</gwt-maven-plugin.version>
 
     <!--
      Ensure the full list is in sync with GWT UserAgent.gwt.xml

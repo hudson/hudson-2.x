@@ -53,6 +53,7 @@ public class WorkspaceManagerViewImpl
 
     public WorkspaceManagerViewImpl() {
         tabPanel = new TabLayoutPanel(2.0, Unit.EM);
+        tabPanel.setSize("100%", "100%");
         initWidget(tabPanel);
         ensureDebugId("workspace-manager-view");
     }
