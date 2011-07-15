@@ -66,25 +66,25 @@ THE SOFTWARE.
                     <g:TabLayoutPanel barUnit="EM" barHeight="2" addStyleNames="hudson-nestedTabLayoutPanel">
                         <g:tab>
                             <g:header>Version</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="versionInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>User</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="userInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>System</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="systemInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>Environment</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="environmentInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
@@ -98,7 +98,7 @@ THE SOFTWARE.
                     <g:header>Artifacts</g:header>
                     <g:LayoutPanel>
                         <g:layer top="0" bottom="2em">
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <m:ArtifactInfoTable ui:field="artifactInfo" pageSize="100" width="100%"/>
                             </g:ScrollPanel>
                         </g:layer>
