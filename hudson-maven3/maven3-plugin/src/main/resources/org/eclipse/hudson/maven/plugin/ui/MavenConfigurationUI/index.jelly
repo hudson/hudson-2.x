@@ -30,6 +30,19 @@
                 #hudson-mavenConfigurationPanel {
                     width: 100%;
                     height: 100%;
+                    zoom: 1;
+                }
+                .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+                    float: left;
+                }
+                .gwt-TabLayoutPanel {
+                    height: 100% !important;
+                }
+                .gwt-TabLayoutPanelContentContainer {
+                    height: 100% !important;
+                }
+                .gwt-TabLayoutPanelContent {
+                    height: 95% !important;
                 }
             </style>
         </l:header>
