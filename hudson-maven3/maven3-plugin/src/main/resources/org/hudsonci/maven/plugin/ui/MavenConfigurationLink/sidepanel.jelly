@@ -26,7 +26,7 @@ THE SOFTWARE.
     <l:header/>
     <l:side-panel>
         <l:tasks>
-            <l:task icon="images/24x24/setting.gif" href="${rootURL}/manage" title="Manage Server" permission="${app.ADMINISTER}"/>
+            <l:task icon="images/24x24/setting.gif" href="${rootURL}/manage" title="Manage Hudson" permission="${app.ADMINISTER}"/>
         </l:tasks>
     </l:side-panel>
 </j:jelly>
