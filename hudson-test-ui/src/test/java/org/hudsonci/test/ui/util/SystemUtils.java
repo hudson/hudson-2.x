@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2011 Hudson, Geoff Waymark
+ * Copyright 2011 Oracle Corporation, Geoff Waymark
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

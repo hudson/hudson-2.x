@@ -1,4 +1,3 @@
-
 package hudson.cli;
 
 import java.io.IOException;
@@ -9,10 +8,9 @@ import java.net.URL;
  * @author Winston Prakash
  * @see org.eclipse.hudson.cli.CLI
  */
-public class CLI extends org.eclipse.hudson.cli.CLI{
+public class CLI extends org.eclipse.hudson.cli.CLI {
 
-	public CLI(URL hudson) throws IOException, InterruptedException {
-		super(hudson);
-	}
-     
+    public CLI(URL hudson) throws IOException, InterruptedException {
+        super(hudson);
+    }
 }
