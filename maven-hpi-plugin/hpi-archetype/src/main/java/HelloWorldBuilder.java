@@ -1,3 +1,8 @@
+
+/*
+ * {Your company copyright license header here}
+ * 
+ */
 import hudson.Launcher;
 import hudson.Extension;
 import hudson.util.FormValidation;
@@ -29,7 +34,7 @@ import java.io.IOException;
  * When a build is performed, the {@link #perform(AbstractBuild, Launcher, BuildListener)} method
  * will be invoked. 
  *
- * @author Kohsuke Kawaguchi
+ * @author {Author Name}
  */
 public class HelloWorldBuilder extends Builder {
 

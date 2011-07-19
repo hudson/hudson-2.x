@@ -1,21 +1,16 @@
-/*
- * The contents of this file are subject to the terms of the Common Development
- * and Distribution License (the License). You may not use this file except in
- * compliance with the License.
+/*******************************************************************************
  *
- * You can obtain a copy of the License at http://www.sun.com/cddl/cddl.html
- * or http://www.netbeans.org/cddl.txt.
+ * Copyright (c) 2004-2011 Oracle Corporation
  *
- * When distributing Covered Code, include this CDDL Header Notice in each file
- * and include the License file at http://www.netbeans.org/cddl.txt.
- * If applicable, add the following below the CDDL Header, with the fields
- * enclosed by brackets [] replaced by your own identifying information:
- * "Portions Copyrighted [year] [name of copyright owner]"
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * The Original Software is SezPoz. The Initial Developer of the Original
- * Software is Sun Microsystems, Inc. Portions Copyright 2006-2007 Sun
- * Microsystems, Inc. All Rights Reserved.
- */
+ * Contributors:
+ *        
+ *
+ *******************************************************************************/ 
 
 package net.java.sezpoz;
 

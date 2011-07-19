@@ -1,3 +1,17 @@
+/*******************************************************************************
+ *
+ * Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *       Kohsuke Kawaguchi 
+ *
+ *******************************************************************************/ 
+
 //========================================================================
 //$Id: RunMojo.java 36037 2010-10-18 09:48:58Z kohsuke $
 //Copyright 2000-2004 Mort Bay Consulting Pty. Ltd.
