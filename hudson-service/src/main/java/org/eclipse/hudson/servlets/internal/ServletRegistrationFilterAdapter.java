@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.servlets.internal;
 
@@ -154,7 +154,7 @@ public class ServletRegistrationFilterAdapter
         String uri = request.getRequestURI();
 
         // Get the requestUri without the context uriPrefix and the leading slash
-        uri = uri.substring(request.getContextPath().length() + 1);
+        uri = uri.substring(request.getContextPath().length());
 
         if (uri.startsWith(uriPrefix)) {
             // Wrap the request to augment the servlet uriPrefix
