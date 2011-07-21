@@ -61,12 +61,8 @@ public class BuildConfigurationExtractor
         return data.getBoolean(name);
     }
 
-    private String getId(final String name) {
-        return nullIfEmptyOrNone(data.getString(name));
-    }
-
     private PropertiesDTO getProperties(final String name) {
-        return parseProperties(nullIfEmpty(data.getString(name)));
+        return parseProperties(data.getString(name));
     }
 
     private List<String> getList(final String name) {
@@ -93,7 +89,7 @@ public class BuildConfigurationExtractor
 
     public BuildConfigurationDTO extract() {
         BuildConfigurationDTO config = new BuildConfigurationDTO();
-        config.setInstallationId(getId("installationId"));
+        config.setInstallationId(getString("installationId"));
         config.setGoals(getString("goals"));
         config.setProperties(getProperties("properties"));
         config.setPomFile(getString("pomFile"));
@@ -112,9 +108,9 @@ public class BuildConfigurationExtractor
         config.setSnapshotUpdateMode(getEnum(SnapshotUpdateModeDTO.class, "snapshotUpdateMode"));
         config.setThreading(getString("threading"));
         config.setMavenOpts(getString("mavenOpts"));
-        config.setSettingsId(getId("settingsId"));
-        config.setGlobalSettingsId(getId("globalSettingsId"));
-        config.setToolChainsId(getId("toolChainsId"));
+        config.setSettingsId(getString("settingsId"));
+        config.setGlobalSettingsId(getString("globalSettingsId"));
+        config.setToolChainsId(getString("toolChainsId"));
         return config;
     }
 }
