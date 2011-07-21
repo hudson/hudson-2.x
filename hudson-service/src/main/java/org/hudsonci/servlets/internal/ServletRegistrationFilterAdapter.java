@@ -159,12 +159,12 @@ public class ServletRegistrationFilterAdapter
         assert response != null;
         assert chain != null;
 
-        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        if (!contextPath.endsWith("/") && !uriPrefix.startsWith("/")) {
+            contextPath = contextPath + '/';
+        }
 
-        // Get the requestUri without the context uriPrefix and the leading slash
-        uri = uri.substring(request.getContextPath().length());
-
-        if (uri.startsWith(uriPrefix)) {
+        if (request.getRequestURI().startsWith(contextPath + uriPrefix)) {
             // Wrap the request to augment the servlet uriPrefix
             HttpServletRequestWrapper req = new HttpServletRequestWrapper(request)
             {
