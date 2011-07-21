@@ -16,6 +16,7 @@
 
 package org.eclipse.hudson.rest.plugin;
 
+import hudson.model.Hudson;
 import org.eclipse.hudson.events.EventConsumer;
 import org.eclipse.hudson.events.ready.ReadyEvent;
 
@@ -88,6 +89,7 @@ public class RestPlugin
 
     @Override
     public void start() throws Exception {
+        Hudson.XSTREAM.alias("org.hudsonci.rest.plugin.RestPlugin", RestPlugin.class);
         load();
     }
 
