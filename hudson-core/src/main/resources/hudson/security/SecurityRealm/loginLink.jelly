@@ -52,7 +52,7 @@ THE SOFTWARE.
             var dataString = jQuery("#loginForm").serialize();
             jQuery.ajax({
               type: 'POST',
-              url: "${app.securityRealm.authenticationGatewayUrl}",
+              url: "${rootURL}/${app.securityRealm.authenticationGatewayUrl}",
               data: dataString,
               success: function(){
                 window.location.href="${from}";
