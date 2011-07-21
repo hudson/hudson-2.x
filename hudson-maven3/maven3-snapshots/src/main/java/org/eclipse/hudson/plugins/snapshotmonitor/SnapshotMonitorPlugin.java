@@ -18,6 +18,7 @@ package org.eclipse.hudson.plugins.snapshotmonitor;
 
 import hudson.Plugin;
 import hudson.model.Descriptor;
+import hudson.model.Hudson;
 import hudson.model.Items;
 import net.sf.json.JSONObject;
 import org.codehaus.plexus.util.StringUtils;
@@ -82,6 +83,7 @@ public class SnapshotMonitorPlugin
     
     @Override
     public void start() throws Exception {
+        Hudson.XSTREAM.alias("org.hudsonci.plugins.snapshotmonitor.SnapshotMonitorPlugin", SnapshotMonitorPlugin.class);
         Items.XSTREAM.processAnnotations(new Class[] {
             SnapshotTrigger.class, WatchedDependenciesProperty.class
         });
