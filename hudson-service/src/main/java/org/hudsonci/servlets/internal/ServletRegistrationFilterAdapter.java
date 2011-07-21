@@ -162,7 +162,10 @@ public class ServletRegistrationFilterAdapter
         String uri = request.getRequestURI();
 
         // Get the requestUri without the context uriPrefix and the leading slash
-        uri = uri.substring(request.getContextPath().length() + 1);
+        uri = uri.substring(request.getContextPath().length());
+        if (uri.startsWith("/")) {
+            uri = uri.substring(1);
+        }
 
         if (uri.startsWith(uriPrefix)) {
             // Wrap the request to augment the servlet uriPrefix
