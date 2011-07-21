@@ -118,7 +118,7 @@ public class MavenBuilder
     public MavenInstallation getMavenInstallation() {
         String installationId = getConfig().getInstallationId();
 
-        if (installationId != null) {
+        if (installationId != null && !"NONE".equals(installationId)) {
             for (MavenInstallation installation : getDescriptor().getInstallations()) {
                 if (installationId.equals(installation.getName())) {
                     return installation;

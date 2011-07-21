@@ -65,7 +65,7 @@ public class ModelUtil
 
     public static PropertiesDTO parseProperties(final String source) {
         // source could be null;
-        if (source == null || source.trim().length() == 0) {
+        if (source == null) {
             return null;
         }
 
@@ -87,7 +87,7 @@ public class ModelUtil
 
     public static PropertiesDTO parsePropertyOptions(final String source) {
         // source could be null;
-        if (source == null || source.trim().length() == 0) {
+        if (source == null) {
             return null;
         }
 
