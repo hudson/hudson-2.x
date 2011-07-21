@@ -75,7 +75,7 @@
 
         <j:if test="${app.securityRealm.allowsSignup()}">
             <div style="margin-top:2em">
-            ${%signUp}
+            ${%signUp(rootURL)}
             </div>
         </j:if>
     </div>
