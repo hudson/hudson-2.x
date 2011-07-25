@@ -16,13 +16,11 @@
 
 package hudson.cli;
 
-import hudson.tasks.Mailer;
 import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.model.Item;
-
-import javax.mail.internet.MimeMessage;
-import javax.mail.Transport;
+import hudson.tasks.HudsonMimeMessage;
+import hudson.tasks.Mailer;
 
 /**
  * Sends e-mail through Hudson.
@@ -40,7 +38,8 @@ public class MailCommand extends CLICommand {
 
     protected int run() throws Exception {
         Hudson.getInstance().checkPermission(Item.CONFIGURE);
-        Transport.send(new MimeMessage(Mailer.descriptor().createSession(),stdin));
+        Mailer.DescriptorImpl descriptor = Mailer.descriptor();
+        descriptor.send(new HudsonMimeMessage(descriptor.createSession(), stdin));
         return 0;
     }
 }

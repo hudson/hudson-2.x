@@ -17,23 +17,35 @@
 package hudson.tasks;
 
 import hudson.FilePath;
-import hudson.Util;
 import hudson.Functions;
-import hudson.model.*;
+import hudson.Util;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.BuildListener;
+import hudson.model.CheckPoint;
+import hudson.model.Hudson;
+import hudson.model.Result;
+import hudson.model.User;
 import hudson.scm.ChangeLogSet;
-
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.AddressException;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Core logic of sending out notification e-mail.
@@ -99,7 +111,7 @@ public class MailSender {
                     for (Address a : allRecipients)
                         buf.append(' ').append(a);
                     listener.getLogger().println(buf);
-                    Transport.send(mail);
+                    Mailer.descriptor().send((HudsonMimeMessage) mail);
 
                     build.addAction(new MailMessageIdAction(mail.getMessageID()));
                 } else {
@@ -293,7 +305,7 @@ public class MailSender {
     }
 
     private MimeMessage createEmptyMail(AbstractBuild<?, ?> build, BuildListener listener) throws MessagingException {
-        MimeMessage msg = new MimeMessage(Mailer.descriptor().createSession());
+        MimeMessage msg = new HudsonMimeMessage(Mailer.descriptor().createSession());
         // TODO: I'd like to put the URL to the page in here,
         // but how do I obtain that?
         msg.setContent("", "text/plain");
