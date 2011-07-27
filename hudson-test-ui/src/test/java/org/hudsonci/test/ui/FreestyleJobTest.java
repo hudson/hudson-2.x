@@ -97,7 +97,8 @@ public class FreestyleJobTest extends BaseUITest {
         selenium.click("//button[@type='button']");
         selenium.waitForPageToLoad("30000");
         selenium.click(CVS_LBL_SELECT_EXP);
-        selenium.type("cvs_root", ":pserver:anonymous@proftp.cvs.sourceforge.net:2401/cvsroot/proftp");
+        selenium.type("cvs_root", ":pserver:anonymous@ayam.cvs.sourceforge.net:/cvsroot/ayam");
+        selenium.type("textarea._.allModules", "ayam");
         selenium.click("//span[@id='yui-gen19']/span/button");
         selenium.waitForPageToLoad("30000");
         selenium.click("link=Build Now");
