@@ -153,7 +153,6 @@
           <plugin>
             <groupId>org.jvnet.hudson.tools</groupId>
             <artifactId>maven-hpi-plugin</artifactId>
-            <version>${project.version}</version>
             <extensions>true</extensions>
             <configuration>
               <showDeprecation>true</showDeprecation>

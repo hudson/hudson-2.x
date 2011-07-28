@@ -67,6 +67,7 @@
   </properties>
 
   <modules>
+    <module>maven-hpi-plugin</module>
     <module>hudson-parent</module>
     <module>hudson-test-utils</module>
     <module>hudson-utils</module>
@@ -84,7 +85,6 @@
     <module>hudson-war</module>
     <module>hudson-test-framework</module>
     <module>hudson-plugin-parent</module>
-    <module>maven-hpi-plugin</module>
   </modules>
   
   <build>
