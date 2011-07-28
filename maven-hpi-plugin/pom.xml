@@ -72,6 +72,7 @@
             <phase>process-resources</phase>
             <configuration>
               <tasks>
+                <property name="hudson.version" value="${project.version}" />
                 <ant antfile="${basedir}/copyArchetype.xml" />
               </tasks>
             </configuration>
