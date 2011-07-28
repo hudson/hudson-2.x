@@ -68,13 +68,14 @@ check_tcp_port() {
         port=$default
     fi
     
-    count=`netstat --listen --numeric-ports | grep \:$port | grep -c . `
-    
-    if [ $count -ne 0 ]; then
+    netstat --listen --numeric-ports |
+    while read proto ref b1 flags b2 type state lport path ;  do
+      if [ "$port" = "$lport" ]; then
         echo "The selected $service port ($port) seems to be in use by another program "
         echo "Please select another port to use for $NAME"
         return 1
-    fi
+      fi
+    done
 }
 
 #
