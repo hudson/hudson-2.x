@@ -86,6 +86,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -1723,10 +1724,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         FilePath ws = getSomeWorkspace();
         if ((ws == null) || (!ws.exists())) {
             // if there's no workspace, report a nice error message
-            // Would be good if when asked for *plain*, do something else!
-            // (E.g. return 404, or send empty doc.)
-            // Not critical; client can just check if content type is not text/plain,
-            // which also serves to detect old versions of Hudson.
+            rsp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             req.getView(this,"noWorkspace.jelly").forward(req,rsp);
             return null;
         } else {
