@@ -86,6 +86,15 @@ public class AbstractProjectTest extends HudsonTestCase {
                 b.getWorkspace().exists());
     }
 
+    public void testMissingWorkspaceGives404() throws Exception {
+        FreeStyleProject project = createFreeStyleProject();
+        assertNull(project.getSomeWorkspace());
+        WebClient webClient = new WebClient();
+        webClient.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = webClient.getPage(project, "ws/some/file");
+        assertEquals(404, page.getWebResponse().getStatusCode());
+    }
+
     /**
      * Makes sure that the workspace deletion is protected.
      */
