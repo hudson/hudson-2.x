@@ -438,8 +438,8 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
         if (req.getMethod().equals("GET")) {
             // read
             checkPermission(EXTENDED_READ);
-            rsp.setContentType("application/xml;charset=UTF-8");
-            getConfigFile().writeRawTo(rsp.getWriter());
+            rsp.setContentType("application/xml");
+            getConfigFile().writeRawTo(rsp.getOutputStream());
             return;
         }
         if (req.getMethod().equals("POST")) {
