@@ -44,7 +44,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.io.StringWriter;
@@ -192,14 +194,18 @@ public final class XmlFile {
      * Opens a {@link Reader} that loads XML.
      * This method uses {@link #sniffEncoding() the right encoding},
      * not just the system default encoding.
+     * @deprecated Should not be loading XML content using a character stream.
      */
+    @Deprecated
     public Reader readRaw() throws IOException {
         return new InputStreamReader(new FileInputStream(file),sniffEncoding());
     }
 
     /**
      * Returns the XML file read as a string.
+     * @deprecated Should not be loading XML content using a character stream.
      */
+    @Deprecated
     public String asString() throws IOException {
         StringWriter w = new StringWriter();
         writeRawTo(w);
@@ -209,7 +215,9 @@ public final class XmlFile {
     /**
      * Writes the raw XML to the given {@link Writer}.
      * Writer will not be closed by the implementation.
+     * @deprecated Safer to use {@link #writeRawTo(OutputStream)}.
      */
+    @Deprecated
     public void writeRawTo(Writer w) throws IOException {
         Reader r = readRaw();
         try {
@@ -220,13 +228,29 @@ public final class XmlFile {
     }
 
     /**
+     * Writes the raw XML to the given {@link OutputStream}.
+     * Stream will not be closed by the implementation.
+     * @since 2.1.1
+     */
+    public void writeRawTo(OutputStream os) throws IOException {
+        InputStream is = new FileInputStream(file);
+        try {
+            Util.copyStream(is, os);
+        } finally {
+            is.close();
+        }
+    }
+
+    /**
      * Parses the beginning of the file and determines the encoding.
      *
      * @throws IOException
      *      if failed to detect encoding.
      * @return
      *      always non-null.
+     * @deprecated Should not be loading XML content using a character stream.
      */
+    @Deprecated
     public String sniffEncoding() throws IOException {
         class Eureka extends SAXException {
             final String encoding;
