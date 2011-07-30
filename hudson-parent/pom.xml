@@ -50,7 +50,7 @@
 
   <ciManagement>
     <system>Hudson</system>
-    <url>http://hudson-ci.org:58200/hudson</url>
+    <url>http://hudson-ci.org/hudson</url>
   </ciManagement>
 
   <mailingLists>
