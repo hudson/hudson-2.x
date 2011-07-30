@@ -81,7 +81,6 @@ THE SOFTWARE.
   </properties>
 
   <modules>
-    <module>maven-hpi-plugin</module>
     <module>hudson-parent</module>
     <module>hudson-test-utils</module>
     <module>hudson-utils</module>
@@ -158,6 +157,12 @@ THE SOFTWARE.
               <version>1.4</version>
             </dependency>
           </dependencies>
+        </plugin>
+        
+         <plugin>
+          <groupId>org.jvnet.hudson.tools</groupId>
+          <artifactId>maven-hpi-plugin</artifactId>
+          <version>2.1.0</version>
         </plugin>
 
         <!-- this is really just a patched version of maven-jetty-plugin to workaround issue #932 -->
