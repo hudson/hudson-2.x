@@ -40,8 +40,7 @@ import hudson.util.CyclicGraphDetector.CycleDetectedException;
 import hudson.util.PersistedList;
 import hudson.util.Service;
 
-import java.util.Iterator;
-import org.apache.commons.beanutils.PropertyUtils;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -94,7 +93,7 @@ public abstract class PluginManager extends AbstractModelObject {
     /**
      * All active plugins.
      */
-    protected final List<PluginWrapper> activePlugins = new ArrayList<PluginWrapper>();
+    protected final List<PluginWrapper> activePlugins = new CopyOnWriteArrayList<PluginWrapper> ();
 
     protected final List<FailedPlugin> failedPlugins = new ArrayList<FailedPlugin>();
 
@@ -659,11 +658,7 @@ public abstract class PluginManager extends AbstractModelObject {
 
         @Override
         protected URL findResource(String name) {
-            //use iterator in order to avoid ConcurrentModificationException for some cases.
-            //see http://issues.hudson-ci.org/browse/HUDSON-4868
-            Iterator<PluginWrapper> iterator = activePlugins.iterator();
-            while (iterator.hasNext()) {
-                PluginWrapper p = iterator.next();
+            for (PluginWrapper p : activePlugins) {
                 URL url = p.classLoader.getResource(name);
                 if(url!=null)
                     return url;
