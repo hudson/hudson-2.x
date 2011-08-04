@@ -505,12 +505,6 @@
       </dependency>
 
       <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>hudson-test-harness</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
          <groupId>${project.groupId}</groupId>
          <artifactId>hudson-test-ui</artifactId>
          <version>${project.version}</version>
