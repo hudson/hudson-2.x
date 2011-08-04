@@ -16,10 +16,6 @@
 
 package hudson;
 
-import static hudson.init.InitMilestone.PLUGINS_PREPARED;
-import static hudson.init.InitMilestone.PLUGINS_STARTED;
-import static hudson.init.InitMilestone.PLUGINS_LISTED;
-
 import hudson.PluginWrapper.Dependency;
 import hudson.init.InitStrategy;
 import hudson.init.InitializerFinder;
@@ -32,8 +28,28 @@ import hudson.util.CyclicGraphDetector;
 import hudson.util.CyclicGraphDetector.CycleDetectedException;
 import hudson.util.PersistedList;
 import hudson.util.Service;
-
-import org.apache.commons.beanutils.PropertyUtils;
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -50,27 +66,9 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static hudson.init.InitMilestone.PLUGINS_LISTED;
+import static hudson.init.InitMilestone.PLUGINS_PREPARED;
+import static hudson.init.InitMilestone.PLUGINS_STARTED;
 
 /**
  * Manages {@link PluginWrapper}s.
@@ -86,7 +84,7 @@ public abstract class PluginManager extends AbstractModelObject {
     /**
      * All active plugins.
      */
-    protected final List<PluginWrapper> activePlugins = new ArrayList<PluginWrapper>();
+    protected final List<PluginWrapper> activePlugins = new CopyOnWriteArrayList<PluginWrapper> ();
 
     protected final List<FailedPlugin> failedPlugins = new ArrayList<FailedPlugin>();
 
