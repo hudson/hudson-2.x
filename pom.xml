@@ -518,12 +518,7 @@ THE SOFTWARE.
         <version>${project.version}</version>
       </dependency>
 
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>hudson-test-ui</artifactId>
-         <version>${project.version}</version>
-       </dependency>
-    </dependencies>
+     </dependencies>
   </dependencyManagement>
 
   <profiles>
@@ -641,10 +636,7 @@ THE SOFTWARE.
           <name>it</name>
         </property>
       </activation>
-      <modules>
-        <module>hudson-test-ui</module>
-        <module>hudson-test-harness</module>
-      </modules>
+       
       <!--TODO find better solution to use properties for hudson-remoting-->
       <properties>
         <hudson.sign.alias>hudson</hudson.sign.alias>
