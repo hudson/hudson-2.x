@@ -89,13 +89,23 @@
         });
 
     </script>
-    
 
-    <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}" onclick="onLinkClick(); return false;" >
-        <b>${%login}</b>
-    </a>
-        
-       
+    <!-- We cannot use ajax in case of container based authentication (LegacySecurityRealm)
+         because of the HTTP Status 400 - Invalid direct reference to form login page -->
+    <j:choose>
+        <j:when test="${app.securityRealm.loginUrl=='loginEntry'}">
+            <a style="color:inherit" href="${rootURL}/${app.securityRealm.loginUrl}?from=${from}">
+                <b>${%login}</b>
+            </a>
+        </j:when>
+        <j:otherwise>
+            <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}"
+               onclick="onLinkClick(); return false;">
+                <b>${%login}</b>
+            </a>
+        </j:otherwise>
+    </j:choose>
+
     <div id="question" style="display:none; cursor: default">
         <j:set var="submitFrom" value="${from}" />
         <st:include page="loginDialog.jelly" />
