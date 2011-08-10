@@ -52,7 +52,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
      *      if the parsing fails.
      */
     public VersionNumber( String num ) {
-        StringTokenizer tokens = new StringTokenizer(num,".-");
+        StringTokenizer tokens = new StringTokenizer(num,".-_");
         digits = new int[tokens.countTokens()];
         if(digits.length<2)
             throw new IllegalArgumentException("Failed to parse "+num+" as version number");
