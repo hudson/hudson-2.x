@@ -23,23 +23,23 @@
  */
 package hudson.remoting;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
-import java.net.MalformedURLException;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Loads class files from the other peer through {@link Channel}.
@@ -63,8 +63,8 @@ final class RemoteClassLoader extends URLClassLoader {
      */
     private final Channel channel;
 
-    private final Map<String,File> resourceMap = new HashMap<String,File>();
-    private final Map<String,Vector<File>> resourcesMap = new HashMap<String,Vector<File>>();
+    /** Manages resources receiving remotely, not including class files. */
+    private final RemoteResourceManager resourceManager;
 
     /**
      * List of jars that are already pre-fetched through {@link #addURL(URL)}.
@@ -88,6 +88,7 @@ final class RemoteClassLoader extends URLClassLoader {
         super(new URL[0],parent);
         this.proxy = proxy;
         this.channel = RemoteInvocationHandler.unwrap(proxy);
+        resourceManager = new RemoteResourceManager(this, this.proxy, this.channel);
     }
 
     /**
@@ -154,86 +155,50 @@ final class RemoteClassLoader extends URLClassLoader {
     /**
      * Defining a package is necessary to make {@link Class#getPackage()} work,
      * which is often used to retrieve package-level annotations.
-     * (for example, JAXB RI and Hadoop use them.) 
+     * (for example, JAXB RI and Hadoop use them.)
+     *
+     * @param name package name.
      */
     private void definePackage(String name) {
         int idx = name.lastIndexOf('.');
         if (idx<0)  return; // not in a package
-        
+
         String packageName = name.substring(0,idx);
         if (getPackage(packageName) != null)    // already defined
             return;
 
         definePackage(packageName, null, null, null, null, null, null, null);
     }
+    /**
+     * Finds resources in the URLs that have been added so far.
+     *
+     * @param name The name of the resource to retrieve.
+     * @return a <code>URL</code> for the resource, or <code>null</code> if the resource could not
+     *         be found.
+     * @see URLClassLoader#findResource(String)
+     */
+    URL findResourceInURLs(String name) {
+        return super.findResource(name);
+    }
 
     public URL findResource(String name) {
-        // first attempt to load from locally fetched jars
-        URL url = super.findResource(name);
-        if(url!=null || channel.isRestricted)   return url;
-
-        try {
-            if(resourceMap.containsKey(name)) {
-                File f = resourceMap.get(name);
-                if(f==null) return null;    // no such resource
-                if(f.exists())
-                    // be defensive against external factors that might have deleted this file, since we use /tmp
-                    // see http://www.nabble.com/Surefire-reports-tt17554215.html
-                    return f.toURI().toURL();
-            }
-
-            long startTime = System.nanoTime();
-            byte[] image = proxy.getResource(name);
-            channel.resourceLoadingTime.addAndGet(System.nanoTime()-startTime);
-            channel.resourceLoadingCount.incrementAndGet();
-            if(image==null) {
-                resourceMap.put(name,null);
-                return null;
-            }
-    
-            File res = makeResource(name, image);
-            resourceMap.put(name,res);
-            return res.toURI().toURL();
-        } catch (IOException e) {
-            throw new Error("Unable to load resource "+name,e);
-        }
+        return resourceManager.findResource(name);
     }
+    /**
+     * Appends the specified URL to the list of URLs to search for classes and resources. This
+     * method was added so that package-level members, namely RemoteResourceManager, can access this
+     * method.
+     *
+     * @param url the URL to be added to the search path of URLs
+     */
+    @Override
+    protected void addURL(URL url) {
+        super.addURL(url);
+     }
 
-    private static Vector<URL> toURLs(Vector<File> files) throws MalformedURLException {
-        Vector<URL> r = new Vector<URL>(files.size());
-        for (File f : files) {
-            if(!f.exists()) return null;    // abort
-            r.add(f.toURI().toURL());
-        }
-        return r;
-    }
 
     public Enumeration<URL> findResources(String name) throws IOException {
-        if(channel.isRestricted)
-            return new Vector<URL>().elements();
-
-        // TODO: use the locally fetched jars to speed up the look up
-        // the challenge is how to combine the list from local jars
-        // and the remote list
-
-        Vector<File> files = resourcesMap.get(name);
-        if(files!=null) {
-            Vector<URL> urls = toURLs(files);
-            if(urls!=null)
-                return urls.elements();
-        }
-
-        long startTime = System.nanoTime();
-        byte[][] images = proxy.getResources(name);
-        channel.resourceLoadingTime.addAndGet(System.nanoTime()-startTime);
-        channel.resourceLoadingCount.incrementAndGet();
-
-        files = new Vector<File>();
-        for( byte[] image: images )
-            files.add(makeResource(name,image));
-        resourcesMap.put(name,files);
-
-        return toURLs(files).elements();
+        return resourceManager.findResources(name);
     }
 
     // FIXME move to utils
@@ -257,39 +222,6 @@ final class RemoteClassLoader extends URLClassLoader {
         }
     }
 
-
-    private File makeResource(String name, byte[] image) throws IOException {
-        File tmpFile = createTempDir();
-        File resource = new File(tmpFile, name);
-        resource.getParentFile().mkdirs();
-
-        FileOutputStream fos = new FileOutputStream(resource);
-        fos.write(image);
-        fos.close();
-
-        deleteDirectoryOnExit(tmpFile);
-
-        return resource;
-    }
-
-    private File createTempDir() throws IOException {
-    	// work around sun bug 6325169 on windows
-    	// see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6325169
-        int nRetry=0;
-        while (true) {
-            try {
-                File tmpFile = File.createTempFile("hudson-remoting", "");
-                tmpFile.delete();
-                tmpFile.mkdir();
-                return tmpFile;
-            } catch (IOException e) {
-                if (nRetry++ < 100)
-                    continue;
-                throw e;
-            }
-        }
-    }
-
     /**
      * Prefetches the jar into this class loader.
      *
@@ -298,20 +230,11 @@ final class RemoteClassLoader extends URLClassLoader {
      *      and doesn't point to anything meaningful locally.
      * @return
      *      true if the prefetch happened. false if the jar is already prefetched.
-     * @see Channel#preloadJar(Callable, Class[]) 
+     * @throws IOException if any,.
+     * @see Channel#preloadJar(Callable, Class[])
      */
-    /*package*/ boolean prefetch(URL jar) throws IOException {
-        synchronized (prefetchedJars) {
-            if(prefetchedJars.contains(jar))
-                return false;
-
-            String p = jar.getPath().replace('\\','/');
-            p = p.substring(p.lastIndexOf('/')+1);
-            File localJar = makeResource(p,proxy.fetchJar(jar));
-            addURL(localJar.toURI().toURL());
-            prefetchedJars.add(jar);
-            return true;
-        }
+    boolean prefetch(URL jar) throws IOException {
+        return resourceManager.prefetchJar(jar);
     }
 
     static class ClassFile implements Serializable {
@@ -332,12 +255,78 @@ final class RemoteClassLoader extends URLClassLoader {
     /**
      * Remoting interface.
      */
-    /*package*/ static interface IClassLoader {
+    static interface IClassLoader {
         byte[] fetchJar(URL url) throws IOException;
+
         byte[] fetch(String className) throws ClassNotFoundException;
+
         ClassFile fetch2(String className) throws ClassNotFoundException;
+
+        /**
+         * Retrieves a byte image of the supplied resource. This method is deprecated, but is being
+         * kept to provide backward compatibility with older nodes.
+         * @param name resource name.
+         * @return byte array
+         * @throws IOException if any.
+         *
+         * @deprecated
+         */
         byte[] getResource(String name) throws IOException;
+
+        /**
+         * Retrieves a byte images of the supplied resources. This method is deprecated, but is being
+         * kept to provide backward compatibility with older nodes.
+         *
+         * @param name resources.
+         * @return array of bytes
+         * @throws IOException if any.
+         * @deprecated
+         */
         byte[][] getResources(String name) throws IOException;
+
+        /**
+         * Returns a list of URLs that contain the resource with the given name.
+         *
+         * @param name The resource name
+         * @return A list of URLs. Each URL returned will be a file URL representing the underlying
+         *         local file on the remote machine. This is necessary as the caller might not understand
+         *         certain vendor-specific URL protocols on the remote machine. Also, the URL will contain a
+         *         query value to the requested resource. For example, in this URL, there is a query value
+         *         of images/hudson.png: file:/some/resource.jar?/images/hudson.png.
+         * @throws IOException When some exception occurs looking up the resources.
+         *
+         */
+        Vector<URL> findResources(String name) throws IOException;
+
+        /**
+         * Retrieves the JAR in the provided URL
+         *
+         * @param fileUrl The file URL to the resource on the remote host.
+         * @return An input stream
+         * @throws IOException if any,
+         */
+        RemoteInputStream getJarAsStream(URL fileUrl) throws IOException;
+
+        /**
+         * Returns an stream to the requested resource.
+         *
+         * @param fileUrl A file URL to the resource on the remote host with the query string set to
+         * the requested resource (e.g. file:/some/resource.jar?/images/hudson.png).
+         * @return An InputStream for reading the content requested.
+         * @throws IOException If some error occurs creating the InputStream.
+         */
+        RemoteInputStream getResourceAsStream(URL fileUrl) throws IOException;
+
+        /**
+         * Returns an input stream for reading the specified resource. The search order is described
+         * in the documentation for getResource(String).
+         *
+         * @param name - The resource name
+         * @return An input stream for reading the resource, or null if the resource could not be
+         *         found
+         * @throws IOException if any,
+         */
+        RemoteInputStream getResourceAsStream(String name) throws IOException;
     }
 
     public static IClassLoader export(ClassLoader cl, Channel local) {
@@ -359,7 +348,7 @@ final class RemoteClassLoader extends URLClassLoader {
         return local.export(new ClassLoaderProxy(cl,local), false);
     }
 
-    /*package*/ static final class ClassLoaderProxy implements IClassLoader {
+    static final class ClassLoaderProxy implements IClassLoader {
         final ClassLoader cl;
         final Channel channel;
 
@@ -409,40 +398,56 @@ final class RemoteClassLoader extends URLClassLoader {
             }
         }
 
+        private URL resolveResource(String name) throws IOException {
+            URL resource = cl.getResource(name);
+            if (resource == null) {
+                return null;
+            }
+
+            if (!USE_BOOTSTRAP_CLASSLOADER) {
+                URL systemResource = PSEUDO_BOOTSTRAP.getResource(name);
+                if (resource.equals(systemResource)) {
+                    return null;
+                }
+            }
+            return resource;
+        }
+
         public byte[] getResource(String name) throws IOException {
-        	URL resource = cl.getResource(name);
-        	if (resource == null) {
-        		return null;
-        	}
-        	
-        	if (!USE_BOOTSTRAP_CLASSLOADER) {
-        		URL systemResource = PSEUDO_BOOTSTRAP.getResource(name);
-        		if (resource.equals(systemResource)) {
-        			return null;
-        		}
-        	}
-        	
+            URL resource = resolveResource(name);
+            if (resource == null) {
+                return null;
+            }
             return readFully(resource.openStream());
+        }
+
+        private Enumeration<URL> resolveResources(String name) throws IOException {
+            Set<URL> systemResources = null;
+            if (!USE_BOOTSTRAP_CLASSLOADER) {
+                systemResources = new HashSet<URL>();
+                Enumeration<URL> e = PSEUDO_BOOTSTRAP.getResources(name);
+                while (e.hasMoreElements()) {
+                    systemResources.add(e.nextElement());
+                }
+            }
+
+            Vector<URL> resolvedUrls = new Vector<URL>();
+            Enumeration<URL> e = cl.getResources(name);
+            while (e.hasMoreElements()) {
+                URL url = e.nextElement();
+                if (systemResources == null || !systemResources.contains(url)) {
+                    resolvedUrls.add(url);
+                }
+            }
+            return resolvedUrls.elements();
         }
 
         public byte[][] getResources(String name) throws IOException {
             List<byte[]> images = new ArrayList<byte[]>();
-            
-            Set<URL> systemResources = null;
-            if (!USE_BOOTSTRAP_CLASSLOADER) {
-            	systemResources = new HashSet<URL>();
-            	Enumeration<URL> e = PSEUDO_BOOTSTRAP.getResources(name);
-            	while (e.hasMoreElements()) {
-            		systemResources.add(e.nextElement());
-            	}
-            }
-
-            Enumeration<URL> e = cl.getResources(name);
+            Enumeration<URL> e = resolveResources(name);
             while(e.hasMoreElements()) {
-            	URL url = e.nextElement();
-            	if (systemResources == null || !systemResources.contains(url)) {
-            		images.add(readFully(url.openStream()));
-            	}
+                URL url = e.nextElement();
+                images.add(readFully(url.openStream()));
             }
 
             return images.toArray(new byte[images.size()][]);
@@ -458,6 +463,69 @@ final class RemoteClassLoader extends URLClassLoader {
             in.close();
 
             return baos.toByteArray();
+        }
+
+        public RemoteInputStream getJarAsStream(URL fileUrl) throws IOException {
+            return new RemoteInputStream(new BufferedInputStream(fileUrl.openStream()));
+        }
+
+        /**
+         * @see IClassLoader#findResources(String)
+         */
+        public Vector<URL> findResources(String name) throws IOException {
+            Enumeration<URL> resources = resolveResources(name);
+            // Enumeration is not serializable, so wrap in Vector, which is.
+            if (resources == null) {
+                return null;
+            }
+
+            Vector<URL> vector = new Vector<URL>();
+            while (resources.hasMoreElements()) {
+                URL resourceUrl = resources.nextElement();
+                String file;
+                URL fileUrl;
+                if ("file".equals(resourceUrl.getProtocol())) {
+                    fileUrl = resourceUrl;
+                    file = fileUrl.getPath();
+                } else {
+                    String jarspec = resourceUrl.toExternalForm();
+                    String resourceName  = jarspec.substring(jarspec.lastIndexOf('!') + 1,
+                            jarspec.length());
+                    File jarFile = Which.urlToFile(resourceUrl);
+                    fileUrl = jarFile.toURI().toURL();
+                    file = fileUrl.getPath() + "?" + resourceName;
+
+                }
+                vector.add(new URL(fileUrl.getProtocol(), fileUrl.getHost(), file));
+            }
+            return vector;
+        }
+
+        /**
+         * @see IClassLoader#getResourceAsStream(URL)
+         */
+        public RemoteInputStream getResourceAsStream(URL url) throws IOException {
+            InputStream in;
+            if (!url.getPath().contains(".jar")) {
+                in = (new FileInputStream(Which.decode(url.getPath())));
+            }
+            else {
+                File file = new File(Which.decode(url.getPath()));
+                JarFile jarFile = new JarFile(file);
+                String resourcePath = Which.decode(url.getQuery());
+                resourcePath = resourcePath.replaceFirst("^\\/", "");
+                JarEntry jarEntry = jarFile.getJarEntry(resourcePath);
+                in = jarFile.getInputStream(jarEntry);
+            }
+            return new RemoteInputStream(new BufferedInputStream(in));
+        }
+
+        public RemoteInputStream getResourceAsStream(String name) throws IOException {
+            URL resource = resolveResource(name);
+            if (resource == null) {
+                return null;
+            }
+            return new RemoteInputStream(new BufferedInputStream(resource.openStream()));
         }
 
         public boolean equals(Object that) {
@@ -522,6 +590,28 @@ final class RemoteClassLoader extends URLClassLoader {
 
         private Object readResolve() {
             return Channel.current().getExportedObject(oid);
+        }
+
+        /**
+         * @see IClassLoader#findResources(String)
+         */
+        public Vector<URL> findResources(String name) throws IOException {
+            return proxy.findResources(name);
+        }
+
+        /**
+         * @see IClassLoader#getResourceAsStream(URL)
+         */
+        public RemoteInputStream getResourceAsStream(URL url) throws IOException {
+            return proxy.getResourceAsStream(url);
+        }
+
+        public RemoteInputStream getJarAsStream(URL fileUrl) throws IOException {
+            return proxy.getJarAsStream(fileUrl);
+        }
+
+        public RemoteInputStream getResourceAsStream(String name) throws IOException {
+            return proxy.getResourceAsStream(name);
         }
 
         private static final long serialVersionUID = 1L;
