@@ -70,8 +70,8 @@ THE SOFTWARE.
      <script type="text/javascript">
        
           <![CDATA[
-            
-            var tz = ${tz.rawOffset / 3600000};
+            // Respect Daylight Saving Time on client side
+            var tz = ${it.getTimeZoneOffset()};
            
              function onLoadEvent() {
                 var tl_el = document.getElementById("tl");
