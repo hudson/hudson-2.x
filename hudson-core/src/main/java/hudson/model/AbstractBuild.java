@@ -48,8 +48,6 @@ import hudson.util.AdaptedIterator;
 import hudson.util.Iterators;
 import hudson.util.LogTaskListener;
 import hudson.util.VariableResolver;
-import java.io.InterruptedIOException;
-import javax.swing.table.TableRowSorter;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -512,8 +510,6 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
                         }
                         return;
                     }
-                } catch (InterruptedIOException e) {
-                    throw new InterruptedException();
                 } catch (AbortException e) {
                     listener.error(e.getMessage());
                 } catch (IOException e) {
