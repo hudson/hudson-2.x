@@ -93,11 +93,20 @@ public class ArtifactArchiver extends Recorder {
     @DataBoundConstructor
     public ArtifactArchiver(String artifacts, String excludes, boolean latestOnly, String compressionType,
                             boolean autoValidateFileMask) {
-        this.artifacts = artifacts.trim();
+        this.artifacts = Util.fixEmptyAndTrim(artifacts);
         this.excludes = Util.fixEmptyAndTrim(excludes);
         this.latestOnly = latestOnly;
         setCompressionType(compressionType);
         this.autoValidateFileMask = autoValidateFileMask;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean needsToRun(Result buildResult) {
+        //TODO it seems we shouldn't archive if build result is worse than SUCCESS, investigate this
+        return buildResult.isBetterThan(Result.ABORTED);
     }
 
     public String getArtifacts() {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ import hudson.model.Project;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 
+import hudson.model.Result;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,7 @@ import java.util.Comparator;
  * different job type, use {@link BuildStepDescriptor} for the base type
  * of your descriptor to control which job type it supports.
  *
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi, Anton Kozak
  */
 public abstract class Publisher extends BuildStepCompatibilityLayer implements BuildStep, Describable<Publisher> {
     /**
@@ -117,6 +118,19 @@ public abstract class Publisher extends BuildStepCompatibilityLayer implements B
      */
     public boolean needsToRunAfterFinalized() {
         return false;
+    }
+
+    /**
+     * Returns true if this {@link Publisher} needs to run depends on Build {@link Result}.
+     * <p/>
+     * Can be used if execution of {@link Publisher} is not required for some Build {@link Result},
+     * i.e. ABORTED, FAILED, etc.
+     * <p/>
+     *
+     * @since 2.1.1
+     */
+    public boolean needsToRun(Result buildResult) {
+        return true;
     }
 
     public Descriptor<Publisher> getDescriptor() {
