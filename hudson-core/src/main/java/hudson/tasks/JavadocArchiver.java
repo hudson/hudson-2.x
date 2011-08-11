@@ -64,6 +64,15 @@ public class JavadocArchiver extends Recorder {
         this.keepAll = keep_all;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean needsToRun(Result buildResult) {
+        //TODO it seems we shouldn't archive javadocs if build result is worse than SUCCESS, investigate this
+        return buildResult.isBetterThan(Result.ABORTED);
+    }
+
     public String getJavadocDir() {
         return javadocDir;
     }
