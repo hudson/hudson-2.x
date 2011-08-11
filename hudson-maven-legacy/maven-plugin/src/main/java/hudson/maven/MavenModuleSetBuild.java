@@ -98,6 +98,7 @@ import org.sonatype.aether.transfer.TransferCancelledException;
 import org.sonatype.aether.transfer.TransferEvent;
 import org.sonatype.aether.transfer.TransferListener;
 
+import static hudson.model.Result.ABORTED;
 /**
  * {@link Build} for {@link MavenModuleSet}.
  *
@@ -660,6 +661,9 @@ public class MavenModuleSetBuild extends AbstractMavenBuild<MavenModuleSet,Maven
                                 process.discard();
                             }
                         }
+                    } catch (InterruptedException e) {
+                        r = ABORTED;
+                        throw e;
                     } finally {
                         if (r != null) {
                             setResult(r);

@@ -497,42 +497,38 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
         }
 
         private void checkout(BuildListener listener) throws Exception {
-            try {
-                for (int retryCount=project.getScmCheckoutRetryCount(); ; retryCount--) {
-                    // for historical reasons, null in the scm field means CVS, so we need to explicitly set this to something
-                    // in case check out fails and leaves a broken changelog.xml behind.
-                    // see http://www.nabble.com/CVSChangeLogSet.parse-yields-SAXParseExceptions-when-parsing-bad-*AccuRev*-changelog.xml-files-td22213663.html
-                    AbstractBuild.this.scm = new NullChangeLogParser();
+            for (int retryCount = project.getScmCheckoutRetryCount(); ; retryCount--) {
+                // for historical reasons, null in the scm field means CVS, so we need to explicitly set this to something
+                // in case check out fails and leaves a broken changelog.xml behind.
+                // see http://www.nabble.com/CVSChangeLogSet.parse-yields-SAXParseExceptions-when-parsing-bad-*AccuRev*-changelog.xml-files-td22213663.html
+                AbstractBuild.this.scm = new NullChangeLogParser();
 
-                    try {
-                        if (project.checkout(AbstractBuild.this,launcher,listener,new File(getRootDir(),"changelog.xml"))) {
-                            // check out succeeded
-                            SCM scm = project.getScm();
+                try {
+                    if (project.checkout(AbstractBuild.this, launcher, listener,
+                        new File(getRootDir(), "changelog.xml"))) {
+                        // check out succeeded
+                        SCM scm = project.getScm();
 
-                            AbstractBuild.this.scm = scm.createChangeLogParser();
-                            AbstractBuild.this.changeSet = AbstractBuild.this.calcChangeSet();
+                        AbstractBuild.this.scm = scm.createChangeLogParser();
+                        AbstractBuild.this.changeSet = AbstractBuild.this.calcChangeSet();
 
-                            for (SCMListener l : Hudson.getInstance().getSCMListeners())
-                                l.onChangeLogParsed(AbstractBuild.this,listener,changeSet);
-                            return;
+                        for (SCMListener l : Hudson.getInstance().getSCMListeners()) {
+                            l.onChangeLogParsed(AbstractBuild.this, listener, changeSet);
                         }
-                    } catch (AbortException e) {
-                        listener.error(e.getMessage());
-                    } catch (IOException e) {
-                        // checkout error not yet reported
-                        e.printStackTrace(listener.getLogger());
+                        return;
                     }
-
-                    if (retryCount == 0)   // all attempts failed
-                        throw new RunnerAbortedException();
-
-                    listener.getLogger().println("Retrying after 10 seconds");
-                    Thread.sleep(10000);
+                } catch (AbortException e) {
+                    listener.error(e.getMessage());
+                } catch (IOException e) {
+                    // checkout error not yet reported
+                    e.printStackTrace(listener.getLogger());
                 }
-            } catch (InterruptedException e) {
-                listener.getLogger().println(Messages.AbstractProject_ScmAborted());
-                LOGGER.log(Level.INFO, AbstractBuild.this + " aborted", e);
-                throw new RunnerAbortedException();
+                // all attempts failed
+                if (retryCount == 0){
+                    throw new RunnerAbortedException();
+                }
+                listener.getLogger().println("Retrying after 10 seconds");
+                Thread.sleep(10000);
             }
         }
 
