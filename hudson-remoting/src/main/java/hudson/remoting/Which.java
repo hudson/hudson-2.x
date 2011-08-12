@@ -62,14 +62,17 @@ public class Which {
     }
 
     /**
-     * Locates the JAR file from the given URL.
+     * Locates the jar file that contains the given class.
      *
-     * @param res The URL
+     * <p>
+     * Note that jar files are not always loaded from {@link File},
+     * so for diagnostics purposes {@link #jarURL(Class)} is preferrable.
+     *
      * @throws IllegalArgumentException
-     *      if failed to determine the underlying file.
-     * @return The underlying File for this URL.
+     *      if failed to determine.
      */
-    public static File urlToFile(URL res) throws IOException {
+    public static File jarFile(Class clazz) throws IOException {
+        URL res = jarURL(clazz);
         String resURL = res.toExternalForm();
         String originalURL = resURL;
         if(resURL.startsWith("jar:file:") || resURL.startsWith("wsjar:file:"))
@@ -86,6 +89,23 @@ public class Which {
             // also see http://www.nabble.com/Re%3A-Hudson-on-Weblogic-10.3-td25038378.html#a25043415
             resURL = resURL.substring("zip:".length(), resURL.lastIndexOf('!')); // cut off zip: and the file name portion
             return new File(decode(new URL("file:"+resURL).getPath()));
+        }
+
+        if(resURL.startsWith("file:")) {
+            // unpackaged classes
+            int n = clazz.getName().split("\\.").length; // how many slashes do wo need to cut?
+            for( ; n>0; n-- ) {
+                int idx = Math.max(resURL.lastIndexOf('/'), resURL.lastIndexOf('\\'));
+                if(idx<0)   throw new IllegalArgumentException(originalURL + " - " + resURL);
+                resURL = resURL.substring(0,idx);
+            }
+
+            // won't work if res URL contains ' '
+            // return new File(new URI(null,new URL(res).toExternalForm(),null));
+            // won't work if res URL contains '%20'
+            // return new File(new URL(res).toURI());
+
+            return new File(decode(new URL(resURL).getPath()));
         }
 
         if(resURL.startsWith("vfszip:")) {
@@ -120,7 +140,8 @@ public class Which {
         if(resURL.startsWith("vfs:") || resURL.startsWith("vfsfile:")) {
             // JBoss6
             try {
-                resURL = resURL.substring(0, resURL.lastIndexOf(resURL));
+                String resource = '/' + clazz.getName().replace('.', '/');
+                resURL = resURL.substring(0, resURL.lastIndexOf(resource));
                 Object content = new URL(res, resURL).getContent();
                 if (content instanceof File) {
                     return (File)content;
@@ -162,50 +183,15 @@ public class Which {
                         f.setAccessible(true);
                         return new File((String) f.get(jarFile));
                     } catch (NoSuchFieldException e) {
-                        LOGGER.log(Level.INFO, "Failed to obtain the local cache file name.", e);
+                        LOGGER.log(Level.INFO, "Failed to obtain the local cache file name of "+clazz, e);
                     } catch (IllegalAccessException e) {
-                        LOGGER.log(Level.INFO, "Failed to obtain the local cache file name.", e);
+                        LOGGER.log(Level.INFO, "Failed to obtain the local cache file name of "+clazz, e);
                     }
                 }
             }
         }
 
         throw new IllegalArgumentException(originalURL + " - " + resURL);
-    }
-
-    /**
-     * Locates the jar file that contains the given class.
-     *
-     * <p>
-     * Note that jar files are not always loaded from {@link File},
-     * so for diagnostics purposes {@link #jarURL(Class)} is preferrable.
-     *
-     * @throws IllegalArgumentException
-     *      if failed to determine.
-     */
-    public static File jarFile(Class clazz) throws IOException {
-        URL res = jarURL(clazz);
-        String resURL = res.toExternalForm();
-        String originalURL = resURL;
-
-        if(resURL.startsWith("file:")) {
-            // unpackaged classes
-            int n = clazz.getName().split("\\.").length; // how many slashes do wo need to cut?
-            for( ; n>0; n-- ) {
-                int idx = Math.max(resURL.lastIndexOf('/'), resURL.lastIndexOf('\\'));
-                if(idx<0)   throw new IllegalArgumentException(originalURL + " - " + resURL);
-                resURL = resURL.substring(0,idx);
-            }
-
-            // won't work if res URL contains ' '
-            // return new File(new URI(null,new URL(res).toExternalForm(),null));
-            // won't work if res URL contains '%20'
-            // return new File(new URL(res).toURI());
-
-            return new File(decode(new URL(resURL).getPath()));
-        }
-
-        return urlToFile(res);
     }
 
     public static File jarFile(URL resource) throws IOException {
@@ -220,7 +206,7 @@ public class Which {
     /**
      * Decode '%HH'.
      */
-    static String decode(String s) {
+    private static String decode(String s) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for( int i=0; i<s.length();i++ ) {
             char ch = s.charAt(i);
