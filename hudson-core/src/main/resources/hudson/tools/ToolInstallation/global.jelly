@@ -29,8 +29,19 @@ THE SOFTWARE.
         <j:set var="toolDescriptor" value="${descriptor}" /><!-- to make this descriptor accessible from properties -->
         <table width="100%">
           <st:include page="config.jelly" from="${descriptor}" class="${descriptor.clazz}"/>
-          <f:descriptorList descriptors="${descriptor.propertyDescriptors}" field="properties"/>
-          <f:entry title="">
+            <!-- TODO enable JDK installer when it will be ready -->
+            <j:choose>
+                <j:when test="${descriptor.displayName=='JDK'}">
+                    <tr>
+                        <td colspan="2"/>
+                        <td><div style="text-align:left; color:red; font-weight:bold">${%jdk.installed.disabled}</div></td>
+                    </tr>
+                </j:when>
+                <j:otherwise>
+                    <f:descriptorList descriptors="${descriptor.propertyDescriptors}" field="properties"/>
+                </j:otherwise>
+            </j:choose>
+            <f:entry title="">
             <div align="right">
               <f:repeatableDeleteButton value="${%label.delete(descriptor.displayName)}"/>
             </div>
