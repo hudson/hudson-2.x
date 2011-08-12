@@ -35,9 +35,6 @@ import hudson.remoting.SocketInputStream;
 import hudson.remoting.SocketOutputStream;
 import hudson.slaves.ComputerLauncher;
 import hudson.slaves.SlaveComputer;
-import hudson.tools.JDKInstaller;
-import hudson.tools.JDKInstaller.CPU;
-import hudson.tools.JDKInstaller.Platform;
 import hudson.util.IOUtils;
 import hudson.util.Secret;
 import hudson.util.jna.DotNet;
@@ -155,50 +152,27 @@ public class ManagedWindowsServiceLauncher extends ComputerLauncher {
                 proc.getInputStream().close();
                 int exitCode = proc.waitFor();
                 if (exitCode==1) {// we'll get this error code if Java is not found
-                    logger.println("No Java found. Downloading JDK");
-                    JDKInstaller jdki = new JDKInstaller("jdk-6u16-oth-JPR@CDS-CDS_Developer",true);
-                    URL jdk = jdki.locate(listener, Platform.WINDOWS, CPU.i386);
-
-                    listener.getLogger().println("Installing JDK");
-                    copyStreamAndClose(jdk.openStream(), new SmbFile(remoteRoot, "jdk.exe").getOutputStream());
-
-                    String javaDir = path + "\\jdk"; // this is where we install Java to
-
-                    WindowsRemoteFileSystem fs = new WindowsRemoteFileSystem(name, createSmbAuth());
-                    fs.mkdirs(javaDir);
-                    
-                    jdki.install(new WindowsRemoteLauncher(listener,wrpl), Platform.WINDOWS,
-                            fs, listener, javaDir ,path+"\\jdk.exe");
+                    //TODO enable me when JDK installer based on REST API will be ready
+                    logger.println("No JDK found on slave node. Please install JDK");
+                    throw new InterruptedException("No JDK found on slave node. Please install JDK");
+//                    logger.println("No Java found. Downloading JDK");
+//                    JDKInstaller jdki = new JDKInstaller("jdk-6u16-oth-JPR@CDS-CDS_Developer",true);
+//                    URL jdk = jdki.locate(listener, Platform.WINDOWS, CPU.i386);
+//
+//                    listener.getLogger().println("Installing JDK");
+//                    copyStreamAndClose(jdk.openStream(), new SmbFile(remoteRoot, "jdk.exe").getOutputStream());
+//
+//                    String javaDir = path + "\\jdk"; // this is where we install Java to
+//
+//                    WindowsRemoteFileSystem fs = new WindowsRemoteFileSystem(name, createSmbAuth());
+//                    fs.mkdirs(javaDir);
+//
+//                    jdki.install(new WindowsRemoteLauncher(listener,wrpl), Platform.WINDOWS,
+//                            fs, listener, javaDir ,path+"\\jdk.exe");
                 }
             } catch (Exception e) {
                 e.printStackTrace(listener.error("Failed to prepare Java"));
             }
-
-// this just doesn't work --- trying to obtain the type or check the existence of smb://server/C$/ results in "access denied"    
-//            {// check if the administrative share exists
-//                String fullpath = remoteRoot.getPath();
-//                int idx = fullpath.indexOf("$/");
-//                if (idx>=0) {// this must be true but be defensive since all we are trying to do here is a friendlier error check
-//                    boolean exists;
-//                    try {
-//                        // SmbFile.exists() doesn't work on a share
-//                        new SmbFile(fullpath.substring(0, idx + 2)).getType();
-//                        exists = true;
-//                    } catch (SmbException e) {
-//                        // on Windows XP that I was using for the test, if the share doesn't exist I get this error
-//                        // a thread in jcifs library ML confirms this, too:
-//                        // http://old.nabble.com/"The-network-name-cannot-be-found"-after-30-seconds-td18859163.html
-//                        if (e.getNtStatus()== NtStatus.NT_STATUS_BAD_NETWORK_NAME)
-//                            exists = false;
-//                        else
-//                            throw e;
-//                    }
-//                    if (!exists) {
-//                        logger.println(name +" appears to be missing the administrative share "+fullpath.substring(idx-1,idx+1)/*C$*/);
-//                        return;
-//                    }
-//                }
-//            }
 
             String id = WindowsSlaveInstaller.generateServiceId(path);
             Win32Service slaveService = services.getService(id);
