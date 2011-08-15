@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <style type="text/css">
-        INPUT {
+        #loginForm input {
             width: 150px;
         }
     </style>
@@ -57,8 +57,8 @@ THE SOFTWARE.
                 </j:if>
             </table>
             <input type="hidden" name="from" value="${submitFrom}" />
-            <input style="width:75px" type="button" id="yes" value="${%Login}" />
-            <input style="margin-left:10px; width:75px" type="button" id="no" value="${%Cancel}" />
+            <input style="width:75px" type="button" id="loginButton" value="${%Login}" />
+            <input style="margin-left:10px; width:75px" type="button" id="cancelButton" value="${%Cancel}" />
             <script>
             $('j_username').focus();
             </script>

@@ -36,9 +36,9 @@ THE SOFTWARE.
   
     <script type="text/javascript">
         
-        function onLinkClick(){
+        function showLoginDialog(){
             jQuery.blockUI({
-              message: jQuery('#question'),
+              message: jQuery('#loginDialog'),
               css: { 
                 width: '350px', 
               },
@@ -80,12 +80,12 @@ THE SOFTWARE.
             });
 
 
-            jQuery('#yes').click(function() {
+            jQuery('#loginButton').click(function() {
                  submitForm();
             });
             
 
-            jQuery('#no').click(function() {
+            jQuery('#cancelButton').click(function() {
                 jQuery.unblockUI();
                 jQuery('#j_username').attr({value:""});
                 jQuery('#j_password').attr({value:""});
@@ -108,13 +108,13 @@ THE SOFTWARE.
         </j:when>
         <j:otherwise>
             <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}"
-               onclick="onLinkClick(); return false;">
+               onclick="showLoginDialog(); return false;">
                 <b>${%login}</b>
             </a>
         </j:otherwise>
     </j:choose>
 
-    <div id="question" style="display:none; cursor: default">
+    <div id="loginDialog" style="display:none; cursor: default">
         <j:set var="submitFrom" value="${from}" />
         <st:include page="loginDialog.jelly" />
     </div>
