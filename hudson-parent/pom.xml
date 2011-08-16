@@ -206,7 +206,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${maven-pmd-plugin.version}</version>
-          <configuration>
+          <!--configuration>
             <verbose>true</verbose>
             <targetJdk>1.5</targetJdk>
             <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
@@ -223,7 +223,7 @@
                 <goal>cpd-check</goal>
               </goals>
             </execution>
-          </executions>
+          </executions-->
         </plugin>
 
         <plugin>
