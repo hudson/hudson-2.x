@@ -22,6 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- by default only check remote repositories once per week -->
     <maven.repository.update.freqency>interval:10080</maven.repository.update.freqency>
+    <maven-pmd-plugin.version>2.5</maven-pmd-plugin.version>
   </properties>
 
   <organization>
@@ -204,7 +205,25 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
-          <version>2.5</version>
+          <version>${maven-pmd-plugin.version}</version>
+          <configuration>
+            <verbose>true</verbose>
+            <targetJdk>1.5</targetJdk>
+            <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+            <targetDirectory>${project.build.directory}</targetDirectory>
+            <excludeRoots>
+              <excludeRoot>${basedir}/target/generated-sources/</excludeRoot>
+            </excludeRoots>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>validate</phase>
+              <goals>
+                <goal>check</goal>
+                <goal>cpd-check</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
 
         <plugin>
