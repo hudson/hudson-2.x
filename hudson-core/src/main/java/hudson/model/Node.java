@@ -17,6 +17,7 @@
 package hudson.model;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import hudson.Extension;
 import hudson.ExtensionPoint;
 import hudson.FilePath;
 import hudson.FileSystemProvisioner;
@@ -29,24 +30,25 @@ import hudson.remoting.VirtualChannel;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
+import hudson.slaves.ComputerListener;
 import hudson.slaves.NodeDescriptor;
 import hudson.slaves.NodeProperty;
 import hudson.slaves.NodePropertyDescriptor;
+import hudson.slaves.OfflineCause;
 import hudson.util.ClockDifference;
 import hudson.util.DescribableList;
 import hudson.util.EnumConverter;
 import hudson.util.TagCloud;
 import hudson.util.TagCloud.WeightFunction;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
-
+import java.util.Set;
+import org.apache.log4j.Logger;
 import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * Base type of Hudson slaves (although in practice, you probably extend {@link Slave} to define a new slave type.)
@@ -60,11 +62,49 @@ import org.kohsuke.stapler.export.Exported;
  */
 @ExportedBean
 public abstract class Node extends AbstractModelObject implements Describable<Node>, ExtensionPoint, AccessControlled {
+
+    private static final Logger LOGGER = Logger.getLogger(Node.class.getName());
+
     /**
      * Newly copied slaves get this flag set, so that Hudson doesn't try to start this node until its configuration
      * is saved once.
      */
     protected volatile transient boolean holdOffLaunchUntilSave;
+
+    /**
+     * Contains info about reason the node is offline.
+     */
+    private OfflineCause offlineCause;
+
+    /**
+     * Listener for set offline cause for node when computer get started.
+     */
+    @Extension
+    public static class NodeListener extends ComputerListener {
+        @Override
+        public void onOnline(Computer c, TaskListener listener) {
+            Node node = c.getNode();
+            if (null != node.offlineCause && node.offlineCause != c.getOfflineCause()) {
+                c.setTemporarilyOffline(true, node.offlineCause);
+            }
+        }
+    }
+
+    /**
+     * Sets the reason about why the node is offline and save configuration.
+     *
+     * @param cause the offline cause
+     */
+    public void setOfflineCause(OfflineCause cause) {
+        try {
+            if (cause != offlineCause) {
+                offlineCause = cause;
+                Hudson.getInstance().save();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Unable to complete save: " + e.getMessage());
+        }
+    }
 
     public String getDisplayName() {
         return getNodeName(); // default implementation

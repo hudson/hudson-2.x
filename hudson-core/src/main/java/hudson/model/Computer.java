@@ -17,12 +17,10 @@
 package hudson.model;
 
 import hudson.EnvVars;
-import hudson.FilePath;
 import hudson.Util;
 import hudson.cli.declarative.CLIMethod;
 import hudson.console.AnnotatedLargeText;
 import hudson.model.Descriptor.FormException;
-import hudson.model.Hudson.MasterComputer;
 import hudson.model.queue.WorkUnit;
 import hudson.node_monitors.NodeMonitor;
 import hudson.remoting.Channel;
@@ -51,7 +49,6 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.HttpRedirect;
-import org.kohsuke.stapler.WebMethod;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.args4j.Option;
@@ -501,6 +498,10 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
     public void setTemporarilyOffline(boolean temporarilyOffline, OfflineCause cause) {
         offlineCause = temporarilyOffline ? cause : null;
         this.temporarilyOffline = temporarilyOffline;
+        Node node = getNode();
+        if (null != node) {
+            node.setOfflineCause(offlineCause);
+        }
         Hudson.getInstance().getQueue().scheduleMaintenance();
     }
 
@@ -555,6 +556,10 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
             this.nodeName = null;
 
         setNumExecutors(node.getNumExecutors());
+
+        if (temporarilyOffline) {
+            node.setOfflineCause(offlineCause);
+        }
     }
 
     /**
