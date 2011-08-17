@@ -18,7 +18,7 @@
 <div>
    <form method="post" action="doDelete">
        <h4>Are you sure you want to delete the Job?.</h4>
-       <input type="submit" id="yes" value="Yes" />
-       <input type="button" id="no" value="No" />
+       <input type="submit" class="yes" value="Yes" />
+       <input type="button" class="no" value="No" />
    </form>
 </div>
