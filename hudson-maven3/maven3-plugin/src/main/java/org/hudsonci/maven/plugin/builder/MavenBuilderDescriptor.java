@@ -87,7 +87,7 @@ public class MavenBuilderDescriptor
     public static final BuildConfigurationDTO DEFAULTS = new BuildConfigurationDTO()
         .withGoals("clean install")
         .withPomFile("pom.xml")
-        .withPrivateRepository(true)
+        .withPrivateRepository(false) // may take up a lot of diskspace if many jobs, so leave off by default
         .withPrivateTmpdir(false) // may cause problems with paths with spaces, so leave off by default
         .withOffline(false)
         .withRecursive(true)
