@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.maven.plugin.builder;
 
@@ -79,7 +79,7 @@ public class MavenBuilderDescriptor
     public static final BuildConfigurationDTO DEFAULTS = new BuildConfigurationDTO()
         .withGoals("clean install")
         .withPomFile("pom.xml")
-        .withPrivateRepository(true)
+        .withPrivateRepository(false) // may take up a lot of disk space if many jobs, so leave off by default
         .withPrivateTmpdir(false) // may cause problems with paths with spaces, so leave off by default
         .withOffline(false)
         .withRecursive(true)
