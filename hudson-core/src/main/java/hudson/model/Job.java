@@ -1089,7 +1089,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                     }
 
                     public int compareTo(ChartLabel that) {
-                        return this.run.number - that.run.number;
+                        return Run.ORDER_BY_DATE.compare(that.run, run);
                     }
 
                     @Override
