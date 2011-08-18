@@ -1,0 +1,7 @@
+<div>
+   <form method="post" action="doDelete">
+       <h4>${%Are you sure about deleting the view?}</h4>
+       <input type="submit" class="yes" value="${%Yes}" />
+       <input type="button" class="no" value="${%No}" />
+   </form>
+</div>
