@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -49,13 +50,18 @@ import java.text.ParseException;
  */
 public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> implements SortedMap<Integer,R> {
     // copy-on-write map
-    private transient volatile SortedMap<Integer,R> builds =
-        new TreeMap<Integer,R>(COMPARATOR);
+    private transient volatile SortedMap<Integer,R> builds;
 
     /**
      * Read-only view of this map.
      */
     private final SortedMap<Integer,R> view = Collections.unmodifiableSortedMap(this);
+
+    private transient volatile Map<Integer, Long> buildsTimeMap = new HashMap<Integer, Long>();
+
+    public RunMap() {
+        builds = new TreeMap<Integer,R>(BUILD_TIME_COMPARATOR);
+    }
 
     public Set<Entry<Integer,R>> entrySet() {
         // since the map is copy-on-write, make sure no one modifies it
@@ -71,6 +77,7 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
         // copy-on-write update
         TreeMap<Integer,R> m = new TreeMap<Integer,R>(builds);
 
+        buildsTimeMap.put(key, value.getTimeInMillis());
         R r = update(m, key, value);
 
         this.builds = m;
@@ -82,8 +89,10 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
         // copy-on-write update
         TreeMap<Integer,R> m = new TreeMap<Integer,R>(builds);
 
-        for (Map.Entry<? extends Integer,? extends R> e : rhs.entrySet())
+        for (Map.Entry<? extends Integer,? extends R> e : rhs.entrySet()) {
+            buildsTimeMap.put(e.getKey(), e.getValue().getTimeInMillis());
             update(m, e.getKey(), e.getValue());
+        }
 
         this.builds = m;
     }
@@ -125,7 +134,7 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
     }
 
     public synchronized void reset(TreeMap<Integer,R> builds) {
-        this.builds = new TreeMap<Integer,R>(COMPARATOR);
+        this.builds = new TreeMap<Integer,R>(BUILD_TIME_COMPARATOR);
         putAll(builds);
     }
 
@@ -170,6 +179,17 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
     };
 
     /**
+     * Compare Build by timestamp
+     */
+    private Comparator<Integer> BUILD_TIME_COMPARATOR = new Comparator<Integer>() {
+        public int compare(Integer i1, Integer i2) {
+            Long date1 = buildsTimeMap.get(i1);
+            Long date2 = buildsTimeMap.get(i2);
+            return -date1.compareTo(date2);
+        }
+    };
+
+    /**
      * {@link Run} factory.
      */
     public interface Constructor<R extends Run<?,R>> {
@@ -187,7 +207,7 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
     public synchronized void load(Job job, Constructor<R> cons) {
         final SimpleDateFormat formatter = Run.ID_FORMATTER.get();
 
-        TreeMap<Integer,R> builds = new TreeMap<Integer,R>(RunMap.COMPARATOR);
+        TreeMap<Integer,R> builds = new TreeMap<Integer,R>(BUILD_TIME_COMPARATOR);
         File buildDir = job.getBuildDir();
         buildDir.mkdirs();
         String[] buildDirs = buildDir.list(new FilenameFilter() {
@@ -219,6 +239,7 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
                 // if the build result file isn't in the directory, ignore it.
                 try {
                     R b = cons.create(d);
+                    buildsTimeMap.put(b.getNumber(), b.getTimeInMillis());
                     builds.put( b.getNumber(), b );
                 } catch (IOException e) {
                     e.printStackTrace();
