@@ -35,7 +35,7 @@
             <td>
               <a href="${user.url}/configure"><img src="${imagesURL}/32x32/setting.gif" alt="Setting"/></a>
               <j:if test="${user.canDelete()}">
-                <a href="${user.url}/delete"><img src="${imagesURL}/24x24/edit-delete.gif" alt="Delete"/></a>
+                <st:include page="delete.jelly" />
               </j:if>
             </td>
           </tr>
