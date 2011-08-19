@@ -66,6 +66,12 @@
       <artifactId>maven3-model</artifactId>
       <type>test-jar</type>
     </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -89,9 +95,10 @@
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-            </manifest>
+            <manifestEntries>
+              <!-- this is assembled by the maven slavebundle -->
+              <Class-Path>maven3-eventspy-runtime.jar</Class-Path>
+            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

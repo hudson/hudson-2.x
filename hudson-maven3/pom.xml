@@ -114,26 +114,8 @@
 
   <dependencies>
     <!--
-     | Provided by Hudson core
+     | Don't add dependencies here, unless you want them in the slavebundle
     -->
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-inject</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-service</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-     | Test dependencies
-    -->
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-test-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <modules>

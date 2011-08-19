@@ -28,8 +28,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-jaxb-runtime</artifactId>
+      <groupId>com.flipthebird.gwt-hashcode-equals</groupId>
+      <artifactId>gwt-hashcode-equals</artifactId>
     </dependency>
 
     <dependency>
