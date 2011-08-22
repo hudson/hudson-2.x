@@ -180,7 +180,7 @@ public class LabelExpressionTest extends HudsonTestCase {
         assertEquals("x&&x||x",x.and(x).or(x).getName());
     }
 
-    public void testDash() {
+    public void ignore_testDash() {
         hudson.getLabelAtom("solaris-x86");
     }
 
@@ -193,6 +193,4 @@ public class LabelExpressionTest extends HudsonTestCase {
         }
     }
 
-    public void testFormValidation() throws Exception {
-    }
 }

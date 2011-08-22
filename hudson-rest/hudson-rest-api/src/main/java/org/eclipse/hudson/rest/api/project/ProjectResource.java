@@ -16,19 +16,16 @@
 
 package org.eclipse.hudson.rest.api.project;
 
-import javax.inject.Inject;
-
-import org.eclipse.hudson.service.ProjectService;
-import org.eclipse.hudson.rest.api.internal.ResourceSupport;
-import org.eclipse.hudson.rest.model.project.ProjectDTO;
 import hudson.model.AbstractProject;
-
+import java.util.UUID;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-
-
-import java.util.UUID;
+import org.eclipse.hudson.rest.api.internal.ResourceSupport;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.service.ProjectService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -36,6 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/project")
 public class ProjectResource
     extends ResourceSupport

@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.plugins.snapshotmonitor.internal;
 
@@ -36,6 +36,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collection;
+import java.util.HashSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -56,7 +58,9 @@ public class WatchedDependenciesLoader
 
     public WatchedDependenciesLoader() {
         XStream xs = new XStream();
+        xs.setClassLoader(getClass().getClassLoader());
         xs.processAnnotations(WatchedDependencies.class);
+        xs.addDefaultImplementation(HashSet.class,Collection.class);
         marshaller = new XStreamMarshaller(xs);
     }
 

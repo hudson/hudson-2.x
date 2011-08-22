@@ -16,64 +16,58 @@
 
 package hudson.remoting;
 
-import java.io.OutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Test for "http://issues.hudson-ci.org/browse/HUDSON-7809"
- * 
+ * Test for "http://issues.hudson-ci.org/browse/HUDSON-8592"
+ *
  * @author Winston Prakash
  */
 public class PipeClosedBugTest extends RmiTestBase implements Serializable {
 
-    public void testRemoteWrite() throws Exception {
-        final Pipe pipe = Pipe.createRemoteToLocal();
-        Future<Integer> f = channel.callAsync(new WritingCallable(pipe));
+    /**
+      * Have the reader close the read end of the pipe while the writer is still writing.
+      * The writer should pick up a failure.
+      */
+     public void testReaderCloseWhileWriterIsStillWriting() throws Exception {
+         final Pipe p = Pipe.createRemoteToLocal();
+         final Future<Void> f = channel.callAsync(new InfiniteWriter(p));
+         final InputStream in = p.getIn();
+         assertEquals(in.read(), 0);
+         in.close();
 
-        readFromPipe(pipe);
+         try {
+             f.get();
+             fail();
+         } catch (ExecutionException e) {
+             // should have resulted in an IOException
+             if (!(e.getCause() instanceof IOException)) {
+                 e.printStackTrace();
+                 fail();
+             }
+         }
+     }
 
-        int r = f.get();
-        assertEquals(5, r);
-    }
+     /**
+      * Just writes forever to the pipe
+      */
+     private static class InfiniteWriter implements Callable<Void, Exception> {
+         private final Pipe pipe;
 
-    private void readFromPipe(Pipe p) throws IOException {
-        System.out.println("South: Reading only one byte from pipe and closing stream.");
-        InputStream in = p.getIn();
-        // Read only one byte from pipe and close, even through the writer continues
-        // to write more bytes in to the pipe.
-        in.read();
-        in.close();
-    }
+         public InfiniteWriter(Pipe pipe) {
+             this.pipe = pipe;
+         }
 
-    private static class WritingCallable implements Callable<Integer, IOException> {
+         public Void call() throws Exception {
+             while (true) {
+                 pipe.getOut().write(0);
+                 Thread.sleep(10);
+             }
+         }
+     }
 
-        private final Pipe pipe;
-
-        public WritingCallable(Pipe pipe) {
-            this.pipe = pipe;
-        }
-
-        public Integer call() throws IOException {
-            writeToPipe(pipe);
-            return 5;
-        }
-
-        private void writeToPipe(Pipe pipe) {
-            System.out.println("North: Writing several bytes of data to pipe.");
-            try {
-                OutputStream os = pipe.getOut();
-                byte[] buf = new byte[384];
-                for (int i = 0; i < 256; i++) {
-                    Arrays.fill(buf, (byte) i);
-                    os.write(buf, 0, 256);
-                }
-                os.close();
-            } catch (IOException ex) {
-                fail("No IOException (Pipe is already closed) Expected.");
-            }
-        }
-    }
 }

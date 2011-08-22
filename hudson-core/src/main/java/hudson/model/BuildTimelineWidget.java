@@ -18,6 +18,7 @@ package hudson.model;
 
 import hudson.Functions;
 import hudson.util.RunList;
+import java.util.TimeZone;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -59,6 +60,15 @@ public class BuildTimelineWidget {
 
     public Run<?, ?> getLastBuild() {
         return builds.getLastBuild();
+    }
+
+    /**
+     * Get timezone offset with Daylight time saving support
+     *
+     * @return int value
+     */
+    public int getTimeZoneOffset() {
+        return TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 3600000;
     }
 
     public TimelineEventList doData(StaplerRequest req, @QueryParameter long min, @QueryParameter long max) throws IOException {

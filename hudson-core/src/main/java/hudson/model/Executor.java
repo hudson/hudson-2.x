@@ -246,14 +246,14 @@ public class Executor extends Thread implements ModelObject {
      */
     @Exported
     public boolean isIdle() {
-        return executable==null;
+        return executable==null && causeOfDeath==null;
     }
 
     /**
      * The opposite of {@link #isIdle()} &mdash; the executor is doing some work.
      */
     public boolean isBusy() {
-        return executable!=null;
+        return executable!=null || causeOfDeath!=null;
     }
 
     /**
@@ -394,10 +394,11 @@ public class Executor extends Thread implements ModelObject {
      * Returns when this executor started or should start being idle.
      */
     public long getIdleStartMilliseconds() {
-        if (isIdle())
+        Queue.Executable e = executable;
+        if (e == null)
             return Math.max(finishTime, owner.getConnectTime());
         else {
-            return Math.max(startTime + Math.max(0, Executables.getEstimatedDurationFor(executable)),
+            return Math.max(startTime + Math.max(0, Executables.getEstimatedDurationFor(e)),
                     System.currentTimeMillis() + 15000);
         }
     }

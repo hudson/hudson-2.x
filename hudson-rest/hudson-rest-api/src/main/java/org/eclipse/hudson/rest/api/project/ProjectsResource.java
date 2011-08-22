@@ -16,23 +16,15 @@
 
 package org.eclipse.hudson.rest.api.project;
 
-import org.eclipse.hudson.rest.api.build.BuildConverter;
-import org.eclipse.hudson.service.ProjectService;
-import org.eclipse.hudson.service.SecurityService;
-import org.eclipse.hudson.utils.io.Closer;
-import org.eclipse.hudson.rest.api.internal.PermissionsFactory;
-import org.eclipse.hudson.rest.api.internal.ProjectBuildHelper;
-import org.eclipse.hudson.rest.api.internal.ResourceSupport;
-import org.eclipse.hudson.rest.model.PermissionsDTO;
-import org.eclipse.hudson.rest.model.build.BuildsDTO;
-import org.eclipse.hudson.rest.model.project.ProjectDTO;
-import org.eclipse.hudson.rest.model.project.ProjectsDTO;
 import hudson.XmlFile;
 import hudson.model.AbstractProject;
 import hudson.model.Cause;
 import hudson.model.Run;
-
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -44,11 +36,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.eclipse.hudson.rest.api.build.BuildConverter;
+import org.eclipse.hudson.rest.api.internal.PermissionsFactory;
+import org.eclipse.hudson.rest.api.internal.ProjectBuildHelper;
+import org.eclipse.hudson.rest.api.internal.ResourceSupport;
+import org.eclipse.hudson.rest.model.PermissionsDTO;
+import org.eclipse.hudson.rest.model.build.BuildsDTO;
+import org.eclipse.hudson.rest.model.project.ProjectDTO;
+import org.eclipse.hudson.rest.model.project.ProjectsDTO;
+import org.eclipse.hudson.service.ProjectService;
+import org.eclipse.hudson.service.SecurityService;
+import org.eclipse.hudson.utils.io.Closer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static hudson.model.Item.BUILD;
@@ -63,6 +61,7 @@ import static javax.ws.rs.core.Response.Status.CONFLICT;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/projects")
 public class ProjectsResource
     extends ResourceSupport

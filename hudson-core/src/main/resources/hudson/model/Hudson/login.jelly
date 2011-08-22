@@ -23,7 +23,7 @@
     <l:main-panel>
       <div style="margin: 2em;">
         <!-- login form -->
-        <form name="login" action="${it.securityRealm.authenticationGatewayUrl}" method="post" style="text-size:smaller">
+        <form name="login" action="${rootURL}/${it.securityRealm.authenticationGatewayUrl}" method="post" style="text-size:smaller">
           <table>
             <tr>
               <td>${%User}:</td>

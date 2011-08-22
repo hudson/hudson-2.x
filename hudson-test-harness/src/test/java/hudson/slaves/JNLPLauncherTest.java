@@ -81,7 +81,7 @@ public class JNLPLauncherTest extends HudsonTestCase {
         try {
             // verify that the connection is established, up to 10 secs
             for( int i=0; i<100; i++ ) {
-                Thread.sleep(100);
+                Thread.sleep(500);
                 if(!c.isOffline())
                     break;
             }

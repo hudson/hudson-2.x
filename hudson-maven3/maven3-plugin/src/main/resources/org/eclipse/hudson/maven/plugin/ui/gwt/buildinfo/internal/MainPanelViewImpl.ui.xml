@@ -7,12 +7,12 @@
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
 #
-# Contributors: 
+# Contributors:
 #
-#   
-#        
 #
-#************************************************************************** --> 
+#
+#
+#************************************************************************** -->
 
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
@@ -58,25 +58,25 @@
                     <g:TabLayoutPanel barUnit="EM" barHeight="2" addStyleNames="hudson-nestedTabLayoutPanel">
                         <g:tab>
                             <g:header>Version</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="versionInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>User</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="userInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>System</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="systemInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>Environment</g:header>
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <w:PropertiesTable ui:field="environmentInfo"/>
                             </g:ScrollPanel>
                         </g:tab>
@@ -90,7 +90,7 @@
                     <g:header>Artifacts</g:header>
                     <g:LayoutPanel>
                         <g:layer top="0" bottom="2em">
-                            <g:ScrollPanel>
+                            <g:ScrollPanel styleName="scrollPanel">
                                 <m:ArtifactInfoTable ui:field="artifactInfo" pageSize="100" width="100%"/>
                             </g:ScrollPanel>
                         </g:layer>

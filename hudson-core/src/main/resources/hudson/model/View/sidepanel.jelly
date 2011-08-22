@@ -43,7 +43,7 @@
         <l:task icon="images/24x24/gear.gif" href="${rootURL}/${it.viewUrl}configure" title="${%Edit View}" permission="${it.CONFIGURE}" />
       </j:if>
       <j:if test="${it.owner.canDelete(it)}">
-        <l:task icon="images/24x24/edit-delete.gif" href="delete" title="${%Delete View}" permission="${it.DELETE}" />
+        <l:taskWithDialog icon="images/24x24/edit-delete.gif" dialogPanel="deleteConfirmationPanel.jelly" href="delete" title="${%Delete View}" permission="${it.DELETE}" />
       </j:if>
       <j:if test="${app.fingerprintMap.ready}">
         <l:task icon="images/24x24/search.gif" href="${rootURL}/projectRelationship" title="${%Project Relationship}" />

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static hudson.model.Result.FAILURE;
-
+import static hudson.model.Result.ABORTED;
 /**
  * A build of a {@link Project}.
  *
@@ -129,6 +129,9 @@ public abstract class Build <P extends Project<P,B>,B extends Build<P,B>>
 
                 if(!build(listener,project.getBuilders()))
                     r = FAILURE;
+            } catch (InterruptedException e) {
+                r = ABORTED;
+                throw e;
             } finally {
                 if (r != null) setResult(r);
                 // tear down in reverse order

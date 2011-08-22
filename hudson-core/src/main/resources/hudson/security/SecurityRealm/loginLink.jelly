@@ -28,9 +28,9 @@
   
     <script type="text/javascript">
         
-        function onLinkClick(){
+        function showLoginDialog(){
             jQuery.blockUI({
-              message: jQuery('#question'),
+              message: jQuery('#loginDialog'),
               css: { 
                 width: '350px', 
               },
@@ -44,7 +44,7 @@
             var dataString = jQuery("#loginForm").serialize();
             jQuery.ajax({
               type: 'POST',
-              url: "${app.securityRealm.authenticationGatewayUrl}",
+              url: "${rootURL}/${app.securityRealm.authenticationGatewayUrl}",
               data: dataString,
               success: function(){
                 window.location.href="${from}";
@@ -72,12 +72,12 @@
             });
 
 
-            jQuery('#yes').click(function() {
+            jQuery('#loginButton').click(function() {
                  submitForm();
             });
             
 
-            jQuery('#no').click(function() {
+            jQuery('#cancelButton').click(function() {
                 jQuery.unblockUI();
                 jQuery('#j_username').attr({value:""});
                 jQuery('#j_password').attr({value:""});
@@ -89,14 +89,24 @@
         });
 
     </script>
-    
 
-    <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}" onclick="onLinkClick(); return false;" >
-        <b>${%login}</b>
-    </a>
-        
-       
-    <div id="question" style="display:none; cursor: default">
+    <!-- We cannot use ajax in case of container based authentication (LegacySecurityRealm)
+         because of the HTTP Status 400 - Invalid direct reference to form login page -->
+    <j:choose>
+        <j:when test="${app.securityRealm.loginUrl=='loginEntry'}">
+            <a style="color:inherit" href="${rootURL}/${app.securityRealm.loginUrl}?from=${from}">
+                <b>${%login}</b>
+            </a>
+        </j:when>
+        <j:otherwise>
+            <a href="${rootURL}/${app.securityRealm.loginUrl}?from=${fromEncoded}"
+               onclick="showLoginDialog(); return false;">
+                <b>${%login}</b>
+            </a>
+        </j:otherwise>
+    </j:choose>
+
+    <div id="loginDialog" style="display:none; cursor: default">
         <j:set var="submitFrom" value="${from}" />
         <st:include page="loginDialog.jelly" />
     </div>

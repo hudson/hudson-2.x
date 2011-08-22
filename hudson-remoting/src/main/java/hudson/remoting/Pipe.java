@@ -27,28 +27,28 @@ import java.util.logging.Logger;
 
 /**
  * Pipe for the remote {@link Callable} and the local program to talk to each other.
- *
- * <p>
+ * <p/>
+ * <p/>
  * There are two kinds of pipes. One is for having a local system write to a remote system,
  * and the other is for having a remote system write to a local system. Use
  * the different versions of the <tt>create</tt> method to create the appropriate kind
  * of pipes.
- *
- * <p>
+ * <p/>
+ * <p/>
  * Once created, {@link Pipe} can be sent to the remote system as a part of a serialization of
  * {@link Callable} between {@link Channel}s.
  * Once re-instantiated on the remote {@link Channel}, pipe automatically connects
  * back to the local instance and perform necessary set up.
- *
- * <p>
+ * <p/>
+ * <p/>
  * The local and remote system can then call {@link #getIn()} and {@link #getOut()} to
  * read/write bytes.
- *
- * <p>
+ * <p/>
+ * <p/>
  * Pipe can be only written by one system and read by the other system. It is an error to
  * send one {@link Pipe} to two remote {@link Channel}s, or send one {@link Pipe} to
  * the same {@link Channel} twice.
- *
+ * <p/>
  * <h2>Usage</h2>
  * <pre>
  * final Pipe p = Pipe.createLocalToRemote();
@@ -63,9 +63,9 @@ import java.util.logging.Logger;
  * OutputStream out = p.getOut();
  * ... write to out ...
  * </pre>
- *
+ * <p/>
  * <h2>Implementation Note</h2>
- * <p>
+ * <p/>
  * For better performance, {@link Pipe} uses lower-level {@link Command} abstraction
  * to send data, instead of typed proxy object. This allows the writer to send data
  * without blocking until the arrival of the data is confirmed.
@@ -100,21 +100,22 @@ public final class Pipe implements Serializable {
      */
     public static Pipe createRemoteToLocal() {
         // OutputStream will be created on the target
-        return new Pipe(new FastPipedInputStream(),null);
+        return new Pipe(new FastPipedInputStream(), null);
     }
 
     /**
      * Creates a {@link Pipe} that allows local system to write and remote system to read.
      */
     public static Pipe createLocalToRemote() {
-        return new Pipe(null,new ProxyOutputStream());
+        return new Pipe(null, new ProxyOutputStream());
     }
 
     private void writeObject(ObjectOutputStream oos) throws IOException {
-        if(in!=null && out==null) {
+        if (in != null && out == null) {
             // remote will write to local
-            FastPipedOutputStream pos = new FastPipedOutputStream((FastPipedInputStream)in);
-            int oid = Channel.current().export(pos,false);  // this export is unexported in ProxyOutputStream.finalize() 
+            FastPipedOutputStream pos = new FastPipedOutputStream((FastPipedInputStream) in);
+            int oid = Channel.current()
+                .export(pos, false);  // this export is unexported in ProxyOutputStream.finalize()
 
             oos.writeBoolean(true); // marker
             oos.writeInt(oid);
@@ -129,9 +130,9 @@ public final class Pipe implements Serializable {
 
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         final Channel channel = Channel.current();
-        assert channel !=null;
+        assert channel != null;
 
-        if(ois.readBoolean()) {
+        if (ois.readBoolean()) {
             // local will write to remote
             in = null;
             out = new ProxyOutputStream(channel, ois.readInt());
@@ -176,7 +177,7 @@ public final class Pipe implements Serializable {
                         channel.unexport(oidRos);
                         ros.connect(channel, oidPos);
                     } catch (IOException e) {
-                        logger.log(Level.SEVERE,"Failed to connect to pipe",e);
+                        logger.log(Level.SEVERE, "Failed to connect to pipe", e);
                     }
                 }
             });

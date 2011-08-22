@@ -31,11 +31,6 @@
       <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-rest-common</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-service</artifactId>
-    </dependency>
   </dependencies>
 
   <build>

@@ -107,6 +107,15 @@ public class JUnitResultArchiver extends Recorder implements Serializable,
 	}
 
     /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean needsToRun(Result buildResult) {
+        //TODO it seems we shouldn't archive junit results if build result is worse than FAILURE, investigate this
+        return buildResult.isBetterThan(Result.ABORTED);
+    }
+
+    /**
      * In progress. Working on delegating the actual parsing to the JUnitParser.
      */
     protected TestResult parse(String expandedTestResults, AbstractBuild build, Launcher launcher, BuildListener listener)

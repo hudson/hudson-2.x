@@ -39,20 +39,16 @@
                 <include>**</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>target/lib</directory>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
-        <!--
-        Install non-eventspy impl jars w/ version.
-        -->
-        <dependencySet>
-            <outputDirectory>lib</outputDirectory>
-            <useStrictFiltering>true</useStrictFiltering>
-            <excludes>
-                <exclude>org.eclipse.hudson.main:maven3-eventspy-3.0</exclude>
-            </excludes>
-        </dependencySet>
-
         <!--
         Install eventspy impl jars w/o version.
         -->

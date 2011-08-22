@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.maven.model;
 
@@ -21,8 +21,6 @@ import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.eclipse.hudson.maven.model.PropertiesDTO;
 
 /**
  * Various model utilities.
@@ -59,7 +57,7 @@ public class ModelUtil
 
     public static PropertiesDTO parseProperties(final String source) {
         // source could be null;
-        if (source == null || source.trim().length() == 0) {
+        if (source == null) {
             return null;
         }
 
@@ -81,7 +79,7 @@ public class ModelUtil
 
     public static PropertiesDTO parsePropertyOptions(final String source) {
         // source could be null;
-        if (source == null || source.trim().length() == 0) {
+        if (source == null) {
             return null;
         }
 

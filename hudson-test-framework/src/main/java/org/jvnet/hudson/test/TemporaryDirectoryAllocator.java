@@ -74,10 +74,9 @@ public class TemporaryDirectoryAllocator {
             try {
                 new FilePath(dir).deleteRecursive();
             } catch (IOException e) {
-                x = e;
+                e.printStackTrace();
             }
         tmpDirectories.clear();
-        if (x!=null)    throw new IOException2("Failed to clean up temp dirs",x);
     }
 
     /**
