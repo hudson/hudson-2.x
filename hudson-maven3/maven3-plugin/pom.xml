@@ -70,13 +70,13 @@
 
     <dependency>
       <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-rest-api</artifactId>
+      <artifactId>hudson-service</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson</groupId>
-      <artifactId>xstream</artifactId>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-rest-api</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -128,6 +128,13 @@
       <artifactId>maven3-model</artifactId>
       <type>test-jar</type>
     </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -180,7 +187,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.2.0</version>
         <configuration>
           <runTarget>MavenBuildInfo.html</runTarget>
         </configuration>

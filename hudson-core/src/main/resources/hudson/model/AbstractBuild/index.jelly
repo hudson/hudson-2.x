@@ -101,8 +101,13 @@
         <!-- give actions a chance to contribute summary item -->
         <j:forEach var="a" items="${it.actions}">
           <!-- Force StaplerProxy to resolve, st:include doesn't respect it. -->
-          <j:set var="a" value="${h.resolveStaplerObject(a)}"/>
-          <st:include page="summary.jelly" from="${a}" optional="true" it="${a}" />
+          <j:set var="b" value="${h.resolveStaplerObject(a)}"/>
+          <st:include page="summary.jelly" from="${b}" optional="true" it="${b}">
+            <j:if test="${a != b}">
+              <!-- No luck with proxy's target, fall back to original object -->
+              <st:include page="summary.jelly" from="${a}" optional="true" it="${a}" />
+            </j:if>
+          </st:include>
         </j:forEach>
       </table>
 

@@ -16,15 +16,11 @@
 
 package org.eclipse.hudson.rest.api.admin;
 
-import javax.inject.Inject;
-
-import org.eclipse.hudson.rest.api.internal.ResourceSupport;
-import org.eclipse.hudson.service.SecurityService;
-import org.eclipse.hudson.service.SystemService;
-
 import hudson.XmlFile;
 import hudson.lifecycle.RestartNotSupportedException;
-
+import java.io.IOException;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,18 +28,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-
-import java.io.IOException;
+import org.eclipse.hudson.rest.api.internal.ResourceSupport;
+import org.eclipse.hudson.service.SystemService;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static javax.ws.rs.core.MediaType.*;
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/admin")
 public class AdminResource
     extends ResourceSupport

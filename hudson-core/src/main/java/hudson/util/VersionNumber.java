@@ -16,7 +16,6 @@
 
 package hudson.util;
 
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -53,14 +52,14 @@ public class VersionNumber implements Comparable<VersionNumber> {
      *      if the parsing fails.
      */
     public VersionNumber( String num ) {
-        StringTokenizer tokens = new StringTokenizer(num,".-");
+        StringTokenizer tokens = new StringTokenizer(num,".-_");
         digits = new int[tokens.countTokens()];
         if(digits.length<2)
             throw new IllegalArgumentException("Failed to parse "+num+" as version number");
 
         int i=0;
         while( tokens.hasMoreTokens() ) {
-            String token = tokens.nextToken().toLowerCase(Locale.ENGLISH);
+            String token = tokens.nextToken().toLowerCase();
             if(token.equals("*")) {
                 digits[i++] = 1000;
             } else
@@ -75,7 +74,13 @@ public class VersionNumber implements Comparable<VersionNumber> {
                 else
                     digits[i++] = -1000 + Integer.parseInt(token.substring(2)); // "eaNNN"
             } else {
-                digits[i++] = Integer.parseInt(token);
+                int n =0;
+                try {
+                    n = Integer.parseInt(token);
+                } catch (NumberFormatException e) {
+                    // ignore
+                }
+                digits[i++] = n;
             }
         }
     }
@@ -86,7 +91,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for( int i=0; i<digits.length; i++ ) {
             if(i!=0)    buf.append('.');
             buf.append( Integer.toString(digits[i]) );

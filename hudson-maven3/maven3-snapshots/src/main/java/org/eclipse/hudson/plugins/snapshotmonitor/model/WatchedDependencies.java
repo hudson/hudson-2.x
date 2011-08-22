@@ -7,19 +7,18 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.plugins.snapshotmonitor.model;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamInclude;
-
 import java.util.Collection;
 
 /**
@@ -32,7 +31,7 @@ import java.util.Collection;
 @XStreamInclude(WatchedDependency.class)
 public class WatchedDependencies
 {
-    @XStreamImplicit
+    @XStreamImplicit(itemFieldName="dependency")
     private Collection<WatchedDependency> dependencies;
 
     public Collection<WatchedDependency> getDependencies() {
@@ -45,8 +44,6 @@ public class WatchedDependencies
 
     @Override
     public String toString() {
-        return "WatchedDependencies{" +
-            "dependencies=" + dependencies +
-            '}';
+        return "WatchedDependencies{" + dependencies + '}';
     }
 }

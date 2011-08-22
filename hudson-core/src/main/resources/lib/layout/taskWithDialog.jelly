@@ -66,47 +66,16 @@
         </j:if>
       </j:when>
       <j:otherwise>
+        <!--Plug popup dialog script-->
+        <script src="${resURL}/scripts/popup-dialog.js" type="text/javascript" />
         <div class="task">
 
-        <script type="text/javascript">
-            function onLinkClick(){
-                jQuery.blockUI({
-                  message: jQuery('#question'),
-                  css: { 
-                    width: '350px', 
-                    border: '2px solid #FFFFFF',
-                    padding: '5px', 
-                    backgroundColor: '#000', 
-                    '-webkit-border-radius': '10px', 
-                    '-moz-border-radius': '10px', 
-                    opacity: .6, 
-                    color: '#fff'
-                  },
-                  title:  'Confirmation',
-                });
-            }
-
-            jQuery(document).ready(function() {
-
-                jQuery('#yes').click(function() {
-                    setTimeout(jQuery.unblockUI, 4000);
-                });
-
-                jQuery('#no').click(function() {
-                    jQuery.unblockUI();
-                    return false;
-                });
-
-            });
-
-          </script>
-
-          <a href="${href}" onclick="onLinkClick(); return false;">
+          <a href="${href}" onclick="onLinkClick('question'); return false;">
             <img width="24" height="24" style="margin: 2px;" alt="" src="${rootURL}${icon.startsWith('images/') ? h.resourcePath : ''}/${icon}"/>
           </a>
           <st:nbsp />
 
-          <a href="${href}" onclick="onLinkClick(); return false;">
+          <a href="${href}" onclick="onLinkClick('question'); return false;">
             <j:choose>
               <j:when test="${match}">
                 <b>${title}</b>

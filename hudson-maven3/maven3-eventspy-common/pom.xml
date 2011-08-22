@@ -27,9 +27,15 @@
   <name>Hudson :: Maven 3 :: Event Spy Common</name>
 
   <dependencies>
+     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-utils</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
       <scope>provided</scope>
     </dependency>
 

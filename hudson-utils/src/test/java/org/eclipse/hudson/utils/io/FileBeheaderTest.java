@@ -7,28 +7,24 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.utils.io;
-
-import org.codehaus.plexus.util.FileUtils;
-import org.eclipse.hudson.utils.io.FileBeheader;
-import org.eclipse.hudson.utils.io.FileUtil;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import org.codehaus.plexus.util.FileUtils;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 

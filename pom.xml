@@ -51,8 +51,8 @@
     <build.number/>
 
     <aspectjVersion>1.6.11</aspectjVersion>
-    <sisuGuiceVersion>3.0.2</sisuGuiceVersion>
-    <sisuInjectVersion>2.2.2</sisuInjectVersion>
+    <sisuGuiceVersion>3.0.3</sisuGuiceVersion>
+    <sisuInjectVersion>2.2.3</sisuInjectVersion>
     <jetty-version>6.1.26</jetty-version>
     <junit.version>4.8.1</junit.version>
     <easymock.version>3.0</easymock.version>
@@ -63,12 +63,7 @@
     <gwt.style>OBFUSCATED</gwt.style>
     <gwt.compiler.optimizationLevel>9</gwt.compiler.optimizationLevel>
     <gwt.compiler.strict>true</gwt.compiler.strict>
-
-    <!--
-     Ensure the full list is in sync with GWT UserAgent.gwt.xml
-     http://code.google.com/p/google-web-toolkit/source/browse/trunk/user/src/com/google/gwt/user/UserAgent.gwt.xml
-     -->
-    <gwt.user.agent>ie6,ie8,gecko1_8,safari,opera</gwt.user.agent>
+    <gwt-maven-plugin.version>2.3.0-1</gwt-maven-plugin.version>
   </properties>
 
   <modules>
@@ -89,7 +84,6 @@
     <module>hudson-war</module>
     <module>hudson-test-framework</module>
     <module>hudson-plugin-parent</module>
-    <module>maven-hpi-plugin</module>
   </modules>
   
   <build>
@@ -149,6 +143,12 @@
               <version>1.4</version>
             </dependency>
           </dependencies>
+        </plugin>
+        
+         <plugin>
+          <groupId>org.jvnet.hudson.tools</groupId>
+          <artifactId>maven-hpi-plugin</artifactId>
+          <version>2.1.0</version>
         </plugin>
 
         <!-- this is really just a patched version of maven-jetty-plugin to workaround issue #932 -->
@@ -278,6 +278,7 @@
       <artifactId>animal-sniffer-annotation</artifactId>
       <version>1.0</version>
       <optional>true</optional><!-- no need to have this at runtime -->
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -290,6 +291,12 @@
   
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.4</version>
+      </dependency>
+
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
@@ -503,18 +510,7 @@
         <version>${project.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>hudson-test-harness</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>${project.groupId}</groupId>
-         <artifactId>hudson-test-ui</artifactId>
-         <version>${project.version}</version>
-       </dependency>
-    </dependencies>
+     </dependencies>
   </dependencyManagement>
 
   <profiles>
@@ -632,10 +628,7 @@
           <name>it</name>
         </property>
       </activation>
-      <modules>
-        <module>hudson-test-ui</module>
-        <module>hudson-test-harness</module>
-      </modules>
+       
       <!--TODO find better solution to use properties for hudson-remoting-->
       <properties>
         <hudson.sign.alias>hudson</hudson.sign.alias>

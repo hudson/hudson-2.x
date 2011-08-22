@@ -28,14 +28,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-jaxb-runtime</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <scope>provided</scope>
+      <groupId>com.flipthebird.gwt-hashcode-equals</groupId>
+      <artifactId>gwt-hashcode-equals</artifactId>
     </dependency>
 
     <dependency>
@@ -53,7 +47,13 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>xstream</artifactId>
-      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.hudson.main</groupId>
+      <artifactId>hudson-test-utils</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -99,7 +99,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.2.0</version>
         <executions>
           <execution>
             <goals>

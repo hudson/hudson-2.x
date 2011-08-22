@@ -403,7 +403,7 @@ public abstract class SCM implements Describable<SCM>, ExtensionPoint {
      *
      * @throws InterruptedException
      *      interruption is usually caused by the user aborting the build.
-     *      this exception will cause the build to fail.
+     *      this exception will cause the build to abort.
      */
     public abstract boolean checkout(AbstractBuild<?,?> build, Launcher launcher, FilePath workspace, BuildListener listener, File changelogFile) throws IOException, InterruptedException;
 

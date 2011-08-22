@@ -22,6 +22,18 @@
       <l:task icon="images/24x24/up.gif" href="${it.upUrl}" title="${%Back to Project}" />
       <l:task icon="images/24x24/search.gif" href="${buildUrl.baseUrl}/" title="${%Status}" />
       <l:task icon="images/24x24/notepad.gif" href="${buildUrl.baseUrl}/changes" title="${%Changes}" />
+      <j:if test="${it.project.buildable}">
+         <l:task icon="images/24x24/clock.gif" href="${it.upUrl}build?delay=0sec" title="${%Build Now}"
+                  onclick="${it.project.parameterized?null:'return build(this)'}" permission="${it.BUILD}" />
+          <script>
+            function build(a) {
+              new Ajax.Request(a.href);
+
+              hoverNotification('${%Build scheduled}',a.parentNode);
+              return false;
+            }
+          </script>
+      </j:if>
       <j:choose>
         <j:when test="${it.logFile.length() > 200000}">
           <!-- Show raw link directly so user need not click through live console page. -->

@@ -46,6 +46,7 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.acegisecurity.userdetails.ldap.LdapUserDetails;
 import org.acegisecurity.userdetails.ldap.LdapUserDetailsImpl;
 import org.apache.commons.collections.map.LRUMap;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.springframework.dao.DataAccessException;
@@ -522,8 +523,9 @@ public class LDAPSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         		@QueryParameter final String managerDN,
         		@QueryParameter final String managerPassword) {
 
-            if(!Hudson.getInstance().hasPermission(Hudson.ADMINISTER))
+            if(!Hudson.getInstance().hasPermission(Hudson.ADMINISTER) || StringUtils.isEmpty(server)){
                 return FormValidation.ok();
+            }
 
             try {
                 Hashtable<String,String> props = new Hashtable<String,String>();

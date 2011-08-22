@@ -19,7 +19,6 @@ package hudson.slaves;
 import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Computer;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +36,9 @@ import java.util.logging.Logger;
  * @see Computer#getWorkspaceList()
  */
 public final class WorkspaceList {
+
+    private static final String WORKSPACE_NAME_SUFFIX = "_";
+
     /**
      * Book keeping for workspace allocation.
      */
@@ -115,7 +117,9 @@ public final class WorkspaceList {
      */
     public synchronized Lease allocate(FilePath base) throws InterruptedException {
         for (int i=1; ; i++) {
-            FilePath candidate = i==1 ? base : base.withSuffix("@"+i);
+            //Workspace suffix was changed from @ to _, because of some issues with SCMs.
+            //see http://issues.hudson-ci.org/browse/HUDSON-4791
+            FilePath candidate = i==1 ? base : base.withSuffix(WORKSPACE_NAME_SUFFIX + i);
             Entry e = inUse.get(candidate);
             if(e!=null && !e.quick)
                 continue;

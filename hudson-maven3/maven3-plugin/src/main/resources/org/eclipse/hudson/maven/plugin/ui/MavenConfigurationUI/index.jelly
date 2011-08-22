@@ -7,12 +7,12 @@
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
 #
-# Contributors: 
+# Contributors:
 #
-#   
-#        
 #
-#************************************************************************** --> 
+#
+#
+#************************************************************************** -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
     <!--<![CDATA[<!doctype html>]]>-->
@@ -30,6 +30,19 @@
                 #hudson-mavenConfigurationPanel {
                     width: 100%;
                     height: 100%;
+                    zoom: 1;
+                }
+                .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+                    float: left;
+                }
+                .gwt-TabLayoutPanel {
+                    height: 100% !important;
+                }
+                .gwt-TabLayoutPanelContentContainer {
+                    height: 100% !important;
+                }
+                .gwt-TabLayoutPanelContent {
+                    height: 95% !important;
                 }
             </style>
         </l:header>
@@ -38,7 +51,7 @@
         <j:set var="images" value="${it.imagesPath}"/>
 
         <l:main-panel>
-            <div id="${it.mainPanelId}"/>
+            <div id="${it.mainPanelId}" name="${it.mainPanelId}"/>
         </l:main-panel>
     </l:layout>
 </j:jelly>

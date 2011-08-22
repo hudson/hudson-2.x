@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.servlets.internal;
 
@@ -151,12 +151,12 @@ public class ServletRegistrationFilterAdapter
         assert response != null;
         assert chain != null;
 
-        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        if (!contextPath.endsWith("/") && !uriPrefix.startsWith("/")) {
+            contextPath = contextPath + '/';
+        }
 
-        // Get the requestUri without the context uriPrefix and the leading slash
-        uri = uri.substring(request.getContextPath().length() + 1);
-
-        if (uri.startsWith(uriPrefix)) {
+        if (request.getRequestURI().startsWith(contextPath + uriPrefix)) {
             // Wrap the request to augment the servlet uriPrefix
             HttpServletRequestWrapper req = new HttpServletRequestWrapper(request)
             {

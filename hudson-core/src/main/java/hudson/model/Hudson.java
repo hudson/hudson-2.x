@@ -1248,6 +1248,18 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         return viewableItems;
     }
 
+    @Exported(name = "securedJobs")
+    public List<TopLevelItem> getSecuredItems() {
+        List<TopLevelItem> viewableItems = new ArrayList<TopLevelItem>();
+        for (TopLevelItem item : items.values()) {
+            if (!item.hasPermission(Item.READ)) {
+                viewableItems.add(item);
+            }
+        }
+
+        return viewableItems;
+    }
+
     /**
      * Returns the read-only view of all the {@link TopLevelItem}s keyed by their names.
      * <p>

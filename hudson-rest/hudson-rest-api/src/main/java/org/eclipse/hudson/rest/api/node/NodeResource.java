@@ -16,22 +16,19 @@
 
 package org.eclipse.hudson.rest.api.node;
 
-import static com.google.common.base.Preconditions.*;
 import hudson.model.Node;
-
 import java.util.List;
-
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-
-import javax.inject.Inject;
-
-import org.eclipse.hudson.service.NodeService;
-
 import org.eclipse.hudson.rest.api.internal.ResourceSupport;
 import org.eclipse.hudson.rest.model.NodeDTO;
 import org.eclipse.hudson.rest.model.NodesDTO;
+import org.eclipse.hudson.service.NodeService;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Access Nodes
@@ -39,6 +36,7 @@ import org.eclipse.hudson.rest.model.NodesDTO;
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0
  */
+@Named
 @Path("/nodes")
 public class NodeResource extends ResourceSupport {
     private final NodeService nodeService;

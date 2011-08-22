@@ -16,10 +16,9 @@
 
 package org.eclipse.hudson.maven.plugin.documents.rest;
 
-import static org.eclipse.hudson.rest.common.RestPreconditions.*;
-import static javax.ws.rs.core.MediaType.*;
-
+import com.google.common.base.Preconditions;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -30,13 +29,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
+import org.eclipse.hudson.maven.model.config.DocumentDTO;
+import org.eclipse.hudson.maven.model.config.DocumentsDTO;
 import org.eclipse.hudson.maven.plugin.Constants;
 import org.eclipse.hudson.maven.plugin.documents.DocumentManager;
 
-import com.google.common.base.Preconditions;
-import org.eclipse.hudson.maven.model.config.DocumentDTO;
-import org.eclipse.hudson.maven.model.config.DocumentsDTO;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static org.eclipse.hudson.rest.common.RestPreconditions.checkDocumentId;
+import static org.eclipse.hudson.rest.common.RestPreconditions.checkNotNull;
+import static org.eclipse.hudson.rest.common.RestPreconditions.throwConflict;
 
 /**
  * Provides REST access to the {@link DocumentManager}.
@@ -45,6 +47,7 @@ import org.eclipse.hudson.maven.model.config.DocumentsDTO;
  * @since 2.1.0
  * @todo should we verify the document id inside document dto or make id strongly typed to uuid
  */
+@Named
 @Path(Constants.URI_PREFIX + "/documents")
 @Produces({APPLICATION_JSON, APPLICATION_XML})
 @Consumes({APPLICATION_JSON, APPLICATION_XML})

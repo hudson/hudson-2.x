@@ -205,6 +205,10 @@ public abstract class ConsoleNote<T> implements Serializable, Describable<Consol
 
             DataInputStream decoded = new DataInputStream(new UnbufferedBase64InputStream(in));
             int sz = decoded.readInt();
+            //Size should be greater than Zero. See http://issues.hudson-ci.org/browse/HUDSON-6558
+            if (sz < 0) {
+                return null;
+            }
             byte[] buf = new byte[sz];
             decoded.readFully(buf);
 

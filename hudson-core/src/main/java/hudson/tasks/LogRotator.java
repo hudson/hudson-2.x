@@ -21,17 +21,15 @@ import hudson.model.Descriptor;
 import hudson.model.Job;
 import hudson.model.Run;
 import hudson.scm.SCM;
-
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.FINER;
-
 import java.util.List;
 import java.util.logging.Logger;
+import org.kohsuke.stapler.DataBoundConstructor;
+
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINER;
 
 /**
  * Deletes old log files.
@@ -89,112 +87,154 @@ public class LogRotator implements Describable<LogRotator> {
     public LogRotator(int daysToKeep, int numToKeep) {
         this(daysToKeep, numToKeep, -1, -1);
     }
-    
+
     public LogRotator(int daysToKeep, int numToKeep, int artifactDaysToKeep, int artifactNumToKeep) {
         this.daysToKeep = daysToKeep;
         this.numToKeep = numToKeep;
         this.artifactDaysToKeep = artifactDaysToKeep;
         this.artifactNumToKeep = artifactNumToKeep;
-        
+
     }
 
-    public void perform(Job<?,?> job) throws IOException, InterruptedException {
-        LOGGER.log(FINE,"Running the log rotation for "+job.getFullDisplayName());
-        
+    public void perform(Job<?, ?> job) throws IOException, InterruptedException {
+        LOGGER.log(FINE, "Running the log rotation for " + job.getFullDisplayName());
+
         // keep the last successful build regardless of the status
         Run lsb = job.getLastSuccessfulBuild();
         Run lstb = job.getLastStableBuild();
 
-        if(numToKeep!=-1) {
-            List<? extends Run<?,?>> builds = job.getBuilds();
-            for (Run r : builds.subList(Math.min(builds.size(),numToKeep),builds.size())) {
-                if (r.isKeepLog()) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's marked as a keeper");
-                    continue;
-                }
-                if (r==lsb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's the last successful build");
-                    continue;
-                }
-                if (r==lstb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's the last stable build");
-                    continue;
-                }
-                LOGGER.log(FINER,r.getFullDisplayName()+" is to be removed");
-                r.delete();
+        List<? extends Run<?, ?>> builds = job.getBuilds();
+        Calendar cal = null;
+        //Delete builds
+        if (-1 != numToKeep || -1 != daysToKeep) {
+            if (-1 != daysToKeep) {
+                cal = new GregorianCalendar();
+                cal.add(Calendar.DAY_OF_YEAR, -daysToKeep);
             }
+            if (-1 != numToKeep) {
+                builds = builds.subList(Math.min(builds.size(), numToKeep), builds.size());
+            }
+            //Delete builds based on configured values. See http://issues.hudson-ci.org/browse/HUDSON-3650
+            deleteBuilds(builds, lsb, lstb, cal);
         }
 
-        if(daysToKeep!=-1) {
-            Calendar cal = new GregorianCalendar();
-            cal.add(Calendar.DAY_OF_YEAR,-daysToKeep);
-            // copy it to the array because we'll be deleting builds as we go.
-            for( Run r : job.getBuilds() ) {
-                if (r.isKeepLog()) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's marked as a keeper");
-                    continue;
-                }
-                if (r==lsb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's the last successful build");
-                    continue;
-                }
-                if (r==lstb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's the last stable build");
-                    continue;
-                }
-                if (!r.getTimestamp().before(cal)) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not GC-ed because it's still new");
-                    continue;
-                }
-                LOGGER.log(FINER,r.getFullDisplayName()+" is to be removed");
-                r.delete();
+        cal = null;
+        builds = job.getBuilds();
+        //Delete build artifacts
+        if (-1 != artifactNumToKeep || -1 != artifactDaysToKeep) {
+            if (-1 != artifactDaysToKeep) {
+                cal = new GregorianCalendar();
+                cal.add(Calendar.DAY_OF_YEAR, -artifactDaysToKeep);
+            }
+            if (-1 != artifactNumToKeep) {
+                builds = builds.subList(Math.min(builds.size(), artifactNumToKeep), builds.size());
+            }
+            //Delete build artifacts based on configured values. See http://issues.hudson-ci.org/browse/HUDSON-3650
+            deleteBuildArtifacts(builds, lsb, lstb, cal);
+        }
+    }
+
+    /**
+     * Performs builds deletion
+     *
+     * @param builds list of builds
+     * @param lastSuccessBuild last success build
+     * @param lastStableBuild last stable build
+     * @param cal calendar if configured
+     * @throws IOException if configured
+     */
+    private void deleteBuilds(List<? extends Run<?, ?>> builds, Run lastSuccessBuild, Run lastStableBuild, Calendar cal)
+        throws IOException {
+        for (Run currentBuild : builds) {
+            if (allowDeleteBuild(lastSuccessBuild, lastStableBuild, currentBuild, cal)) {
+                LOGGER.log(FINER, currentBuild.getFullDisplayName() + " is to be removed");
+                currentBuild.delete();
             }
         }
+    }
 
-        if(artifactNumToKeep!=null && artifactNumToKeep!=-1) {
-            List<? extends Run<?,?>> builds = job.getBuilds();
-            for (Run r : builds.subList(Math.min(builds.size(),artifactNumToKeep),builds.size())) {
-                if (r.isKeepLog()) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's marked as a keeper");
-                    continue;
-                }
-                if (r==lsb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's the last successful build");
-                    continue;
-                }
-                if (r==lstb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's the last stable build");
-                    continue;
-                }
-                r.deleteArtifacts();
+    /**
+     * Checks whether current build could be deleted.
+     * If current build equals to last Success Build or last Stable Build or currentBuild is configured to keep logs or
+     * currentBuild timestamp is before configured calendar value - return false, otherwise return true.
+     *
+     * @param lastSuccessBuild {@link Run}
+     * @param lastStableBuild {@link Run}
+     * @param currentBuild {@link Run}
+     * @param cal {@link Calendar}
+     * @return true - if deletion is allowed, false - otherwise.
+     */
+    private boolean allowDeleteBuild(Run lastSuccessBuild, Run lastStableBuild, Run currentBuild, Calendar cal) {
+        if (currentBuild.isKeepLog()) {
+            LOGGER.log(FINER, currentBuild.getFullDisplayName() + " is not GC-ed because it's marked as a keeper");
+            return false;
+        }
+        if (currentBuild == lastSuccessBuild) {
+            LOGGER.log(FINER,
+                currentBuild.getFullDisplayName() + " is not GC-ed because it's the last successful build");
+            return false;
+        }
+        if (currentBuild == lastStableBuild) {
+            LOGGER.log(FINER, currentBuild.getFullDisplayName() + " is not GC-ed because it's the last stable build");
+            return false;
+        }
+        if (null != cal && !currentBuild.getTimestamp().before(cal)) {
+            LOGGER.log(FINER, currentBuild.getFullDisplayName() + " is not GC-ed because it's still new");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Performs build artifacts deletion
+     *
+     * @param builds list of builds
+     * @param lastSuccessBuild last success build
+     * @param lastStableBuild last stable build
+     * @param cal calendar if configured
+     * @throws IOException if configured
+     */
+    private void deleteBuildArtifacts(List<? extends Run<?, ?>> builds, Run lastSuccessBuild, Run lastStableBuild,
+                                      Calendar cal) throws IOException {
+        for (Run currentBuild : builds) {
+            if (allowDeleteArtifact(lastSuccessBuild, lastStableBuild, currentBuild, cal)) {
+                currentBuild.deleteArtifacts();
             }
         }
+    }
 
-        if(artifactDaysToKeep!=null && artifactDaysToKeep!=-1) {
-            Calendar cal = new GregorianCalendar();
-            cal.add(Calendar.DAY_OF_YEAR,-artifactDaysToKeep);
-            // copy it to the array because we'll be deleting builds as we go.
-            for( Run r : job.getBuilds() ) {
-                if (r.isKeepLog()) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's marked as a keeper");
-                    continue;
-                }
-                if (r==lsb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's the last successful build");
-                    continue;
-                }
-                if (r==lstb) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's the last stable build");
-                    continue;
-                }
-                if (!r.getTimestamp().before(cal)) {
-                    LOGGER.log(FINER,r.getFullDisplayName()+" is not purged of artifacts because it's still new");
-                    continue;
-                }
-                r.deleteArtifacts();
-            }
+    /**
+     * Checks whether artifacts from build could be deleted.
+     * If current build equals to last Success Build or last Stable Build or currentBuild is configured to keep logs or
+     * currentBuild timestamp is before configured calendar value - return false, otherwise return true.
+     *
+     * @param lastSuccessBuild {@link Run}
+     * @param lastStableBuild {@link Run}
+     * @param currentBuild {@link Run}
+     * @param cal {@link Calendar}
+     * @return true - if deletion is allowed, false - otherwise.
+     */
+    private boolean allowDeleteArtifact(Run lastSuccessBuild, Run lastStableBuild, Run currentBuild, Calendar cal) {
+        if (currentBuild.isKeepLog()) {
+            LOGGER.log(FINER,
+                currentBuild.getFullDisplayName() + " is not purged of artifacts because it's marked as a keeper");
+            return false;
         }
-
+        if (currentBuild == lastSuccessBuild) {
+            LOGGER.log(FINER, currentBuild.getFullDisplayName()
+                + " is not purged of artifacts because it's the last successful build");
+            return false;
+        }
+        if (currentBuild == lastStableBuild) {
+            LOGGER.log(FINER,
+                currentBuild.getFullDisplayName() + " is not purged of artifacts because it's the last stable build");
+            return false;
+        }
+        if (null != cal && !currentBuild.getTimestamp().before(cal)) {
+            LOGGER.log(FINER, currentBuild.getFullDisplayName() + " is not purged of artifacts because it's still new");
+            return false;
+        }
+        return true;
     }
 
     public int getDaysToKeep() {
