@@ -16,6 +16,7 @@
 
 package hudson.tasks;
 
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Functions;
@@ -23,24 +24,23 @@ import hudson.Launcher;
 import hudson.RestrictedSince;
 import hudson.Util;
 import hudson.diagnosis.OldDataMonitor;
-import static hudson.Util.fixEmptyAndTrim;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.model.UserPropertyDescriptor;
-import hudson.model.Hudson;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
 import hudson.util.XStream2;
-import org.apache.tools.ant.types.selectors.SelectorUtils;
-import org.kohsuke.accmod.Restricted;
-import org.kohsuke.accmod.restrictions.NoExternalUse;
-import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.export.Exported;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -51,16 +51,16 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.apache.tools.ant.types.selectors.SelectorUtils;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
+import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.export.Exported;
+
+import static hudson.Util.fixEmptyAndTrim;
 
 /**
  * {@link Publisher} that sends the build result in e-mail.
@@ -176,7 +176,7 @@ public class Mailer extends Notifier {
          * which is usually <tt>localhost</tt>.
          */
         private String smtpHost;
-        
+
         /**
          * If true use SSL on port 465 (standard SMTPS) unless <code>smtpPort</code> is set.
          */
@@ -192,12 +192,12 @@ public class Mailer extends Notifier {
          * The charset to use for the text and subject.
          */
         private String charset;
-        
+
         /**
          * Used to keep track of number test e-mails.
          */
         private static transient int testEmailCount = 0;
-        
+
 
         public DescriptorImpl() {
             load();
@@ -226,6 +226,7 @@ public class Mailer extends Notifier {
             smtpAuthUserName = fixEmptyAndTrim(smtpAuthUserName);
 
             Properties props = new Properties(System.getProperties());
+            props.put("mail.transport.protocol", "smtp");
             if(fixEmptyAndTrim(smtpHost)!=null)
                 props.put("mail.smtp.host",smtpHost);
             if (smtpPort!=null) {
@@ -293,7 +294,7 @@ public class Mailer extends Notifier {
             charset = json.getString("charset");
             if (charset == null || charset.length() == 0)
             	charset = "UTF-8";
-            
+
             save();
             return true;
         }
@@ -325,7 +326,7 @@ public class Mailer extends Notifier {
             if (smtpAuthPassword==null) return null;
             return Secret.toString(smtpAuthPassword);
         }
-        
+
         public boolean getUseSsl() {
         	return useSsl;
         }
@@ -333,7 +334,7 @@ public class Mailer extends Notifier {
         public String getSmtpPort() {
         	return smtpPort;
         }
-        
+
         public String getCharset() {
         	String c = charset;
         	if (c == null || c.length() == 0)	c = "UTF-8";
@@ -368,7 +369,7 @@ public class Mailer extends Notifier {
         public void setSmtpPort(String smtpPort) {
             this.smtpPort = smtpPort;
         }
-        
+
         public void setCharset(String chaset) {
             this.charset = chaset;
         }
@@ -444,19 +445,63 @@ public class Mailer extends Notifier {
                 @QueryParameter boolean useSsl, @QueryParameter String smtpPort) throws IOException, ServletException, InterruptedException {
             try {
                 if (!useSMTPAuth)   smtpAuthUserName = smtpAuthPassword = null;
-                
-                MimeMessage msg = new MimeMessage(createSession(smtpServer,smtpPort,useSsl,smtpAuthUserName,Secret.fromString(smtpAuthPassword)));
+
+                Session session = createSession(smtpServer, smtpPort, useSsl, smtpAuthUserName,
+                    Secret.fromString(smtpAuthPassword));
+                MimeMessage msg = new HudsonMimeMessage(session);
                 msg.setSubject("Test email #" + ++testEmailCount);
                 msg.setContent("This is test email #" + testEmailCount + " sent from Hudson Continuous Integration server.", "text/plain");
                 msg.setFrom(new InternetAddress(adminAddress));
                 msg.setSentDate(new Date());
                 msg.setRecipient(Message.RecipientType.TO, new InternetAddress(adminAddress));
 
-                Transport.send(msg);
-                
+                //See http://issues.hudson-ci.org/browse/HUDSON-7426 and
+                //http://www.oracle.com/technetwork/java/faq-135477.html#smtpauth
+                send(smtpServer, smtpAuthUserName, smtpAuthPassword, smtpPort, (HudsonMimeMessage) msg);
+
                 return FormValidation.ok("Email was successfully sent");
             } catch (MessagingException e) {
                 return FormValidation.errorWithMarkup("<p>Failed to send out e-mail</p><pre>"+Util.escape(Functions.printThrowable(e))+"</pre>");
+            }
+        }
+
+        /**
+         * Sends message
+         * @param msg {@link MimeMessage}
+         * @throws MessagingException if any.
+         */
+        public void send(HudsonMimeMessage msg) throws MessagingException {
+            send(smtpHost, smtpAuthUsername, Secret.toString(smtpAuthPassword), smtpPort, msg);
+        }
+
+        /**
+         * Wrap {@link Transport#send(javax.mail.Message)} method. Based on
+         * <a href="http://www.oracle.com/technetwork/java/faq-135477.html#smtpauth">javax.mail recommendations</a>
+         * and fix <a href="http://issues.hudson-ci.org/browse/HUDSON-7426">HUDSON-7426</a>
+         *
+         * @param smtpServer smtp server
+         * @param smtpAuthUserName username
+         * @param smtpAuthPassword password.
+         * @param smtpPort port.
+         * @param msg {@link MimeMessage}
+         * @throws MessagingException if any.
+         * @see {@link #createSession(String, String, boolean, String, hudson.util.Secret)}
+         */
+        public static void send(String smtpServer, String smtpAuthUserName, String smtpAuthPassword, String smtpPort,
+                                HudsonMimeMessage msg) throws MessagingException {
+            if (null != msg && null !=msg.getSession()) {
+                Session session = msg.getSession();
+                Transport t = null != session.getProperty("mail.transport.protocol") ?
+                    session.getTransport() : session.getTransport("smtp");
+                smtpPort = fixEmptyAndTrim(smtpPort);
+                int port = -1;
+                if (StringUtils.isNumeric(smtpPort)) {
+                    port = Integer.parseInt(smtpPort);
+                }
+                t.connect(smtpServer, port, smtpAuthUserName, smtpAuthPassword);
+                msg.saveChanges();
+                t.sendMessage(msg, msg.getAllRecipients());
+                t.close();
             }
         }
 
