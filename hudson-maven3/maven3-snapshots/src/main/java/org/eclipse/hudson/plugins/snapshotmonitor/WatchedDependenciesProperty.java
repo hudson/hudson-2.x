@@ -7,12 +7,12 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: 
+ * Contributors:
  *
- *   
- *     
  *
- *******************************************************************************/ 
+ *
+ *
+ *******************************************************************************/
 
 package org.eclipse.hudson.plugins.snapshotmonitor;
 
@@ -25,10 +25,12 @@ import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 
+import net.sf.json.JSONObject;
 import org.eclipse.hudson.plugins.snapshotmonitor.internal.WatchedDependenciesLoader;
 import org.eclipse.hudson.plugins.snapshotmonitor.model.WatchedDependencies;
 import org.eclipse.hudson.plugins.snapshotmonitor.model.WatchedDependency;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +121,15 @@ public class WatchedDependenciesProperty
 
         @Override
         public boolean isApplicable(final Class<? extends Job> type) {
-            return true;
+            return AbstractProject.class.isAssignableFrom(type);
+        }
+
+        @Override
+        public JobProperty<?> newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+            if (req.hasParameter(SnapshotTrigger.class.getName().replace('.','-'))) {
+                return super.newInstance(req, formData);
+            }
+            return null; // not watching any dependencies
         }
     }
 }
