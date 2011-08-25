@@ -28,11 +28,11 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson-rest</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1</version>
   </parent>
 
   <artifactId>hudson-rest-server</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.1.1</version>
   <name>Hudson :: REST :: Server</name>
 
   <dependencies>
