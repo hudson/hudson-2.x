@@ -994,3 +994,18 @@ table.progress-bar.red td.progress-bar-done {
 .tag7 { font-size: 1.70em; }
 .tag8 { font-size: 1.80em; }
 .tag9 { font-size: 1.90em; }
+
+/* ========================= "Delete slave" dialog ================== */
+div.deleteSlaveDialog ul {
+    text-align:left;
+    padding-left:80px;
+}
+
+div.deleteSlaveDialog div.radioButtons {
+    padding-bottom:10px;
+}
+
+div.deleteSlaveDialog h4 {
+    color: #F89938;
+}
+
