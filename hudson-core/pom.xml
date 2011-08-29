@@ -290,15 +290,9 @@ THE SOFTWARE.
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>org.jvnet.hudson</groupId>
+      <groupId>net.sf.jtidy</groupId>
       <artifactId>jtidy</artifactId>
-      <version>4aug2000r7-dev-hudson-1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>jdom</groupId>
-          <artifactId>jdom</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>r938</version>
     </dependency>
 
     <dependency>
