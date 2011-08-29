@@ -65,6 +65,15 @@ THE SOFTWARE.
     <d:invokeBody />
   </j:scope>
 
+    <j:choose>
+        <j:when test="${attrs.onclick != null}">
+            <j:set var="onLinkClick" value="${attrs.onclick}" />
+        </j:when>
+        <j:otherwise>
+            <j:set var="onLinkClick" value="onLinkClick('question'); return false;" />
+        </j:otherwise>
+    </j:choose>
+
   <j:if test="${attrs.permission==null or h.hasPermission(it,attrs.permission)}">
     <j:choose>
       <j:when test="${taskMatching!=null}">
@@ -77,12 +86,12 @@ THE SOFTWARE.
         <script src="${resURL}/scripts/popup-dialog.js" type="text/javascript" />
         <div class="task">
 
-          <a href="${href}" onclick="onLinkClick('question'); return false;">
+          <a href="${href}" onclick="${onLinkClick}">
             <img width="24" height="24" style="margin: 2px;" alt="" src="${rootURL}${icon.startsWith('images/') ? h.resourcePath : ''}/${icon}"/>
           </a>
           <st:nbsp />
 
-          <a href="${href}" onclick="onLinkClick('question'); return false;">
+          <a href="${href}" onclick="${onLinkClick}">
             <j:choose>
               <j:when test="${match}">
                 <b>${title}</b>
