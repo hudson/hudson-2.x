@@ -381,7 +381,7 @@
             <version>${antlr.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jvnet.hudson</groupId>
+            <groupId>org.hudsonci.tools</groupId>
             <artifactId>xstream</artifactId>
         </dependency>
         <dependency>
