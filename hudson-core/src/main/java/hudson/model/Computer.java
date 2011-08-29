@@ -103,6 +103,16 @@ import java.net.Inet4Address;
 @ExportedBean
 public /*transient*/ abstract class Computer extends Actionable implements AccessControlled, ExecutorListener {
 
+    /**
+     * Parameter in request for deleting the slave.
+     */
+    private static final String DELETE_MODE_KEY = "deleteMode";
+
+    /**
+     * Key for delete mode when the jobs are stopping before the slave will delete
+     */
+    private static final String DELETE_MODE_STOP_KEY = "0";
+
     private final CopyOnWriteArrayList<Executor> executors = new CopyOnWriteArrayList<Executor>();
     // TODO: 
     private final CopyOnWriteArrayList<OneOffExecutor> oneOffExecutors = new CopyOnWriteArrayList<OneOffExecutor>();
@@ -542,6 +552,24 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
 
     public RunList getBuilds() {
     	return new RunList(Hudson.getInstance().getAllItems(Job.class)).node(getNode());
+    }
+
+    /**
+     * Returns jobs that running on current computer.
+     * @return List<AbstractProject>.
+     */
+    @Exported
+    public List<AbstractProject> getRunningJobs() {
+        List<AbstractProject> jobs = new ArrayList<AbstractProject>();
+        Queue queue = Hudson.getInstance().getQueue();
+        if (getTiedJobs() != null) {
+            for (AbstractProject project : getTiedJobs())  {
+                if (project.isBuilding() || queue.contains(project)) {
+                    jobs.add(project);
+                }
+            }
+        }
+        return jobs;
     }
 
     /**
@@ -1019,7 +1047,7 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
      */
     public void doConfigSubmit( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException, FormException {
         checkPermission(CONFIGURE);
-        
+
         final Hudson app = Hudson.getInstance();
 
         Node result = getNode().getDescriptor().newInstance(req, req.getSubmittedForm());
@@ -1050,6 +1078,34 @@ public /*transient*/ abstract class Computer extends Actionable implements Acces
         Hudson.getInstance().removeNode(getNode());
         return new HttpRedirect("..");
     }
+
+    /**
+     * Delete the slave.
+     * If request have parameter 'deleteMode' than deleting performs in according with this parameter.
+     * @param req StaplerRequest
+     * @return HttpResponse
+     * @throws IOException if any.
+     * @throws ServletException if any.
+     */
+    public HttpResponse doDeleteWithParam(StaplerRequest req) throws IOException, ServletException {
+        checkPermission(DELETE);
+        String deleteMode = req.getParameter(DELETE_MODE_KEY);
+        if (deleteMode != null) {
+            if (DELETE_MODE_STOP_KEY.equals(deleteMode)) {
+                if (getRunningJobs() != null) {
+                    for (AbstractProject job : getRunningJobs()) {
+                        Hudson.getInstance().getQueue().cancel(job);
+                    }
+                }
+                for (Executor executor : executors) {
+                    executor.interrupt();
+                }
+            }
+        }
+        Hudson.getInstance().removeNode(getNode());
+        return new HttpRedirect("..");
+    }
+
 
     /**
      * Handles incremental log.

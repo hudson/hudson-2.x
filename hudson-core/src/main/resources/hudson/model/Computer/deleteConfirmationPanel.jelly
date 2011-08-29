@@ -13,11 +13,89 @@
 #
 #
 #************************************************************************** -->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+    <script type="text/javascript">
+        function deletingSlave() {
+            var type = jQuery(".radioButtons input:radio:checked").val();
+            if (type != undefined) {
+                var array = new Array();
+                array[0] = "${%Stopping all jobs. Deleting slave...}";
+                jQuery("#deleteMsg").html(array[type]);
+                onLinkClick("deleteMsg");
+                setTimeout(function() {
+                    jQuery.unblockUI({
+                        onUnblock: function() {
+                            window.location.href="..";
+                        }
+                    });
+                }, 2000);
+            } else {
+                window.location.href="..";
+            }
+        }
 
-<div>
-   <form method="post" action="doDelete">
-       <h4>${%Are you sure about deleting the slave?}</h4>
-       <input type="submit" class="yes" value="${%Yes}" />
-       <input type="button" class="no" value="${%No}" />
-   </form>
-</div>
+        function submitDeleteForm() {
+            var dataString = jQuery("#deleteForm").serialize();
+            jQuery.ajax({
+                type: 'POST',
+                url: "${rootUrl}/${it.url}deleteWithParam",
+                data: dataString,
+                success: deletingSlave,
+                dataType: "html"
+            });
+        }
+
+        function onDeleteClick() {
+            jQuery.ajax({
+                url: "${rootUrl}/${it.url}api/json",
+                dataType: 'json',
+                success: function(data) {
+                    jQuery('#slaveStatus').hide();
+                    if (data.idle == false) {
+                        jQuery("#stopMode").attr("checked", "checked");
+                        var runningJobs = data.runningJobs;
+                        var jobList = jQuery("#jobList");
+                        jobList.html("");
+                        for (var i = 0; i &lt; runningJobs.length; i++) {
+                            jobList.append("<li>" + runningJobs[i].name + "</li>");
+                        }
+                        jQuery('#slaveStatus').show();
+                    }
+                }
+            })
+            onLinkClick("question");
+        }
+
+        jQuery(document).ready(function() {
+            jQuery('#confirm').unbind('click').click(function() {
+                 submitDeleteForm();
+            });
+
+            jQuery('#cancel').click(function() {
+                jQuery.unblockUI();
+                return false;
+            });
+        });
+    </script>
+
+    <div>
+        <form id="deleteForm">
+           <h4>${%Are you sure about deleting the slave?}</h4>
+           <div id="slaveStatus" class="deleteSlaveDialog" style="display:none">
+               <h4>${%Note: following jobs are running on this slave:}</h4>
+               <ul id="jobList">
+               </ul>
+               <div class="radioButtons">
+                   <input id="stopMode" type="radio" value="0" name="deleteMode">${%Force stop the jobs}</input>
+               </div>
+           </div>
+            <div>
+               <input type="button" id="confirm" value="${%Confirm}" />
+               <input type="button" id="cancel" value="${%Cancel}" />
+           </div>
+        </form>
+    </div>
+
+    <div id="deleteMsg" style="display:none">
+    </div>
+</j:jelly>
