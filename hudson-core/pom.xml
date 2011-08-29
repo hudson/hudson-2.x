@@ -37,7 +37,7 @@ THE SOFTWARE.
   <description>
     Contains the core Hudson code and view files to render HTML.
   </description>
-  
+
   <properties>
     <staplerFork>true</staplerFork>
   </properties>
@@ -374,7 +374,7 @@ THE SOFTWARE.
       <version>2.7.6</version>
     </dependency>
     <dependency>
-      <groupId>org.jvnet.hudson</groupId>
+      <groupId>org.hudsonci.tools</groupId>
       <artifactId>xstream</artifactId>
     </dependency>
     <dependency>
@@ -801,7 +801,7 @@ THE SOFTWARE.
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
-      </plugin> 
+      </plugin>
     </plugins>
   </reporting>
 </project>
