@@ -35,6 +35,10 @@ THE SOFTWARE.
   <version>2.1.2-SNAPSHOT</version>
   <name>Hudson :: REST :: Client</name>
 
+  <properties>
+    <async-http-client.version>1.6.3</async-http-client.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
@@ -55,7 +59,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>com.ning</groupId>
       <artifactId>async-http-client</artifactId>
-      <version>1.6.3</version>
+      <version>${async-http-client.version}</version>
     </dependency>
 
     <dependency>

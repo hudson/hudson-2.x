@@ -37,6 +37,11 @@ THE SOFTWARE.
 
   <properties>
     <gwtVersion>2.3.0</gwtVersion>
+    <gxt.version>2.2.0</gxt.version>
+    <guava-gwt.version>r08</guava-gwt.version>
+    <restygwt.version>1.1</restygwt.version>
+    <gin.version>1.5.0</gin.version>
+    <gwt-log.version>3.1.0</gwt-log.version>
   </properties>
 
   <dependencyManagement>
@@ -62,31 +67,31 @@ THE SOFTWARE.
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava-gwt</artifactId>
-        <version>r08</version>
+        <version>${guava-gwt.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.fusesource.restygwt</groupId>
         <artifactId>restygwt</artifactId>
-        <version>1.1</version>
+        <version>${restygwt.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.google.gwt.inject</groupId>
         <artifactId>gin</artifactId>
-        <version>1.5.0</version>
+        <version>${gin.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.google.code.gwt-log</groupId>
         <artifactId>gwt-log</artifactId>
-        <version>3.1.0</version>
+        <version>${gwt-log.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.extjs</groupId>
         <artifactId>gxt</artifactId>
-        <version>2.2.0</version>
+        <version>${gxt.version}</version>
       </dependency>
 
       <!-- INTERNAL -->
@@ -145,7 +150,6 @@ THE SOFTWARE.
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>gwt-maven-plugin</artifactId>
-          <version>${gwt-maven-plugin.version}</version>
           <configuration>
             <mode>htmlunit</mode>
             <gen>${project.build.directory}/gwt-generated</gen>

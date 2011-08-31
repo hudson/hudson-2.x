@@ -36,6 +36,10 @@ THE SOFTWARE.
   <name>Hudson :: Maven 3 :: Slave Bundle</name>
   <packaging>pom</packaging>
 
+  <properties>
+    <jarjar-maven-plugin.version>1.4</jarjar-maven-plugin.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
@@ -85,7 +89,7 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>jarjar-maven-plugin</artifactId>
-        <version>1.4</version>
+        <version>${jarjar-maven-plugin.version}</version>
         <executions>
           <execution>
             <id>jarjar-runtime-classes</id>

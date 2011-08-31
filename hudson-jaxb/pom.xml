@@ -39,67 +39,74 @@ THE SOFTWARE.
     Compilation and runtime support for using JAXB in Hudson.
   </description>
 
+  <properties>
+    <jaxb-impl.version>2.2.2</jaxb-impl.version>
+    <jaxb-xjc.version>2.2.2</jaxb-xjc.version>
+    <jaxb2-basics.version>0.6.0</jaxb2-basics.version>
+    <jaxb2-basics-tools.version>0.6.0</jaxb2-basics-tools.version>
+    <jaxb2-basics-annotate.version>0.6.0</jaxb2-basics-annotate.version>
+    <jaxb-fluent-api.version>2.1.8</jaxb-fluent-api.version>
+    <jackson-core-asl.version>1.7.1</jackson-core-asl.version>
+    <jackson-mapper-asl.version>1.7.1</jackson-mapper-asl.version>
+    <gwt-hashcode-equals.version>0.1.0</gwt-hashcode-equals.version>
+  </properties>
+
   <dependencyManagement>
 
     <dependencies>
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.2.2</version>
-      </dependency>
 
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
-        <version>2.2.2</version>
+        <version>${jaxb-impl.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-xjc</artifactId>
-        <version>2.2.2</version>
+        <version>${jaxb-xjc.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jvnet.jaxb2_commons</groupId>
         <artifactId>jaxb2-basics</artifactId>
-        <version>0.6.0</version>
+        <version>${jaxb2-basics.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jvnet.jaxb2_commons</groupId>
         <artifactId>jaxb2-basics-tools</artifactId>
-        <version>0.6.0</version>
+        <version>${jaxb2-basics-tools.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jvnet.jaxb2_commons</groupId>
         <artifactId>jaxb2-basics-annotate</artifactId>
-        <version>0.6.0</version>
+        <version>${jaxb2-basics-annotate.version}</version>
       </dependency>
 
       <dependency>
         <groupId>net.java.dev.jaxb2-commons</groupId>
         <artifactId>jaxb-fluent-api</artifactId>
-        <version>2.1.8</version>
+        <version>${jaxb-fluent-api.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-core-asl</artifactId>
-        <version>1.7.1</version>
+        <version>${jackson-core-asl.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-mapper-asl</artifactId>
-        <version>1.7.1</version>
+        <version>${jackson-mapper-asl.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.flipthebird.gwt-hashcode-equals</groupId>
         <artifactId>gwt-hashcode-equals</artifactId>
-        <version>0.1.0</version>
+        <version>${gwt-hashcode-equals.version}</version>
       </dependency>
 
       <!-- INTERNAL -->
