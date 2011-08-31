@@ -38,8 +38,11 @@
   </description>
 
   <properties>
-    <gmaven.plugin.version>1.3</gmaven.plugin.version>
-    <gmaven.provider.version>1.7</gmaven.provider.version>
+    <htmlunit.version>2.6-hudson-2</htmlunit.version>
+    <embedded-rhino-debugger.version>1.2</embedded-rhino-debugger.version>
+    <netx.version>0.5-hudson-2</netx.version>
+    <gmaven-plugin.version>1.3</gmaven-plugin.version>
+    <gmaven-provider.version>1.7</gmaven-provider.version>
   </properties>
 
   <dependencies>
@@ -85,13 +88,12 @@
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
-      <version>6.1.11</version>
     </dependency>
 
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>test-annotations</artifactId>
-      <version>1.0</version>
+      <version>${test-annotations.version}</version>
       <scope>compile</scope>
       <!-- in this module we need this as a compile scope, whereas in the parent it's test -->
     </dependency>
@@ -99,7 +101,7 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>htmlunit</artifactId>
-      <version>2.6-hudson-2</version>
+      <version>${htmlunit.version}</version>
       <exclusions>
         <exclusion>
           <!--  hides JDK DOM classes in Eclipse -->
@@ -112,14 +114,14 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>embedded-rhino-debugger</artifactId>
-      <version>1.2</version>
+      <version>${embedded-rhino-debugger.version}</version>
     </dependency>
 
     <dependency>
       <!-- for testing JNLP launch. -->
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>netx</artifactId>
-      <version>0.5-hudson-2</version>
+      <version>${netx.version}</version>
     </dependency>
 
     <dependency>
@@ -133,19 +135,19 @@
   <build>
       <plugins>
         <plugin>
-         <groupId>org.codehaus.gmaven</groupId>
-         <artifactId>gmaven-plugin</artifactId>
-         <version>${gmaven.plugin.version}</version>
-         <dependencies>
+          <groupId>org.codehaus.gmaven</groupId>
+          <artifactId>gmaven-plugin</artifactId>
+          <version>${gmaven-plugin.version}</version>
+          <dependencies>
             <dependency>
-               <groupId>org.codehaus.groovy</groupId>
-               <artifactId>groovy-all</artifactId>
-               <version>${groovy.version}</version>
+              <groupId>org.codehaus.groovy</groupId>
+              <artifactId>groovy-all</artifactId>
+              <version>${groovy.version}</version>
             </dependency>
             <dependency>
               <groupId>org.codehaus.gmaven.runtime</groupId>
               <artifactId>gmaven-runtime-1.7</artifactId>
-              <version>${gmaven.plugin.version}</version>
+              <version>${gmaven-plugin.version}</version>
               <exclusions>
                 <exclusion>
                   <groupId>org.codehaus.groovy</groupId>
@@ -154,12 +156,12 @@
               </exclusions>
             </dependency>
             <dependency>
-               <groupId>org.apache.ant</groupId>
-               <artifactId>ant</artifactId>
-               <version>1.8.0</version>
-             </dependency>
-         </dependencies>
-         <executions>
+              <groupId>org.apache.ant</groupId>
+              <artifactId>ant</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+          </dependencies>
+          <executions>
             <execution>
               <id>preset-packager</id>
               <phase>process-resources</phase>
@@ -168,7 +170,7 @@
               </goals>
               <configuration>
                 <source>${pom.basedir}/src/main/preset-data/package.groovy</source>
-                <providerSelection>${gmaven.provider.version}</providerSelection>
+                <providerSelection>${gmaven-provider.version}</providerSelection>
               </configuration>
             </execution>
             <execution>
@@ -177,7 +179,7 @@
                 <goal>testCompile</goal>
               </goals>
               <configuration>
-                <providerSelection>${gmaven.provider.version}</providerSelection>
+                <providerSelection>${gmaven-provider.version}</providerSelection>
               </configuration>
             </execution>
           </executions>

@@ -26,8 +26,10 @@
   <properties>
     <mavenVersion>3.0.2</mavenVersion>
     <maven.version>${mavenVersion}</maven.version>
-    <aetherVersion>1.9</aetherVersion>
+    <aetherVersion>${aether.version}</aetherVersion>
     <wagonVersion>1.0-beta-7</wagonVersion>
+    <commons-httpclient.version>3.1-rc1</commons-httpclient.version>
+    <plexus-classworlds.version>2.3</plexus-classworlds.version>
   </properties>
 
   <modules>
@@ -85,19 +87,20 @@
       <dependency>
         <groupId>org.sonatype.aether</groupId>
         <artifactId>aether-spi</artifactId>
-        <version>${aetherVersion}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-util</artifactId>
-        <version>${aetherVersion}</version>
+        <version>${aether.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.sonatype.aether</groupId>
         <artifactId>aether-connector-wagon</artifactId>
         <version>${aetherVersion}</version>
+      </dependency>
+
+      <dependency>
+        <!-- default dependency to 2.0.2 confuses IntelliJ. Otherwise this value doesn't really affect build or runtime. -->
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>${commons-httpclient.version}</version>
       </dependency>
 
       <dependency>
@@ -121,13 +124,13 @@
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-inject-plexus</artifactId>
-        <version>${sisuInjectVersion}</version>
+        <version>${sisuInject.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-classworlds</artifactId>
-        <version>2.3</version>
+        <version>${plexus-classworlds.version}</version>
       </dependency>
 
       <!-- INTERNAL -->

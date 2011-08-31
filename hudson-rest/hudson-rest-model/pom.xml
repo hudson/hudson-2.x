@@ -53,15 +53,12 @@ THE SOFTWARE.
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.7.4</version>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <extension>true</extension>
-              <schemaDirectory>src/main/schema</schemaDirectory>
               <args>
                 <arg>-Xannotate</arg>
                 <arg>-Xfluent-api</arg>
@@ -69,13 +66,6 @@ THE SOFTWARE.
                 <arg>-XequalsBuilder</arg>
                 <arg>-XhashCodeBuilder</arg>
               </args>
-              <plugins>
-                <plugin>
-                  <groupId>org.jvnet.hudson.main</groupId>
-                  <artifactId>hudson-jaxb-xjc</artifactId>
-                  <version>${project.version}</version>
-                </plugin>
-              </plugins>
             </configuration>
           </execution>
         </executions>
