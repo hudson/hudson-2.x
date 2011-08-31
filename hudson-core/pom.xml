@@ -534,7 +534,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>1.7.6</version>
+      <version>${groovy.version}</version>
     </dependency>
     <dependency>
       <!--
