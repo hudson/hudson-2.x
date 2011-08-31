@@ -38,6 +38,11 @@ THE SOFTWARE.
     Contains common utility code, reusable outside Hudson.
   </description>
 
+  <properties>
+    <gossip-support.version>1.7</gossip-support.version>
+    <plexus-utils.version>2.0.5</plexus-utils.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -57,7 +62,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.sonatype.gossip</groupId>
       <artifactId>gossip-support</artifactId>
-      <version>1.7</version>
+      <version>${gossip-support.version}</version>
     </dependency>
 
     <dependency>
@@ -74,7 +79,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>2.0.5</version>
+      <version>${plexus-utils.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

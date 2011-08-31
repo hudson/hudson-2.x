@@ -58,26 +58,60 @@ THE SOFTWARE.
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
     <build.number />
 
-    <aspectjVersion>1.6.11</aspectjVersion>
-    <sisuGuiceVersion>3.0.3</sisuGuiceVersion>
-    <sisuInjectVersion>2.2.3</sisuInjectVersion>
-    <jetty-version>6.1.26</jetty-version>
+    <!--GWT properties-->
+    <gwt.draftCompile>false</gwt.draftCompile>
+    <gwt.style>OBFUSCATED</gwt.style>
+    <gwt.compiler.optimizationLevel>9</gwt.compiler.optimizationLevel>
+    <gwt.compiler.strict>true</gwt.compiler.strict>
+
+    <!--Libraries-->
+    <localizer.version>1.10</localizer.version>
+    <aspectj.version>1.6.11</aspectj.version>
+    <sisuGuice.version>3.0.3</sisuGuice.version>
+    <sisuInject.version>2.2.3</sisuInject.version>
+    <jetty.version>6.1.26</jetty.version>
+    <wagon-http.version>1.0-beta-5</wagon-http.version>
+    <animal-sniffer-annotation.version>1.0</animal-sniffer-annotation.version>
+    <test-annotations.version>1.0</test-annotations.version>
+    <servlet-api.version>2.4</servlet-api.version>
+    <slf4j-api.version>1.6.1</slf4j-api.version>
+    <jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
+    <slf4j-jdk14.version>1.6.1</slf4j-jdk14.version>
+    <jul-to-slf4j.version>1.6.1</jul-to-slf4j.version>
+    <logback-classic.version>0.9.28</logback-classic.version>
+    <guava.version>r09</guava.version>
+    <ant.version>1.8.0</ant.version>
+    <xstream.version>1.4.1-hudson-1</xstream.version>
+    <jsr305.version>1.3.9</jsr305.version>
+    <commons-lang.version>2.4</commons-lang.version>
+    <commons-io.version>1.4</commons-io.version>
+    <commons-codec.version>1.4</commons-codec.version>
+    <aether.version>1.11</aether.version>
+    <args4j.version>2.0.16</args4j.version>
+    <groovy.version>1.8.1</groovy.version>
+    <jaxb-api.version>2.2.2</jaxb-api.version>
+
+    <!--Backward compatible properties-->
+    <aspectjVersion>${aspectj.version}</aspectjVersion>
+    <sisuGuiceVersion>${sisuGuice.version}</sisuGuiceVersion>
+    <sisuInjectVersion>${sisuInject.version}</sisuInjectVersion>
+    <jetty-version>${jetty.version}</jetty-version>
+
+    <!--Test dependencies-->
     <junit.version>4.8.1</junit.version>
     <easymock.version>3.0</easymock.version>
     <mockito-core.version>1.8.5</mockito-core.version>
     <powermock.version>1.4.9</powermock.version>
 
-    <gwt.draftCompile>false</gwt.draftCompile>
-    <gwt.style>OBFUSCATED</gwt.style>
-    <gwt.compiler.optimizationLevel>9</gwt.compiler.optimizationLevel>
-    <gwt.compiler.strict>true</gwt.compiler.strict>
+    <!--Plugins-->
+    <maven-antrun-extended-plugin.version>1.42</maven-antrun-extended-plugin.version>
+    <maven-hudson-dev-plugin.version>6.1.7-hudson-1</maven-hudson-dev-plugin.version>
+    <build-helper-maven-plugin.version>1.5</build-helper-maven-plugin.version>
+    <aspectj-maven-plugin.version>1.3</aspectj-maven-plugin.version>
     <gwt-maven-plugin.version>2.3.0-1</gwt-maven-plugin.version>
-
-    <!--
-     Ensure the full list is in sync with GWT UserAgent.gwt.xml
-     http://code.google.com/p/google-web-toolkit/source/browse/trunk/user/src/com/google/gwt/user/UserAgent.gwt.xml
-     -->
-    <gwt.user.agent>ie6,ie8,gecko1_8,safari,opera</gwt.user.agent>
+    <plexus-component-metadata-plugin.version>1.5.4</plexus-component-metadata-plugin.version>
+    <maven-jaxb2-plugin.version>0.7.4</maven-jaxb2-plugin.version>
+    <maven-enunciate-plugin.version>1.22</maven-enunciate-plugin.version>
   </properties>
 
   <modules>
@@ -103,34 +137,11 @@ THE SOFTWARE.
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.kohsuke.gmaven</groupId>
-          <artifactId>gmaven-plugin</artifactId>
-          <version>1.0-rc-5-patch-2</version>
-          <dependencies>
-            <dependency><!-- this needs to be visible to Ant inside GMaven, so has to be a plugin dependency -->
-              <groupId>org.apache.ant</groupId>
-              <artifactId>ant-junit</artifactId>
-              <version>1.7.0</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.cobertura</groupId>
-              <artifactId>cobertura</artifactId>
-              <version>1.9</version>
-            </dependency>
-            <dependency>
-              <!-- this provided scope dependency doesn't get added to GMaven unless explicitly added here -->
-              <groupId>javax.servlet</groupId>
-              <artifactId>servlet-api</artifactId>
-              <version>2.4</version>
-            </dependency>
-          </dependencies>
-        </plugin>
 
         <plugin>
           <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
           <artifactId>maven-antrun-extended-plugin</artifactId>
-          <version>1.39</version>
+          <version>${maven-antrun-extended-plugin.version}</version>
         </plugin>
 
         <plugin>
@@ -148,7 +159,6 @@ THE SOFTWARE.
           -->
           <groupId>org.kohsuke.stapler</groupId>
           <artifactId>maven-stapler-plugin</artifactId>
-          <version>1.15</version>
           <extensions>true</extensions>
           <dependencies>
             <dependency>
@@ -159,34 +169,28 @@ THE SOFTWARE.
           </dependencies>
         </plugin>
         
-         <plugin>
-          <groupId>org.jvnet.hudson.tools</groupId>
-          <artifactId>maven-hpi-plugin</artifactId>
-          <version>2.1.0</version>
-        </plugin>
-
         <!-- this is really just a patched version of maven-jetty-plugin to workaround issue #932 -->
         <plugin>
           <groupId>org.jvnet.hudson.tools</groupId>
           <artifactId>maven-hudson-dev-plugin</artifactId>
-          <version>6.1.7-hudson-1</version>
+          <version>${maven-hudson-dev-plugin.version}</version>
         </plugin>
 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.5</version>
+          <version>${build-helper-maven-plugin.version}</version>
         </plugin>
 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>aspectj-maven-plugin</artifactId>
-          <version>1.3</version>
+          <version>${aspectj-maven-plugin.version}</version>
           <dependencies>
             <dependency>
               <groupId>org.aspectj</groupId>
               <artifactId>aspectjtools</artifactId>
-              <version>${aspectjVersion}</version>
+              <version>${aspectj.version}</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -196,6 +200,60 @@ THE SOFTWARE.
             <target>1.5</target>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>gwt-maven-plugin</artifactId>
+          <version>${gwt-maven-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-metadata</artifactId>
+          <version>${plexus-component-metadata-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jvnet.jaxb2.maven2</groupId>
+          <artifactId>maven-jaxb2-plugin</artifactId>
+          <version>${maven-jaxb2-plugin.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+              <configuration>
+                <extension>true</extension>
+                <schemaDirectory>src/main/schema</schemaDirectory>
+                <plugins>
+                  <plugin>
+                    <groupId>org.jvnet.hudson.main</groupId>
+                    <artifactId>hudson-jaxb-xjc</artifactId>
+                    <version>${project.version}</version>
+                  </plugin>
+                </plugins>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.enunciate</groupId>
+          <artifactId>maven-enunciate-plugin</artifactId>
+          <version>${maven-enunciate-plugin.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>assemble</goal>
+              </goals>
+              <configuration>
+                <forceWarPackaging>false</forceWarPackaging>
+                <configFile>enunciate.xml</configFile>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
       </plugins>
     </pluginManagement>
     
@@ -260,27 +318,14 @@ THE SOFTWARE.
         -->
         <groupId>org.jvnet.hudson.tools</groupId>
         <artifactId>maven-hudson-dev-plugin</artifactId>
-        <version>6.1.7</version>
       </plugin>
-
-      <!--<plugin>
-        <groupId>org.jvnet.fix1600</groupId>
-        <artifactId>fix1600</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>fix</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
     </plugins>
 
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-http</artifactId>
-        <version>1.0-beta-5</version>
+        <version>${wagon-http.version}</version>
       </extension>
     </extensions>
   </build>
@@ -290,7 +335,7 @@ THE SOFTWARE.
       <!-- for JRE requirement check annotation -->
       <groupId>org.jvnet</groupId>
       <artifactId>animal-sniffer-annotation</artifactId>
-      <version>1.0</version>
+      <version>${animal-sniffer-annotation.version}</version>
       <optional>true</optional><!-- no need to have this at runtime -->
       <scope>provided</scope>
     </dependency>
@@ -298,111 +343,144 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>test-annotations</artifactId>
-      <version>1.0</version>
+      <version>${test-annotations.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
   
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>org.jvnet.localizer</groupId>
+        <artifactId>localizer</artifactId>
+        <version>${localizer.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
-        <version>2.4</version>
+        <version>${servlet-api.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.6.1</version>
+        <version>${slf4j-api.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
-        <version>1.6.1</version>
+        <version>${jcl-over-slf4j.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-jdk14</artifactId>
-        <version>1.6.1</version>
+        <version>${slf4j-jdk14.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jul-to-slf4j</artifactId>
-        <version>1.6.1</version>
+        <version>${jul-to-slf4j.version}</version>
       </dependency>
 
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>0.9.28</version>
+        <version>${logback-classic.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>r09</version>
+        <version>${guava.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
-        <version>${aspectjVersion}</version>
+        <version>${aspectj.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
-        <version>${aspectjVersion}</version>
+        <version>${aspectj.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-guice</artifactId>
-        <version>${sisuGuiceVersion}</version>
+        <version>${sisuGuice.version}</version>
         <classifier>no_aop</classifier>
       </dependency>
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
         <artifactId>sisu-inject-bean</artifactId>
-        <version>${sisuInjectVersion}</version>
+        <version>${sisuInject.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.ant</groupId>
         <artifactId>ant</artifactId>
-        <version>1.8.0</version>
+        <version>${ant.version}</version>
       </dependency>    
       
       <dependency>
         <groupId>org.hudsonci.tools</groupId>
         <artifactId>xstream</artifactId>
-        <version>1.4.1-hudson-1</version>
+        <version>${xstream.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.google.code.findbugs</groupId>
         <artifactId>jsr305</artifactId>
-        <version>1.3.9</version>
+        <version>${jsr305.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.sonatype.aether</groupId>
+        <artifactId>aether-util</artifactId>
+        <version>${aether.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>args4j</groupId>
+        <artifactId>args4j</artifactId>
+        <version>${args4j.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>${jaxb-api.version}</version>
       </dependency>
 
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
-        <version>2.4</version>
+        <version>${commons-lang.version}</version>
       </dependency>
+
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>1.4</version>
+        <version>${commons-io.version}</version>
       </dependency>
+
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
-        <version>1.4</version>
+        <version>${commons-codec.version}</version>
       </dependency> 
 
       <!--unit tests -->
