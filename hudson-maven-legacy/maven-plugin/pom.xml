@@ -34,7 +34,16 @@
   </description>
 
   <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+2+Project+Plugin</url>
-    
+
+  <properties>
+    <maven2.1-interceptor.version>1.2</maven2.1-interceptor.version>
+    <maven-reporting-api.version>3.0</maven-reporting-api.version>
+    <hudson-maven-artifact-manager.version>1.0</hudson-maven-artifact-manager.version>
+    <hudson-maven-embedder.version>3.2</hudson-maven-embedder.version>
+    <wagon-webdav.version>1.0-beta-2-hudson-1</wagon-webdav.version>
+    <nekohtml.version>1.9.13</nekohtml.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.eclipse.hudson.main</groupId>
@@ -73,7 +82,7 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>maven2.1-interceptor</artifactId>
-      <version>1.2</version>
+      <version>${maven2.1-interceptor.version}</version>
     </dependency>
     
     <dependency>
@@ -141,17 +150,17 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-ftp</artifactId>
-      <version>${wagonVersion}</version>
+      <version>${wagon.version}</version>
     </dependency>        
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-ssh</artifactId>
-      <version>${wagonVersion}</version>
+      <version>${wagon.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-ssh-external</artifactId>
-      <version>${wagonVersion}</version>
+      <version>${wagon.version}</version>
     </dependency>    
 
     <dependency>
@@ -161,7 +170,7 @@
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-api</artifactId>
-      <version>3.0</version>
+      <version>${maven-reporting-api.version}</version>
     </dependency>  
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -174,7 +183,7 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>hudson-maven-artifact-manager</artifactId>
-      <version>1.0</version>
+      <version>${hudson-maven-artifact-manager.version}</version>
     </dependency>                
     <dependency>
       <groupId>commons-io</groupId>
@@ -183,7 +192,7 @@
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>hudson-maven-embedder</artifactId>
-      <version>3.2</version>
+      <version>${hudson-maven-embedder.version}</version>
       <exclusions>
         <exclusion><!-- we'll add our own patched version. see http://www.nabble.com/Issue-1680-td18383889.html -->
           <groupId>jtidy</groupId>
@@ -220,7 +229,7 @@
       <!-- commonly used wagon provider -->
       <groupId>org.jvnet.hudson</groupId>
       <artifactId>wagon-webdav</artifactId>
-      <version>1.0-beta-2-hudson-1</version>
+      <version>${wagon-webdav.version}</version>
       <exclusions>
         <exclusion>
           <groupId>jdom</groupId>
@@ -232,7 +241,7 @@
     <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
-      <version>1.9.13</version>
+      <version>${nekohtml.version}</version>
     </dependency>
   </dependencies>
 

@@ -31,6 +31,14 @@
   <properties>
     <!-- if your java.net user name is different from local user name, specify it here -->
     <java.net.id>${user.name}</java.net.id>
+
+    <rest-plugin.version>2.1.0-SNAPSHOT</rest-plugin.version>
+    <maven-plugin.version>2.1.0-SNAPSHOT</maven-plugin.version>
+    <hudson-war.version>2.1.0-SNAPSHOT</hudson-war.version>
+    <hudson-core.version>2.1.0-SNAPSHOT</hudson-core.version>
+    <hudson-test-framework.version>2.1.0-SNAPSHOT</hudson-test-framework.version>
+    <junit.version>4.8.1</junit.version>
+    <servlet-api.version>2.4</servlet-api.version>
   </properties>
 
   <scm>
@@ -49,12 +57,12 @@
       <dependency>
         <groupId>org.eclipse.hudson.main</groupId>
         <artifactId>rest-plugin</artifactId>
-        <version>2.1.0-SNAPSHOT</version>
+        <version>${rest-plugin.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.hudson.main</groupId>
         <artifactId>maven-plugin</artifactId>
-        <version>2.1.0-SNAPSHOT</version>
+        <version>${maven-plugin.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -64,31 +72,31 @@
       <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-war</artifactId>
       <type>war</type>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>${hudson-war.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-core</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>${hudson-core.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.hudson.main</groupId>
       <artifactId>hudson-test-framework</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>${hudson-test-framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.3.1</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.4</version>
+      <version>${servlet-api.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -100,13 +108,11 @@
       <plugin>
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
-        <version>1.12</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
         <groupId>org.jvnet.localizer</groupId>
         <artifactId>maven-localizer-plugin</artifactId>
-        <version>1.8</version>
         <executions>
           <execution>
             <goals>

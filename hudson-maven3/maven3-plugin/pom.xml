@@ -83,7 +83,6 @@
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-util</artifactId>
-      <version>1.11</version>
     </dependency>
 
     <dependency>
@@ -145,18 +144,6 @@
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
-        <version>1.21</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>assemble</goal>
-            </goals>
-            <configuration>
-              <forceWarPackaging>false</forceWarPackaging>
-              <configFile>enunciate.xml</configFile>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>

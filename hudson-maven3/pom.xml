@@ -30,6 +30,7 @@
 
   <properties>
     <mavenVersion>3.0.3</mavenVersion>
+    <plexus-component-annotations.version>1.5.5</plexus-component-annotations.version>
   </properties>
 
   <dependencyManagement>
@@ -45,7 +46,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-component-annotations</artifactId>
-        <version>1.5.5</version>
+        <version>${plexus-component-annotations.version}</version>
         <exclusions>
           <exclusion>
             <groupId>junit</groupId>
@@ -111,18 +112,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>gwt-maven-plugin</artifactId>
-          <version>${gwt-maven-plugin.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 
   <dependencies>
     <!--

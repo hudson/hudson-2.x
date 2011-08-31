@@ -30,6 +30,12 @@
     Contains test utility code, reusable outside Hudson.
   </description>
 
+  <properties>
+    <junit-ext.version>1.0-RC3</junit-ext.version>
+    <hamcrest-library.version>1.2</hamcrest-library.version>
+    <hamcrest-core.version>1.2</hamcrest-core.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -45,7 +51,7 @@
       <groupId>com.googlecode.junit-ext</groupId>
       <artifactId>junit-ext</artifactId>
       <classifier>junit45</classifier>
-      <version>1.0-RC3</version>
+      <version>${junit-ext.version}</version>
     </dependency>
 
     <dependency>
@@ -57,13 +63,13 @@
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-library</artifactId>
-      <version>1.2</version>
+      <version>${hamcrest-library.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <version>1.2</version>
+      <version>${hamcrest-core.version}</version>
     </dependency>
 
     <dependency>
