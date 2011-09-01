@@ -25,7 +25,7 @@ import java.net.URLEncoder;
 /**
  * Helper to encode/decode project names.
  *
- * This is a hack since {@literal '/'} causes problems with Apache HTTPD reverse proxy, so
+ * This is a work around since {@literal '/'} causes problems with Apache HTTPD reverse proxy, so
  * its translated to {@literal '@'}, which must be decoded before being used internally to
  * lookup projects.
  *

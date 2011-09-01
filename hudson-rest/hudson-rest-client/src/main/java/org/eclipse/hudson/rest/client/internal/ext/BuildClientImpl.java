@@ -200,7 +200,7 @@ public class BuildClientImpl
     // Event support
     //
 
-    // FIXME: This is all very hacky and should be replaced with something more sane.
+    // FIXME: This is a work around and should be replaced with something more sane.
 
     private static final String SUBSCRIBE_CHANNEL = "/meta/subscribe";
 

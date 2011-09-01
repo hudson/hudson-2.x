@@ -15,7 +15,7 @@ if (typeof SimileAjax == "undefined") {
     
     SimileAjax.Platform = new Object();
         /*
-            HACK: We need these 2 things here because we cannot simply append
+            WORK AROUND: We need these 2 things here because we cannot simply append
             a <script> element containing code that accesses SimileAjax.Platform
             to initialize it because IE executes that <script> code first
             before it loads ajax.js and platform.js.

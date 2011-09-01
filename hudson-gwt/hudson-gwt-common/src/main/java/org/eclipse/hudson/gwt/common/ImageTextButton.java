@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Image;
 /**
  * Custom button with an image and text.
  *
- * This is a very hacky widget, recommend only using the constructor to configure and not attempt to reconfigure dynamically or bad things happen.
+ * This is a very tricky widget, recommend only using the constructor to configure and not attempt to reconfigure dynamically or bad things happen.
  *
  * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 2.1.0

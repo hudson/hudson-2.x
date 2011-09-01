@@ -42,8 +42,7 @@ public class ReadyDetectorStarter
 {
     private static final Logger log = LoggerFactory.getLogger(ReadyDetectorStarter.class);
 
-    // FIXME: Use of ItemListener for server life-cycle bits is highly hackish
-
+    // FIXME: Use of ItemListener for server life-cycle bits is a work around
     private final ReadyDetector detector;
 
     @Inject

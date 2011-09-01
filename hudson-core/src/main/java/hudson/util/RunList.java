@@ -70,7 +70,7 @@ public class RunList<R extends Run> extends ArrayList<R> {
         Collections.sort(this,Run.ORDER_BY_DATE);
     }
 
-    private RunList(Collection<? extends R> c, boolean hack) {
+    private RunList(Collection<? extends R> c, boolean dummy) {
         super(c);
     }
 

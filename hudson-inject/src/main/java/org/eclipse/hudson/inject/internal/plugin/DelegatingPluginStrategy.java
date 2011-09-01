@@ -48,7 +48,7 @@ public class DelegatingPluginStrategy
     private final PluginStrategy delegate;
 
     public DelegatingPluginStrategy(final PluginManager plugins) {
-        // HACK: Need to configure the PluginManager instance so that bootstrap components can wire correctly
+        // WORK AROUND: Need to configure the PluginManager instance so that bootstrap components can wire correctly
         HudsonModule.bind(plugins);
         this.delegate = Smoothie.getContainer().get(Key.get(PluginStrategy.class, Names.named("default")));
         log.debug("Delegate: {}", delegate);

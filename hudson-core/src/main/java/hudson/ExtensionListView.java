@@ -91,7 +91,7 @@ public class ExtensionListView {
     }
 
     /**
-     * Creates a seriously hacked up {@link CopyOnWriteList} that acts as a view to the current {@link ExtensionList}.
+     * Creates a enhanced {@link CopyOnWriteList} that acts as a view to the current {@link ExtensionList}.
      */
     public static <T> CopyOnWriteList<T> createCopyOnWriteList(final Class<T> type) {
         return new CopyOnWriteList<T>() {

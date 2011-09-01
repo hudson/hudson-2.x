@@ -1126,7 +1126,7 @@ function updateOptionalBlock(c,scroll) {
     }
 
     if (c.name == 'hudson-tools-InstallSourceProperty') {
-        // Hack to hide tool home when "Install automatically" is checked.
+        // Work around to hide tool home when "Install automatically" is checked.
         var homeField = findPreviousFormItem(c, 'home');
         if (homeField != null && homeField.value == '') {
             var tr = findAncestor(homeField, 'TR');
@@ -1427,7 +1427,7 @@ var repeatableSupport = {
         while(n.tag==null)
             n = n.parentNode;
         n.tag.expand();
-        // Hack to hide tool home when a new tool has some installers.
+        // Work around to hide tool home when a new tool has some installers.
         var inputs = n.getElementsByTagName('INPUT');
         for (var i = 0; i < inputs.length; i++) {
             var input = inputs[i];

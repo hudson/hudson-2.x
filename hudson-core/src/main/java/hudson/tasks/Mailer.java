@@ -235,7 +235,7 @@ public class Mailer extends Notifier {
             	/* This allows the user to override settings by setting system properties but
             	 * also allows us to use the default SMTPs port of 465 if no port is already set.
             	 * It would be cleaner to use smtps, but that's done by calling session.getTransport()...
-            	 * and thats done in mail sender, and it would be a bit of a hack to get it all to
+            	 * and thats done in mail sender, and it would be a bit of a work around to get it all to
             	 * coordinate, and we can make it work through setting mail.smtp properties.
             	 */
             	if (props.getProperty("mail.smtp.socketFactory.port") == null) {

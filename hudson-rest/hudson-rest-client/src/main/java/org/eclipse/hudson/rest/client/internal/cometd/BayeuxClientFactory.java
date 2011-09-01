@@ -55,7 +55,7 @@ public class BayeuxClientFactory
         checkNotNull(uri);
         checkNotNull(opts);
 
-        // HACK: The cometd client freaks out when using http[s] w/o a port explicitly configured
+        // WORK AROUND: The cometd client freaks out when using http[s] w/o a port explicitly configured
         //       this is reported to be fixed in cometd 1.1.3 (as yet unreleased)
 
         if ("https".equals(uri.getScheme()) && uri.getPort() == -1) {

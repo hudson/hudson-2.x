@@ -475,7 +475,7 @@ public class SlaveComputer extends Computer {
         launcher = grabLauncher(node);
 
         // maybe the configuration was changed to relaunch the slave, so try to re-launch now.
-        // "constructed==null" test is an ugly hack to avoid launching before the object is fully
+        // "constructed==null" test is an ugly work around to avoid launching before the object is fully
         // constructed.
         if(constructed!=null) {
             if (node instanceof Slave)

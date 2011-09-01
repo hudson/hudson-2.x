@@ -107,7 +107,7 @@ public class ZipExtractionInstaller extends ToolInstaller {
 
     /**
      * Sets execute permission on all files, since unzip etc. might not do this.
-     * Hackish, is there a better way?
+     * Work around, is there a better way?
      */
     static class ChmodRecAPlusX implements FileCallable<Void> {
         private static final long serialVersionUID = 1L;

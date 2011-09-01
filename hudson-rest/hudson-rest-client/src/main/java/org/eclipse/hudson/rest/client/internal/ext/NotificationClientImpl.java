@@ -52,7 +52,7 @@ public class NotificationClientImpl
     }
 
     //
-    // FIXME: The client ext stuff was only designed for REST bits, so the use/req of uri() is very hacky
+    // FIXME: The client ext stuff was only designed for REST bits, so the use/req of uri() is a work around
     //
 
     @Override

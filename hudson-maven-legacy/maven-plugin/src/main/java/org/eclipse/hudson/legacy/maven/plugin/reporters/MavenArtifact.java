@@ -129,14 +129,14 @@ public final class MavenArtifact implements Serializable {
     }
 
     public boolean isPOM() {
-        return fileName.endsWith(".pom");   // hack
+        return fileName.endsWith(".pom");   // work around
     }
 
     /**
      * Creates a Maven {@link Artifact} back from the persisted data.
      */
     public Artifact toArtifact(ArtifactHandlerManager handlerManager, ArtifactFactory factory, MavenBuild build) throws IOException {
-        // Hack: presence of custom ArtifactHandler during builds could influence the file extension
+        // Work around: presence of custom ArtifactHandler during builds could influence the file extension
         // in the repository during deployment. So simulate that behavior if that's necessary.
         final String canonicalExtension = canonicalName.substring(canonicalName.lastIndexOf('.')+1);
         ArtifactHandler ah = handlerManager.getArtifactHandler(type);

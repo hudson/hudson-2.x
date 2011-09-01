@@ -726,7 +726,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @QuickSilver
     public RunT getLastSuccessfulBuild() {
         RunT r = getLastBuild();
-        // temporary hack till we figure out what's causing this bug
+        // temporary work around till we figure out what's causing this bug
         while (r != null
                 && (r.isBuilding() || r.getResult() == null || r.getResult().isWorseThan(Result.UNSTABLE))) {
             r = r.getPreviousBuild();

@@ -44,8 +44,8 @@ import java.net.URLEncoder;
  * Hudson supports both the HTTP basic authentication and the form-based authentication.
  * The former is for scripted clients, and the latter is for humans. Unfortunately,
  * becase the servlet spec does not allow us to programatically authenticate users,
- * we need to rely on some hack to make it work, and this is the class that implements
- * that hack.
+ * we need to rely on some work around to make it work, and this is the class that implements
+ * that work around.
  *
  * <p>
  * When an HTTP request arrives with an HTTP basic auth header, this filter detects

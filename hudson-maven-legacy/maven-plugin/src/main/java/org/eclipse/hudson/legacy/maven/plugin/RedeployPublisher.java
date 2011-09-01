@@ -213,7 +213,7 @@ public class RedeployPublisher extends Recorder {
 		}
 
 		public boolean showEvenIfUnstableOption() {
-			// little hack to avoid showing this option on the redeploy action's
+			// little work around to avoid showing this option on the redeploy action's
 			// screen
 			return true;
 		}

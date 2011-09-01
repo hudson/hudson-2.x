@@ -116,7 +116,7 @@ public class ProjectClientImpl
     }
 
     //
-    // HACK: This is added to test by UUID reference bits, should eventually only allow one method.
+    // WORK AROUND: This is added to test by UUID reference bits, should eventually only allow one method.
     //
 
     public ProjectDTO getProject(final ProjectReferenceDTO ref) {
