@@ -33,8 +33,8 @@
 
   <licenses>
     <license>
-      <name>The MIT license</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <name>Eclipse Public License v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
