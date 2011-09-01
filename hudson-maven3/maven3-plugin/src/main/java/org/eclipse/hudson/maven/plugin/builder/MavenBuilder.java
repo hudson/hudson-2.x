@@ -122,7 +122,7 @@ public class MavenBuilder
     }
 
     public DocumentDTO getDocument(final String id) {
-        // WORK AROUND: Handle special case from shitty Jelly configuration crap, "NONE" == null ATM.
+        // WORK AROUND: Handle special case from Jelly configuration, "NONE" == null ATM.
         // WORK AROUND: ... When configured via REST and we use null for none then drop this check (keeping null check only)
         if (id == null || "NONE".equals(id)) {
             return null;

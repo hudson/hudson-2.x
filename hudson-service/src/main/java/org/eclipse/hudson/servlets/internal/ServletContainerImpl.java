@@ -63,7 +63,7 @@ public class ServletContainerImpl
     public void start() throws Exception {
         log.debug("Starting");
 
-        // When a ServletContainerAware ext gets executed, we need to set the TCL so that it loads properly, else crazy shit will happen
+        // When a ServletContainerAware ext gets executed, we need to set the TCL so that it loads properly, else crazy things will happen
         final ClassLoader cl = Thread.currentThread().getContextClassLoader();
 
         for (ServletContainerAware target : getConcerned()) {
