@@ -508,8 +508,6 @@ public class JDKInstaller extends ToolInstaller {
 
         /**
          * Determines the CPU of the current JVM.
-         *
-         * http://lopica.sourceforge.net/os.html was useful in writing this code.
          */
         public static CPU current() throws DetectionFailedException {
             String arch = System.getProperty("os.arch").toLowerCase(Locale.ENGLISH);
