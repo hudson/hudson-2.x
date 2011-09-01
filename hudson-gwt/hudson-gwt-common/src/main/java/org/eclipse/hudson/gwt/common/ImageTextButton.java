@@ -35,8 +35,7 @@ public class ImageTextButton
 {
     private String text;
 
-    // FIXME: This is very hackish... calls to setImage/setText will mess up the button, and the order is important when first setting :-(
-    // FIXME: ... based on something I found on the net... so whatever, works for limited use required (sans the update of the text)
+    // FIXME: Calls to setImage/setText will mess up the button, and the order is important when first setting :-(
 
     public ImageTextButton(final ImageResource image, final String text) {
         // Order is important here... blah
