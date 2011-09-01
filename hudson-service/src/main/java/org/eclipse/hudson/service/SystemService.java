@@ -76,7 +76,7 @@ public interface SystemService
 
     String getSystemMessage();
 
-    // FIXME: Drop do* prefix on these methods.  do* is specific to stapler crap and should be dropped from the service API
+    // FIXME: Drop do* prefix on these methods.  do* is specific to stapler and should be dropped from the service API
 
     boolean isQuietingDown();
 

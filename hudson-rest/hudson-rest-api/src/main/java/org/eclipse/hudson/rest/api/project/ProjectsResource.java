@@ -192,7 +192,7 @@ public class ProjectsResource
     }
 
     // TODO: Add POST to update project config, requires re-implementing the
-    // update project muck, Hudson only exposes stapler crap
+    // update project muck, Hudson only exposes stapler
     @GET
     @Path("{projectName}/enable")
     public Response enableProject(final @PathParam("projectName") String projectName, final @QueryParam("enable") @DefaultValue("true") boolean enable) {

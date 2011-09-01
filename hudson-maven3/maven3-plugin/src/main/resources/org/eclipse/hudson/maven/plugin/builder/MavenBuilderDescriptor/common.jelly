@@ -20,7 +20,7 @@
     Requires ${config} and ${defaults} to be set.
     -->
 
-    <!-- FIXME: Root from code, not from crappy jelly shit -->
+    <!-- FIXME: Root from code, not from jelly -->
     <j:set var="help" value="/plugin/maven3-plugin/help/mavenbuilder"/>
 
     <f:entry title="Maven 3" help="${help}/installationId.html">

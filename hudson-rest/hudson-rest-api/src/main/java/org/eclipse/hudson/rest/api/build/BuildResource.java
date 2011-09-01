@@ -186,7 +186,7 @@ public class BuildResource
         log.debug("Get console content: {} #{} ({}:{})", $(projectName, buildNumber, offset, length));
 
         //
-        // FIXME: This may include serialized annotation crap, need to resolve...
+        // FIXME: This may include serialized annotation, need to resolve...
         //
 
         AbstractBuild build = support.getBuild(projectName, buildNumber);

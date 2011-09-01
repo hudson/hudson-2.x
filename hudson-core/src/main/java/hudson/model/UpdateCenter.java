@@ -637,7 +637,7 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
                 Util.copyStreamAndClose(ProxyConfiguration.open(url).getInputStream(),new NullOutputStream());
             } catch (SSLHandshakeException e) {
                 if (e.getMessage().contains("PKIX path building failed"))
-                   // fix up this crappy error message from JDK
+                   // fix up this illegible error message from JDK
                     throw new IOException2("Failed to validate the SSL certificate of "+url,e);
             }
         }
