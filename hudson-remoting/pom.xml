@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>hudson-remoting</artifactId>
@@ -22,6 +22,10 @@
     Contains the bootstrap code to bridge separate JVMs into a single semi-shared space.
     Reusable outside Hudson.
   </description>
+
+  <properties>
+    <asm-all.version>2.2.3</asm-all.version>
+  </properties>
 
   <build>
     <plugins>
@@ -102,14 +106,13 @@
     <dependency>
       <groupId>asm</groupId>
       <artifactId>asm-all</artifactId>
-      <version>2.2.3</version>
+      <version>${asm-all.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>args4j</groupId>
       <artifactId>args4j</artifactId>
-      <version>2.0.16</version>
       <scope>provided</scope>
     </dependency>
 
@@ -121,7 +124,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

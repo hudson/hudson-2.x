@@ -27,7 +27,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson-maven-legacy</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   
@@ -57,7 +57,6 @@ THE SOFTWARE.
       <!-- default dependency to 2.0.2 confuses IntelliJ. Otherwise this value doesn't really affect build or runtime. -->
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
-      <version>3.1-rc1</version>
     </dependency>
   </dependencies>
 </project>
