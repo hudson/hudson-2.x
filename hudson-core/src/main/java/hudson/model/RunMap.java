@@ -120,6 +120,7 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
 
         // copy-on-write update
         TreeMap<Integer,R> m = new TreeMap<Integer,R>(builds);
+        buildsTimeMap.remove(run.getNumber());
         R r = m.remove(run.getNumber());
         this.builds = m;
 
@@ -178,6 +179,9 @@ public final class RunMap<R extends Run<?,R>> extends AbstractMap<Integer,R> imp
         public int compare(Integer i1, Integer i2) {
             Long date1 = buildsTimeMap.get(i1);
             Long date2 = buildsTimeMap.get(i2);
+            if (null == date1 || null == date2) {
+                return COMPARATOR.compare(i1, i2);
+            }
             return -date1.compareTo(date2);
         }
     };

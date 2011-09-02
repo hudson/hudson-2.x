@@ -16,6 +16,12 @@
 
 package hudson.model;
 
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TimeZone;
 import junit.framework.TestCase;
 
 import java.util.GregorianCalendar;
@@ -34,7 +40,7 @@ public class RunTest extends TestCase {
         list.computeDisplayName();
         return list;
     }
-    
+
     public void testArtifactListDisambiguation1() {
         List<? extends Run<?, ?>.Artifact> a = createArtifactList("a/b/c.xml", "d/f/g.xml", "h/i/j.xml");
         assertEquals(a.get(0).getDisplayPath(),"c.xml");
@@ -54,4 +60,24 @@ public class RunTest extends TestCase {
         assertEquals(a.get(0).getDisplayPath(),"a.xml");
         assertEquals(a.get(1).getDisplayPath(),"a/a.xml");
     }
+
+    public void testRunCompare() throws IOException {
+        Calendar cal1 = new GregorianCalendar();
+        cal1.setTimeInMillis(2);
+        Calendar cal2 = new GregorianCalendar();
+        cal2.setTimeInMillis(1);
+        Calendar cal3 = new GregorianCalendar();
+        cal3.setTimeInMillis(3);
+
+        Run<FreeStyleProject,FreeStyleBuild> run1 = new Run<FreeStyleProject, FreeStyleBuild>(null, cal1) {};
+        Run<FreeStyleProject,FreeStyleBuild> run2 = new Run<FreeStyleProject, FreeStyleBuild>(null, cal2) {};
+        Run<FreeStyleProject,FreeStyleBuild> run3 = new Run<FreeStyleProject, FreeStyleBuild>(null, cal3) {};
+
+        RunMap runMap = new RunMap();
+        runMap.put(1, run1);
+        runMap.put(2, run2);
+        runMap.put(3, run3);
+        runMap.remove(run2);
+    }
+
 }
