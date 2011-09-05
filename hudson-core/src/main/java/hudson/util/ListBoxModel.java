@@ -91,19 +91,34 @@ public class ListBoxModel extends ArrayList<ListBoxModel.Option> implements Http
         /**
          * Text to be displayed to user.
          */
+        //TODO: review and check whether we can do it private
         @Exported
         public String name;
         /**
          * The value that gets sent to the server when the form is submitted.
          */
+        //TODO: review and check whether we can do it private
         @Exported
         public String value;
 
         /**
          * True to make this item selected.
          */
+        //TODO: review and check whether we can do it private
         @Exported
         public boolean selected;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
 
         public Option(String name, String value) {
             this(name,value,false);

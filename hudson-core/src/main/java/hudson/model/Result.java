@@ -69,11 +69,13 @@ public final class Result implements Serializable, CustomExportedBean {
     /**
      * Bigger numbers are worse.
      */
+    //TODO: review and check whether we can do it private
     public final int ordinal;
 
     /**
      * Default ball color for this status.
      */
+    //TODO: review and check whether we can do it private
     public final BallColor color;
 
     private Result(String name, BallColor color, int ordinal) {
@@ -81,6 +83,15 @@ public final class Result implements Serializable, CustomExportedBean {
         this.color = color;
         this.ordinal = ordinal;
     }
+
+    public int getOrdinal() {
+        return ordinal;
+    }
+
+    public BallColor getColor() {
+        return color;
+    }
+
 
     /**
      * Combines two {@link Result}s and returns the worse one.

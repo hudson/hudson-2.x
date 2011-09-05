@@ -43,6 +43,7 @@ public class TestResultProjectAction implements Action {
     /**
      * Project that owns this action.
      */
+    //TODO: review and check whether we can do it private
     public final AbstractProject<?,?> project;
 
     public TestResultProjectAction(AbstractProject<?,?> project) {
@@ -62,6 +63,10 @@ public class TestResultProjectAction implements Action {
 
     public String getUrlName() {
         return "test";
+    }
+
+    public AbstractProject<?, ?> getProject() {
+        return project;
     }
 
     public AbstractTestResultAction getLastTestResultAction() {

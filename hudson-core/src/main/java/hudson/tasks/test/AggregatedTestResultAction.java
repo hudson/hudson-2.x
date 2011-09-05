@@ -58,7 +58,12 @@ public abstract class AggregatedTestResultAction extends AbstractTestResultActio
     /**
      * child builds whose test results are used for aggregation.
      */
+    //TODO: review and check whether we can do it private
     public final List<Child> children = new ArrayList<Child>();
+
+    public List<Child> getChildren() {
+        return children;
+    }
 
     public AggregatedTestResultAction(AbstractBuild owner) {
         super(owner);
@@ -112,10 +117,20 @@ public abstract class AggregatedTestResultAction extends AbstractTestResultActio
      */
     @ExportedBean(defaultVisibility=2)
     public static final class ChildReport {
+        //TODO: review and check whether we can do it private
         @Exported
         public final AbstractBuild<?,?> child;
+        //TODO: review and check whether we can do it private
         @Exported
         public final Object result;
+
+        public AbstractBuild getChild() {
+            return child;
+        }
+
+        public Object getResult() {
+            return result;
+        }
 
         public ChildReport(AbstractBuild<?, ?> child, AbstractTestResultAction result) {
             this.child = child;

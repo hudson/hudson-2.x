@@ -464,8 +464,12 @@ public abstract class FormValidation extends IOException implements HttpResponse
     }
 
 
-
+    //TODO: review and check whether we can do it private
     public final Kind kind;
+
+    public Kind getKind() {
+        return kind;
+    }
 
     /**
      * Instances should be created via one of the factory methods above.

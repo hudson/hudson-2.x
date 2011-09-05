@@ -46,6 +46,7 @@ import java.lang.reflect.Type;
  * @since 1.145
  */
 public abstract class RunListener<R extends Run> implements ExtensionPoint {
+    //TODO: review and check whether we can do it private
     public final Class<R> targetType;
 
     protected RunListener(Class<R> targetType) {
@@ -58,6 +59,10 @@ public abstract class RunListener<R extends Run> implements ExtensionPoint {
             targetType = Types.erasure(Types.getTypeArgument(type,0));
         else
             throw new IllegalStateException(getClass()+" uses the raw type for extending RunListener");
+    }
+
+    public Class<R> getTargetType() {
+        return targetType;
     }
 
     /**

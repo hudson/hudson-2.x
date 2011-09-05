@@ -1140,11 +1140,13 @@ public class Queue extends ResourceController implements Saveable {
          * VM-wide unique ID that tracks the {@link Task} as it moves through different stages
          * in the queue (each represented by different subtypes of {@link Item}.
          */
+        //TODO: review and check whether we can do it private
     	public final int id;
     	
 		/**
          * Project to be built.
          */
+        //TODO: review and check whether we can do it private
         @Exported
         public final Task task;
 
@@ -1203,6 +1205,14 @@ public class Queue extends ResourceController implements Saveable {
         	this(item.task, item.getActions(), item.id, item.future);
         }
 
+        public int getId() {
+            return id;
+        }
+
+        public Task getTask() {
+            return task;
+        }
+
         /**
          * Gets a human-readable status message describing why it's in the queue.
          */
@@ -1215,6 +1225,7 @@ public class Queue extends ResourceController implements Saveable {
         /**
          * Gets an object that describes why this item is in the queue.
          */
+        //TODO: review and check whether we can do it private
         public abstract CauseOfBlockage getCauseOfBlockage();
 
         /**
@@ -1327,8 +1338,13 @@ public class Queue extends ResourceController implements Saveable {
         /**
          * This item can be run after this time.
          */
+        //TODO: review and check whether we can do it private
         @Exported
         public Calendar timestamp;
+
+        public Calendar getTimestamp() {
+            return timestamp;
+        }
 
         public WaitingItem(Calendar timestamp, Task project, List<Action> actions) {
             super(project, actions, COUNTER.incrementAndGet(), new FutureImpl(project));

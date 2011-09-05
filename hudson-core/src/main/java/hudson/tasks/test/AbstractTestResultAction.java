@@ -49,6 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ExportedBean
 public abstract class AbstractTestResultAction<T extends AbstractTestResultAction> implements HealthReportingAction {
+    //TODO: review and check whether we can do it private
     public final AbstractBuild<?,?> owner;
 
     private Map<String,String> descriptions = new ConcurrentHashMap<String, String>();
@@ -103,6 +104,10 @@ public abstract class AbstractTestResultAction<T extends AbstractTestResultActio
 
     public String getIconFileName() {
         return "clipboard.gif";
+    }
+
+    public AbstractBuild getOwner() {
+        return owner;
     }
 
     public HealthReport getBuildHealth() {

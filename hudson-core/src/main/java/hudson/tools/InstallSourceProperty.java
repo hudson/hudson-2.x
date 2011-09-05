@@ -33,6 +33,7 @@ import java.io.IOException;
  */
 public class InstallSourceProperty extends ToolProperty<ToolInstallation> {
     // TODO: get the proper Saveable
+    //TODO: review and check whether we can do it private
     public final DescribableList<ToolInstaller, Descriptor<ToolInstaller>> installers =
             new DescribableList<ToolInstaller, Descriptor<ToolInstaller>>(Saveable.NOOP);
 
@@ -41,6 +42,10 @@ public class InstallSourceProperty extends ToolProperty<ToolInstallation> {
         if (installers != null) {
             this.installers.replaceBy(installers);
         }
+    }
+
+    public DescribableList<ToolInstaller, Descriptor<ToolInstaller>> getInstallers() {
+        return installers;
     }
 
     @Override

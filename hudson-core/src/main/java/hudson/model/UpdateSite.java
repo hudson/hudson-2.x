@@ -21,11 +21,12 @@ import hudson.PluginManager;
 import hudson.model.UpdateCenter.UpdateCenterJob;
 import hudson.lifecycle.Lifecycle;
 import hudson.util.IOUtils;
+import hudson.util.JSONCanonicalUtils;
 import hudson.util.TextFile;
 import hudson.util.VersionNumber;
 import static hudson.util.TimeUnit2.DAYS;
+
 import net.sf.json.JSONObject;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -183,7 +184,7 @@ public class UpdateSite {
         sig.initVerify(certs.get(0));
         SignatureOutputStream sos = new SignatureOutputStream(sig);
 
-        o.writeCanonical(new OutputStreamWriter(new TeeOutputStream(dos,sos),"UTF-8"));
+        JSONCanonicalUtils.write(o, new OutputStreamWriter(new TeeOutputStream(dos, sos), "UTF-8"));
 
         // did the digest match? this is not a part of the signature validation, but if we have a bug in the c14n
         // (which is more likely than someone tampering with update center), we can tell
@@ -340,21 +341,25 @@ public class UpdateSite {
         /**
          * The {@link UpdateSite} ID.
          */
+        //TODO: review and check whether we can do it private
         public final String sourceId;
 
         /**
          * The latest hudson.war.
          */
+        //TODO: review and check whether we can do it private
         public final Entry core;
         /**
          * Plugins in the repository, keyed by their artifact IDs.
          */
+        //TODO: review and check whether we can do it private
         public final Map<String,Plugin> plugins = new TreeMap<String,Plugin>(String.CASE_INSENSITIVE_ORDER);
 
         /**
          * If this is non-null, Hudson is going to check the connectivity to this URL to make sure
          * the network connection is up. Null to skip the check.
          */
+        //TODO: review and check whether we can do it private
         public final String connectionCheckUrl;
 
         Data(JSONObject o) {
@@ -370,6 +375,22 @@ public class UpdateSite {
             }
 
             connectionCheckUrl = (String)o.get("connectionCheckUrl");
+        }
+
+        public String getSourceId() {
+            return sourceId;
+        }
+
+        public Entry getCore() {
+            return core;
+        }
+
+        public Map<String, Plugin> getPlugins() {
+            return plugins;
+        }
+
+        public String getConnectionCheckUrl() {
+            return connectionCheckUrl;
         }
 
         /**

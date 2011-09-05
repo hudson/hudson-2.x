@@ -620,10 +620,21 @@ public class Fingerprint implements ModelObject, Saveable {
 
     @ExportedBean(defaultVisibility=2)
     public static final class RangeItem {
+        //TODO: review and check whether we can do it private
         @Exported
         public final String name;
+
+        //TODO: review and check whether we can do it private
         @Exported
         public final RangeSet ranges;
+
+        public String getName() {
+            return name;
+        }
+
+        public RangeSet getRanges() {
+            return ranges;
+        }
 
         public RangeItem(String name, RangeSet ranges) {
             this.name = name;

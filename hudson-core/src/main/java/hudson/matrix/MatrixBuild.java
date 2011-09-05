@@ -76,6 +76,7 @@ public class MatrixBuild extends AbstractBuild<MatrixProject,MatrixBuild> {
      * Used by view to render a ball for {@link MatrixRun}.
      */
     public final class RunPtr {
+        //TODO: review and check whether we can do it private
         public final Combination combination;
         private RunPtr(Combination c) { this.combination=c; }
 
@@ -94,6 +95,10 @@ public class MatrixBuild extends AbstractBuild<MatrixProject,MatrixBuild> {
             if(item!=null)
                 return item.getWhy();
             return null;    // fall back
+        }
+
+        public Combination getCombination() {
+            return combination;
         }
     }
 

@@ -37,12 +37,14 @@ public final class PollingResult implements Serializable {
      * (This comes from either the workspace, or from the remote repository as of the last polling.
      * Can be null.
      */
+    //TODO: review and check whether we can do it private
     public final SCMRevisionState baseline;
 
     /**
      * Current state of the remote repository. To be passed to the next invocation of the polling method.
      * Can be null.
      */
+    //TODO: review and check whether we can do it private
     public final SCMRevisionState remote;
 
     /**
@@ -53,6 +55,7 @@ public final class PollingResult implements Serializable {
      * the immediate rebuild, and (2) allow SCM to ignore some changes in the repository to implement
      * exclusion feature.
      */
+    //TODO: review and check whether we can do it private
     public final Change change;
 
     /**
@@ -100,6 +103,18 @@ public final class PollingResult implements Serializable {
 
     public PollingResult(Change change) {
         this(null,null,change);
+    }
+
+    public SCMRevisionState getBaseline() {
+        return baseline;
+    }
+
+    public SCMRevisionState getRemote() {
+        return remote;
+    }
+
+    public Change getChange() {
+        return change;
     }
 
     public boolean hasChanges() {

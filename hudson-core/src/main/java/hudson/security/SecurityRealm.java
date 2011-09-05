@@ -487,7 +487,7 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
      * @see SecurityRealm#createSecurityComponents()
      */
     public static final class SecurityComponents {
-
+        //TODO: review and check whether we can do it private
         public final AuthenticationManager manager;
         public final UserDetailsService userDetails;
         public final RememberMeServices rememberMe;
@@ -515,6 +515,18 @@ public abstract class SecurityRealm extends AbstractDescribableImpl<SecurityReal
             this.manager = manager;
             this.userDetails = userDetails;
             this.rememberMe = rememberMe;
+        }
+
+        public AuthenticationManager getManager() {
+            return manager;
+        }
+
+        public UserDetailsService getUserDetails() {
+            return userDetails;
+        }
+
+        public RememberMeServices getRememberMe() {
+            return rememberMe;
         }
 
         private static RememberMeServices createRememberMeService(UserDetailsService uds) {

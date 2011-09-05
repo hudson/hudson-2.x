@@ -133,8 +133,13 @@ public class Search {
 
     @ExportedBean
     public static class Result {
+        //TODO: review and check whether we can do it private
         @Exported
         public List<Item> suggestions = new ArrayList<Item>();
+
+        public List<Item> getSuggestions() {
+            return suggestions;
+        }
     }
 
     @ExportedBean(defaultVisibility=999)

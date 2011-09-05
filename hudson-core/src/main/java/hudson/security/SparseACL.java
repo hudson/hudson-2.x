@@ -32,6 +32,7 @@ import static java.util.logging.Level.FINE;
 public class SparseACL extends SidACL {
     public static final class Entry {
         // Sid has value-equality semantics
+        //TODO: review and check whether we can do it private
         public final Sid sid;
         public final Permission permission;
         public final boolean allowed;
@@ -40,6 +41,18 @@ public class SparseACL extends SidACL {
             this.sid = sid;
             this.permission = permission;
             this.allowed = allowed;
+        }
+
+        public Sid getSid() {
+            return sid;
+        }
+
+        public Permission getPermission() {
+            return permission;
+        }
+
+        public boolean isAllowed() {
+            return allowed;
         }
     }
 

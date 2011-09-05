@@ -52,8 +52,10 @@ public final class Permission {
         }
     };
 
+    //TODO: review and check whether we can do it private
     public final Class owner;
 
+    //TODO: review and check whether we can do it private
     public final PermissionGroup group;
 
     /**
@@ -65,6 +67,7 @@ public final class Permission {
      * <p>
      * The expected naming convention is something like "BrowseWorkspace".
      */
+    //TODO: review and check whether we can do it private
     public final String name;
 
     /**
@@ -75,6 +78,7 @@ public final class Permission {
      * <p>
      * If null, there will be no description text.
      */
+    //TODO: review and check whether we can do it private
     public final Localizable description;
 
     /**
@@ -90,6 +94,7 @@ public final class Permission {
      * such broad permission bundle is good enough, and those few
      * that need finer control can do so.
      */
+    //TODO: review and check whether we can do it private
     public final Permission impliedBy;
 
     /**
@@ -102,6 +107,7 @@ public final class Permission {
      *
      * @since 1.325
      */
+    //TODO: review and check whether we can do it private
     public boolean enabled;
     
     /**
@@ -170,6 +176,30 @@ public final class Permission {
      */
     public String getId() {
         return owner.getName()+'.'+name;
+    }
+
+    public Class getOwner() {
+        return owner;
+    }
+
+    public PermissionGroup getGroup() {
+        return group;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Localizable getDescription() {
+        return description;
+    }
+
+    public Permission getImpliedBy() {
+        return impliedBy;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /**

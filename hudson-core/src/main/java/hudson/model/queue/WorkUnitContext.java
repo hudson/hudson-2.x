@@ -33,18 +33,22 @@ import java.util.List;
  */
 public final class WorkUnitContext {
 
+    //TODO: review and check whether we can do it private
     public final BuildableItem item;
 
+    //TODO: review and check whether we can do it private
     public final Task task;
 
     /**
      * Once the execution is complete, update this future object with the outcome.
      */
+    //TODO: review and check whether we can do it private
     public final FutureImpl future;
 
     /**
      * Associated parameters to the build.
      */
+    //TODO: review and check whether we can do it private
     public final List<Action> actions;
 
     private final Latch startLatch, endLatch;
@@ -77,6 +81,22 @@ public final class WorkUnitContext {
         };
 
         endLatch = new Latch(workUnitSize);
+    }
+
+    public BuildableItem getItem() {
+        return item;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public FutureImpl getFuture() {
+        return future;
+    }
+
+    public List<Action> getActions() {
+        return actions;
     }
 
     /**

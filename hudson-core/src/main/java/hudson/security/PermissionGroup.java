@@ -37,13 +37,23 @@ import org.jvnet.localizer.Localizable;
 public final class PermissionGroup implements Iterable<Permission>, Comparable<PermissionGroup> {
     private final List<Permission> permisisons = new CopyOnWriteArrayList<Permission>();
     private final List<Permission> permisisonsView = Collections.unmodifiableList(permisisons);
+    //TODO: review and check whether we can do it private
     public final Class owner;
 
     /**
      * Human readable title of this permission group.
      * This should be short.
      */
+    //TODO: review and check whether we can do it private
     public final Localizable title;
+
+    public Class getOwner() {
+        return owner;
+    }
+
+    public Localizable getTitle() {
+        return title;
+    }
 
     public PermissionGroup(Class owner, Localizable title) {
         this.owner = owner;

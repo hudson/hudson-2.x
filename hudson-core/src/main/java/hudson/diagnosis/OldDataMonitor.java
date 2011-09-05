@@ -180,11 +180,16 @@ public class OldDataMonitor extends AdministrativeMonitor {
 
         VersionNumber min, max;
         boolean single = true;
+        //TODO: review and check whether we can do it private
         public String extra;
 
         public VersionRange(String version, String extra) {
             min = max = version != null ? new VersionNumber(version) : null;
             this.extra = extra;
+        }
+
+        public String getExtra() {
+            return extra;
         }
 
         public void add(String version) {

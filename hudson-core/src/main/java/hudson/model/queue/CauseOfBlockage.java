@@ -51,7 +51,12 @@ public abstract class CauseOfBlockage {
      * Build is blocked because a node is offline.
      */
     public static final class BecauseNodeIsOffline extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final Node node;
+
+        public Node getNode() {
+            return node;
+        }
 
         public BecauseNodeIsOffline(Node node) {
             this.node = node;
@@ -66,7 +71,12 @@ public abstract class CauseOfBlockage {
      * Build is blocked because all the nodes that match a given label is offline.
      */
     public static final class BecauseLabelIsOffline extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final Label label;
+
+        public Label getLabel() {
+            return label;
+        }
 
         public BecauseLabelIsOffline(Label l) {
             this.label = l;
@@ -81,7 +91,12 @@ public abstract class CauseOfBlockage {
      * Build is blocked because a node is fully busy
      */
     public static final class BecauseNodeIsBusy extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final Node node;
+
+        public Node getNode() {
+            return node;
+        }
 
         public BecauseNodeIsBusy(Node node) {
             this.node = node;
@@ -96,7 +111,12 @@ public abstract class CauseOfBlockage {
      * Build is blocked because everyone that matches the specified label is fully busy
      */
     public static final class BecauseLabelIsBusy extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final Label label;
+
+        public Label getLabel() {
+            return label;
+        }
 
         public BecauseLabelIsBusy(Label label) {
             this.label = label;

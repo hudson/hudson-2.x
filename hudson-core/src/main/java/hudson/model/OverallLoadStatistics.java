@@ -38,12 +38,17 @@ public class OverallLoadStatistics extends LoadStatistics {
     /**
      * Number of total {@link Queue.BuildableItem}s that represents blocked builds.
      */
+    //TODO: review and check whether we can do it private
     @Exported
     public final MultiStageTimeSeries totalQueueLength = new MultiStageTimeSeries(
             Messages._LoadStatistics_Legends_QueueLength(), ColorPalette.GREY, 0,DECAY);
 
     /*package*/ OverallLoadStatistics() {
         super(0,0);
+    }
+
+    public MultiStageTimeSeries getTotalQueueLength() {
+        return totalQueueLength;
     }
 
     @Override

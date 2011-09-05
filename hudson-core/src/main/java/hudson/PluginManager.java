@@ -91,6 +91,7 @@ public abstract class PluginManager extends AbstractModelObject {
     /**
      * Plug-in root directory.
      */
+    //TODO: review and check whether we can do it private
     public final File rootDir;
 
     /**
@@ -107,6 +108,7 @@ public abstract class PluginManager extends AbstractModelObject {
      */
     // implementation is minimal --- just enough to run XStream
     // and load plugin-contributed classes.
+    //TODO: review and check whether we can do it private
     public final ClassLoader uberClassLoader = new UberClassLoader();
 
     /**
@@ -114,6 +116,7 @@ public abstract class PluginManager extends AbstractModelObject {
      * This is used to report a message that Hudson needs to be restarted
      * for new plugins to take effect.
      */
+    //TODO: review and check whether we can do it private
     public volatile boolean pluginUploaded = false;
 
     /**
@@ -137,6 +140,22 @@ public abstract class PluginManager extends AbstractModelObject {
             rootDir.mkdirs();
         
         strategy = createPluginStrategy();
+    }
+
+    public List<PluginWrapper> getActivePlugins() {
+        return activePlugins;
+    }
+
+    public File getRootDir() {
+        return rootDir;
+    }
+
+    public ServletContext getContext() {
+        return context;
+    }
+
+    public ClassLoader getUberClassLoader() {
+        return uberClassLoader;
     }
 
     /**

@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  */
 public class UDPBroadcastThread extends Thread {
     private final Hudson hudson;
-
+    //TODO: review and check whether we can do it private
     public final OneShotEvent ready = new OneShotEvent();
     private MulticastSocket mcs;
     private boolean shutdown;
@@ -49,6 +49,10 @@ public class UDPBroadcastThread extends Thread {
         super("Hudson UDP "+PORT+" monitoring thread");
         this.hudson = hudson;
         mcs = new MulticastSocket(PORT);
+    }
+
+    public OneShotEvent getReady() {
+        return ready;
     }
 
     @Override

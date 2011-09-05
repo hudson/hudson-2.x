@@ -55,15 +55,15 @@ import java.util.logging.Level;
  */
 public final class DirectoryBrowserSupport implements HttpResponse {
 
+    //TODO: review and check whether we can do it private
     public final ModelObject owner;
-    
+    //TODO: review and check whether we can do it private
     public final String title;
 
     private final FilePath base;
     private final String icon;
     private final boolean serveDirIndex;
     private String indexFileName = "index.html";
-
     /**
      * @deprecated as of 1.297
      *      Use {@link #DirectoryBrowserSupport(ModelObject, FilePath, String, String, boolean)}
@@ -78,7 +78,7 @@ public final class DirectoryBrowserSupport implements HttpResponse {
      * @param base
      *      The root of the directory that's bound to URL.
      * @param title
-     *      Used in the HTML caption. 
+     *      Used in the HTML caption.
      * @param icon
      *      The icon file name, like "folder.gif"
      * @param serveDirIndex
@@ -278,6 +278,14 @@ public final class DirectoryBrowserSupport implements HttpResponse {
         if(path.length()==0)
             path = "/";
         return path;
+    }
+
+    public ModelObject getOwner() {
+        return owner;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     private static final class ContentInfo implements FileCallable<ContentInfo> {

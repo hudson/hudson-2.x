@@ -460,6 +460,7 @@ public abstract class View extends AbstractModelObject implements AccessControll
         @Exported
         public final List<UserInfo> users;
 
+        //TODO: review and check whether we can do it private
         public final Object parent;
 
         public People(Hudson parent) {
@@ -478,6 +479,14 @@ public abstract class View extends AbstractModelObject implements AccessControll
         public People(View parent) {
             this.parent = parent;
             this.users = toList(getUserInfo(parent.getItems()));
+        }
+
+        public List<UserInfo> getUsers() {
+            return users;
+        }
+
+        public Object getParent() {
+            return parent;
         }
 
         private Map<User,UserInfo> getUserInfo(Collection<? extends Item> items) {

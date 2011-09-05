@@ -39,7 +39,7 @@
         <trilead-putty-extension.version>1.0</trilead-putty-extension.version>
         <stapler-jelly.version>1.155</stapler-jelly.version>
         <bridge-method-annotation.version>1.4</bridge-method-annotation.version>
-        <json-lib.version>2.1-rev6</json-lib.version>
+        <json-lib.version>2.4</json-lib.version>
         <annotation-indexer.version>1.2</annotation-indexer.version>
         <task-reactor.version>1.2</task-reactor.version>
         <antlr.version>2.7.6</antlr.version>
@@ -343,6 +343,10 @@
                     <groupId>commons-jexl</groupId>
                     <artifactId>commons-jexl</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.kohsuke.stapler</groupId>
+                    <artifactId>json-lib</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -353,9 +357,10 @@
         </dependency>
 
         <dependency><!-- until we get this version through Stapler -->
-            <groupId>org.kohsuke.stapler</groupId>
+            <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
             <version>${json-lib.version}</version>
+            <classifier>jdk15</classifier>
         </dependency>
         <dependency>
             <groupId>args4j</groupId>
