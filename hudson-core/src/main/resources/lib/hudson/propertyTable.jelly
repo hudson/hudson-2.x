@@ -38,7 +38,12 @@ THE SOFTWARE.
     <j:forEach var="e" items="${items}">
       <tr>
         <td class="pane"><st:out value="${e.key}"/></td>
-        <td class="pane"><st:out value="${e.value}"/></td>
+        <td class="pane">
+          <j:invokeStatic var="escapedValue" className="hudson.Util" method="escapeString">
+            <j:arg value="${e.value}" />
+          </j:invokeStatic>
+          ${escapedValue}
+        </td>
       </tr>
     </j:forEach>
   </table>
