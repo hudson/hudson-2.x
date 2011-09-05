@@ -91,6 +91,7 @@ public class EnvironmentVariablesNodeProperty extends NodeProperty<Node> {
     }
 	
 	public static class Entry {
+        //TODO: review and check whether we can do it private
 		public String key, value;
 
 		@DataBoundConstructor
@@ -98,7 +99,15 @@ public class EnvironmentVariablesNodeProperty extends NodeProperty<Node> {
 			this.key = key;
 			this.value = value;
 		}
-	}
+
+        public String getKey() {
+            return key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 	
 	private static EnvVars toMap(List<Entry> entries) {
 		EnvVars map = new EnvVars();

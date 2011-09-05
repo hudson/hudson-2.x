@@ -35,7 +35,12 @@ import hudson.Functions;
  * @author Kohsuke Kawaguchi
  */
 public class InsufficientPermissionDetected extends ErrorObject {
+    //TODO: review and check whether we can do it private
     public final SecurityException exception;
+
+    public SecurityException getException() {
+        return exception;
+    }
 
     public InsufficientPermissionDetected(SecurityException e) {
         this.exception = e;

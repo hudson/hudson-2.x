@@ -75,6 +75,7 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
     /**
      * {@link PluginManager} to which this belongs to.
      */
+    //TODO: review and check whether we can do it private
     public final PluginManager parent;
 
     /**
@@ -87,6 +88,7 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
      * {@link ClassLoader} for loading classes from this plugin.
      * Null if disabled.
      */
+    //TODO: review and check whether we can do it private
     public final ClassLoader classLoader;
 
     /**
@@ -94,6 +96,7 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
      * Null if disabled. The static resources are mapped under
      * <tt>hudson/plugin/SHORTNAME/</tt>.
      */
+    //TODO: review and check whether we can do it private
     public final URL baseResourceURL;
 
     /**
@@ -134,6 +137,7 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
     /*package*/ boolean isBundled;
 
     public static final class Dependency {
+        //TODO: review and check whether we can do it private
         public final String shortName;
         public final String version;
         public final boolean optional;
@@ -154,6 +158,18 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
                 }
             }
             this.optional = isOptional;
+        }
+
+        public String getShortName() {
+            return shortName;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public boolean isOptional() {
+            return optional;
         }
 
         @Override
@@ -189,6 +205,18 @@ public class PluginWrapper implements Comparable<PluginWrapper> {
 		this.active = !disableFile.exists();
 		this.dependencies = dependencies;
 		this.optionalDependencies = optionalDependencies;
+    }
+
+    public PluginManager getParent() {
+        return parent;
+    }
+
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    public URL getBaseResourceURL() {
+        return baseResourceURL;
     }
 
     /**

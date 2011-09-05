@@ -30,6 +30,7 @@ package hudson.search;
  */
 public class SuggestedItem {
     private final SuggestedItem parent;
+    //TODO: review and check whether we can do it private
     public final SearchItem item;
     private String path;
 
@@ -40,6 +41,10 @@ public class SuggestedItem {
     public SuggestedItem(SuggestedItem parent, SearchItem item) {
         this.parent = parent;
         this.item = item;
+    }
+
+    public SearchItem getItem() {
+        return item;
     }
 
     public String getPath() {

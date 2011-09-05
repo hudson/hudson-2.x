@@ -47,7 +47,12 @@ public class ChartUtil {
      * Can be used as a graph label. Only displays numbers.
      */
     public static final class NumberOnlyBuildLabel implements Comparable<NumberOnlyBuildLabel> {
+        //TODO: review and check whether we can do it private
         public final AbstractBuild build;
+
+        public AbstractBuild getBuild() {
+            return build;
+        }
 
         public NumberOnlyBuildLabel(AbstractBuild build) {
             this.build = build;

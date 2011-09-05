@@ -66,6 +66,7 @@ import java.util.logging.Logger;
  * @see Hudson#getDescriptorList(Class)
  */
 public class ExtensionList<T> extends AbstractList<T> {
+    //TODO: review and check whether we can do it private
     public final Hudson hudson;
     public final Class<T> extensionType;
 
@@ -90,7 +91,7 @@ public class ExtensionList<T> extends AbstractList<T> {
      * @param legacyStore
      *      Place to store manually registered instances. The version of the constructor that
      *      omits this uses a new {@link Vector}, making the storage lifespan tied to the life of  {@link ExtensionList}.
-     *      If the manually registered instances are scoped to VM level, the caller should pass in a static list. 
+     *      If the manually registered instances are scoped to VM level, the caller should pass in a static list.
      */
     protected ExtensionList(Hudson hudson, Class<T> extensionType, CopyOnWriteArrayList<ExtensionComponent<T>> legacyStore) {
         this.hudson = hudson;
@@ -111,7 +112,7 @@ public class ExtensionList<T> extends AbstractList<T> {
 
     @Override
     public Iterator<T> iterator() {
-        // we need to intercept mutation, so for now don't allow Iterator.remove 
+        // we need to intercept mutation, so for now don't allow Iterator.remove
         return new AdaptedIterator<ExtensionComponent<T>,T>(Iterators.readOnly(ensureLoaded().iterator())) {
             protected T adapt(ExtensionComponent<T> item) {
                 return item.getInstance();
@@ -129,7 +130,7 @@ public class ExtensionList<T> extends AbstractList<T> {
     public T get(int index) {
         return ensureLoaded().get(index).getInstance();
     }
-    
+
     public int size() {
         return ensureLoaded().size();
     }
@@ -195,6 +196,14 @@ public class ExtensionList<T> extends AbstractList<T> {
             if (t.getClass().getName().equals(className))
                 return t;
         return null;
+    }
+
+    public Hudson getHudson() {
+        return hudson;
+    }
+
+    public Class<T> getExtensionType() {
+        return extensionType;
     }
 
     private List<ExtensionComponent<T>> ensureLoaded() {

@@ -60,9 +60,22 @@ public class NodeProvisioner {
          * being provisioned (like the instance ID), but if such an identifier doesn't readily exist, this
          * can be just a name of the template being provisioned (like the machine image ID.)
          */
+        //TODO: review and check whether we can do it private
         public final String displayName;
         public final Future<Node> future;
         public final int numExecutors;
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public Future<Node> getFuture() {
+            return future;
+        }
+
+        public int getNumExecutors() {
+            return numExecutors;
+        }
 
         public PlannedNode(String displayName, Future<Node> future, int numExecutors) {
             if(displayName==null || future==null || numExecutors<1)  throw new IllegalArgumentException();

@@ -139,9 +139,20 @@ public abstract class Descriptor<T extends Describable<T>> implements Saveable {
      * Represents a readable property on {@link Describable}.
      */
     public static final class PropertyType {
+        //TODO: review and check whether we can do it private
         public final Class clazz;
+        //TODO: review and check whether we can do it private
         public final Type type;
+
         private volatile Class itemType;
+
+        public Class getClazz() {
+            return clazz;
+        }
+
+        public Type getType() {
+            return type;
+        }
 
         PropertyType(Class clazz, Type type) {
             this.clazz = clazz;
