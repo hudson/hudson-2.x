@@ -811,6 +811,38 @@ public class Util {
                 buf.append(ch);
         }
         return buf.toString();
+
+    }
+
+    /**
+     * Methods acts as {@link #xmlEscape(String)} method with only difference that it also escapes
+     * '\n', '\r' symbols
+     *
+     * @param text string to escape
+     * @return escaped string.
+     */
+    public static String escapeString(String text) {
+        StringBuilder buf = new StringBuilder(text.length() + 64);
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);// '\n', '\12', and '\x0A'
+            switch (ch) {
+                case '\n':
+                    buf.append('\\').append('n');
+                    break;
+                case '\r':
+                    buf.append('\\').append('r');
+                    break;
+                case '<':
+                    buf.append("&lt;");
+                    break;
+                case '&':
+                    buf.append("&amp;");
+                    break;
+                default:
+                    buf.append(ch);
+            }
+        }
+        return buf.toString();
     }
 
     /**
