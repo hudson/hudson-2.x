@@ -37,6 +37,7 @@ import java.util.List;
  */
 public class TagCloud<T> extends AbstractList<TagCloud<T>.Entry> {
     public final class Entry {
+        //TODO: review and check whether we can do it private
         public final T item;
         public final float weight;
 
@@ -52,6 +53,14 @@ public class TagCloud<T> extends AbstractList<TagCloud<T>.Entry> {
 
         public String getClassName() {
             return "tag"+((int)scale());
+        }
+
+        public T getItem() {
+            return item;
+        }
+
+        public float getWeight() {
+            return weight;
         }
     }
 

@@ -53,6 +53,7 @@ public abstract class SCMDescriptor<T extends SCM> extends Descriptor<SCM> {
      * this field doesn't really count the # of instances created to date,
      * but it's good enough for the cache invalidation.
      */
+    //TODO: review and check whether we can do it private
     public volatile int generation = 1;
 
     protected SCMDescriptor(Class<T> clazz, Class<? extends RepositoryBrowser> repositoryBrowser) {
@@ -69,6 +70,10 @@ public abstract class SCMDescriptor<T extends SCM> extends Descriptor<SCM> {
      */
     protected SCMDescriptor(Class<? extends RepositoryBrowser> repositoryBrowser) {
         this.repositoryBrowser = repositoryBrowser;
+    }
+
+    public int getGeneration() {
+        return generation;
     }
 
     // work around HUDSON-4514. The repositoryBrowser field was marked as non-transient until 1.325,

@@ -69,26 +69,31 @@ public class MultiStageTimeSeries {
     /**
      * Name of this data series.
      */
+    //TODO: review and check whether we can do it private
     public final Localizable title;
 
     /**
      * Used to render a line in the trend chart.
      */
+    //TODO: review and check whether we can do it private
     public final Color color;
 
     /**
      * Updated every 10 seconds. Keep data up to 1 hour.
      */
+    //TODO: review and check whether we can do it private
     @Exported
     public final TimeSeries sec10;
     /**
      * Updated every 1 min. Keep data up to 1 day.
      */
+    //TODO: review and check whether we can do it private
     @Exported
     public final TimeSeries min;
     /**
      * Updated every 1 hour. Keep data up to 4 weeks.
      */
+    //TODO: review and check whether we can do it private
     @Exported
     public final TimeSeries hour;
 
@@ -100,6 +105,26 @@ public class MultiStageTimeSeries {
         this.sec10 = new TimeSeries(initialValue,decay,6*60);
         this.min = new TimeSeries(initialValue,decay,60*24);
         this.hour = new TimeSeries(initialValue,decay,28*24);
+    }
+
+    public Localizable getTitle() {
+        return title;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public TimeSeries getSec10() {
+        return sec10;
+    }
+
+    public TimeSeries getMin() {
+        return min;
+    }
+
+    public TimeSeries getHour() {
+        return hour;
     }
 
     /**
@@ -193,6 +218,18 @@ public class MultiStageTimeSeries {
         public final TimeScale timeScale;
         public final List<MultiStageTimeSeries> series;
         public final DefaultCategoryDataset dataset;
+
+        public TimeScale getTimeScale() {
+            return timeScale;
+        }
+
+        public List<MultiStageTimeSeries> getSeries() {
+            return series;
+        }
+
+        public DefaultCategoryDataset getDataset() {
+            return dataset;
+        }
 
         public TrendChart(TimeScale timeScale, MultiStageTimeSeries... series) {
             this.timeScale = timeScale;

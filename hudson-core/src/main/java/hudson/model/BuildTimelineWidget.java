@@ -138,8 +138,9 @@ public class BuildTimelineWidget {
      * This is bound to JSON and sent to the client-side JavaScript.
      */
     private static class Event {
-
+        //TODO: review and check whether we can do it private
         public Date start;
+
         public Date end;
         public String title, description;
         /**
@@ -168,5 +169,37 @@ public class BuildTimelineWidget {
          * CSS class name.
          */
         public String classname;
+
+        public Date getStart() {
+            return start;
+        }
+
+        public Date getEnd() {
+            return end;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public Boolean getDurationEvent() {
+            return durationEvent;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public String getClassname() {
+            return classname;
+        }
     }
 }

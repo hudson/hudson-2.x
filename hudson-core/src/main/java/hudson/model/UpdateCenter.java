@@ -659,10 +659,15 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         /**
          * Which {@link UpdateSite} does this belong to?
          */
+        //TODO: review and check whether we can do it private
         public final UpdateSite site;
 
         protected UpdateCenterJob(UpdateSite site) {
             this.site = site;
+        }
+
+        public UpdateSite getSite() {
+            return site;
         }
 
         /**
@@ -742,10 +747,12 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         /**
          * Unique ID that identifies this job.
          */
+        //TODO: review and check whether we can do it private
         public final int id = iota.incrementAndGet();
         /**
          * Immutable object representing the current state of this job.
          */
+        //TODO: review and check whether we can do it private
         public volatile InstallationStatus status = new Pending();
 
         /**
@@ -774,6 +781,14 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         public Authentication getUser()
         {
             return this.authentication;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public InstallationStatus getStatus() {
+            return status;
         }
 
         protected DownloadJob(UpdateSite site, Authentication authentication) {
@@ -828,7 +843,13 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
          * Instances of this class is immutable.
          */
         public abstract class InstallationStatus {
+            //TODO: review and check whether we can do it private
             public final int id = iota.incrementAndGet();
+
+            public int getId() {
+                return id;
+            }
+
             public boolean isSuccess() {
                 return false;
             }
@@ -838,10 +859,15 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
          * Indicates that the installation of a plugin failed.
          */
         public class Failure extends InstallationStatus {
+            //TODO: review and check whether we can do it private
             public final Throwable problem;
 
             public Failure(Throwable problem) {
                 this.problem = problem;
+            }
+
+            public Throwable getProblem() {
+                return problem;
             }
 
             public String getStackTrace() {
@@ -871,7 +897,12 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
             /**
              * % completed download, or -1 if the percentage is not known.
              */
+            //TODO: review and check whether we can do it private
             public final int percentage;
+
+            public int getPercentage() {
+                return percentage;
+            }
 
             public Installing(int percentage) {
                 this.percentage = percentage;
@@ -886,6 +917,7 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         /**
          * What plugin are we trying to install?
          */
+        //TODO: review and check whether we can do it private
         public final Plugin plugin;
 
         private final PluginManager pm = Hudson.getInstance().getPluginManager();
@@ -893,6 +925,10 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         public InstallationJob(Plugin plugin, UpdateSite site, Authentication auth) {
             super(site, auth);
             this.plugin = plugin;
+        }
+
+        public Plugin getPlugin() {
+            return plugin;
         }
 
         protected URL getURL() throws MalformedURLException {
@@ -940,6 +976,7 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
         /**
          * What plugin are we trying to install?
          */
+        //TODO: review and check whether we can do it private
         public final Plugin plugin;
 
         private final PluginManager pm = Hudson.getInstance().getPluginManager();
@@ -966,6 +1003,10 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
 
         public String getName() {
             return plugin.getDisplayName();
+        }
+
+        public Plugin getPlugin() {
+            return plugin;
         }
 
         @Override
@@ -1095,9 +1136,18 @@ public class UpdateCenter extends AbstractModelObject implements Saveable {
     }
 
     public static final class PluginEntry implements Comparable<PluginEntry> {
+        //TODO: review and check whether we can do it private
         public Plugin plugin;
         public String category;
         private PluginEntry(Plugin p, String c) { plugin = p; category = c; }
+
+        public Plugin getPlugin() {
+            return plugin;
+        }
+
+        public String getCategory() {
+            return category;
+        }
 
         public int compareTo(PluginEntry o) {
             int r = category.compareTo(o.category);

@@ -1065,7 +1065,12 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * Because the downstream build is in progress, and we are configured to wait for that.
      */
     public static class BecauseOfDownstreamBuildInProgress extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final AbstractProject<?,?> up;
+
+        public AbstractProject getUp() {
+            return up;
+        }
 
         public BecauseOfDownstreamBuildInProgress(AbstractProject<?,?> up) {
             this.up = up;
@@ -1081,10 +1086,15 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * Because the upstream build is in progress, and we are configured to wait for that.
      */
     public static class BecauseOfUpstreamBuildInProgress extends CauseOfBlockage {
+        //TODO: review and check whether we can do it private
         public final AbstractProject<?,?> up;
 
         public BecauseOfUpstreamBuildInProgress(AbstractProject<?,?> up) {
             this.up = up;
+        }
+
+        public AbstractProject getUp() {
+            return up;
         }
 
         @Override

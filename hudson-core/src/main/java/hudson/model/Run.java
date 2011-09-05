@@ -1564,12 +1564,21 @@ public abstract class Run <JobT extends Job<JobT,RunT>,RunT extends Run<JobT,Run
         /**
          * Is this build worse or better, compared to the previous build?
          */
+        //TODO: review and check whether we can do it private
         public boolean isWorse;
         public String message;
 
         public Summary(boolean worse, String message) {
             this.isWorse = worse;
             this.message = message;
+        }
+
+        public boolean isWorse() {
+            return isWorse;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 
