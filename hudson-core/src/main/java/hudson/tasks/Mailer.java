@@ -81,17 +81,32 @@ public class Mailer extends Notifier {
     /**
      * Whitespace-separated list of e-mail addresses that represent recipients.
      */
+    //TODO: review and check whether we can do it private
     public String recipients;
 
     /**
      * If true, only the first unstable build will be reported.
      */
+    //TODO: review and check whether we can do it private
     public boolean dontNotifyEveryUnstableBuild;
 
     /**
      * If true, individuals will receive e-mails regarding who broke the build.
      */
+    //TODO: review and check whether we can do it private
     public boolean sendToIndividuals;
+
+    public String getRecipients() {
+        return recipients;
+    }
+
+    public boolean isDontNotifyEveryUnstableBuild() {
+        return dontNotifyEveryUnstableBuild;
+    }
+
+    public boolean isSendToIndividuals() {
+        return sendToIndividuals;
+    }
 
     // TODO: left so that XStream won't get angry. figure out how to set the error handling behavior
     // in XStream.  Deprecated since 2005-04-23.

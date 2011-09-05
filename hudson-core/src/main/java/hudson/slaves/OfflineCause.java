@@ -48,7 +48,12 @@ public abstract class OfflineCause {
      * but without any further UI.
      */
     public static class SimpleOfflineCause extends OfflineCause {
+        //TODO: review and check whether we can do it private
         public final Localizable description;
+
+        public Localizable getDescription() {
+            return description;
+        }
 
         private SimpleOfflineCause(Localizable description) {
             this.description = description;
@@ -69,8 +74,13 @@ public abstract class OfflineCause {
      * Caused by unexpected channel termination.
      */
     public static class ChannelTermination extends OfflineCause {
+        //TODO: review and check whether we can do it private
         @Exported
         public final Exception cause;
+
+        public Exception getCause() {
+            return cause;
+        }
 
         public ChannelTermination(Exception cause) {
             this.cause = cause;
@@ -92,8 +102,13 @@ public abstract class OfflineCause {
     }
 
     public static class ByCLI extends OfflineCause {
+        //TODO: review and check whether we can do it private
         @Exported
         public final String message;
+
+        public String getMessage() {
+            return message;
+        }
 
         public ByCLI(String message) {
             this.message = message;

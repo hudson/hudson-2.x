@@ -50,6 +50,7 @@ public class HistoryWidget<O extends ModelObject,T> extends Widget {
     /**
      * The given data model of records. Newer ones first.
      */
+    //TODO: review and check whether we can do it private
     public Iterable<T> baseList;
 
     /**
@@ -60,12 +61,15 @@ public class HistoryWidget<O extends ModelObject,T> extends Widget {
     /**
      * URL of the {@link #owner}.
      */
+    //TODO: review and check whether we can do it private
     public final String baseUrl;
 
+    //TODO: review and check whether we can do it private
     public final O owner;
 
     private boolean trimmed;
 
+    //TODO: review and check whether we can do it private
     public final Adapter<? super T> adapter;
 
     /**
@@ -98,6 +102,22 @@ public class HistoryWidget<O extends ModelObject,T> extends Widget {
 
     public String getFirstTransientBuildKey() {
         return firstTransientBuildKey;
+    }
+
+    public Iterable<T> getBaseList() {
+        return baseList;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public O getOwner() {
+        return owner;
+    }
+
+    public Adapter<? super T> getAdapter() {
+        return adapter;
     }
 
     private Iterable<T> updateFirstTransientBuildKey(Iterable<T> source) {

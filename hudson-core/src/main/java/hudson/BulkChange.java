@@ -85,7 +85,13 @@ import java.io.IOException;
  */
 public class BulkChange {
     private final Saveable saveable;
+    //TODO: review and check whether we can do it private
     public final Exception allocator;
+
+    public Exception getAllocator() {
+        return allocator;
+    }
+
     private final BulkChange parent;
 
     private boolean completed;

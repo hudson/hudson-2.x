@@ -30,12 +30,17 @@ import java.util.Locale;
 import java.util.Map;
 
 public class JobParameterValue extends ParameterValue {
+    //TODO: review and check whether we can do it private
     public final Job job;
 
     @DataBoundConstructor
     public JobParameterValue(String name, Job job) {
         super(name);
         this.job = job;
+    }
+
+    public Job getJob() {
+        return job;
     }
 
     /**

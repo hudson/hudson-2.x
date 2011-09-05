@@ -65,6 +65,7 @@ import java.util.logging.Logger;
 public class LogRecorder extends AbstractModelObject implements Saveable {
     private volatile String name;
 
+    //TODO: review and check whether we can do it private
     public final CopyOnWriteList<Target> targets = new CopyOnWriteList<Target>();
 
     private transient /*almost final*/ RingBufferLogHandler handler = new RingBufferLogHandler() {
@@ -78,6 +79,10 @@ public class LogRecorder extends AbstractModelObject implements Saveable {
             }
         }
     };
+
+    public CopyOnWriteList<Target> getTargets() {
+        return targets;
+    }
 
     /**
      * Logger that this recorder monitors, and its log level.

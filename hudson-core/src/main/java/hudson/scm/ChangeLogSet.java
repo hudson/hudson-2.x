@@ -56,10 +56,15 @@ public abstract class ChangeLogSet<T extends ChangeLogSet.Entry> implements Iter
     /**
      * {@link AbstractBuild} whose change log this object represents.
      */
+    //TODO: review and check whether we can do it private
     public final AbstractBuild<?, ?> build;
 
     protected ChangeLogSet(AbstractBuild<?, ?> build) {
         this.build = build;
+    }
+
+    public AbstractBuild<?, ?> getBuild() {
+        return build;
     }
 
     /**
