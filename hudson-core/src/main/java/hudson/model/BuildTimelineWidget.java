@@ -137,7 +137,7 @@ public class BuildTimelineWidget {
      * <p>
      * This is bound to JSON and sent to the client-side JavaScript.
      */
-    private static class Event {
+    public static class Event {
         //TODO: review and check whether we can do it private
         public Date start;
 
