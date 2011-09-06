@@ -349,6 +349,7 @@ public class Queue extends ResourceController implements Saveable {
     /**
      * Wipes out all the items currently in the queue, as if all of them are cancelled at once.
      */
+
     @CLIMethod(name="clear-queue")
     public synchronized void clear() {
         Hudson.getInstance().checkPermission(Hudson.ADMINISTER);
@@ -358,6 +359,14 @@ public class Queue extends ResourceController implements Saveable {
         blockedProjects.cancelAll();
         buildables.cancelAll();
         scheduleMaintenance();
+    }
+
+    /**
+     * Called from queue.jelly.
+     */
+    public HttpResponse doClearQueue() throws IOException, ServletException {
+        Hudson.getInstance().getQueue().clear();
+        return HttpResponses.forwardToPreviousPage();
     }
 
     private File getQueueFile() {
