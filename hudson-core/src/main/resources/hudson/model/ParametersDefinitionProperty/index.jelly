@@ -37,6 +37,12 @@ THE SOFTWARE.
     <st:include page="sidepanel.jelly" it="${it.project}" />
     <l:main-panel>
       <h1>${it.owner.pronoun} ${it.owner.displayName}</h1>
+      <p>
+        <j:invokeStatic var="escapedValue" className="hudson.Util" method="escape">
+          <j:arg value="${it.owner.description}"/>
+        </j:invokeStatic>
+        ${escapedValue}
+      </p>
       <p>${%description}</p>
       <j:set var="delay" value="${request.getParameter('delay')}" />
       <f:form method="post" action="build${empty(delay)?'':'?delay='+delay}" name="parameters"
