@@ -22,19 +22,18 @@
  *  THE SOFTWARE.
  */
 
-package hudson.model;
+package hudson.util;
 
-import java.util.List;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.runners.Parameterized;
-import org.junit.runner.RunWith;
-import hudson.model.AbstractProject.AbstractProjectDescriptor.AutoCompleteSeeder;
+import java.util.List;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- *
  * @author dty
  */
 @RunWith(Parameterized.class)
@@ -43,30 +42,30 @@ public class AutoCompleteSeederTest {
     public static class TestData {
         private String seed;
         private List<String> expected;
-        
+
         public TestData(String seed, String... expected) {
             this.seed = seed;
             this.expected = Arrays.asList(expected);
         }
     }
-    
+
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList( new Object[][] {
-                    { new TestData("", "") },
-                    { new TestData("\"", "") },
-                    { new TestData("\"\"", "") },
-                    { new TestData("freebsd", "freebsd") },
-                    { new TestData(" freebsd", "freebsd") },
-                    { new TestData("freebsd ", "") },
-                    { new TestData("freebsd 6", "6") },
-                    { new TestData("\"freebsd", "freebsd") },
-                    { new TestData("\"freebsd ", "freebsd ") },
-                    { new TestData("\"freebsd\"", "") },
-                    { new TestData("\"freebsd\" ", "") },
-                    { new TestData("\"freebsd 6", "freebsd 6") },
-                    { new TestData("\"freebsd 6\"", "") },
-               });
+        return Arrays.asList(new Object[][]{
+            {new TestData("", "")},
+            {new TestData("\"", "")},
+            {new TestData("\"\"", "")},
+            {new TestData("freebsd", "freebsd")},
+            {new TestData(" freebsd", "freebsd")},
+            {new TestData("freebsd ", "")},
+            {new TestData("freebsd 6", "6")},
+            {new TestData("\"freebsd", "freebsd")},
+            {new TestData("\"freebsd ", "freebsd ")},
+            {new TestData("\"freebsd\"", "")},
+            {new TestData("\"freebsd\" ", "")},
+            {new TestData("\"freebsd 6", "freebsd 6")},
+            {new TestData("\"freebsd 6\"", "")},
+        });
     }
 
     private String seed;
@@ -79,7 +78,7 @@ public class AutoCompleteSeederTest {
 
     @Test
     public void testAutoCompleteSeeds() throws Exception {
-        AutoCompleteSeeder seeder = new AbstractProject.AbstractProjectDescriptor.AutoCompleteSeeder(seed);
+        AutoCompleteSeeder seeder = new AutoCompleteSeeder(seed);
         assertEquals(expected, seeder.getSeeds());
 
     }
