@@ -26,6 +26,7 @@ package hudson.tasks;
 import hudson.Launcher;
 import hudson.Extension;
 import hudson.Util;
+import hudson.model.AutoCompletionCandidates;
 import hudson.security.AccessControlled;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -37,13 +38,13 @@ import hudson.model.DependencyGraph.Dependency;
 import hudson.model.Hudson;
 import hudson.model.Item;
 import hudson.model.Items;
-import hudson.model.Job;
 import hudson.model.Project;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.TaskListener;
 import hudson.model.listeners.ItemListener;
+import hudson.util.AutoCompleteSeeder;
 import hudson.util.FormValidation;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -214,7 +215,7 @@ public class BuildTrigger extends Recorder implements DependecyDeclarer {
     }
 
     /**
-     * Called from {@link ItemListenerImpl} when a job is renamed.
+     * Called from {@link hudson.tasks.BuildTrigger.DescriptorImpl.ItemListenerImpl} when a job is renamed.
      *
      * @return true if this {@link BuildTrigger} is changed and needs to be saved.
      */
@@ -301,6 +302,21 @@ public class BuildTrigger extends Recorder implements DependecyDeclarer {
             }
 
             return FormValidation.ok();
+        }
+
+        public AutoCompletionCandidates doAutoCompleteChildProjectsValue(@QueryParameter String value) {
+            AutoCompletionCandidates c = new AutoCompletionCandidates();
+            List<Item> items = Hudson.getInstance().getItems(Item.class);
+            List<String> queries = new AutoCompleteSeeder(value).getSeeds();
+
+            for (String term : queries) {
+                for (Item item : items) {
+                    if (item.getName().startsWith(term)) {
+                        c.add(item.getName());
+                    }
+                }
+            }
+            return c;
         }
 
         @Extension
