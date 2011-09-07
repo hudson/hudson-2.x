@@ -368,6 +368,8 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
     private static final GrantedAuthority[] TEST_AUTHORITY = {AUTHENTICATED_AUTHORITY};
 
     public static final class SignupInfo {
+
+        //TODO: review and check whether we can do it private
         public String username,password1,password2,fullname,email,captcha;
 
         /**
@@ -386,6 +388,33 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
             this.username = i.getNickname();
             this.fullname = i.getFullName();
             this.email = i.getEmailAddress();
+        }
+        public String getUsername() {
+            return username;
+        }
+
+        public String getPassword1() {
+            return password1;
+        }
+
+        public String getPassword2() {
+            return password2;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getCaptcha() {
+            return captcha;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
         }
     }
 

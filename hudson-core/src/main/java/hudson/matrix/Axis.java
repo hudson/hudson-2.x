@@ -68,6 +68,7 @@ public class Axis extends AbstractDescribableImpl<Axis> implements Comparable<Ax
      * @deprecated as of 1.373
      *      Use {@link #getValues()}
      */
+    //TODO: review and check whether we can do it private
     public final List<String> values;
 
     public Axis(String name, List<String> values) {

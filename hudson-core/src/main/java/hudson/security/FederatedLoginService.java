@@ -227,10 +227,15 @@ public abstract class FederatedLoginService implements ExtensionPoint {
      * associated with anyone.
      */
     public static class UnclaimedIdentityException extends RuntimeException implements HttpResponse {
+        //TODO: review and check whether we can do it private
         public final FederatedIdentity identity;
 
         public UnclaimedIdentityException(FederatedIdentity identity) {
             this.identity = identity;
+        }
+
+        public FederatedIdentity getIdentity() {
+            return identity;
         }
 
         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {

@@ -144,6 +144,7 @@ public class SCMTrigger extends Trigger<SCMedItem> {
          * Whether the projects should be polled all in one go in the order of dependencies. The default behavior is
          * that each project polls for changes independently.
          */
+        //TODO: review and check whether we can do it private
         public boolean synchronousPolling = false;
 
         /**
@@ -155,6 +156,10 @@ public class SCMTrigger extends Trigger<SCMedItem> {
         public DescriptorImpl() {
             load();
             resizeThreadPool();
+        }
+
+        public boolean isSynchronousPolling() {
+            return synchronousPolling;
         }
 
         public boolean isApplicable(Item item) {
@@ -271,6 +276,7 @@ public class SCMTrigger extends Trigger<SCMedItem> {
      * @since 1.376
      */
     public static class BuildAction implements Action {
+        //TODO: review and check if we can do it private
         public final AbstractBuild build;
 
         public BuildAction(AbstractBuild build) {
@@ -294,6 +300,10 @@ public class SCMTrigger extends Trigger<SCMedItem> {
 
         public String getUrlName() {
             return "pollingLog";
+        }
+
+        public AbstractBuild getBuild() {
+            return build;
         }
 
         /**

@@ -27,7 +27,12 @@ package hudson.util;
  * @author Kohsuke Kawaguchi
  */
 public class AWTProblem extends ErrorObject {
+    //TODO: review and check whether we can do it private
     public final Throwable cause;
+
+    public Throwable getCause() {
+        return cause;
+    }
 
     public AWTProblem(Throwable cause) {
         this.cause = cause;

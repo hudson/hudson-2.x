@@ -83,12 +83,25 @@ import static java.lang.Math.*;
  * @author Kohsuke Kawaguchi
  */
 public class MappingWorksheet {
+    //TODO: review and check whether we can do it private
     public final List<ExecutorChunk> executors;
     public final List<WorkChunk> works;
     /**
      * {@link BuildableItem} for which we are trying to figure out the execution plan. Never null.
      */
     public final BuildableItem item;
+
+    public List<ExecutorChunk> getExecutors() {
+        return executors;
+    }
+
+    public List<WorkChunk> getWorks() {
+        return works;
+    }
+
+    public BuildableItem getItem() {
+        return item;
+    }
 
     private static class ReadOnlyList<E> extends AbstractList<E> {
         protected final List<E> base;
@@ -107,6 +120,7 @@ public class MappingWorksheet {
     }
 
     public final class ExecutorChunk extends ReadOnlyList<ExecutorSlot> {
+        //TODO: review and check whether we can do it private
         public final int index;
         public final Computer computer;
         public final Node node;
@@ -117,6 +131,18 @@ public class MappingWorksheet {
             assert !base.isEmpty();
             computer = base.get(0).getExecutor().getOwner();
             node = computer.getNode();
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public Computer getComputer() {
+            return computer;
+        }
+
+        public Node getNode() {
+            return node;
         }
 
         /**

@@ -53,29 +53,54 @@ public final class WorkspaceList {
         /**
          * Who acquired this workspace?
          */
+        //TODO: review and check whether we can do it private
         public final Thread holder = Thread.currentThread();
 
         /**
          * When?
          */
+        //TODO: review and check whether we can do it private
         public final long time = System.currentTimeMillis();
 
         /**
          * From where?
          */
+        //TODO: review and check whether we can do it private
         public final Exception source = new Exception();
 
         /**
          * True makes the caller of {@link WorkspaceList#allocate(FilePath)} wait
          * for this workspace.
          */
+        //TODO: review and check whether we can do it private
         public final boolean quick;
 
+        //TODO: review and check whether we can do it private
         public final FilePath path;
 
         private Entry(FilePath path, boolean quick) {
             this.path = path;
             this.quick = quick;
+        }
+
+        public Thread getHolder() {
+            return holder;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public Exception getSource() {
+            return source;
+        }
+
+        public boolean isQuick() {
+            return quick;
+        }
+
+        public FilePath getPath() {
+            return path;
         }
 
         @Override
@@ -91,10 +116,15 @@ public final class WorkspaceList {
      * Represents a leased workspace that needs to be returned later.
      */
     public static abstract class Lease {
+        //TODO: review and check whether we can do it private
         public final FilePath path;
 
         protected Lease(FilePath path) {
             this.path = path;
+        }
+
+        public FilePath getPath() {
+            return path;
         }
 
         /**

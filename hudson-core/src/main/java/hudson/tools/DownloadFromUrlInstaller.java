@@ -24,6 +24,7 @@ import java.net.URL;
  * @since 1.308
  */
 public abstract class DownloadFromUrlInstaller extends ToolInstaller {
+    //TODO: review and check whether we can do it private
     public final String id;
 
     @DataBoundConstructor
@@ -32,6 +33,10 @@ public abstract class DownloadFromUrlInstaller extends ToolInstaller {
         // and as such we don't provide the label support
         super(null);
         this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /**
@@ -157,13 +162,19 @@ public abstract class DownloadFromUrlInstaller extends ToolInstaller {
      */
     public static class InstallableList {
         // initialize with an empty array just in case JSON doesn't have the list field (which shouldn't happen.)
+        //TODO: review and check whether we can do it private
         public Installable[] list = new Installable[0];
+
+        public Installable[] getList() {
+            return list;
+        }
     }
 
     /**
      * Downloadable and installable tool.
      */
     public static class Installable {
+        //TODO: review and check whether we can do it private
         /**
          * Used internally to uniquely identify the name.
          */
@@ -176,5 +187,17 @@ public abstract class DownloadFromUrlInstaller extends ToolInstaller {
          * URL.
          */
         public String url;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getUrl() {
+            return url;
+        }
     }
 }
