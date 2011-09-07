@@ -42,6 +42,7 @@ public class UtilTest extends TestCase {
         Map<String,String> m = new HashMap<String,String>();
         m.put("A","a");
         m.put("AA","aa");
+        m.put("A.B", "ab");
         m.put("B","B");
         m.put("DOLLAR", "$");
         m.put("ENCLOSED", "a${A}");
@@ -60,7 +61,11 @@ public class UtilTest extends TestCase {
         assertEquals("$", Util.replaceMacro("$$",m));
         assertEquals("$$", Util.replaceMacro("$$$$",m));
 
-    	// test that more complex scenarios work
+        // test that . is a valid variable character
+        assertEquals("a.b", Util.replaceMacro("a.b", m));
+        assertEquals("ab", Util.replaceMacro("${A.B}", m));
+
+        // test that more complex scenarios work
         assertEquals("/a/B/aa", Util.replaceMacro("/$A/$B/$AA",m));
         assertEquals("a-aa", Util.replaceMacro("$A-$AA",m));
         assertEquals("/a/foo/can/B/you-believe_aa~it?", Util.replaceMacro("/$A/foo/can/$B/you-believe_$AA~it?",m));
