@@ -407,6 +407,7 @@ public class LDAPSecurityRealm extends AbstractPasswordBasedSecurityRealm {
     }
 
     public static class LDAPUserDetailsService implements UserDetailsService {
+        //TODO: review and check whether we can do it private
         public final LdapUserSearch ldapSearch;
         public final LdapAuthoritiesPopulator authoritiesPopulator;
         /**
@@ -424,6 +425,14 @@ public class LDAPSecurityRealm extends AbstractPasswordBasedSecurityRealm {
         LDAPUserDetailsService(LdapUserSearch ldapSearch, LdapAuthoritiesPopulator authoritiesPopulator) {
             this.ldapSearch = ldapSearch;
             this.authoritiesPopulator = authoritiesPopulator;
+        }
+
+        public LdapUserSearch getLdapSearch() {
+            return ldapSearch;
+        }
+
+        public LdapAuthoritiesPopulator getAuthoritiesPopulator() {
+            return authoritiesPopulator;
         }
 
         public LdapUserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {

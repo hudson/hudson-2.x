@@ -1048,20 +1048,24 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
         /**
          * The dependency project.
          */
+        //TODO: review and check whether we can do it private
         public final AbstractProject project;
         /**
          * Version of the dependency project used in the previous build.
          */
+        //TODO: review and check whether we can do it private
         public final int fromId;
         /**
          * {@link Build} object for {@link #fromId}. Can be null if the log is gone.
          */
+        //TODO: review and check whether we can do it private
         public final AbstractBuild from;
         /**
          * Version of the dependency project used in this build.
          */
+        //TODO: review and check whether we can do it private
         public final int toId;
-
+        //TODO: review and check whether we can do it private
         public final AbstractBuild to;
 
         public DependencyChange(AbstractProject<?,?> project, int fromId, int toId) {
@@ -1072,6 +1076,25 @@ public abstract class AbstractBuild<P extends AbstractProject<P,R>,R extends Abs
             this.to = project.getBuildByNumber(toId);
         }
 
+        public AbstractProject getProject() {
+            return project;
+        }
+
+        public int getFromId() {
+            return fromId;
+        }
+
+        public AbstractBuild getFrom() {
+            return from;
+        }
+
+        public int getToId() {
+            return toId;
+        }
+
+        public AbstractBuild getTo() {
+            return to;
+        }
         /**
          * Gets the {@link AbstractBuild} objects (fromId,toId].
          * <p>

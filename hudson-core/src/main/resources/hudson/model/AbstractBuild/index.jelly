@@ -36,7 +36,13 @@ THE SOFTWARE.
         </l:hasPermission>
         <div style="margin-top:1em">
           ${%startedAgo(it.timestampString)}
-          </div><div>
+        </div>
+        <div>
+          <j:if test="${it.building and it.executor != null}">
+            ${%beingExecuted(it.executor.timestampString)}
+          </j:if>
+        </div>
+        <div>
           <j:if test="${!it.building}">
             ${%Took} <a href="${rootURL}/${it.parent.url}buildTimeTrend">${it.durationString}</a>
           </j:if>

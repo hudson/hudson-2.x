@@ -42,6 +42,7 @@ public final class Resource {
      * Human-readable name of this resource.
      * Used for rendering HTML.
      */
+    //TODO: review and check whether we can do it private
     public final String displayName;
 
     /**
@@ -52,11 +53,13 @@ public final class Resource {
      * so acquiring the parent resource always imply acquiring all
      * the child resources.
      */
+    //TODO: review and check whether we can do it private
     public final Resource parent;
 
     /**
      * Maximum number of concurrent write.
      */
+    //TODO: review and check whether we can do it private
     public final int numConcurrentWrite;
 
     public Resource(Resource parent, String displayName) {
@@ -77,6 +80,18 @@ public final class Resource {
 
     public Resource(String displayName) {
         this(null,displayName);
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public Resource getParent() {
+        return parent;
+    }
+
+    public int getNumConcurrentWrite() {
+        return numConcurrentWrite;
     }
 
     /**

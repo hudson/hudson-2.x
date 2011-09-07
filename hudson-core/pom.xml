@@ -47,7 +47,7 @@ THE SOFTWARE.
     <trilead-putty-extension.version>1.0</trilead-putty-extension.version>
     <stapler-jelly.version>1.155</stapler-jelly.version>
     <bridge-method-annotation.version>1.4</bridge-method-annotation.version>
-    <json-lib.version>2.1-rev6</json-lib.version>
+    <json-lib.version>2.4</json-lib.version>
     <annotation-indexer.version>1.2</annotation-indexer.version>
     <task-reactor.version>1.2</task-reactor.version>
     <graph-layouter.version>1.0</graph-layouter.version>
@@ -65,9 +65,8 @@ THE SOFTWARE.
     <activation.version>1.1.1-hudson-1</activation.version>
     <jaxen.version>1.1-beta-11</jaxen.version>
     <acegi-security.version>1.0.5</acegi-security.version>
-    <spring-web.version>2.5</spring-web.version>
-    <spring-core.version>2.5</spring-core.version>
-    <spring-aop.version>2.5</spring-aop.version>
+    <spring.version>2.5</spring.version>
+    <spring-dao.version>2.0.8</spring-dao.version>
     <xpp3.version>1.1.4c</xpp3.version>
     <jstl.version>1.1.0</jstl.version>
     <log4j.version>1.2.12</log4j.version>
@@ -370,6 +369,10 @@ THE SOFTWARE.
           <groupId>commons-jexl</groupId>
           <artifactId>commons-jexl</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.kohsuke.stapler</groupId>
+          <artifactId>json-lib</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 
@@ -380,9 +383,10 @@ THE SOFTWARE.
     </dependency>
 
     <dependency><!-- until we get this version through Stapler -->
-      <groupId>org.kohsuke.stapler</groupId>
+      <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
       <version>${json-lib.version}</version>
+      <classifier>jdk15</classifier>
     </dependency>
     <dependency>
       <groupId>args4j</groupId>
@@ -574,6 +578,14 @@ THE SOFTWARE.
           <groupId>org.springframework</groupId>
           <artifactId>spring-support</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-dao</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-jdbc</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -588,17 +600,28 @@ THE SOFTWARE.
       -->
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${spring-web.version}</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>${spring-core.version}</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency><!-- Hudson core doesn't use it but HUDSON-3811 requires us to put it. -->
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>${spring-aop.version}</version>
+      <version>${spring.version}</version>
+    </dependency>
+    <!--Dao and JDBC is used for acegi-security.-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-dao</artifactId>
+      <version>${spring-dao.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>xpp3</groupId>
@@ -827,6 +850,7 @@ THE SOFTWARE.
       <plugin><!-- generate Jelly tag lib documentation -->
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
+        <version>${maven-stapler-plugin.version}</version>
         <configuration>
           <patterns>
             <pattern>/lib/.*</pattern>

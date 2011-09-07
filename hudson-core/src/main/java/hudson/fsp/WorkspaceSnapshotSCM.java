@@ -54,6 +54,7 @@ public class WorkspaceSnapshotSCM extends SCM {
     /**
      * The job name from which we inherit the workspace.
      */
+    //TODO: review and check whether we can do it private
     public String jobName;
     /**
      * The permalink name indicating the build from which to inherit the workspace.
@@ -64,6 +65,14 @@ public class WorkspaceSnapshotSCM extends SCM {
     public WorkspaceSnapshotSCM(String jobName, String permalink) {
         this.jobName = jobName;
         this.permalink = permalink;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public String getPermalink() {
+        return permalink;
     }
 
     /**

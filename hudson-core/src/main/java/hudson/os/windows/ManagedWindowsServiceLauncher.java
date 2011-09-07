@@ -80,9 +80,19 @@ public class ManagedWindowsServiceLauncher extends ComputerLauncher {
     /**
      * "[DOMAIN\\]USERNAME" to follow the Windows convention.
      */
+    //TODO: review and check whether we can do it private
     public final String userName;
-    
+
+    //TODO: review and check whether we can do it private
     public final Secret password;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Secret getPassword() {
+        return password;
+    }
 
     @DataBoundConstructor
     public ManagedWindowsServiceLauncher(String userName, String password) {

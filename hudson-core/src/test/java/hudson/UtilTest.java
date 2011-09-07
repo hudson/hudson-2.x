@@ -177,4 +177,12 @@ public class UtilTest extends TestCase {
         assertEquals("&quot;&#039;", Util.escape("'\""));
         assertEquals("&nbsp; ", Util.escape("  "));
     }
+
+    public void testEscapeString() {
+        assertEquals("\\n", Util.escapeString("\n"));
+        assertEquals("\\r", Util.escapeString("\r"));
+        assertEquals("&lt;a>", Util.escapeString("<a>"));
+        assertEquals("'\"", Util.escapeString("'\""));
+        assertEquals("  ", Util.escapeString("  "));
+    }
 }

@@ -60,6 +60,7 @@ public class Api extends AbstractModelObject {
     /**
      * Model object to be exposed as XML/JSON/etc.
      */
+    //TODO: review and check whether we can do it private
     public final Object bean;
 
     public Api(Object bean) {
@@ -73,6 +74,11 @@ public class Api extends AbstractModelObject {
     public String getSearchUrl() {
         return "api";
     }
+
+    public Object getBean() {
+            return bean;
+    }
+
 
     /**
      * Exposes the bean as XML.

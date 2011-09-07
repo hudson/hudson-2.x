@@ -40,11 +40,13 @@ public final class WorkUnit {
     /**
      * Task to be executed.
      */
+    //TODO: review and check whether we can do it private
     public final SubTask work;
 
     /**
      * Shared context among {@link WorkUnit}s.
      */
+    //TODO: review and check whether we can do it private
     public final WorkUnitContext context;
 
     private volatile Executor executor;
@@ -52,6 +54,14 @@ public final class WorkUnit {
     WorkUnit(WorkUnitContext context, SubTask work) {
         this.context = context;
         this.work = work;
+    }
+
+    public SubTask getWork() {
+        return work;
+    }
+
+    public WorkUnitContext getContext() {
+        return context;
     }
 
     /**
