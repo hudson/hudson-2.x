@@ -48,7 +48,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
