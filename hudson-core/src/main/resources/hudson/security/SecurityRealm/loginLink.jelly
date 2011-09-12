@@ -40,11 +40,12 @@ THE SOFTWARE.
             jQuery.blockUI({
               message: jQuery('#loginDialog'),
               css: { 
-                width: '350px', 
+                width: '350px'
               },
-              title:  'Confirmation',
+              title:  'Confirmation'
             });
-	}
+            jQuery('j_username').focus();
+        }
         
         function submitForm(){
             jQuery('#loginMsg').css({ opacity: 1.0 });

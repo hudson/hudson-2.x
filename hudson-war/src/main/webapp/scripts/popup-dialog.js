@@ -11,7 +11,7 @@ function onLinkClick(dialogContainerId) {
         opacity: .6,
         color: '#fff'
       },
-      title:  'Confirmation',
+      title:  'Confirmation'
     });
 }
 
