@@ -37,7 +37,7 @@
     <aetherVersion>${aether.version}</aetherVersion>
     <wagon.version>1.0-beta-7</wagon.version>
     <wagonVersion>${wagon.version}</wagonVersion><!--backward compatible property-->
-    <commons-httpclient.version>3.1-rc1</commons-httpclient.version>
+    <commons-httpclient.version>4.1.2</commons-httpclient.version>
     <plexus-classworlds.version>2.3</plexus-classworlds.version>
   </properties>
 
@@ -107,8 +107,8 @@
 
       <dependency>
         <!-- default dependency to 2.0.2 confuses IntelliJ. Otherwise this value doesn't really affect build or runtime. -->
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
         <version>${commons-httpclient.version}</version>
       </dependency>
 
