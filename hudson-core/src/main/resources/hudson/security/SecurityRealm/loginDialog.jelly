@@ -59,17 +59,29 @@ THE SOFTWARE.
             <input type="hidden" name="from" value="${submitFrom}" />
             <input style="width:75px" type="button" id="loginButton" value="${%Login}" />
             <input style="margin-left:10px; width:75px" type="button" id="cancelButton" value="${%Cancel}" />
-            <script>
-            $('j_username').focus();
-            </script>
-         
+
         </form>
-        
-        <div id="loginError" style="opacity:0.0; text-align:center; color:red; font-weight:bold">
+        <style type="text/css">
+            #loginError, #loginMsg {
+                opacity:0;
+                -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+                filter: alpha(opacity=0);
+                text-align:center;
+                font-weight:bold;
+            }
+            #loginError {
+                color: red;
+            }
+            #loginMsg {
+                color: black;
+            }
+        </style>
+
+        <div id="loginError">
             ${%Invalid login information. Please try again.}
         </div>
         
-        <div id="loginMsg" style="opacity:0.0; text-align:center; color:black; font-weight:bold">
+        <div id="loginMsg">
             ${%Logging in...}
         </div>
         
