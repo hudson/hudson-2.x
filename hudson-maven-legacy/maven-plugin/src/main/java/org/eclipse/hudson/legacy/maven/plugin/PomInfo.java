@@ -16,7 +16,7 @@
 
 package org.eclipse.hudson.legacy.maven.plugin;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.CiManagement;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
