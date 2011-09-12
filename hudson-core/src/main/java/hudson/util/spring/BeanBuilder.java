@@ -37,7 +37,7 @@ import groovy.lang.GroovyObjectSupport;
 import groovy.lang.GroovyShell;
 import groovy.lang.MetaClass;
 import groovy.lang.MissingMethodException;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.codehaus.groovy.runtime.InvokerHelper;

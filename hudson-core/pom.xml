@@ -403,8 +403,8 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency><!-- hudson doesn't use this directly, but some plugins wanted to use the latest -->
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-digester</groupId>

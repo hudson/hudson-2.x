@@ -17,7 +17,7 @@ package hudson.model;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import net.sf.json.JSONObject;
 import hudson.Extension;
 import hudson.cli.CLICommand;

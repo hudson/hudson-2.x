@@ -17,7 +17,7 @@
 package hudson.model;
 
 import hudson.widgets.Widget;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Sets;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import hudson.Extension;

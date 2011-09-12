@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.input.CountingInputStream;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
