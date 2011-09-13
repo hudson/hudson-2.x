@@ -24,7 +24,7 @@
 
 package org.hudsonci.utils.common;
 
-import org.apache.commons.lang.time.FastDateFormat;
+import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

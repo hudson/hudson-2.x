@@ -71,17 +71,11 @@ public class IOUtils extends org.apache.commons.io.IOUtils {
      * So to reliably skip just the N bytes, we'll actually read all those bytes.
      *
      * @since 1.349
+     * @deprecated use {@link org.apache.commons.io.IOUtils#skip(java.io.InputStream, long)} instead
+     * @since 2.1.2
      */
-    public static InputStream skip(InputStream in, long size) throws IOException {
-        DataInputStream di = new DataInputStream(in);
-
-        while (size>0) {
-            int chunk = (int)Math.min(SKIP_BUFFER.length,size);
-            di.readFully(SKIP_BUFFER,0,chunk);
-            size -= chunk;
-        }
-
-        return in;
+    public static long skip(InputStream in, long size) throws IOException {
+        return org.apache.commons.io.IOUtils.skip(in, size);
     }
 
     /**

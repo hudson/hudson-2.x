@@ -39,6 +39,23 @@ THE SOFTWARE.
   </description>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-xjc</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.sun.xml.bind</groupId>
+          <artifactId>jaxb-impl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
     <dependency>
       <groupId>org.jvnet.jaxb2_commons</groupId>
       <artifactId>jaxb2-basics-tools</artifactId>
@@ -55,8 +72,8 @@ THE SOFTWARE.
     </dependency>
 
     <dependency>
-      <groupId>net.java.dev.jaxb2-commons</groupId>
-      <artifactId>jaxb-fluent-api</artifactId>
+      <groupId>org.jvnet.jaxb2_commons</groupId>
+      <artifactId>jaxb2-fluent-api</artifactId>
     </dependency>
 
     <dependency>

@@ -76,7 +76,7 @@ import java.util.SortedMap;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
