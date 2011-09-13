@@ -1,0 +1,40 @@
+==============================================================
+Hudson Continuous Integration Server
+Copyright 2004-2011 Oracle Corporation ==============================================================
+
+The Hudson Continuous Integration Server is Copyright Oracle Corporation
+unless otherwise noted. It is licensed under eclipse 1.0 license.  
+
+The following classes used were sourced from the Apache
+Software Foundation and is distributed under the apache 2.0
+license.
+
+BeanBuilder.java
+BeanConfiguration.java
+DefaultBeanConfiguration.java
+RuntimeSpringConfiguration.java
+DefaultRuntimeSpringConfiguration.java
+ChunkedInputStream.java
+ChunkedOutputStream.java
+DefaultMavenExecutionRequestBuilder.java
+DefaultRuntimeSpringConfiguration.java
+ExecutionEventLogger.java
+FastPipedInputStream.java
+FastPipedOutputStream.java
+HudsonMavenExecutionResult.java
+Maven3Launcher.java
+MavenBuildInformation.java
+MavenEmbedderRequest.java
+MavenExecutionRequestBuilder.java
+MavenExecutionRequestsBuilderException.java
+MavenProjectBuildResult.java
+MavenProjectInfo.java
+MavenVersionParserTest.java
+QuotedStringTokenizer.java
+TarInputStream.java
+TarOutputStream.java
+
+
+
+
+
