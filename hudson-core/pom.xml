@@ -53,7 +53,7 @@ THE SOFTWARE.
     <graph-layouter.version>1.0</graph-layouter.version>
     <antlr.version>2.7.6</antlr.version>
     <jfreechart.version>1.0.9</jfreechart.version>
-    <commons-digester.version>1.7</commons-digester.version>
+    <commons-digester.version>3.0</commons-digester.version>
     <commons-beanutils.version>1.8.0</commons-beanutils.version>
     <commons-jelly-tags-fmt.version>1.0</commons-jelly-tags-fmt.version>
     <commons-jelly-tags-xml.version>1.1</commons-jelly-tags-xml.version>
@@ -70,7 +70,7 @@ THE SOFTWARE.
     <xpp3.version>1.1.4c</xpp3.version>
     <jstl.version>1.1.0</jstl.version>
     <log4j.version>1.2.12</log4j.version>
-    <logkit.version>1.0.1</logkit.version>
+    <logkit.version>2.0</logkit.version>
     <avalon-framework.version>4.1.3</avalon-framework.version>
     <txw2.version>20070624</txw2.version>
     <winp.version>1.14</winp.version>
@@ -88,7 +88,7 @@ THE SOFTWARE.
     <jinterop-wmi.version>1.0</jinterop-wmi.version>
     <windows-remote-command.version>1.0</windows-remote-command.version>
     <metainf-services.version>1.1</metainf-services.version>
-    <asm-commons.version>2.2.3</asm-commons.version>
+    <asm-commons.version>3.3.1</asm-commons.version>
     <access-modifier-annotation.version>1.0</access-modifier-annotation.version>
     <jline.version>0.9.94</jline.version>
 
@@ -439,12 +439,12 @@ THE SOFTWARE.
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency><!-- hudson doesn't use this directly, but some plugins wanted to use the latest -->
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-digester</groupId>
-      <artifactId>commons-digester</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-digester3</artifactId>
       <version>${commons-digester.version}</version>
       <exclusions>
         <exclusion>
