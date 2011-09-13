@@ -88,7 +88,7 @@ THE SOFTWARE.
     <jinterop-wmi.version>1.0</jinterop-wmi.version>
     <windows-remote-command.version>1.0</windows-remote-command.version>
     <metainf-services.version>1.1</metainf-services.version>
-    <asm-commons.version>2.2.3</asm-commons.version>
+    <asm-commons.version>3.3.1</asm-commons.version>
     <access-modifier-annotation.version>1.0</access-modifier-annotation.version>
     <jline.version>0.9.94</jline.version>
 
