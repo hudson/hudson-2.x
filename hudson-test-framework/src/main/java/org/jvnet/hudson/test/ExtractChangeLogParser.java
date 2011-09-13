@@ -20,7 +20,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.User;
 import hudson.scm.ChangeLogParser;
 import hudson.scm.ChangeLogSet;
-import org.apache.commons.digester.Digester;
+import org.apache.commons.digester3.Digester;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 import org.xml.sax.SAXException;
