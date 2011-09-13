@@ -19,7 +19,7 @@ package org.eclipse.hudson.utils.tasks;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStep;
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 
 /**
  * Support for {@link hudson.tasks.BuildStep#prebuild} operation.
