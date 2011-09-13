@@ -9,362 +9,486 @@
 #
 # Contributors: 
 #
-#    Kohsuke Kawaguchi, Stephen Connolly, Tom Huybrechts, Yahoo! Inc.
+#    Kohsuke Kawaguchi, Stephen Connolly, Tom Huybrechts, Yahoo! Inc., Winston Prakash
 #        
 #
 #************************************************************************** --> 
 
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.hudson.main</groupId>
-    <artifactId>hudson</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.eclipse.hudson.main</groupId>
+        <artifactId>hudson</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
   
-  <artifactId>hudson-war</artifactId>
-  <packaging>war</packaging>
-  <name>Hudson :: Webapp</name>
+    <artifactId>hudson-war</artifactId>
+    <packaging>war</packaging>
+    <name>Hudson :: War</name>
 
-  <description>
+    <description>
     Creates a war file. Also includes additional static web resources, such as images, CSS, JavaScript, and
     some HTML files.
-  </description>
+    </description>
 
-  <properties>
-    <HUDSON_HOME>${basedir}/work</HUDSON_HOME>
-    <contextPath>/</contextPath><!-- context path during test -->
-    <port>8080</port><!-- HTTP listener port -->
-  </properties>
+    <properties>
+        <HUDSON_HOME>${basedir}/work</HUDSON_HOME>
+        <contextPath>/</contextPath><!-- context path during test -->
+        <port>8080</port><!-- HTTP listener port -->
+    </properties>
 
-  <build>
-    <finalName>hudson</finalName>
+    <build>
+        <finalName>hudson</finalName>
 
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-          <webResources>
-            <resource>
-              <directory>${project.build.directory}/generated-resources</directory>
-            </resource>
-          </webResources>
-          <!-- for putting Main-Class into war -->
-          <archive>
-            <manifest>
-              <mainClass>Main</mainClass>
-            </manifest>
-            <manifestEntries>
-              <Implementation-Version>${project.version}</Implementation-Version>
-              <Hudson-Version>${project.version}</Hudson-Version>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>list</goal>
-            </goals>
-            <!--  TODO: what is actually using this file? -->
-            <configuration>
-              <outputFile>${basedir}/target/classes/dependencies.txt</outputFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.jvnet.maven-antrun-extended-plugin</groupId>
-        <artifactId>maven-antrun-extended-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>package</id>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <!-- deploy the war as a jar, so that the tests can pull this into the classpath -->
-                <attachArtifact file="target/hudson.war" classifier="war-for-test" type="jar" />
-              </tasks>
-            </configuration>
-          </execution>
-          <execution>
-            <id>resgen</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <verifyArtifact>false</verifyArtifact>
-              <tasks>
-                <mkdir dir="target/generated-resources" />
-
-                <!-- put executable war header -->
-                <resolveArtifact groupId="org.jvnet.hudson" artifactId="executable-war" version="1.17" type="jar" property="executable-war.jar" />
-                <unjar src="${executable-war.jar}" dest="target/generated-resources">
-                  <patternset>
-                    <include name="**/*.class" />
-                  </patternset>
-                </unjar>
-
-                <!-- dependencies that goes to unusual locations -->
-                <resolveArtifact artifactId="hudson-remoting" tofile="${basedir}/target/generated-resources/WEB-INF/remoting.jar" />
-                <resolveArtifact artifactId="hudson-remoting" tofile="${basedir}/target/generated-resources/WEB-INF/slave.jar" />
-                <resolveArtifact groupId="${project.groupId}" artifactId="hudson-cli" classifier="jar-with-dependencies" version="${project.version}" type="jar" tofile="${basedir}/target/generated-resources/WEB-INF/hudson-cli.jar" />
-                <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
-                
-                <!-- bundled plugins -->
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="ssh-slaves" version="2.1.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.1.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.1.0_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.1.0_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.jvnet.hudson.tools</groupId>
-        <artifactId>maven-hudson-dev-plugin</artifactId>
-        <configuration>
-          <contextPath>${contextPath}</contextPath>
-          <connectors>
-            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                <port>${port}</port>
-            </connector>
-          </connectors>
-          <!--
-            read directly from core module's output directory,
-            so that changes are picked up right away without running mvn.
-          -->
-          <classesDirectory>../hudson-core/target/classes</classesDirectory>
-          <!-- use the test classpath for loading resources, since this takes priority -->
-          <testClassesDirectory>../hudson-core/src/main/resources</testClassesDirectory>
-          <useTestClasspath>true</useTestClasspath>
-          <!--
-            Reload webapp when you hit ENTER. (See JETTY-282 for more)
-          -->
-          <consoleForceReload>true</consoleForceReload>
-          <userRealms>
-            <userRealm implementation="org.mortbay.jetty.security.HashUserRealm">
-              <name>default</name>
-              <config>${basedir}/src/realm.properties</config>
-            </userRealm>
-          </userRealms>
-          <systemProperties>
-            <systemProperty>
-              <name>HUDSON_HOME</name>
-              <value>${HUDSON_HOME}</value>
-            </systemProperty>
-            <systemProperty>
-              <!-- always reload views during debugging -->
-              <name>stapler.jelly.noCache</name>
-              <value>true</value>
-            </systemProperty>
-            <systemProperty>
-              <!-- show the stapler evaluation during execution -->
-              <name>stapler.trace</name>
-              <value>true</value>
-            </systemProperty>
-            <systemProperty>
-              <!-- always reload scripts during debugging -->
-              <name>hudson.script.noCache</name>
-              <value>true</value>
-            </systemProperty>
-            <systemProperty>
-              <!-- load view resources from the source directly, again for real time change -->
-              <name>stapler.resourcePath</name>
-              <value>
-                  ../hudson-core/src/main/resources;
-                  ../hudson-maven-legacy/maven-plugin/src/main/resources
-              </value>
-            </systemProperty>
-            <systemProperty>
-              <!-- enable the plugins in main by default -->
-              <name>hudson.bundled.plugins</name>
-              <value>
-                  ${basedir}/../hudson-rest/rest-plugin/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven3/maven3-plugin/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven-legacy/maven-plugin/target/test-classes/the.hpl,
-               </value>
-            </systemProperty>
-            <systemProperty>
-              <!-- stat collection pointless -->
-              <name>hudson.model.UsageStatistics.disabled</name>
-              <value>true</value>
-            </systemProperty>
-            <systemProperty>
-              <name>hudson.Main.development</name>
-              <value>true</value>
-            </systemProperty>
-            <systemProperty>
-              <!-- this adds 3 sec to the shutdown, and most likely pointless, too -->
-              <name>hudson.DNSMultiCast.disabled</name>
-              <value>true</value>
-            </systemProperty>
-          </systemProperties>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-core</artifactId>
-      <exclusions>
-        <!--
-          jars that are not needed in war. most of the exclusions should happen in the core, to make IDEs happy, not here.
-        -->
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>jsp-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-inject</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-service</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-remoting</artifactId>
-    </dependency>
-
-    <!-- declare in reactor, so "mvn install -pl war -am" will work -->
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>rest-plugin</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>maven3-plugin</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>maven3-snapshots</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- REMOVE when the legacy maven-plugin isn't a bundled plugin -->
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>maven-plugin</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.hudson.main</groupId>
-      <artifactId>hudson-cli</artifactId>
-      <classifier>jar-with-dependencies</classifier>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-    </dependency>
-  </dependencies>
-
-  <profiles>
-    <profile>
-      <!-- profile for creating Hudson IPS package -->
-      <id>ips</id>
-      <build>
         <plugins>
-          <plugin>
-            <groupId>org.jvnet.updatecenter2</groupId>
-            <artifactId>maven-makepkgs-plugin</artifactId>
-            <version>0.3</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>package</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <python>python2.5</python>
-              <proto>../ips/proto.py</proto>
-              <attach>false</attach>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <!-- sign war -->
-      <id>sign</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <!-- sign the war -->
-              <execution>
-                <id>signWar</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                  <tasks>
-                    <!--
-                      during the development, debug profile defined in ../pom.xml will cause
-                      the jars to be signed by a self-certified dummy public key.
-
-                      For release, you should define the real values in ~/.m2/settings.xml
-                    -->
-                    <signjar jar="target/hudson.war" alias="${hudson.sign.alias}" keystore="${hudson.sign.keystore}" storepass="${hudson.sign.storepass}" />
-                  </tasks>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    
+                    <webResources>
+                        <resource>
+                            <directory>${project.build.directory}/generated-resources</directory>
+                        </resource>
+                    </webResources>
+                    <!-- Main Class to Start Jetty -->
+                    <archive>
+                        <manifest>
+                            <mainClass>org.eclipse.hudson.war.executable.StartJetty</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Hudson-Version>${project.version}</Hudson-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
+            </plugin>
+    
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                   
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>list</goal>
+                        </goals>
+                            <!--  TODO: what is actually using this file? -->
+                        <configuration>
+                            <outputFile>${basedir}/target/classes/dependencies.txt</outputFile>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>copyExecuteWar</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <!-- TODO: Replace this with jetty console plugin -->
+                                <artifactItem>
+                                    <groupId>org.eclipse.hudson.main</groupId>
+                                    <artifactId>hudson-jetty-war-executable</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources</outputDirectory>
+                                    
+                                    <!-- TODO: Find out from maven guys how to exclude META-INF files while unpacking. -->
+                                    <!--
+                                    <excludes>
+                                        <exclude>META-INF</exclude>
+                                    </excludes>
+                                    -->
+                                      
+                                </artifactItem>
+                                
+                                <!-- Jetty Classes -->
+                                <artifactItem>
+                                    <groupId>org.mortbay.jetty</groupId>
+                                    <artifactId>jetty</artifactId>
+                                    <version>6.1.26</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.mortbay.jetty</groupId>
+                                    <artifactId>jetty-util</artifactId>
+                                    <version>6.1.26</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.mortbay.jetty</groupId>
+                                    <artifactId>servlet-api</artifactId>
+                                    <version>2.5-20081211</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources</outputDirectory>
+                                </artifactItem>
+                                
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                                
+                    <execution>
+                        <id>copyResources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                
+                                <!-- dependencies that goes to WEB-INF for unusual usage -->
+                                
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>hudson-remoting</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF</outputDirectory>
+                                    <destFileName>slave.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>hudson-remoting</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF</outputDirectory>
+                                    <destFileName>remoting.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>hudson-cli</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>jar-with-dependencies</classifier>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF</outputDirectory>
+                                    <destFileName>hudson-cli.jar</destFileName>
+                                </artifactItem>
+                                
+                                <!-- bundled plugins (built with core) -->
+                                
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>rest-plugin</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>rest-plugin.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>maven3-plugin</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>maven3-plugin.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>maven3-snapshots</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>maven3-snapshots.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>maven-plugin</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>maven-plugin.hpi</destFileName>
+                                </artifactItem>
+                                
+                                <!-- bundled plugins (external)) -->
+                                
+                                <artifactItem>
+                                    <groupId>org.hudsonci.plugins</groupId>
+                                    <artifactId>subversion</artifactId>
+                                    <version>2.1.0</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>subversion.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hudsonci.plugins</groupId>
+                                    <artifactId>cvs</artifactId>
+                                    <version>2.1.0</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>cvs.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hudsonci.plugins</groupId>
+                                    <artifactId>git</artifactId>
+                                    <version>2.1.0</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>git.hpi</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.hudsonci.plugins</groupId>
+                                    <artifactId>ssh-slaves</artifactId>
+                                    <version>2.1.0</version>
+                                    <type>hpi</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/generated-resources/WEB-INF/plugins</outputDirectory>
+                                    <destFileName>ssh-slaves.hpi</destFileName>
+                                </artifactItem>
+                                
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.build.directory}/${project.artifactId}-${project.version}.war</file>
+                                    <type>jar</type>
+                                    <classifier>war-for-test</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jvnet.hudson.tools</groupId>
+                <artifactId>maven-hudson-dev-plugin</artifactId>
+                <configuration>
+                    <contextPath>${contextPath}</contextPath>
+                    <connectors>
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                            <port>${port}</port>
+                        </connector>
+                    </connectors>
+                    
+                    <!--
+                      read directly from core module's output directory,
+                      so that changes are picked up right away without running mvn.
+                    -->
+                    <classesDirectory>../hudson-core/target/classes</classesDirectory>
+                    <!-- use the test classpath for loading resources, since this takes priority -->
+                    <testClassesDirectory>../hudson-core/src/main/resources</testClassesDirectory>
+                    <useTestClasspath>true</useTestClasspath>
+                    <!--
+                      Reload webapp when you hit ENTER. (See JETTY-282 for more)
+                    -->
+                    <consoleForceReload>true</consoleForceReload>
+                    <userRealms>
+                        <userRealm implementation="org.mortbay.jetty.security.HashUserRealm">
+                            <name>default</name>
+                            <config>${basedir}/src/realm.properties</config>
+                        </userRealm>
+                    </userRealms>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>HUDSON_HOME</name>
+                            <value>${HUDSON_HOME}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- always reload views during debugging -->
+                            <name>stapler.jelly.noCache</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- show the stapler evaluation during execution -->
+                            <name>stapler.trace</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- always reload scripts during debugging -->
+                            <name>hudson.script.noCache</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- load view resources from the source directly, again for real time change -->
+                            <name>stapler.resourcePath</name>
+                            <value>
+                              ../hudson-core/src/main/resources;
+                              ../hudson-maven-legacy/maven-plugin/src/main/resources
+                            </value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- enable the plugins in main by default -->
+                            <name>hudson.bundled.plugins</name>
+                            <value>
+                              ${basedir}/../hudson-rest/rest-plugin/target/test-classes/the.hpl,
+                              ${basedir}/../hudson-maven3/maven3-plugin/target/test-classes/the.hpl,
+                              ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl,
+                              ${basedir}/../hudson-maven-legacy/maven-plugin/target/test-classes/the.hpl,
+                            </value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- stat collection pointless -->
+                            <name>hudson.model.UsageStatistics.disabled</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>hudson.Main.development</name>
+                            <value>true</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <!-- this adds 3 sec to the shutdown, and most likely pointless, too -->
+                            <name>hudson.DNSMultiCast.disabled</name>
+                            <value>true</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>hudson-core</artifactId>
+            <exclusions>
+                <!--
+                  jars that are not needed in war. most of the exclusions should happen in the core, to make IDEs happy, not here.
+                -->
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>hudson-inject</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>hudson-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>hudson-remoting</artifactId>
+        </dependency>
+
+        <!-- declare in reactor, so "mvn install -pl war -am" will work -->
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>rest-plugin</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>maven3-plugin</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.hudson.main</groupId>
+            <artifactId>maven3-snapshots</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <!-- profile for creating Hudson IPS package -->
+            <id>ips</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.updatecenter2</groupId>
+                        <artifactId>maven-makepkgs-plugin</artifactId>
+                        <version>0.3</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <python>python2.5</python>
+                            <proto>../ips/proto.py</proto>
+                            <attach>false</attach>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- sign war -->
+            <id>sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <!-- sign the war -->
+                            <execution>
+                                <id>signWar</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <!--
+                                          during the development, debug profile defined in ../pom.xml will cause
+                                          the jars to be signed by a self-certified dummy public key.
+
+                                          For release, you should define the real values in ~/.m2/settings.xml
+                                        -->
+                                        <signjar jar="target/hudson.war" alias="${hudson.sign.alias}" keystore="${hudson.sign.keystore}" storepass="${hudson.sign.storepass}" />
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
