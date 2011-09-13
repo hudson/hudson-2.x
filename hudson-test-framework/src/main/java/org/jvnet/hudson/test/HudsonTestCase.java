@@ -24,8 +24,17 @@
 package org.jvnet.hudson.test;
 
 import com.gargoylesoftware.htmlunit.DefaultCssErrorHandler;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.ScriptResult;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.javascript.HtmlUnitContextFactory;
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.gargoylesoftware.htmlunit.javascript.host.xml.XMLHttpRequest;
+import com.gargoylesoftware.htmlunit.protocol.javascript.JavaScriptURLConnection;
+import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import hudson.*;
 import hudson.Util;
 import hudson.model.*;
@@ -106,9 +115,9 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
 import org.hudsonci.inject.Smoothie;
@@ -870,7 +879,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
      */
     public void assertXPath(HtmlPage page, String xpath) {
         assertNotNull("There should be an object that matches XPath:"+xpath,
-                page.getDocumentElement().selectSingleNode(xpath));
+            selectSingleNode(page.getDocumentElement(), xpath));
     }
 
     /** Asserts that the XPath matches the contents of a DomNode page. This
@@ -980,8 +989,9 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
 
     /**
      * Submits the form.
-     *
-     * Plain {@link HtmlForm#submit()} doesn't work correctly due to the use of YUI in Hudson.
+     * <p/>
+     * Plain {@link HtmlForm#submit(com.gargoylesoftware.htmlunit.html.SubmittableElement)}}
+     * doesn't work correctly due to the use of YUI in Hudson.
      */
     public HtmlPage submit(HtmlForm form) throws Exception {
         return (HtmlPage)form.submit((HtmlButton)last(form.getHtmlElementsByTagName("button")));
@@ -1005,15 +1015,18 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
                 // Just doing form.submit() doesn't work either, because it doesn't do
                 // the preparation work needed to pass along the name of the button that
                 // triggered a submission (more concretely, m_oSubmitTrigger is not set.)
-                ((HtmlButton)e).click();
-                return (HtmlPage)form.submit((HtmlButton)e);
+                return (HtmlPage)e.click();
             }
         }
         throw new AssertionError("No such submit button with the name "+name);
     }
 
     protected HtmlInput findPreviousInputElement(HtmlElement current, String name) {
-        return (HtmlInput)current.selectSingleNode("(preceding::input[@name='_."+name+"'])[last()]");
+        return selectSingleNode(current, "(preceding::input[@name='_."+name+"'])[last()]");
+    }
+
+    protected <X> X selectSingleNode(HtmlElement current, String xPathExpression) {
+        return (X) current.getFirstByXPath(xPathExpression);
     }
 
     protected HtmlButton getButtonByCaption(HtmlForm f, String s) {
@@ -1023,6 +1036,8 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
         }
         return null;
     }
+
+
 
     /**
      * Creates a {@link TaskListener} connected to stdout.
@@ -1413,7 +1428,50 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
     public WebClient createWebClient() {
         return new WebClient();
     }
-    
+
+    /**
+     * This method submits form. Logic was taken from
+     * {@link HtmlForm#submit(com.gargoylesoftware.htmlunit.html.SubmittableElement)} method with null submitElement
+     *
+     * @param form form to submit.
+     * @return {@link Page} result page after submitted.
+     */
+    public static Page submitForm(HtmlForm form) {
+        final HtmlPage htmlPage = (HtmlPage) form.getPage();
+        final com.gargoylesoftware.htmlunit.WebClient webClient = htmlPage.getWebClient();
+        if (webClient.isJavaScriptEnabled()) {
+            final String action = form.getActionAttribute().trim();
+            if (StringUtils.startsWithIgnoreCase(action, JavaScriptURLConnection.JAVASCRIPT_PREFIX)) {
+                return htmlPage.executeJavaScriptIfPossible(action, "Form action",
+                    form.getStartLineNumber()).getNewPage();
+            }
+        } else {
+            if (StringUtils.startsWithIgnoreCase(form.getActionAttribute(),
+                JavaScriptURLConnection.JAVASCRIPT_PREFIX)) {
+                // The action is JavaScript but JavaScript isn't enabled.
+                // Return the current page.
+                return htmlPage;
+            }
+        }
+
+        final WebRequest request = form.getWebRequest(null);
+        final String target = htmlPage.getResolvedTarget(form.getTargetAttribute());
+
+        final WebWindow webWindow = htmlPage.getEnclosingWindow();
+        final String action = form.getActionAttribute();
+        final boolean isHashJump = HttpMethod.GET.equals(request.getHttpMethod()) && action.endsWith("#");
+        webClient.download(webWindow, target, request, isHashJump, "JS form.submit()");
+        return htmlPage;
+    }
+
+    public <E> List<E> selectNodes(DomNode domNode, final String xpathExpr) {
+        return (List<E>) domNode.getByXPath(xpathExpr);
+    }
+
+    public HtmlAnchor getFirstAnchorByText(HtmlPage page, final String text) throws ElementNotFoundException {
+        return page.getAnchorByText(text);
+    }
+
     /**
      * Extends {@link com.gargoylesoftware.htmlunit.WebClient} and provide convenience methods
      * for accessing Hudson.
@@ -1480,7 +1538,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
             HtmlForm form = page.getFormByName("login");
             form.getInputByName("j_username").setValueAttribute(username);
             form.getInputByName("j_password").setValueAttribute(password);
-            form.submit(null);
+            submitForm(null);
             return this;
         }
 
@@ -1492,7 +1550,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
          * and passwords. All the test accounts have the same user name and password.
          */
         public WebClient login(String username) throws Exception {
-            login(username,username);
+            login(username, username);
             return this;
         }
 
@@ -1500,7 +1558,7 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
             HtmlPage top = goTo("");
             HtmlForm search = top.getFormByName("search");
             search.getInputByName("q").setValueAttribute(q);
-            return (HtmlPage)search.submit(null);
+            return (HtmlPage) submitForm(search);
         }
 
         /**
@@ -1606,15 +1664,13 @@ public abstract class HudsonTestCase extends TestCase implements RootAction {
          * Adds a security crumb to the quest
          */
         public WebRequestSettings addCrumb(WebRequestSettings req) {
-            NameValuePair crumb[] = { new NameValuePair() };
-            
-            crumb[0].setName(hudson.getCrumbIssuer().getDescriptor().getCrumbRequestField());
-            crumb[0].setValue(hudson.getCrumbIssuer().getCrumb( null ));
-            
+            NameValuePair crumb = new NameValuePair(
+                hudson.getCrumbIssuer().getDescriptor().getCrumbRequestField(),
+                hudson.getCrumbIssuer().getCrumb( null ));
             req.setRequestParameters(Arrays.asList( crumb ));
             return req;
         }
-        
+
         /**
          * Creates a URL with crumb parameters relative to {{@link #getContextPath()}
          */

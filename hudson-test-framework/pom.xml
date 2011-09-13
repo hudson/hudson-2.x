@@ -38,8 +38,8 @@
   </description>
 
   <properties>
-    <htmlunit.version>2.6-hudson-2</htmlunit.version>
-    <embedded-rhino-debugger.version>1.2</embedded-rhino-debugger.version>
+    <htmlunit.version>2.9-hudson-1</htmlunit.version>
+    <embedded-rhino-debugger.version>1.3</embedded-rhino-debugger.version>
     <netx.version>0.5-hudson-2</netx.version>
     <gmaven-plugin.version>1.3</gmaven-plugin.version>
     <gmaven-provider.version>1.7</gmaven-provider.version>
@@ -100,11 +100,16 @@
 
     <dependency>
       <groupId>org.jvnet.hudson</groupId>
+      <artifactId>embedded-rhino-debugger</artifactId>
+      <version>${embedded-rhino-debugger.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hudsonci.tools</groupId>
       <artifactId>htmlunit</artifactId>
       <version>${htmlunit.version}</version>
       <exclusions>
         <exclusion>
-          <!--  hides JDK DOM classes in Eclipse -->
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
         </exclusion>
@@ -112,9 +117,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jvnet.hudson</groupId>
-      <artifactId>embedded-rhino-debugger</artifactId>
-      <version>${embedded-rhino-debugger.version}</version>
+      <groupId>net.sourceforge.nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <version>1.9.15</version>
     </dependency>
 
     <dependency>
