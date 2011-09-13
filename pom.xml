@@ -637,7 +637,7 @@
     </profile>
 
     <profile>
-      <!-- FIXME: This is crappy use of a default activated profile. -->
+      <!-- FIXME: This is an inneffective use of a default activated profile. -->
       <id>debug</id>
       <activation>
         <activeByDefault>true</activeByDefault>

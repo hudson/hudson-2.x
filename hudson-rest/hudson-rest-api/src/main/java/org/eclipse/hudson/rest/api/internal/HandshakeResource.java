@@ -89,7 +89,7 @@ public class HandshakeResource
         }
 
         //
-        // FIXME: This is fairly crappy handshaking...
+        // FIXME: This is a fairly  innefective handshaking...
         //
 
         String id = null;

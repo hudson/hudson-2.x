@@ -243,7 +243,7 @@ public class ProjectsResource
     public BuildsDTO getBuilds(final @PathParam("projectName") String projectName) {
         log.debug("Listing builds for project: {}", projectName);
 
-        // securityService.checkPermission(Permission.READ); or Hudson.READ?  or fuck this
+        // securityService.checkPermission(Permission.READ); or Hudson.READ? 
 
         AbstractProject<?, ?> project = support.getProject(projectName);
         project.checkPermission(READ); // FIXME: This is already done by ProjectServiceImpl.findProjectByFullName(), though not done when returning a multiconfig project
