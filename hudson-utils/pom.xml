@@ -40,7 +40,7 @@ THE SOFTWARE.
 
   <properties>
     <gossip-support.version>1.7</gossip-support.version>
-    <plexus-utils.version>2.0.5</plexus-utils.version>
+    <plexus-utils.version>3.0</plexus-utils.version>
   </properties>
 
   <dependencies>
