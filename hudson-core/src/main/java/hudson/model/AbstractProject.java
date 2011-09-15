@@ -96,7 +96,6 @@ import java.util.Vector;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
@@ -218,6 +217,16 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      * List of all {@link Trigger}s for this project.
      */
     protected List<Trigger<?>> triggers = new Vector<Trigger<?>>();
+
+    /**
+     * The name of the template.
+     */
+    private String templateName;
+
+    /**
+     * Selected template for this project.
+     */
+    private transient AbstractProject template;
 
     /**
      * {@link Action}s contributed from subsidiary objects associated with
@@ -1669,7 +1678,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         super.submit(req,rsp);
 
         makeDisabled(req.getParameter("disable")!=null);
-
+        setTemplateName(Util.fixEmptyAndTrim(req.getParameter("templateName")));
         jdk = req.getParameter("jdk");
         if(req.getParameter("hasCustomQuietPeriod")!=null) {
             quietPeriod = Integer.parseInt(req.getParameter("quiet_period"));
@@ -1953,5 +1962,36 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         if (item==null)
             throw new CmdLineException(null,Messages.AbstractItem_NoSuchJobExists(name,AbstractProject.findNearest(name).getFullName()));
         return item;
+    }
+
+    /**
+     * Returns template name.
+     *
+     * @return template name.
+     */
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    /**
+     * Sets template name.
+     *
+     * @param templateName template name.
+     */
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+        this.template = Hudson.getInstance().getTemplate(this.getClass(), templateName);
+    }
+
+    /**
+     * Returns selected template.
+     *
+     * @return template.
+     */
+    public AbstractProject getTemplate() {
+        if (null == template) {
+            template = Hudson.getInstance().getTemplate(this.getClass(), templateName);
+        }
+        return template;
     }
 }
