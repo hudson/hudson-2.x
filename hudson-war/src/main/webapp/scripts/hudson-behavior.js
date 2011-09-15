@@ -1223,7 +1223,7 @@ function scrollIntoView(e) {
 // used in expandableTextbox.jelly to change a input field into a text area
 function expandTextArea(button,id) {
     button.style.display="none";
-    var field = document.getElementById(id);
+    var field = button.parentNode.parentNode.getElementsByTagName("input")[0];
     var value = field.value.replace(/ +/g,'\n');
     var n = field;
     while(n.tagName!="TABLE")
