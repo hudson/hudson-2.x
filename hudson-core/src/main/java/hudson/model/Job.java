@@ -162,8 +162,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     @Override
     public synchronized void save() throws IOException {
-        super.save();
-        holdOffBuildUntilSave = false;
+        if (allowSave.get()) {
+            super.save();
+            holdOffBuildUntilSave = false;
+        }
     }
 
     @Override
@@ -1005,8 +1007,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                     properties.add(prop);
                 }
             }
-
+            allowSave.set(false);
             submit(req, rsp);
+            allowSave.remove();
 
             save();
 
@@ -1308,5 +1311,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         this.creationTime = creationTime;
     }
 
-
+    protected static final ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
+        @Override
+        protected Boolean initialValue() {
+            return true;
+        }
+    };
 }
