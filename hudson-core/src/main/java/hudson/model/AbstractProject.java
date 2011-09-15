@@ -227,7 +227,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     /**
      * Selected template for this project.
      */
-    private transient AbstractProject template;
+    private transient P template;
 
     /**
      * {@link Action}s contributed from subsidiary objects associated with
@@ -273,7 +273,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public void onLoad(ItemGroup<? extends Item> parent, String name) throws IOException {
         super.onLoad(parent, name);
 
-        template = Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+        //TODO fix it
+        template = (P) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
 
         this.builds = new RunMap<R>();
         this.builds.load(this, new Constructor<R>() {
@@ -1983,7 +1984,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     public void setTemplateName(String templateName) {
         this.templateName = templateName;
-        this.template = Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+        //TODO fix it
+        this.template = (P)Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
     }
 
     /**
@@ -1991,7 +1993,16 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      *
      * @return template.
      */
-    public AbstractProject getTemplate() {
+    @SuppressWarnings({"unchecked"})
+    public P getTemplate() {
         return template;
+    }
+
+    /**
+     * Checks whether current project is inherited from other project.
+     * @return boolean.
+     */
+    protected boolean hasParentTemplate() {
+        return null != getTemplate();
     }
 }
