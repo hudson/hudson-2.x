@@ -38,7 +38,7 @@ import javax.servlet.ServletException;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem {
+public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem, IFreeStyleProject {
     /**
      * See {@link #setCustomWorkspace(String)}.
      *

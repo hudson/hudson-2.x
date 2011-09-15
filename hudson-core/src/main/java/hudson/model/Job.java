@@ -111,7 +111,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
  * @author Nikita Levyankov
  */
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
-        extends AbstractItem implements ExtensionPoint, StaplerOverridable {
+        extends AbstractItem implements ExtensionPoint, StaplerOverridable, IJob {
     private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
     /**
      * Next build number. Kept in a separate file because this is the only
