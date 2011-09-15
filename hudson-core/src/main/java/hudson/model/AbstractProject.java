@@ -1989,10 +1989,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      *
      * @return template.
      */
-    public AbstractProject getTemplate() {
+    @SuppressWarnings({"unchecked"})
+    public P getTemplate() {
         if (null == template) {
-            template = Hudson.getInstance().getTemplate(this.getClass(), templateName);
+            template = Hudson.getInstance().getTemplate(this.getClass(),templateName);
         }
-        return template;
+        return (P)template;
+    }
+
+    /**
+     * Checks whether current project is inherited from other project.
+     * @return boolean.
+     */
+    protected boolean hasParentTemplate() {
+        return null != getTemplate();
     }
 }
