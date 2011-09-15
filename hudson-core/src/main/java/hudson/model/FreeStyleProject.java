@@ -28,6 +28,7 @@ import hudson.Extension;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -62,8 +63,12 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
         return FreeStyleBuild.class;
     }
 
+
     public String getCustomWorkspace() {
-        return customWorkspace;
+        if (StringUtils.isNotBlank(customWorkspace)) {
+            return customWorkspace;
+        }
+        return hasParentTemplate()? getTemplate().getCustomWorkspace() : null;
     }
 
     /**
@@ -85,17 +90,33 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @since 1.320
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        this.customWorkspace= customWorkspace;
-        save();
+        setCustomWorkspace(customWorkspace, true);
+    }
+
+    /**
+     * Sets custom workspace,
+     * @param customWorkspace workspace.
+     * @param forceSave true to force save operation
+     * @throws IOException if any.
+     * @see #save()
+     */
+    private void setCustomWorkspace(String customWorkspace, boolean forceSave) throws IOException{
+        if (!(hasParentTemplate()
+            && StringUtils.equalsIgnoreCase(getTemplate().getCustomWorkspace(), customWorkspace))) {
+            this.customWorkspace = customWorkspace;
+        } else {
+            this.customWorkspace = null;
+        }
+        if (forceSave) {
+            save();
+        }
     }
 
     @Override
     protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, Descriptor.FormException {
-        if(req.hasParameter("customWorkspace"))
-            customWorkspace = req.getParameter("customWorkspace.directory");
-        else
-            customWorkspace = null;
-
+        setCustomWorkspace(
+            req.hasParameter("customWorkspace")?  req.getParameter("customWorkspace.directory") : null,
+            false);
         super.submit(req, rsp);
     }
 
