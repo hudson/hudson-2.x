@@ -24,6 +24,8 @@
  */
 package hudson;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import hudson.console.ConsoleAnnotationDescriptor;
 import hudson.console.ConsoleAnnotatorFactory;
 import hudson.model.AbstractProject;
@@ -78,6 +80,7 @@ import org.apache.commons.jelly.Script;
 import org.apache.commons.jelly.XMLOutput;
 import org.apache.commons.jexl.parser.ASTSizeFunction;
 import org.apache.commons.jexl.util.Introspector;
+import org.apache.commons.lang3.StringUtils;
 import org.jvnet.animal_sniffer.IgnoreJRERequirement;
 import org.jvnet.tiger_types.Types;
 import org.kohsuke.stapler.Ancestor;
@@ -667,7 +670,8 @@ public class Functions {
     }
 
     public static List<Descriptor<ComputerLauncher>> getComputerLauncherDescriptors() {
-        return Hudson.getInstance().<ComputerLauncher,Descriptor<ComputerLauncher>>getDescriptorList(ComputerLauncher.class);
+        return Hudson.getInstance().<ComputerLauncher,Descriptor<ComputerLauncher>>getDescriptorList(
+            ComputerLauncher.class);
     }
 
     public static List<Descriptor<RetentionStrategy<?>>> getRetentionStrategyDescriptors() {
@@ -688,7 +692,8 @@ public class Functions {
 
     public static List<NodePropertyDescriptor> getNodePropertyDescriptors(Class<? extends Node> clazz) {
         List<NodePropertyDescriptor> result = new ArrayList<NodePropertyDescriptor>();
-        Collection<NodePropertyDescriptor> list = (Collection) Hudson.getInstance().getDescriptorList(NodeProperty.class);
+        Collection<NodePropertyDescriptor> list = (Collection) Hudson.getInstance().getDescriptorList(
+            NodeProperty.class);
         for (NodePropertyDescriptor npd : list) {
             if (npd.isApplicable(clazz)) {
                 result.add(npd);
@@ -1364,5 +1369,24 @@ public class Functions {
      */
     public static boolean isWipeOutPermissionEnabled() {
         return Boolean.getBoolean("hudson.security.WipeOutPermission");
+    }
+
+    /**
+     * Returns item by name from the list.
+     *
+     * @param items for filtering.
+     * @param name the name of the item.
+     * @return template.
+     */
+    public static <T extends Item> T getItemByName(List<T> items, final String name) {
+        if (StringUtils.isBlank(name)) {
+            return null;
+        }
+        Iterable<T> templates = Iterables.filter(items, new Predicate<T>() {
+            public boolean apply(T item) {
+                return name.equalsIgnoreCase(item.getName());
+            }
+        });
+        return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 }
