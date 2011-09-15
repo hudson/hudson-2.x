@@ -249,7 +249,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected AbstractProject(ItemGroup parent, String name) {
         super(parent, name);
 
-        if(!Hudson.getInstance().getNodes().isEmpty()) {
+        if (Hudson.getInstance() != null && !Hudson.getInstance().getNodes().isEmpty()) {
             // if a new job is configured with Hudson that already has slave nodes
             // make it roamable by default
             canRoam = true;
@@ -273,8 +273,10 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public void onLoad(ItemGroup<? extends Item> parent, String name) throws IOException {
         super.onLoad(parent, name);
 
+        template = Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+
         this.builds = new RunMap<R>();
-        this.builds.load(this,new Constructor<R>() {
+        this.builds.load(this, new Constructor<R>() {
             public R create(File dir) throws IOException {
                 return loadBuild(dir);
             }
@@ -1411,7 +1413,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * Adds a new {@link Trigger} to this {@link Project} if not active yet.
      */
     public void addTrigger(Trigger<?> trigger) throws IOException {
-        addToList(trigger,triggers);
+        addToList(trigger, triggers);
     }
 
     public void removeTrigger(TriggerDescriptor trigger) throws IOException {
@@ -1981,7 +1983,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     public void setTemplateName(String templateName) {
         this.templateName = templateName;
-        this.template = Hudson.getInstance().getTemplate(this.getClass(), templateName);
+        this.template = Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
     }
 
     /**
@@ -1990,9 +1992,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @return template.
      */
     public AbstractProject getTemplate() {
-        if (null == template) {
-            template = Hudson.getInstance().getTemplate(this.getClass(), templateName);
-        }
         return template;
     }
 }
