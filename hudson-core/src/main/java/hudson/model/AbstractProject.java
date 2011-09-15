@@ -122,7 +122,8 @@ import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
  * @author Kohsuke Kawaguchi
  * @see AbstractBuild
  */
-public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends AbstractBuild<P,R>> extends Job<P,R> implements BuildableItem, IAbstractProject {
+public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends AbstractBuild<P, R>>
+    extends Job<P, R> implements BuildableItem, IAbstractProject {
 
     /**
      * {@link SCM} associated with the project.
@@ -803,7 +804,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      *      For the convenience of the caller, this array can contain null, and those will be silently ignored.
      */
     public Future<R> scheduleBuild2(int quietPeriod, Cause c, Action... actions) {
-        return scheduleBuild2(quietPeriod,c,Arrays.asList(actions));
+        return scheduleBuild2(quietPeriod, c, Arrays.asList(actions));
     }
 
     /**
@@ -1414,7 +1415,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     public void removeTrigger(TriggerDescriptor trigger) throws IOException {
-        removeFromList(trigger,triggers);
+        removeFromList(trigger, triggers);
     }
 
     protected final synchronized <T extends Describable<T>>

@@ -23,19 +23,32 @@
  */
 package hudson.model;
 
+import hudson.tasks.BuildWrapper;
+import hudson.tasks.Builder;
+import hudson.tasks.Publisher;
+import java.util.List;
+import java.util.Map;
+
 /**
- * FreeStyle project interface.
+ * Project interface
  * <p/>
  * Date: 9/15/11
  *
  * @author Nikita Levyankov
  */
-public interface IFreeStyleProject extends IProject {
+public interface IProject extends IAbstractProject {
+    /**
+     * @return list of project {@link Builder}
+     */
+    List<Builder> getBuilders();
 
     /**
-     * Returns user-specified workspace directory, or null if it's up to Hudson
-     *
-     * @return string representation of directory.
+     * @return map of project {@link BuildWrapper}
      */
-    String getCustomWorkspace();
+    Map<Descriptor<BuildWrapper>, BuildWrapper> getBuildWrappers();
+
+    /**
+     * @return map of project {@link Publisher}
+     */
+    Map<Descriptor<Publisher>, Publisher> getPublishers();
 }
