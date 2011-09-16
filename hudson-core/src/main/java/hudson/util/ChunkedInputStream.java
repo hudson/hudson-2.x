@@ -1,18 +1,3 @@
-/*******************************************************************************
- *
- * Copyright (c) 2004-2011 Apache Software Foundation (ASF)
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *       Ortwin Glueck, Sean C. Sullivan, Martin Elwin, Eric Johnson
- *       Mike Bowler, Michael Becke, Oleg Kalnichevski
- *
- *******************************************************************************/ 
-
 /*
  * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//httpclient/src/java/org/apache/commons/httpclient/ChunkedInputStream.java,v 1.24 2004/10/10 15:18:55 olegk Exp $
  * $Revision: 480424 $
