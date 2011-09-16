@@ -99,6 +99,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -540,9 +541,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * Sets the custom quiet period of this project, or revert to the global default if null is given.
+     * @param seconds quit period
+     * @throws IOException if any.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
-        this.quietPeriod = seconds;
+        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getQuietPeriod(), seconds))) {
+            this.quietPeriod = seconds;
+        } else {
+            this.quietPeriod = null;
+        }
         save();
     }
 
