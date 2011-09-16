@@ -152,7 +152,7 @@ public interface IMatrixProject extends IAbstractProject {
     /**
      * Returns list of active {@link Builder}s configured for this project.
      *
-     * @return listof active {@link Builder}s configured for this project.
+     * @return list of active {@link Builder}s configured for this project.
      */
     List<Builder> getBuilders();
 
@@ -164,10 +164,10 @@ public interface IMatrixProject extends IAbstractProject {
     Map<Descriptor<Publisher>, Publisher> getPublishers();
 
     /**
-     * Returns {@link DescribableList} of  active {@link BuildWrapper} configured for this project.
+     * Returns map of  active {@link BuildWrapper} configured for this project.
      *
-     * @return @link DescribableList} of  active {@link BuildWrapper} configured for this project.
+     * @return map of  active {@link BuildWrapper} configured for this project.
      */
-    DescribableList<BuildWrapper, Descriptor<BuildWrapper>> getBuildWrappersList();
+    Map<Descriptor<BuildWrapper>,BuildWrapper> getBuildWrappers();
 
 }

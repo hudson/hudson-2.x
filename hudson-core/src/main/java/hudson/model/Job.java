@@ -1356,9 +1356,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @SuppressWarnings({"unchecked"})
     public JobT getTemplate() {
-        if (template == null) {
-            template = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
-        }
+//TODO enable me
+//        if (template == null) {
+//            template = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+//        }
         return template;
     }
 
