@@ -86,8 +86,9 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * <p>
      * If this path is relative, it's resolved against {@link Node#getRootPath()} on the node where this workspace
      * is prepared. 
-     *
+     * @param customWorkspace new custom workspace to set
      * @since 1.320
+     * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
         if (!(hasParentTemplate()
