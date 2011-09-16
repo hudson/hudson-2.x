@@ -92,7 +92,6 @@
                         </goals>
                         <configuration>
                             <artifactItems>
-                                <!-- TODO: Replace this with jetty console plugin -->
                                 <artifactItem>
                                     <groupId>org.eclipse.hudson.main</groupId>
                                     <artifactId>hudson-jetty-war-executable</artifactId>
