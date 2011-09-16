@@ -90,33 +90,19 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @since 1.320
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        setCustomWorkspace(customWorkspace, true);
-    }
-
-    /**
-     * Sets custom workspace,
-     * @param customWorkspace workspace.
-     * @param forceSave true to force save operation
-     * @throws IOException if any.
-     * @see #save()
-     */
-    private void setCustomWorkspace(String customWorkspace, boolean forceSave) throws IOException{
         if (!(hasParentTemplate()
             && StringUtils.equalsIgnoreCase(getTemplate().getCustomWorkspace(), customWorkspace))) {
             this.customWorkspace = customWorkspace;
         } else {
             this.customWorkspace = null;
         }
-        if (forceSave) {
-            save();
-        }
+        save();
     }
 
     @Override
     protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, Descriptor.FormException {
         setCustomWorkspace(
-            req.hasParameter("customWorkspace")?  req.getParameter("customWorkspace.directory") : null,
-            false);
+            req.hasParameter("customWorkspace")?  req.getParameter("customWorkspace.directory") : null);
         super.submit(req, rsp);
     }
 

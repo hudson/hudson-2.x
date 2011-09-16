@@ -99,6 +99,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.ForwardToView;
@@ -332,6 +333,10 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         return cleanWorkspaceRequired;
     }
 
+    public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired) {
+        this.cleanWorkspaceRequired = cleanWorkspaceRequired;
+    }
+
     /**
      * If this project is configured to be always built on this node,
      * return that {@link Node}. Otherwise null.
@@ -535,6 +540,10 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     public int getScmCheckoutRetryCount() {
         return scmCheckoutRetryCount !=null ? scmCheckoutRetryCount : Hudson.getInstance().getScmCheckoutRetryCount();
+    }
+
+    public void setScmCheckoutRetryCount(Integer scmCheckoutRetryCount) {
+        this.scmCheckoutRetryCount = scmCheckoutRetryCount;
     }
 
     // ugly name because of EL
@@ -914,8 +923,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * Overwrites the JDK setting.
      */
     public void setJDK(JDK jdk) throws IOException {
-        this.jdk = jdk.getName();
+        setJDK(jdk.getName());
         save();
+    }
+
+    public void setJDK(String jdk) {
+       this.jdk = jdk;
     }
 
     public BuildAuthorizationToken getAuthToken() {
@@ -1681,21 +1694,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, FormException {
         super.submit(req,rsp);
 
-        makeDisabled(req.getParameter("disable")!=null);
-        setTemplateName(Util.fixEmptyAndTrim(req.getParameter("templateName")));
-        jdk = req.getParameter("jdk");
-        if(req.getParameter("hasCustomQuietPeriod")!=null) {
-            quietPeriod = Integer.parseInt(req.getParameter("quiet_period"));
-        } else {
-            quietPeriod = null;
-        }
-        if(req.getParameter("hasCustomScmCheckoutRetryCount")!=null) {
-            scmCheckoutRetryCount = Integer.parseInt(req.getParameter("scmCheckoutRetryCount"));
-        } else {
-            scmCheckoutRetryCount = null;
-        }
-        blockBuildWhenDownstreamBuilding = req.getParameter("blockBuildWhenDownstreamBuilding")!=null;
-        blockBuildWhenUpstreamBuilding = req.getParameter("blockBuildWhenUpstreamBuilding")!=null;
+        makeDisabled(null != req.getParameter("disable"));
+        setTemplateName(StringUtils.trimToNull(req.getParameter("templateName")));
+        setJDK(req.getParameter("jdk"));
+        setQuietPeriod(null != req.getParameter("hasCustomQuietPeriod") ?
+            Integer.parseInt(req.getParameter("quiet_period")) : null);
+        setScmCheckoutRetryCount(null != req.getParameter("hasCustomScmCheckoutRetryCount")
+            ? Integer.parseInt(req.getParameter("scmCheckoutRetryCount")) : null);
+        setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"));
+        setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"));
 
         if (req.getParameter("hasSlaveAffinity") != null) {
             // New logic for handling whether this choice came from the dropdown or textfield.
@@ -1711,11 +1718,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             advancedAffinityChooser = false;
         }
 
-        cleanWorkspaceRequired = null != req.getParameter("cleanWorkspaceRequired");
+
+        setCleanWorkspaceRequired(null != req.getParameter("cleanWorkspaceRequired"));
 
         canRoam = assignedNode==null;
 
-        concurrentBuild = req.getSubmittedForm().has("concurrentBuild");
+        setConcurrentBuild(req.getSubmittedForm().has("concurrentBuild"));
 
         authToken = BuildAuthorizationToken.create(req);
 
