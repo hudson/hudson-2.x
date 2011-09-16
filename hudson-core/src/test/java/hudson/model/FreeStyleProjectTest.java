@@ -396,7 +396,7 @@ public class FreeStyleProjectTest {
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
-        assertEquals( childProject.getQuietPeriod(), Integer.parseInt(childQuietPeriod));
+        assertEquals(childProject.getQuietPeriod(), Integer.parseInt(childQuietPeriod));
         verifyAll();
     }
 
@@ -450,6 +450,101 @@ public class FreeStyleProjectTest {
 
         parentProject.setQuietPeriod("  ");
         assertEquals(globalQuietPeriod, childProject.getQuietPeriod());
+        verifyAll();
+    }
+
+    @Test
+    public void testSetScmCheckoutRetryCountEqualsWithParent() throws IOException {
+        String scmCheckoutRetryCount = "10";
+        int globalScmCheckoutRetryCount = 4;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        childProject.setTemplate(null);
+
+        Hudson hudson = createMock(Hudson.class);
+        expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount);
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+        assertEquals(childProject.getScmCheckoutRetryCount(), globalScmCheckoutRetryCount);
+        verifyAll();
+    }
+
+    @Test
+    public void testSetScmCheckoutRetryCountNotEqualsWithParent() throws IOException{
+        String parentScmCheckoutRetryCount = "10";
+        String childScmCheckoutRetryCount = "11";
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setScmCheckoutRetryCount(parentScmCheckoutRetryCount);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setScmCheckoutRetryCount(childScmCheckoutRetryCount);
+
+        Hudson hudson = createMock(Hudson.class);
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+        assertEquals(childProject.getScmCheckoutRetryCount(), Integer.parseInt(childScmCheckoutRetryCount));
+        verifyAll();
+    }
+
+    @Test
+    public void testSetScmCheckoutRetryCountParentNull() throws IOException{
+        String scmCheckoutRetryCount = "10";
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        assertEquals(Integer.parseInt(scmCheckoutRetryCount), childProject.getScmCheckoutRetryCount());
+    }
+
+    @Test
+    public void testSetInvalidScmCheckoutRetryCount() throws IOException{
+        String scmCheckoutRetryCount = "asd10asdasd";
+        int globalScmCheckoutRetryCount = 4;
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        Hudson hudson = createMock(Hudson.class);
+        expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount).anyTimes();
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+        assertEquals(globalScmCheckoutRetryCount, childProject.getScmCheckoutRetryCount());
+        verifyAll();
+    }
+
+    @Test
+    public void testGetScmCheckoutRetryCount() throws IOException{
+        String scmCheckoutRetryCountString = "10";
+        int globalScmCheckoutRetryCount = 4;
+        int scmCheckoutRetryCount = Integer.parseInt(scmCheckoutRetryCountString);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        Hudson hudson = createMock(Hudson.class);
+        expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount).anyTimes();
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+
+        childProject.allowSave.set(false);
+        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCountString);
+        assertEquals(scmCheckoutRetryCount, childProject.getScmCheckoutRetryCount());
+
+        parentProject.allowSave.set(false);
+        parentProject.setScmCheckoutRetryCount(scmCheckoutRetryCountString);
+        childProject.setScmCheckoutRetryCount(" ");
+        childProject.setTemplate(parentProject);
+        assertEquals(childProject.getScmCheckoutRetryCount(), scmCheckoutRetryCount);
+
+        parentProject.setScmCheckoutRetryCount("  ");
+        assertEquals(globalScmCheckoutRetryCount, childProject.getScmCheckoutRetryCount());
         verifyAll();
     }
 
