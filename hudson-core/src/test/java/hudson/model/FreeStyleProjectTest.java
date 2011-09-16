@@ -63,7 +63,7 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratch(){
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
+        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         AuthorizationStrategy authorizationStrategy = createMock(ProjectMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -73,8 +73,7 @@ public class FreeStyleProjectTest {
         mockStatic(User.class);
         expect(User.current()).andReturn(user);
         replayAll();
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -90,7 +89,7 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratchGlobalMatrixAuthorizationStrategy(){
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
+        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         AuthorizationStrategy authorizationStrategy = createMock(GlobalMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -100,8 +99,7 @@ public class FreeStyleProjectTest {
         mockStatic(User.class);
         expect(User.current()).andReturn(user);
         replayAll();
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -113,14 +111,13 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratchAnonymousAuthentication(){
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
+        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         mockStatic(User.class);
         expect(User.current()).andReturn(null);
         replayAll();
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -143,7 +140,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -172,7 +169,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -192,7 +189,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(null);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock("testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -206,11 +203,10 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testGetLogRotatorFromParent(){
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.setLogRotator(new LogRotator(10,11,12,13));
 
-        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
+        FreeStyleProject childProject1 = new FreeStyleProjectMock("child1");
         childProject1.setTemplate(parentProject);
         LogRotator result = childProject1.getLogRotator();
         assertNotNull(result);
@@ -219,12 +215,11 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testGetLogRotatorFromChild(){
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.setLogRotator(new LogRotator(10,10,10,10));
 
-        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
-        childProject1.setLogRotator(new LogRotator(20,20,20,20));
+        FreeStyleProject childProject1 = new FreeStyleProjectMock("child1");
+        childProject1.setLogRotator(new LogRotator(20, 20, 20, 20));
         childProject1.setTemplate(parentProject);
         LogRotator result = childProject1.getLogRotator();
         assertNotNull(result);
@@ -233,11 +228,10 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetLogRotatorValueEqualsWithParent(){
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.setLogRotator(new LogRotator(10,11,12,13));
 
-        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
+        FreeStyleProject childProject1 = new FreeStyleProjectMock("child1");
         childProject1.setTemplate(parentProject);
         childProject1.setLogRotator(new LogRotator(10,11,12,13));
         childProject1.setTemplate(null); // else log rotator will be taken from parent
@@ -246,20 +240,18 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetLogRotatorParentNull(){
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
-        childProject1.setLogRotator(new LogRotator(10,11,12,13));
+        FreeStyleProject childProject1 = new FreeStyleProjectMock("child1");
+        childProject1.setLogRotator(new LogRotator(10, 11, 12, 13));
         assertNotNull(childProject1.getLogRotator());
     }
 
     @Test
     public void testSetCustomWorkspaceValueEqualsWithParent() throws IOException{
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         String customWorkspace = "/tmp";
         parentProject.setCustomWorkspace(customWorkspace);
-        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setCustomWorkspace(customWorkspace);
@@ -269,13 +261,12 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetCustomWorkspaceValueNotEqualsWithParent() throws IOException{
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         String parentCustomWorkspace = "/tmp";
         String childCustomWorkspace = "/tmp1";
         parentProject.setCustomWorkspace(parentCustomWorkspace);
-        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setCustomWorkspace(childCustomWorkspace);
@@ -284,19 +275,35 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetCustomWorkspaceValueParentNull() throws IOException{
-        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
         String childCustomWorkspace = "/tmp";
-        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setCustomWorkspace(childCustomWorkspace);
         assertEquals(childCustomWorkspace, childProject.getCustomWorkspace());
     }
 
+    @Test
+    public void testGetCustomWorkspace() throws IOException{
+        String customWorkspace = "/tmp";
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setCustomWorkspace(customWorkspace);
+        assertEquals(customWorkspace, childProject.getCustomWorkspace());
+
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setCustomWorkspace(customWorkspace);
+        childProject.setCustomWorkspace(" ");
+        childProject.setTemplate(parentProject);
+        assertEquals(customWorkspace, childProject.getCustomWorkspace());
+        parentProject.setCustomWorkspace("  ");
+        assertNull(childProject.getCustomWorkspace());
+    }
 
     private class FreeStyleProjectMock extends FreeStyleProject {
 
-        private FreeStyleProjectMock(ItemGroup parent, String name) {
-            super(parent, name);
+        private FreeStyleProjectMock(String name) {
+            super((ItemGroup)null, name);
         }
 
         @Override
