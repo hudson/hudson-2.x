@@ -221,16 +221,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected List<Trigger<?>> triggers = new Vector<Trigger<?>>();
 
     /**
-     * The name of the template.
-     */
-    private String templateName;
-
-    /**
-     * Selected template for this project.
-     */
-    private transient P template;
-
-    /**
      * {@link Action}s contributed from subsidiary objects associated with
      * {@link AbstractProject}, such as from triggers, builders, publishers, etc.
      *
@@ -273,9 +263,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @Override
     public void onLoad(ItemGroup<? extends Item> parent, String name) throws IOException {
         super.onLoad(parent, name);
-
-        //TODO fix it
-        template = (P) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
 
         this.builds = new RunMap<R>();
         this.builds.load(this, new Constructor<R>() {
@@ -1974,43 +1961,5 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if (item==null)
             throw new CmdLineException(null,Messages.AbstractItem_NoSuchJobExists(name,AbstractProject.findNearest(name).getFullName()));
         return item;
-    }
-
-    /**
-     * Returns template name.
-     *
-     * @return template name.
-     */
-    public String getTemplateName() {
-        return templateName;
-    }
-
-    /**
-     * Sets template name.
-     *
-     * @param templateName template name.
-     */
-    public void setTemplateName(String templateName) {
-        this.templateName = templateName;
-        //TODO fix it
-        this.template = (P)Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
-    }
-
-    /**
-     * Returns selected template.
-     *
-     * @return template.
-     */
-    @SuppressWarnings({"unchecked"})
-    public P getTemplate() {
-        return template;
-    }
-
-    /**
-     * Checks whether current project is inherited from other project.
-     * @return boolean.
-     */
-    protected boolean hasParentTemplate() {
-        return null != getTemplate();
     }
 }
