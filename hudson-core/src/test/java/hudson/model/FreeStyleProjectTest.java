@@ -30,6 +30,7 @@ import hudson.security.AuthorizationMatrixProperty;
 import hudson.security.AuthorizationStrategy;
 import hudson.security.GlobalMatrixAuthorizationStrategy;
 import hudson.security.ProjectMatrixAuthorizationStrategy;
+import hudson.tasks.LogRotator;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -224,4 +225,83 @@ public class FreeStyleProjectTest {
         List properties = freeStyleProject.getAllProperties();
         assertEquals(properties.size(), 0);
     }
+
+
+    @Test
+    public void testGetLogRotatorFromParent(){
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        parentProject.setLogRotator(new LogRotator(10,11,12,13));
+
+        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        childProject1.setTemplate(parentProject);
+        LogRotator result = childProject1.getLogRotator();
+        assertNotNull(result);
+        assertEquals(result.getDaysToKeep(), 10);
+    }
+
+    @Test
+    public void testGetLogRotatorFromChild(){
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        parentProject.setLogRotator(new LogRotator(10,10,10,10));
+
+        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        childProject1.setLogRotator(new LogRotator(20,20,20,20));
+        childProject1.setTemplate(parentProject);
+        LogRotator result = childProject1.getLogRotator();
+        assertNotNull(result);
+        assertEquals(result.getDaysToKeep(), 20);
+    }
+
+    @Test
+    public void testSetLogRotatorValueEqualsWithParent(){
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        parentProject.setLogRotator(new LogRotator(10,11,12,13));
+
+        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        childProject1.setTemplate(parentProject);
+        childProject1.setLogRotator(new LogRotator(10,11,12,13));
+        childProject1.setTemplate(null); // else log rotator will be taken from parent
+        assertNull(childProject1.getLogRotator());
+    }
+
+    @Test
+    public void testSetLogRotatorParentNull(){
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+
+        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
+            @Override
+            protected void updateTransientActions() {
+            }
+        };
+        childProject1.setLogRotator(new LogRotator(10,11,12,13));
+        assertNotNull(childProject1.getLogRotator());
+    }
+
 }

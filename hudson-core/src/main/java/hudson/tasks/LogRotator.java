@@ -48,6 +48,8 @@ import static java.util.logging.Level.FINER;
  */
 public class LogRotator implements Describable<LogRotator> {
 
+    private static final Logger LOGGER = Logger.getLogger(LogRotator.class.getName());
+
     /**
      * If not -1, history is only kept up to this days.
      */
@@ -298,5 +300,41 @@ public class LogRotator implements Describable<LogRotator> {
         }
     }
 
-    private static final Logger LOGGER = Logger.getLogger(LogRotator.class.getName());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LogRotator that = (LogRotator) o;
+
+        if (daysToKeep != that.daysToKeep) {
+            return false;
+        }
+        if (numToKeep != that.numToKeep) {
+            return false;
+        }
+        if (artifactDaysToKeep != null ? !artifactDaysToKeep.equals(that.artifactDaysToKeep)
+            : that.artifactDaysToKeep != null) {
+            return false;
+        }
+        if (artifactNumToKeep != null ? !artifactNumToKeep.equals(that.artifactNumToKeep)
+            : that.artifactNumToKeep != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = daysToKeep;
+        result = 31 * result + numToKeep;
+        result = 31 * result + (artifactDaysToKeep != null ? artifactDaysToKeep.hashCode() : 0);
+        result = 31 * result + (artifactNumToKeep != null ? artifactNumToKeep.hashCode() : 0);
+        return result;
+    }
 }

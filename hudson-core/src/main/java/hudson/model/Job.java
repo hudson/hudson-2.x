@@ -77,6 +77,7 @@ import java.util.SortedMap;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -358,11 +359,20 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Returns the log rotator for this job, or null if none.
      */
     public LogRotator getLogRotator() {
-        return logRotator;
+        return logRotator!= null ? logRotator : (hasParentTemplate()? getTemplate().getLogRotator() : null);
     }
 
+    /**
+     * Sets log rotator.
+     *
+     * @param logRotator log rotator.
+     */
     public void setLogRotator(LogRotator logRotator) {
-        this.logRotator = logRotator;
+        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getLogRotator(), logRotator))) {
+            this.logRotator = logRotator;
+        } else {
+            this.logRotator = null;
+        }
     }
 
     /**
@@ -1270,7 +1280,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private void rss(StaplerRequest req, StaplerResponse rsp, String suffix,
             RunList runs) throws IOException, ServletException {
         RSS.forwardToRss(getDisplayName() + suffix, getUrl(), runs.newBuilds(),
-                Run.FEED_ADAPTER, req, rsp);
+            Run.FEED_ADAPTER, req, rsp);
     }
 
     /**
@@ -1344,6 +1354,15 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     @SuppressWarnings({"unchecked"})
     public JobT getTemplate() {
         return template;
+    }
+
+    /**
+     * For the unit tests only. Sets template for the job.
+     *
+     * @param template parent job
+     */
+    void setTemplate(JobT template) {
+        this.template = template;
     }
 
     /**
