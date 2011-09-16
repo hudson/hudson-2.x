@@ -31,6 +31,7 @@ import hudson.security.AuthorizationStrategy;
 import hudson.security.GlobalMatrixAuthorizationStrategy;
 import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
+import java.io.IOException;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,11 +74,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -104,11 +101,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -127,11 +120,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(null);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCreatedFromScratch();
         verifyAll();
         assertNotNull(freeStyleProject.getCreationTime());
@@ -154,11 +143,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -187,11 +172,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(user);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -211,11 +192,7 @@ public class FreeStyleProjectTest {
         expect(User.current()).andReturn(null);
         replayAll();
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject freeStyleProject = new FreeStyleProject(matrixProjectProject, "testJob"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject freeStyleProject = new FreeStyleProjectMock(matrixProjectProject, "testJob");
         freeStyleProject.onCopiedFrom(matrixProjectProject);
         verifyAll();
         assertEquals(freeStyleProject.getNextBuildNumber(), 1);
@@ -230,18 +207,10 @@ public class FreeStyleProjectTest {
     @Test
     public void testGetLogRotatorFromParent(){
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
         parentProject.setLogRotator(new LogRotator(10,11,12,13));
 
-        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
         childProject1.setTemplate(parentProject);
         LogRotator result = childProject1.getLogRotator();
         assertNotNull(result);
@@ -251,18 +220,10 @@ public class FreeStyleProjectTest {
     @Test
     public void testGetLogRotatorFromChild(){
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
         parentProject.setLogRotator(new LogRotator(10,10,10,10));
 
-        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
         childProject1.setLogRotator(new LogRotator(20,20,20,20));
         childProject1.setTemplate(parentProject);
         LogRotator result = childProject1.getLogRotator();
@@ -273,18 +234,10 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetLogRotatorValueEqualsWithParent(){
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-        FreeStyleProject parentProject = new FreeStyleProject(matrixProjectProject, "parent"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
         parentProject.setLogRotator(new LogRotator(10,11,12,13));
 
-        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
         childProject1.setTemplate(parentProject);
         childProject1.setLogRotator(new LogRotator(10,11,12,13));
         childProject1.setTemplate(null); // else log rotator will be taken from parent
@@ -294,14 +247,60 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetLogRotatorParentNull(){
         MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
-
-        FreeStyleProject childProject1 = new FreeStyleProject(matrixProjectProject, "child1"){
-            @Override
-            protected void updateTransientActions() {
-            }
-        };
+        FreeStyleProject childProject1 = new FreeStyleProjectMock(matrixProjectProject, "child1");
         childProject1.setLogRotator(new LogRotator(10,11,12,13));
         assertNotNull(childProject1.getLogRotator());
     }
 
+    @Test
+    public void testSetCustomWorkspaceValueEqualsWithParent() throws IOException{
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        parentProject.allowSave.set(false);
+        String customWorkspace = "/tmp";
+        parentProject.setCustomWorkspace(customWorkspace);
+        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setCustomWorkspace(customWorkspace);
+        childProject.setTemplate(null);
+        assertNull(childProject.getCustomWorkspace());
+    }
+
+    @Test
+    public void testSetCustomWorkspaceValueNotEqualsWithParent() throws IOException{
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        FreeStyleProject parentProject = new FreeStyleProjectMock(matrixProjectProject, "parent");
+        parentProject.allowSave.set(false);
+        String parentCustomWorkspace = "/tmp";
+        String childCustomWorkspace = "/tmp1";
+        parentProject.setCustomWorkspace(parentCustomWorkspace);
+        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setCustomWorkspace(childCustomWorkspace);
+        assertEquals(childCustomWorkspace, childProject.getCustomWorkspace());
+    }
+
+    @Test
+    public void testSetCustomWorkspaceValueParentNull() throws IOException{
+        MatrixProject matrixProjectProject = new MatrixProject("matrixProject");
+        String childCustomWorkspace = "/tmp";
+        FreeStyleProject childProject = new FreeStyleProjectMock(matrixProjectProject, "child");
+        childProject.allowSave.set(false);
+        childProject.setCustomWorkspace(childCustomWorkspace);
+        assertEquals(childCustomWorkspace, childProject.getCustomWorkspace());
+    }
+
+
+    private class FreeStyleProjectMock extends FreeStyleProject {
+
+        private FreeStyleProjectMock(ItemGroup parent, String name) {
+            super(parent, name);
+        }
+
+        @Override
+        protected void updateTransientActions() {
+        }
+    }
 }
