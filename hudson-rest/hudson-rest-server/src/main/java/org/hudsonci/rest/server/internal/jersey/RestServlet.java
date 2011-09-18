@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 import static org.hudsonci.utils.common.Varargs.$;
 import static org.hudsonci.rest.common.Constants.HUDSON_HEADER;
 
@@ -68,6 +67,8 @@ public class RestServlet
     private static final Logger log = LoggerFactory.getLogger(RestServlet.class);
 
     private static final long serialVersionUID = 1L;
+
+    private final List<Application> deferredApplications = new ArrayList<Application>();
 
     private final List<ContainerListener> listeners = new ArrayList<ContainerListener>();
 
@@ -91,14 +92,20 @@ public class RestServlet
      * Dummy root resource to configure Jersey with so that it can initialize, it needs at least one root resource or it will puke.
      */
     @Path("/internal/dummy-root-resource-for-jersey")
-    private static class DummyResource
-    {
-        // empty
+    private static class DummyResource {
+        public DummyResource() {}
     }
 
-    protected void initiate(final ResourceConfig config, final WebApplication webApp) {
+    protected synchronized void initiate(final ResourceConfig config, final WebApplication webApp) {
         this.resourceConfig = checkNotNull(config);
         webApp.initiate(config, componentProviderFactory);
+        while (deferredApplications.size() > 0) {
+            // must reload after every app added; this calls into initiate again, so use pop-technique to handle reentrancy
+            resourceConfig.add(deferredApplications.remove(0));
+            for (ContainerListener listener : listeners) {
+                listener.onReload();
+            }
+        }
     }
 
     @Override
@@ -109,7 +116,11 @@ public class RestServlet
             public ResourceConfig getDefaultResourceConfig(final Map<String, Object> props) throws ServletException {
                 checkNotNull(props);
                 props.put(ResourceConfig.PROPERTY_CONTAINER_NOTIFIER, RestServlet.this);
-                return super.getDefaultResourceConfig(props);
+                try {
+                    return super.getDefaultResourceConfig(props);
+                } catch (LinkageError e) {
+                    return RestServlet.this.getDefaultResourceConfig(props, RestServlet.this.getServletConfig());
+                }
             }
         });
     }
@@ -147,10 +158,13 @@ public class RestServlet
 
     public synchronized void addApplication(final Application application) {
         checkNotNull(application);
-        checkState(resourceConfig != null);
-        resourceConfig.add(application);
-        for (ContainerListener listener : listeners) {
-            listener.onReload();
+        if (resourceConfig != null) {
+            resourceConfig.add(application);
+            for (ContainerListener listener : listeners) {
+                listener.onReload();
+            }
+        } else {
+            deferredApplications.add(application);
         }
     }
 

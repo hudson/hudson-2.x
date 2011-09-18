@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.servlet.ServletException;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -96,7 +97,16 @@ public class CometdProvider
     public static class ServletInstaller
         implements ServletContainerAware
     {
-        private final ContinuationCometdServlet servlet = new ContinuationCometdServlet();
+        private final ContinuationCometdServlet servlet = new ContinuationCometdServlet() {
+            @Override
+            public void init() throws ServletException {
+                super.init();
+
+                Bayeux b = servlet.getBayeux();
+                b.addExtension(new AcknowledgedMessagesExtension());
+                bayeux = b;
+            }
+        };
 
         public void setServletContainer(final ServletContainer container) throws Exception {
             assert container != null;
@@ -108,10 +118,6 @@ public class CometdProvider
             reg.setUriPrefix("cometd");
             reg.addParameter("timeout", "60000");
             handle = container.register(reg);
-
-            Bayeux b = servlet.getBayeux();
-            b.addExtension(new AcknowledgedMessagesExtension());
-            bayeux = b;
         }
     }
 }
