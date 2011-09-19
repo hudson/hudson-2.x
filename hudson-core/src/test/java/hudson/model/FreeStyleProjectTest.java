@@ -33,6 +33,7 @@ import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
 import java.io.IOException;
 import java.util.List;
+import org.easymock.EasyMock;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -550,7 +551,7 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetBlockBuildWhenDownstreamBuildingEqualsWithParent() throws IOException {
-        boolean blockBuildWhenDownstreamBuilding = true;
+        Boolean blockBuildWhenDownstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
@@ -558,16 +559,13 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
-        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
-        childProject.setBlockBuildWhenDownstreamBuilding(null);
         assertNull(childProject.blockBuildWhenDownstreamBuilding);
-        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
     }
 
     @Test
     public void testSetBlockBuildWhenDownstreamBuildingNotEqualsWithParent() throws IOException {
-        boolean childBlockBuildWhenDownstreamBuilding = false;
-        boolean parentBlockBuildWhenDownstreamBuilding = true;
+        Boolean childBlockBuildWhenDownstreamBuilding = false;
+        Boolean parentBlockBuildWhenDownstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
@@ -575,22 +573,41 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenDownstreamBuilding(childBlockBuildWhenDownstreamBuilding);
+        //if child value is not equals to parent one, field should be populated
         assertNotNull(childProject.blockBuildWhenDownstreamBuilding);
-        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) childBlockBuildWhenDownstreamBuilding);
     }
 
     @Test
     public void testSetBlockBuildWhenDownstreamBuildingParentNull() throws IOException {
-        boolean blockBuildWhenDownstreamBuilding = true;
+        Boolean blockBuildWhenDownstreamBuilding = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
-        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
+        //if parent is not set, value should be populated according to existing logic
+        assertEquals(blockBuildWhenDownstreamBuilding, childProject.blockBuildWhenDownstreamBuilding);
+    }
+
+    @Test
+    public void testBlockBuildWhenDownstreamBuilding() throws IOException {
+        Boolean childBlockBuildWhenDownstreamBuilding = false;
+        Boolean parentBlockBuildWhenDownstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setBlockBuildWhenDownstreamBuilding(null);
+        childProject.setTemplate(parentProject);
+        //Value should be taken from template
+        assertEquals(parentBlockBuildWhenDownstreamBuilding, (Boolean) childProject.blockBuildWhenDownstreamBuilding());
+        childProject.setBlockBuildWhenDownstreamBuilding(childBlockBuildWhenDownstreamBuilding);
+        //Child value is not equals to parent - override value in child.
+        assertEquals(childBlockBuildWhenDownstreamBuilding, (Boolean) childProject.blockBuildWhenDownstreamBuilding());
     }
 
     @Test
     public void testSetBlockBuildWhenUpstreamBuildingEqualsWithParent() throws IOException {
-        boolean blockBuildWhenUpstreamBuilding = true;
+        Boolean blockBuildWhenUpstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
@@ -598,16 +615,13 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
-        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
-        childProject.setBlockBuildWhenUpstreamBuilding(null);
         assertNull(childProject.blockBuildWhenUpstreamBuilding);
-        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
     }
 
     @Test
     public void testSetBlockBuildWhenUpstreamBuildingNotEqualsWithParent() throws IOException {
-        boolean childBlockBuildWhenUpstreamBuilding = false;
-        boolean parentBlockBuildWhenUpstreamBuilding = true;
+        Boolean childBlockBuildWhenUpstreamBuilding = false;
+        Boolean parentBlockBuildWhenUpstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
@@ -615,17 +629,149 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(childBlockBuildWhenUpstreamBuilding);
+        //if child value is not equals to parent one, field should be populated
         assertNotNull(childProject.blockBuildWhenUpstreamBuilding);
-        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) childBlockBuildWhenUpstreamBuilding);
     }
 
     @Test
     public void testSetBlockBuildWhenUpstreamBuildingParentNull() throws IOException {
-        boolean blockBuildWhenUpstreamBuilding = true;
+        Boolean blockBuildWhenUpstreamBuilding = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
-        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
+        //if parent is not set, value should be populated according to existing logic
+        assertEquals(blockBuildWhenUpstreamBuilding, childProject.blockBuildWhenUpstreamBuilding);
+    }
+
+    @Test
+    public void testBlockBuildWhenUpstreamBuilding() throws IOException {
+        Boolean childBlockBuildWhenUpstreamBuilding = false;
+        Boolean parentBlockBuildWhenUpstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setBlockBuildWhenUpstreamBuilding(null);
+        childProject.setTemplate(parentProject);
+        //Value should be taken from template
+        assertEquals(parentBlockBuildWhenUpstreamBuilding, (Boolean) childProject.blockBuildWhenUpstreamBuilding());
+        childProject.setBlockBuildWhenUpstreamBuilding(childBlockBuildWhenUpstreamBuilding);
+        //Child value is not equals to parent - override value in child.
+        assertEquals(childBlockBuildWhenUpstreamBuilding, (Boolean) childProject.blockBuildWhenUpstreamBuilding());
+    }
+
+//    ---
+    @Test
+    public void testSetCleanWorkspaceRequiredEqualsWithParent() throws IOException {
+        Boolean cleanWorkspaceRequired = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
+        assertNull(childProject.cleanWorkspaceRequired);
+    }
+
+    @Test
+    public void testSetCleanWorkspaceRequiredNotEqualsWithParent() throws IOException {
+        Boolean childCleanWorkspaceRequired = false;
+        Boolean parentCleanWorkspaceRequired = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setCleanWorkspaceRequired(parentCleanWorkspaceRequired);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setCleanWorkspaceRequired(childCleanWorkspaceRequired);
+        //if child value is not equals to parent one, field should be populated
+        assertNotNull(childProject.cleanWorkspaceRequired);
+    }
+
+    @Test
+    public void testSetCleanWorkspaceRequiredParentNull() throws IOException {
+        Boolean cleanWorkspaceRequired = true;
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
+        //if parent is not set, value should be populated according to existing logic
+        assertEquals(cleanWorkspaceRequired, childProject.cleanWorkspaceRequired);
+    }
+
+    @Test
+    public void testIsCleanWorkspaceRequired() throws IOException {
+        Boolean childCleanWorkspaceRequired = false;
+        Boolean parentCleanWorkspaceRequired = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setCleanWorkspaceRequired(parentCleanWorkspaceRequired);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setCleanWorkspaceRequired(null);
+        childProject.setTemplate(parentProject);
+        //Value should be taken from template
+        assertEquals(parentCleanWorkspaceRequired, (Boolean) childProject.isCleanWorkspaceRequired());
+        childProject.setCleanWorkspaceRequired(childCleanWorkspaceRequired);
+        //Child value is not equals to parent - override value in child.
+        assertEquals(childCleanWorkspaceRequired, (Boolean) childProject.isCleanWorkspaceRequired());
+    }
+
+    @Test
+    public void testSetConcurrentBuildEqualsWithParent() throws IOException {
+        Boolean concurrentBuild = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setConcurrentBuild(concurrentBuild);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setConcurrentBuild(concurrentBuild);
+        assertNull(childProject.concurrentBuild);
+    }
+
+    @Test
+    public void testSetConcurrentBuildNotEqualsWithParent() throws IOException {
+        Boolean childConcurrentBuild = false;
+        Boolean parentConcurrentBuild = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setConcurrentBuild(parentConcurrentBuild);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setConcurrentBuild(childConcurrentBuild);
+        //if child value is not equals to parent one, field should be populated
+        assertEquals(childConcurrentBuild, childProject.concurrentBuild);
+    }
+
+    @Test
+    public void testSetConcurrentBuildParentNull() throws IOException {
+        Boolean concurrentBuild = true;
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setConcurrentBuild(concurrentBuild);
+        //if parent is not set, value should be populated according to existing logic
+        assertEquals(concurrentBuild, childProject.concurrentBuild);
+    }
+
+    @Test
+    public void testIsConcurrentBuild() throws IOException {
+        Boolean childConcurrentBuild = false;
+        Boolean parentConcurrentBuild = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setConcurrentBuild(parentConcurrentBuild);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setConcurrentBuild(null);
+        childProject.setTemplate(parentProject);
+        //Value should be taken from template
+        assertEquals(parentConcurrentBuild, (Boolean) childProject.isConcurrentBuild());
+        childProject.setConcurrentBuild(childConcurrentBuild);
+        //Child value is not equals to parent - override value in child.
+        assertEquals(childConcurrentBuild, (Boolean) childProject.isConcurrentBuild());
     }
 
     private class FreeStyleProjectMock extends FreeStyleProject {
