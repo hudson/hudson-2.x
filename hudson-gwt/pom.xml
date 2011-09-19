@@ -125,7 +125,6 @@
   <modules>
     <module>hudson-gwt-test-support</module>
     <module>hudson-gwt-common</module>
-    <module>hudson-gwt-slf4j</module>
     <module>hudson-gwt-theme-chrome</module>
     <module>hudson-gwt-icons-silk</module>
   </modules>
