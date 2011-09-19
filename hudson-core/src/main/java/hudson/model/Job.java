@@ -168,7 +168,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     private transient JobT template;
 
-    protected final transient ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
+    protected transient volatile ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {
             return true;
@@ -193,7 +193,14 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             throws IOException {
         super.onLoad(parent, name);
         template = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
-
+        if (null == allowSave) {// Initialize property if null.
+            allowSave = new ThreadLocal<Boolean>() {
+                @Override
+                protected Boolean initialValue() {
+                    return true;
+                }
+            };
+        }
         TextFile f = getNextBuildNumberFile();
         if (f.exists()) {
             // starting 1.28, we store nextBuildNumber in a separate file.
