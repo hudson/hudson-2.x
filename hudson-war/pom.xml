@@ -83,13 +83,42 @@
                     </execution>
                     
                     <execution>
-                        <id>copyExecuteWar</id>
+                        <id>unpackJavascript</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <includes>
+                                  yui/build/**/*
+                            </includes>
                             <artifactItems>
+                               
+                                <artifactItem>
+                                    <groupId>com.yahoo.platform.yui</groupId>
+                                    <artifactId>yui</artifactId>
+                                    <version>2.5.0</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/javascripts</outputDirectory>             
+                                </artifactItem>
+             
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>unpackExecWar</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                  META-INF/*
+                            </excludes>
+                            <artifactItems>
+                                                           
                                 <artifactItem>
                                     <groupId>org.eclipse.hudson.main</groupId>
                                     <artifactId>hudson-jetty-war-executable</artifactId>
@@ -97,14 +126,6 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target/generated-resources</outputDirectory>
-                                    
-                                    <!-- TODO: Find out from maven guys how to exclude META-INF files while unpacking. -->
-                                    <!--
-                                    <excludes>
-                                        <exclude>META-INF</exclude>
-                                    </excludes>
-                                    -->
-                                      
                                 </artifactItem>
                                 
                                 <!-- Jetty Classes -->
@@ -133,7 +154,7 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                                
+                    
                     <execution>
                         <id>copyResources</id>
                         <phase>generate-resources</phase>
@@ -258,8 +279,32 @@
             </plugin>
             
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-javascripts</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/generated-resources/scripts/yui</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>${basedir}/target/javascripts/yui/build</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
                 <executions>
                     <execution>
                         <id>attach-artifacts</id>
