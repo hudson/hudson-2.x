@@ -75,14 +75,14 @@ public interface IAbstractProject extends IJob {
     /**
      * Indicates whether build should be blocked while downstream project is building.
      *
-     * @return true if yes, false - otherwise.
+     * @return true if yes, false if no, null - if value should be taken from parent
      */
     boolean blockBuildWhenDownstreamBuilding();
 
     /**
      * Indicates whether build should be blocked while upstream project is building.
      *
-     * @return true if yes, false - otherwise.
+     * @return true if yes, false if no, null - if value should be taken from parent
      */
     boolean blockBuildWhenUpstreamBuilding();
 
