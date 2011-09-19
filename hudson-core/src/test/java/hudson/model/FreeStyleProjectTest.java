@@ -33,6 +33,7 @@ import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
 import java.io.IOException;
 import java.util.List;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -462,16 +463,15 @@ public class FreeStyleProjectTest {
         parentProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
-        childProject.setTemplate(parentProject);
-        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
-        childProject.setTemplate(null);
-
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount);
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
         assertEquals(childProject.getScmCheckoutRetryCount(), globalScmCheckoutRetryCount);
+        childProject.setTemplate(parentProject);
+        childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        assertEquals(childProject.getScmCheckoutRetryCount(), Integer.parseInt(scmCheckoutRetryCount));
         verifyAll();
     }
 
@@ -546,6 +546,86 @@ public class FreeStyleProjectTest {
         parentProject.setScmCheckoutRetryCount("  ");
         assertEquals(globalScmCheckoutRetryCount, childProject.getScmCheckoutRetryCount());
         verifyAll();
+    }
+
+    @Test
+    public void testSetBlockBuildWhenDownstreamBuildingEqualsWithParent() throws IOException {
+        boolean blockBuildWhenDownstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
+        childProject.setBlockBuildWhenDownstreamBuilding(null);
+        assertNull(childProject.blockBuildWhenDownstreamBuilding);
+        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
+    }
+
+    @Test
+    public void testSetBlockBuildWhenDownstreamBuildingNotEqualsWithParent() throws IOException {
+        boolean childBlockBuildWhenDownstreamBuilding = false;
+        boolean parentBlockBuildWhenDownstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setBlockBuildWhenDownstreamBuilding(childBlockBuildWhenDownstreamBuilding);
+        assertNotNull(childProject.blockBuildWhenDownstreamBuilding);
+        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) childBlockBuildWhenDownstreamBuilding);
+    }
+
+    @Test
+    public void testSetBlockBuildWhenDownstreamBuildingParentNull() throws IOException {
+        boolean blockBuildWhenDownstreamBuilding = true;
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+        assertEquals(childProject.blockBuildWhenDownstreamBuilding(), (Boolean) blockBuildWhenDownstreamBuilding);
+    }
+
+    @Test
+    public void testSetBlockBuildWhenUpstreamBuildingEqualsWithParent() throws IOException {
+        boolean blockBuildWhenUpstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
+        childProject.setBlockBuildWhenUpstreamBuilding(null);
+        assertNull(childProject.blockBuildWhenUpstreamBuilding);
+        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
+    }
+
+    @Test
+    public void testSetBlockBuildWhenUpstreamBuildingNotEqualsWithParent() throws IOException {
+        boolean childBlockBuildWhenUpstreamBuilding = false;
+        boolean parentBlockBuildWhenUpstreamBuilding = true;
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        parentProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setTemplate(parentProject);
+        childProject.setBlockBuildWhenUpstreamBuilding(childBlockBuildWhenUpstreamBuilding);
+        assertNotNull(childProject.blockBuildWhenUpstreamBuilding);
+        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) childBlockBuildWhenUpstreamBuilding);
+    }
+
+    @Test
+    public void testSetBlockBuildWhenUpstreamBuildingParentNull() throws IOException {
+        boolean blockBuildWhenUpstreamBuilding = true;
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+        assertEquals(childProject.blockBuildWhenUpstreamBuilding(), (Boolean) blockBuildWhenUpstreamBuilding);
     }
 
     private class FreeStyleProjectMock extends FreeStyleProject {

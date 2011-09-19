@@ -190,13 +190,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * True to keep builds of this project in queue when downstream projects are
      * building. False by default to keep from breaking existing behavior.
      */
-    protected volatile boolean blockBuildWhenDownstreamBuilding = false;
+    protected volatile Boolean blockBuildWhenDownstreamBuilding = false;
 
     /**
      * True to keep builds of this project in queue when upstream projects are
      * building. False by default to keep from breaking existing behavior.
      */
-    protected volatile boolean blockBuildWhenUpstreamBuilding = false;
+    protected volatile Boolean blockBuildWhenUpstreamBuilding = false;
 
     /**
      * Identifies {@link JDK} to be used.
@@ -612,21 +612,35 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         return true;
     }
 
-    public boolean blockBuildWhenDownstreamBuilding() {
-        return blockBuildWhenDownstreamBuilding;
+    public Boolean blockBuildWhenDownstreamBuilding() {
+        if (null != blockBuildWhenDownstreamBuilding) {
+            return blockBuildWhenDownstreamBuilding;
+        }
+        return hasParentTemplate() && getTemplate().blockBuildWhenDownstreamBuilding();
     }
 
-    public void setBlockBuildWhenDownstreamBuilding(boolean b) throws IOException {
-        blockBuildWhenDownstreamBuilding = b;
+    public void setBlockBuildWhenDownstreamBuilding(Boolean b) throws IOException {
+        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().blockBuildWhenDownstreamBuilding(), b))) {
+            blockBuildWhenDownstreamBuilding = b;
+        } else {
+            blockBuildWhenDownstreamBuilding = null;
+        }
         save();
     }
 
-    public boolean blockBuildWhenUpstreamBuilding() {
-        return blockBuildWhenUpstreamBuilding;
+    public Boolean blockBuildWhenUpstreamBuilding() {
+        if (null != blockBuildWhenUpstreamBuilding) {
+            return blockBuildWhenUpstreamBuilding;
+        }
+        return hasParentTemplate() && getTemplate().blockBuildWhenUpstreamBuilding();
     }
 
-    public void setBlockBuildWhenUpstreamBuilding(boolean b) throws IOException {
-        blockBuildWhenUpstreamBuilding = b;
+    public void setBlockBuildWhenUpstreamBuilding(Boolean b) throws IOException {
+        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().blockBuildWhenUpstreamBuilding(), b))) {
+            blockBuildWhenUpstreamBuilding = b;
+        } else {
+            blockBuildWhenUpstreamBuilding = null;
+        }
         save();
     }
 
