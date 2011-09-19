@@ -194,4 +194,42 @@ public final class Result implements Serializable, CustomExportedBean {
             return "STATUS";
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Result result = (Result) o;
+
+        if (ordinal != result.ordinal) {
+            return false;
+        }
+        if (color != result.color) {
+            return false;
+        }
+        if (name != null ? !name.equals(result.name) : result.name != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + ordinal;
+        result = 31 * result + (color != null ? color.hashCode() : 0);
+        return result;
+    }
 }

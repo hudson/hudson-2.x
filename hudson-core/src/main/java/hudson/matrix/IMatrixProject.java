@@ -69,7 +69,7 @@ public interface IMatrixProject extends IAbstractProject {
      * @param runSequentially If true, {@link hudson.matrix.MatrixRun}s are run sequentially, instead of running in parallel.
      * @throws IOException exception.
      */
-    void setRunSequentially(boolean runSequentially) throws IOException;
+    void setRunSequentially(Boolean runSequentially) throws IOException;
 
     /**
      * Sets the combination filter.

@@ -30,6 +30,7 @@ import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.util.QuotedStringTokenizer;
+import org.apache.commons.collections.CollectionUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -235,7 +236,8 @@ public class Axis extends AbstractDescribableImpl<Axis> implements Comparable<Ax
         if (name != null ? !name.equals(axis.name) : axis.name != null) {
             return false;
         }
-        if (values != null ? !values.equals(axis.values) : axis.values != null) {
+
+        if (values != null ? !CollectionUtils.isEqualCollection(values, axis.values) : axis.values != null) {
             return false;
         }
 

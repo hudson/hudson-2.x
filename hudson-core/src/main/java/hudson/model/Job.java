@@ -166,7 +166,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * Selected template for this job.
      */
-    private transient JobT template;
+    protected transient JobT template;
 
     protected final transient ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
         @Override
