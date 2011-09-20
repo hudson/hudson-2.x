@@ -33,8 +33,6 @@ import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
 import java.io.IOException;
 import java.util.List;
-import org.easymock.EasyMock;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -47,9 +45,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.easymock.EasyMock.expect;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
-import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.replayAll;
-import static org.powermock.api.easymock.PowerMock.verify;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 /**
@@ -615,7 +611,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
-        assertNull(childProject.blockBuildWhenUpstreamBuilding);
+        assertNull(childProject.blockBuildWhenUpstreamBuilding(false));
     }
 
     @Test
@@ -630,7 +626,7 @@ public class FreeStyleProjectTest {
         childProject.setTemplate(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(childBlockBuildWhenUpstreamBuilding);
         //if child value is not equals to parent one, field should be populated
-        assertNotNull(childProject.blockBuildWhenUpstreamBuilding);
+        assertNotNull(childProject.blockBuildWhenUpstreamBuilding(false));
     }
 
     @Test
@@ -640,7 +636,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(blockBuildWhenUpstreamBuilding, childProject.blockBuildWhenUpstreamBuilding);
+        assertEquals(blockBuildWhenUpstreamBuilding, childProject.blockBuildWhenUpstreamBuilding(false));
     }
 
     @Test
@@ -672,7 +668,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
-        assertNull(childProject.cleanWorkspaceRequired);
+        assertNull(childProject.isCleanWorkspaceRequired(false));
     }
 
     @Test
@@ -687,7 +683,7 @@ public class FreeStyleProjectTest {
         childProject.setTemplate(parentProject);
         childProject.setCleanWorkspaceRequired(childCleanWorkspaceRequired);
         //if child value is not equals to parent one, field should be populated
-        assertNotNull(childProject.cleanWorkspaceRequired);
+        assertNotNull(childProject.isCleanWorkspaceRequired(false));
     }
 
     @Test
@@ -697,7 +693,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(cleanWorkspaceRequired, childProject.cleanWorkspaceRequired);
+        assertEquals(cleanWorkspaceRequired, childProject.isCleanWorkspaceRequired(false));
     }
 
     @Test
@@ -728,7 +724,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setTemplate(parentProject);
         childProject.setConcurrentBuild(concurrentBuild);
-        assertNull(childProject.concurrentBuild);
+        assertNull(childProject.isConcurrentBuild(false));
     }
 
     @Test
@@ -743,7 +739,7 @@ public class FreeStyleProjectTest {
         childProject.setTemplate(parentProject);
         childProject.setConcurrentBuild(childConcurrentBuild);
         //if child value is not equals to parent one, field should be populated
-        assertEquals(childConcurrentBuild, childProject.concurrentBuild);
+        assertEquals(childConcurrentBuild, (Boolean) childProject.isConcurrentBuild(false));
     }
 
     @Test
@@ -753,7 +749,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setConcurrentBuild(concurrentBuild);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(concurrentBuild, childProject.concurrentBuild);
+        assertEquals(concurrentBuild, (Boolean) childProject.isConcurrentBuild(false));
     }
 
     @Test

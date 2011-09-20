@@ -33,7 +33,6 @@ import hudson.FeedAdapter;
 import hudson.FilePath;
 import hudson.Functions;
 import hudson.Launcher;
-import hudson.RestrictedSince;
 import hudson.Util;
 import hudson.cli.declarative.CLIMethod;
 import hudson.cli.declarative.CLIResolver;
@@ -103,8 +102,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.kohsuke.accmod.Restricted;
-import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.ForwardToView;
@@ -193,13 +190,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * True to keep builds of this project in queue when downstream projects are
      * building. False by default to keep from breaking existing behavior.
      */
-    protected volatile Boolean blockBuildWhenDownstreamBuilding = false;
+    protected volatile Boolean blockBuildWhenDownstreamBuilding;
 
     /**
      * True to keep builds of this project in queue when upstream projects are
      * building. False by default to keep from breaking existing behavior.
      */
-    protected volatile Boolean blockBuildWhenUpstreamBuilding = false;
+    protected volatile Boolean blockBuildWhenUpstreamBuilding;
 
     /**
      * Identifies {@link JDK} to be used.
@@ -234,20 +231,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     @CopyOnWrite
     protected transient volatile List<Action> transientActions = new Vector<Action>();
-    /**
-     * Note: this field was made protected for testing purpose. Access it via {@link #isConcurrentBuild()} method
-     */
-    @Restricted(NoExternalUse.class)
-    @RestrictedSince("2.1.2")
-    protected Boolean concurrentBuild = false;
+
+    private Boolean concurrentBuild;
 
     /**
      * True to clean the workspace prior to each build.
-     * Note: this field was made protected for testing purpose. Access it via {@link #isCleanWorkspaceRequired()} method
      */
-    @Restricted(NoExternalUse.class)
-    @RestrictedSince("2.1.2")
-    protected volatile Boolean cleanWorkspaceRequired = false;
+    private volatile Boolean cleanWorkspaceRequired;
 
     protected AbstractProject(ItemGroup parent, String name) {
         super(parent, name);
@@ -297,19 +287,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
         if(transientActions==null)
             transientActions = new Vector<Action>();    // happens when loaded from disk
-        //Initialize boolean values since from 2.1.2 primitive wrappers were used.
-        if (null == blockBuildWhenDownstreamBuilding) {
-            blockBuildWhenDownstreamBuilding = false;
-        }
-        if (null == blockBuildWhenUpstreamBuilding) {
-            blockBuildWhenUpstreamBuilding = false;
-        }
-        if (null == cleanWorkspaceRequired) {
-            cleanWorkspaceRequired = false;
-        }
-        if (null == concurrentBuild) {
-            concurrentBuild = false;
-        }
         updateTransientActions();
     }
 
@@ -333,10 +310,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     @Exported
     public boolean isConcurrentBuild() {
-        if (null != concurrentBuild) {
-            return Hudson.CONCURRENT_BUILD && concurrentBuild;
+        Boolean result = isConcurrentBuild(true);
+        return null != result ? result : false;
+    }
+
+    public Boolean isConcurrentBuild(boolean useParentValue) {
+        if (!useParentValue) {
+            return concurrentBuild;
+        } else {
+            if (null != concurrentBuild) {
+                return Hudson.CONCURRENT_BUILD && concurrentBuild;
+            }
+            return hasParentTemplate() && getTemplate().isConcurrentBuild();
         }
-        return null != getTemplate() && getTemplate().isConcurrentBuild();
     }
 
     /**
@@ -360,10 +346,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean isCleanWorkspaceRequired() {
-        if (null != cleanWorkspaceRequired) {
+        Boolean result =  isCleanWorkspaceRequired(true);
+        return null != result ? result : false;
+    }
+
+    public Boolean isCleanWorkspaceRequired(boolean useParentValue) {
+        if (!useParentValue) {
             return cleanWorkspaceRequired;
+        } else {
+            if (null != cleanWorkspaceRequired) {
+                return cleanWorkspaceRequired;
+            }
+            return hasParentTemplate() && getTemplate().isCleanWorkspaceRequired();
         }
-        return hasParentTemplate() && getTemplate().isCleanWorkspaceRequired();
     }
 
     /**
@@ -671,10 +666,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean blockBuildWhenDownstreamBuilding() {
-        if (null != blockBuildWhenDownstreamBuilding) {
+        Boolean result = blockBuildWhenDownstreamBuilding(true);
+        return null != result ? result : false;
+    }
+
+    public Boolean blockBuildWhenDownstreamBuilding(boolean useParentValue) {
+        if (!useParentValue) {
             return blockBuildWhenDownstreamBuilding;
+        } else {
+            if (null != blockBuildWhenDownstreamBuilding) {
+                return blockBuildWhenDownstreamBuilding;
+            }
+            return hasParentTemplate() && getTemplate().blockBuildWhenDownstreamBuilding();
         }
-        return hasParentTemplate() && getTemplate().blockBuildWhenDownstreamBuilding();
     }
 
     /**
@@ -697,10 +701,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean blockBuildWhenUpstreamBuilding() {
-        if (null != blockBuildWhenUpstreamBuilding) {
+        Boolean result = blockBuildWhenUpstreamBuilding(true);
+        return null != result ? result : false;
+    }
+
+    public Boolean blockBuildWhenUpstreamBuilding(boolean useParentValue) {
+        if (!useParentValue) {
             return blockBuildWhenUpstreamBuilding;
+        } else {
+            if (null != blockBuildWhenUpstreamBuilding) {
+                return blockBuildWhenUpstreamBuilding;
+            }
+            return hasParentTemplate() && getTemplate().blockBuildWhenUpstreamBuilding();
         }
-        return hasParentTemplate() && getTemplate().blockBuildWhenUpstreamBuilding();
     }
 
     /**
