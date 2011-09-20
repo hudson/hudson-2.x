@@ -1383,7 +1383,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Checks whether current job is inherited from other project.
      * @return boolean.
      */
-    protected boolean hasParentTemplate() {
+    public boolean hasParentTemplate() {
         return null != getTemplate();
     }
 

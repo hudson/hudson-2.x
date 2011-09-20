@@ -28,5 +28,5 @@ THE SOFTWARE.
 		   title="${%Block build when downstream project is building}"
 		   help="/help/project-config/block-downstream-building.html"
 		   checked="${it.blockBuildWhenDownstreamBuilding()}"
-       isTemplateValue="${null != it.blockBuildWhenDownstreamBuilding(false)}"/>
+       isTemplateValue="${it.hasParentTemplate() and null != it.blockBuildWhenDownstreamBuilding(false)}"/>
 </j:jelly>
