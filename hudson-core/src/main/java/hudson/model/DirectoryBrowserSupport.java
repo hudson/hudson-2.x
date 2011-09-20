@@ -80,7 +80,7 @@ public final class DirectoryBrowserSupport implements HttpResponse {
      * @param title
      *      Used in the HTML caption.
      * @param icon
-     *      The icon file name, like "folder.gif"
+     *      The icon file name, like "folder.png"
      * @param serveDirIndex
      *      True to generate the directory index.
      *      False to serve "index.html"
@@ -114,7 +114,7 @@ public final class DirectoryBrowserSupport implements HttpResponse {
      * Serves a file from the file system (Maps the URL to a directory in a file system.)
      *
      * @param icon
-     *      The icon file name, like "folder-open.gif"
+     *      The icon file name, like "folder-open.png"
      * @param serveDirIndex
      *      True to generate the directory index.
      *      False to serve "index.html"
@@ -377,9 +377,9 @@ public final class DirectoryBrowserSupport implements HttpResponse {
 
         public String getIconName() {
             if (isReadable)
-                return isFolder?"folder.gif":"text.gif";
+                return isFolder?"folder.png":"text.png";
             else
-                return isFolder?"folder-error.gif":"text-error.gif";
+                return isFolder?"folder-error.png":"text-error.png";
         }
 
         public long getSize() {

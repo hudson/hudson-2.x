@@ -30,7 +30,7 @@ public final class StockStatusIcon extends AbstractStatusIcon {
 
     /**
      * @param image
-     *      Short file name like "folder.gif" that points to a stock icon in Hudson.
+     *      Short file name like "folder.png" that points to a stock icon in Hudson.
      * @param description
      *      Used as {@link #getDescription()}.
      */

@@ -222,7 +222,7 @@ public abstract class FormFieldValidator {
             response.setContentType("text/html;charset=UTF-8");
             // 1x16 spacer needed for IE since it doesn't support min-height
             response.getWriter().print("<div class="+ cssClass +"><img src='"+
-                    request.getContextPath()+Hudson.RESOURCE_PATH+"/images/none.gif' height=16 width=1>"+
+                    request.getContextPath()+Hudson.RESOURCE_PATH+"/images/none.png' height=16 width=1>"+
                     message+"</div>");
         }
     }

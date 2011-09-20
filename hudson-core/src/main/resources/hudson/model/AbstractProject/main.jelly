@@ -25,7 +25,7 @@
         ${act.displayName}
       </t:summary>
     </j:forEach>
-    <t:summary icon="folder.gif" href="ws/" permission="${it.WORKSPACE}">
+    <t:summary icon="folder.png" href="ws/" permission="${it.WORKSPACE}">
       ${%Workspace}
     </t:summary>
 
@@ -33,20 +33,20 @@
         build="${it.lastSuccessfulBuild}" baseURL="lastSuccessfulBuild/"
         permission="${it.lastSuccessfulBuild.ARTIFACTS}"/>
 
-    <t:summary icon="notepad.gif" href="changes">
+    <t:summary icon="notepad.png" href="changes">
       ${%Recent Changes}
     </t:summary>
 
     <j:set var="tr" value="${it.lastCompletedBuild.testResultAction}"/>
     <j:if test="${tr!=null}">
-      <t:summary icon="clipboard.gif">
+      <t:summary icon="clipboard.png">
         <a href="lastCompletedBuild/testReport/">${%Latest Test Result}</a>
         <st:nbsp/>
         <t:test-result it="${tr}" />
       </t:summary>
     </j:if>
     <j:if test="${it.lastBuild!=null}">
-      <t:summary icon="terminal.gif" href="lastBuild/console">
+      <t:summary icon="terminal.png" href="lastBuild/console">
         ${%Latest Console output}
       </t:summary>
     </j:if>

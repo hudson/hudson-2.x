@@ -53,12 +53,12 @@ public interface Action extends ModelObject {
      * Gets the file name of the icon.
      *
      * @return
-     *      If just a file name (like "abc.gif") is returned, it will be
+     *      If just a file name (like "abc.png") is returned, it will be
      *      interpreted as a file name inside <tt>/images/24x24</tt>.
      *      This is useful for using one of the stock images.
      *      <p>
      *      If an absolute file name that starts from '/' is returned (like
-     *      "/plugin/foo/abc.gif'), then it will be interpreted as a path
+     *      "/plugin/foo/abc.png'), then it will be interpreted as a path
      *      from the context root of Hudson. This is useful to pick up
      *      image files from a plugin.
      *      <p>

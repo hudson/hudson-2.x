@@ -223,7 +223,7 @@ public abstract class FormValidation extends IOException implements HttpResponse
             public String renderHtml() {
                 // 1x16 spacer needed for IE since it doesn't support min-height
                 return "<div class="+ kind.name().toLowerCase(Locale.ENGLISH) +"><img src='"+
-                        Stapler.getCurrentRequest().getContextPath()+ Hudson.RESOURCE_PATH+"/images/none.gif' height=16 width=1>"+
+                        Stapler.getCurrentRequest().getContextPath()+ Hudson.RESOURCE_PATH+"/images/none.png' height=16 width=1>"+
                         message+"</div>";
             }
         };

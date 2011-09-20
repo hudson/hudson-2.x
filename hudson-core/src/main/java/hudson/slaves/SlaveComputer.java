@@ -148,7 +148,7 @@ public class SlaveComputer extends Computer {
     public String getIcon() {
         Future<?> l = lastConnectActivity;
         if(l!=null && !l.isDone())
-            return "computer-flash.gif";
+            return "computer-flash.png";
         return super.getIcon();
     }
 

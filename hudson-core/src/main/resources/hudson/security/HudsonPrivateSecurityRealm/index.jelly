@@ -30,10 +30,10 @@
         </tr>
         <j:forEach var="user" items="${it.allUsers}">
           <tr>
-            <td><a href="${user.url}/"><img src="${imagesURL}/32x32/user.gif" alt=""/></a></td>
+            <td><a href="${user.url}/"><img src="${imagesURL}/32x32/user.png" alt=""/></a></td>
             <td><a href="${user.url}/">${user}</a></td>
             <td>
-              <a href="${user.url}/configure"><img src="${imagesURL}/32x32/setting.gif" alt="Setting"/></a>
+              <a href="${user.url}/configure"><img src="${imagesURL}/32x32/setting.png" alt="Setting"/></a>
               <j:if test="${user.canDelete()}">
                 <st:include page="delete.jelly" />
               </j:if>

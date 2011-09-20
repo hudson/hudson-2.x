@@ -1114,7 +1114,7 @@ public class Util {
     public static String wrapToErrorSpan(String s) {
         s = "<span class=error><img src='"+
             Stapler.getCurrentRequest().getContextPath()+ Hudson.RESOURCE_PATH+
-            "/images/none.gif' height=16 width=1>"+s+"</span>";
+            "/images/none.png' height=16 width=1>"+s+"</span>";
         return s;
     }
     

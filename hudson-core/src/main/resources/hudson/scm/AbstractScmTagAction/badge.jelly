@@ -20,6 +20,6 @@
     <img width="16" height="16"
       tooltip="${it.tooltip}"
       alt="[tagged]"
-      src="${imagesURL}/16x16/save.gif"/>
+      src="${imagesURL}/16x16/save.png"/>
   </a>
 </j:if>

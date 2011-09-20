@@ -23,7 +23,7 @@
         <j:choose>
           <j:when test="${m.value.size()==0}">
             <td class="no-wrap">
-              <img src="${imagesURL}/16x16/grey.gif" alt=""/>
+              <img src="${imagesURL}/16x16/grey.png" alt=""/>
               <st:nbsp/>${m.key.displayName} (${%noRun})
             </td><td>
             </td>
@@ -46,7 +46,7 @@
           <j:otherwise>
             <!-- there are multiple builds for this module, so use a different format -->
             <td class="no-wrap">
-              <img src="${imagesURL}/16x16/empty.gif" alt=""/>
+              <img src="${imagesURL}/16x16/empty.png" alt=""/>
               <st:nbsp/>
               <a href="${rootURL}/${m.key.url}">${m.key.displayName}</a>
             </td><td>

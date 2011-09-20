@@ -25,7 +25,7 @@
       <h1>${%Polling Log}</h1>
       <l:rightspace>
         <a href="pollingLog">
-          <img src="${imagesURL}/24x24/document.gif" alt="" />${%View as plain text}
+          <img src="${imagesURL}/24x24/document.png" alt="" />${%View as plain text}
         </a>
       </l:rightspace>
 

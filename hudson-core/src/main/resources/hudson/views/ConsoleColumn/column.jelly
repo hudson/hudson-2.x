@@ -19,7 +19,7 @@
     <j:choose>
       <j:when test="${job.lastBuild!=null}">
         <a href="${jobBaseUrl}${job.shortUrl}lastBuild/console">
-          <img src="${imagesURL}/${subIconSize}/terminal.gif" alt="${%Console output}"
+          <img src="${imagesURL}/${subIconSize}/terminal.png" alt="${%Console output}"
                border="0"/>
         </a>
       </j:when>

@@ -19,7 +19,7 @@
     <script src="${resURL}/scripts/popup-dialog.js" type="text/javascript"/>
 
     <a href="${user.url}/delete" onclick="onLinkClick('question'); return false;">
-        <img src="${imagesURL}/24x24/edit-delete.gif" alt="Delete"/>
+        <img src="${imagesURL}/24x24/edit-delete.png" alt="Delete"/>
     </a>
 
     <div id="question" style="display:none; cursor: default">

@@ -282,7 +282,7 @@ public class Fingerprinter extends Recorder implements Serializable {
         }
 
         public String getIconFileName() {
-            return "fingerprint.gif";
+            return "fingerprint.png";
         }
 
         public String getDisplayName() {

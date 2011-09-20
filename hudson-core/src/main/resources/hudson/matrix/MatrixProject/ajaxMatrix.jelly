@@ -24,7 +24,7 @@
     <p:matrix autoRefresh="true">
       <j:choose>
         <j:when test="${p==null}">
-          <img src="${imagesURL}/24x24/grey.gif" tooltip="${%Not configured}" alt="${%Not configured}"/>
+          <img src="${imagesURL}/24x24/grey.png" tooltip="${%Not configured}" alt="${%Not configured}"/>
         </j:when>
         <j:otherwise>
           <a href="${p.shortUrl}">

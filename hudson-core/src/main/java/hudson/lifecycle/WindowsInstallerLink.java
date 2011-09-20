@@ -65,7 +65,7 @@ public class WindowsInstallerLink extends ManagementLink {
     }
 
     public String getIconFileName() {
-        return "installer.gif";
+        return "installer.png";
     }
 
     public String getUrlName() {

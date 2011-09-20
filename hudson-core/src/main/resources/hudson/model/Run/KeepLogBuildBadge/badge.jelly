@@ -17,4 +17,4 @@
 
 <img width="16" height="16"
   title="${%Keep this build forever}" alt="[saved]"
-  src="${imagesURL}/16x16/lock.gif"/>
+  src="${imagesURL}/16x16/lock.png"/>

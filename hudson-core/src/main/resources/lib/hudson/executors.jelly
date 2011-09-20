@@ -79,7 +79,7 @@
               <td class="pane" width="16" align="center" valign="middle">
                 <j:if test="${e.hasStopPermission()}">
                   <a href="${rootURL}/${c.url}${url}/stop">
-                    <img src="${imagesURL}/16x16/stop.gif" alt="${%terminate this build}"/>
+                    <img src="${imagesURL}/16x16/stop.png" alt="${%terminate this build}"/>
                   </a>
                 </j:if>
               </td>

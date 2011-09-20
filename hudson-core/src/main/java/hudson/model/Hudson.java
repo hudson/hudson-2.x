@@ -3063,7 +3063,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
      * Binds /userContent/... to $HUDSON_HOME/userContent.
      */
     public DirectoryBrowserSupport doUserContent() {
-        return new DirectoryBrowserSupport(this, getRootPath().child("userContent"), "User content", "folder.gif", true);
+        return new DirectoryBrowserSupport(this, getRootPath().child("userContent"), "User content", "folder.png", true);
     }
 
     /**

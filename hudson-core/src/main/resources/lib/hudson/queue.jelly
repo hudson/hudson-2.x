@@ -60,7 +60,7 @@
                   <j:if test="${stuck}">
                     &#160;
                     <a href="http://wiki.hudson-ci.org/display/HUDSON/Executor+Starvation">
-                      <img src="${imagesURL}/16x16/hourglass.gif"  />
+                      <img src="${imagesURL}/16x16/hourglass.png"  />
                     </a>
                   </j:if>
                 </j:when>
@@ -71,7 +71,7 @@
             </td>
             <td class="pane" width="16" align="center" valign="middle">
               <j:if test="${item.hasCancelPermission()}">
-                <a href="${rootURL}/queue/item/${item.id}/cancelQueue"><img src="${imagesURL}/16x16/stop.gif" alt="cancel this build" /></a>
+                <a href="${rootURL}/queue/item/${item.id}/cancelQueue"><img src="${imagesURL}/16x16/stop.png" alt="cancel this build" /></a>
               </j:if>
              </td>
           </tr>

@@ -53,7 +53,7 @@ public final class ReportAction implements Action, Serializable {
 
     public String getIconFileName() {
         // TODO
-        return "n/a.gif";
+        return "n/a.png";
     }
 
     public String getDisplayName() {

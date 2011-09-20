@@ -455,7 +455,7 @@ div.behavior-loading {
     font-weight: bold;
     padding-left: 20px;
     min-height: 16px;
-    background-image: url("../images/16x16/error.gif");
+    background-image: url("../images/16x16/error.png");
     background-position: left center;
     background-repeat: no-repeat;
 }
@@ -470,7 +470,7 @@ div.behavior-loading {
     font-weight: bold;
     padding-left: 20px;
     min-height: 16px;
-    background-image: url( "../images/16x16/warning.gif" );
+    background-image: url( "../images/16x16/warning.png" );
     background-position: left center;
     background-repeat: no-repeat;
 }
@@ -485,7 +485,7 @@ div.behavior-loading {
     font-weight: bold;
     padding-left: 20px;
     min-height: 16px;
-    background-image: url( "../images/16x16/go-next.gif" ); /* TODO: get a better icon */
+    background-image: url( "../images/16x16/go-next.png" ); /* TODO: get a better icon */
     background-position: left center;
     background-repeat: no-repeat;
 }
@@ -822,7 +822,7 @@ DIV.yahooTree td {
 }
 /* ========================= search box at the top-right of the page ========================= */
 #search-box {
-  background: white url(../images/16x16/search.gif) no-repeat 2px center;
+  background: white url(../images/16x16/search.png) no-repeat 2px center;
   padding-left: 20px;
   width: 15em;
   position: static; 
@@ -879,7 +879,7 @@ TEXTAREA {
 DIV.textarea-handle {
     height: 5px;
     font-size: 0;
-    background: #EEE url(../images/textarea-handle.gif) no-repeat 50% 1px;
+    background: #EEE url(../images/textarea-handle.png) no-repeat 50% 1px;
     border: 1px solid #BABDB6;
     border-top: none;
     cursor: s-resize;

@@ -32,7 +32,7 @@
           <li>
             <p>
               <a href="slave-agent.jnlp" id="jnlp-link">
-                <img src="${imagesURL}/webstart.gif" alt="${%launch agent}" />
+                <img src="${imagesURL}/webstart.png" alt="${%launch agent}" />
               </a>
               ${%Launch agent from browser on slave}
             </p>

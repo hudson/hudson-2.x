@@ -22,10 +22,10 @@
   <l:header />
   <l:side-panel>
     <l:tasks>
-      <l:task icon="images/24x24/up.gif" href=".." title="${%Back to Loggers}" />
-      <l:task icon="images/24x24/notepad.gif" href="." title="${%Log records}" />
-      <l:task icon="images/24x24/setting.gif" href="configure" title="${%Configure}" />
-      <l:taskWithDialog icon="images/24x24/edit-delete.gif" dialogPanel="deleteConfirmationPanel.jelly" href="delete" title="${%Delete}" />
+      <l:task icon="images/24x24/up.png" href=".." title="${%Back to Loggers}" />
+      <l:task icon="images/24x24/notepad.png" href="." title="${%Log records}" />
+      <l:task icon="images/24x24/setting.png" href="configure" title="${%Configure}" />
+      <l:taskWithDialog icon="images/24x24/edit-delete.png" dialogPanel="deleteConfirmationPanel.jelly" href="delete" title="${%Delete}" />
     </l:tasks>
   </l:side-panel>
 </j:jelly>

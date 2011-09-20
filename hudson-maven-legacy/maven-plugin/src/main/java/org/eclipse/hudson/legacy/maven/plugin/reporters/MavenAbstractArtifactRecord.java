@@ -149,7 +149,7 @@ public abstract class MavenAbstractArtifactRecord<T extends AbstractBuild<?,?>> 
     }
 
     public final String getIconFileName() {
-        return "redo.gif";
+        return "redo.png";
     }
 
     public final String getDisplayName() {

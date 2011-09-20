@@ -103,7 +103,7 @@ public abstract class AbstractTestResultAction<T extends AbstractTestResultActio
     }
 
     public String getIconFileName() {
-        return "clipboard.gif";
+        return "clipboard.png";
     }
 
     public AbstractBuild getOwner() {
