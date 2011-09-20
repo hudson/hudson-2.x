@@ -52,15 +52,21 @@ THE SOFTWARE.
     <st:attribute name="inline">
       if present, the foldable section will not be grouped into a separate JSON object upon submission
     </st:attribute>
+    <st:attribute name="isTemplateValue">
+      if present and true - value is taken from parent template
+    </st:attribute>
   </st:documentation>
   <j:if test="${attrs.help==null}">
     <!-- infer the help page from the current descriptor and field if possible -->
     <j:set target="${attrs}" property="help"
            value="${descriptor.getHelpFile(attrs.field)}" />
   </j:if>
+  <j:if test="${attrs.isTemplateValue==null}">
+    <j:set target="${attrs}" property="isTemplateValue" value="false"/>
+  </j:if>
 
   <tr class="optional-block-start ${attrs.inline?'':'row-set-start'}" hasHelp="${attrs.help!=null}"><!-- this ID marks the beginning -->
-    <td colspan="3">
+    <td colspan="3" class="${attrs.isTemplateValue? 'modified': ''}">
       <f:checkbox name="${attrs.name}" onclick="javascript:updateOptionalBlock(this,true)"
                   negative="${attrs.negative}" checked="${attrs.checked}" field="${attrs.field}" title="${title}" />
     </td>

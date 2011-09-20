@@ -1008,4 +1008,7 @@ div.deleteSlaveDialog div.radioButtons {
 div.deleteSlaveDialog h4 {
     color: #F89938;
 }
-
+/* ======================== "Cascading project" ==========================*/
+tr.optional-block-start > td.modified {
+    background-color: #FFE8C9;
+}
