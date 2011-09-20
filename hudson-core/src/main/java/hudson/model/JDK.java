@@ -141,12 +141,14 @@ public final class JDK extends ToolInstallation implements NodeSpecific<JDK>, En
             return "JDK"; // XXX I18N
         }
 
-        public @Override JDK[] getInstallations() {
+        @Override
+        public JDK[] getInstallations() {
             return Hudson.getInstance().getJDKs().toArray(new JDK[0]);
         }
 
         // this isn't really synchronized well since the list is Hudson.jdks :(
-        public @Override synchronized void setInstallations(JDK... jdks) {
+        @Override
+        public synchronized void setInstallations(JDK... jdks) {
             List<JDK> list = Hudson.getInstance().getJDKs();
             list.clear();
             list.addAll(Arrays.asList(jdks));
