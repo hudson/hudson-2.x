@@ -39,6 +39,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
@@ -768,6 +769,26 @@ public class FreeStyleProjectTest {
         childProject.setConcurrentBuild(childConcurrentBuild);
         //Child value is not equals to parent - override value in child.
         assertEquals(childConcurrentBuild, (Boolean) childProject.isConcurrentBuild());
+    }
+
+    @Test
+    public void testIsCustomWorkspaceInherited() throws IOException{
+        FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
+        parentProject.allowSave.set(false);
+        assertFalse(parentProject.isCustomWorkspaceInherited());
+        String temp = "/temp";
+        parentProject.setCustomWorkspace(temp);
+        assertFalse(parentProject.isCustomWorkspaceInherited());
+        FreeStyleProject childProject = new FreeStyleProjectMock("child");
+        childProject.allowSave.set(false);
+        childProject.setCascadingProject(parentProject);
+        assertTrue(childProject.isCustomWorkspaceInherited());
+        childProject.setCustomWorkspace("/temp1");
+        assertFalse(childProject.isCustomWorkspaceInherited());
+        childProject.setCustomWorkspace(null);
+        assertFalse(childProject.isCustomWorkspaceInherited());
+        childProject.setCustomWorkspace(temp);
+        assertTrue(childProject.isCustomWorkspaceInherited());
     }
 
     private class FreeStyleProjectMock extends FreeStyleProject {

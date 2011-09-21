@@ -21,21 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package org.hudsonci.api.model;
+
+import hudson.model.JobProperty;
+import hudson.model.JobPropertyDescriptor;
+import hudson.tasks.LogRotator;
+import java.util.Map;
 
 /**
- * FreeStyle project interface.
+ * Interface that represents Job.
  * <p/>
  * Date: 9/15/11
  *
  * @author Nikita Levyankov
  */
-public interface IFreeStyleProject extends IProject {
+public interface IJob<T> {
 
     /**
-     * Returns user-specified workspace directory, or null if it's up to Hudson
+     * Returns cascading project name.
      *
-     * @return string representation of directory.
+     * @return cascading project name.
      */
-    String getCustomWorkspace();
+    String getCascadingProjectName();
+
+    /**
+     * Returns selected cascading project.
+     *
+     * @return cascading project.
+     */
+    IJob getCascadingProject();
+
+    /**
+     * @return whether the name of this job can be changed by user.
+     */
+    boolean isNameEditable();
+
+    /**
+     * Returns the log rotator for this job, or null if none.
+     *
+     * @return {@link LogRotator} instance.
+     */
+    LogRotator getLogRotator();
+
+    /**
+     * @return true if this instance supports log rotation configuration.
+     */
+    boolean supportsLogRotator();
+
+    /**
+     * Gets all the job properties configured for this job.
+     *
+     * @return Map of properties.
+     */
+    Map<JobPropertyDescriptor, JobProperty<?>> getProperties();
 }

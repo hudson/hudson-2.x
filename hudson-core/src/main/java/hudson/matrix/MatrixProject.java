@@ -58,6 +58,7 @@ import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hudsonci.api.matrix.IMatrixProject;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;

@@ -21,34 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
-
-import hudson.tasks.BuildWrapper;
-import hudson.tasks.Builder;
-import hudson.tasks.Publisher;
-import java.util.List;
-import java.util.Map;
+package org.hudsonci.api.model;
 
 /**
- * Project interface
+ * FreeStyle project interface.
  * <p/>
  * Date: 9/15/11
  *
  * @author Nikita Levyankov
  */
-public interface IProject extends IAbstractProject {
-    /**
-     * @return list of project {@link Builder}
-     */
-    List<Builder> getBuilders();
+public interface IFreeStyleProject extends IProject {
 
     /**
-     * @return map of project {@link BuildWrapper}
+     * Returns user-specified workspace directory, or null if it's up to Hudson
+     *
+     * @return string representation of directory.
      */
-    Map<Descriptor<BuildWrapper>, BuildWrapper> getBuildWrappers();
-
-    /**
-     * @return map of project {@link Publisher}
-     */
-    Map<Descriptor<Publisher>, Publisher> getPublishers();
+    String getCustomWorkspace();
 }
