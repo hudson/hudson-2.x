@@ -67,12 +67,13 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
     }
 
     public String getCustomWorkspace(boolean useParentValue) {
-       if (!useParentValue || !isCustomWorkspaceInherited()) {
-           return DEFAULT_CUSTOM_WORKSPACE.equals(customWorkspace)? null : StringUtils.trimToNull(customWorkspace);
-       } else if (StringUtils.isNotBlank(customWorkspace)) {
-           return customWorkspace;
-       }
-       return hasCascadingProject()? getCascadingProject().getCustomWorkspace() : null;
+        if (!useParentValue || !isCustomWorkspaceInherited()) {
+            return DEFAULT_CUSTOM_WORKSPACE.equals(customWorkspace) ? null : StringUtils.trimToNull(customWorkspace);
+        }
+        if (StringUtils.isNotBlank(customWorkspace)) {
+            return customWorkspace;
+        }
+        return hasCascadingProject() ? getCascadingProject().getCustomWorkspace() : null;
     }
 
     public boolean isCustomWorkspaceInherited() {
