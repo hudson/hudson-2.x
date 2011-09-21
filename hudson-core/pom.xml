@@ -97,7 +97,6 @@ THE SOFTWARE.
     <bridge-method-injector.version>1.4</bridge-method-injector.version>
     <access-modifier-checker.version>1.0</access-modifier-checker.version>
     <antlr-maven-plugin.version>2.1</antlr-maven-plugin.version>
-    <cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
     <apt-maven-plugin.version>1.0-alpha-2</apt-maven-plugin.version>
     <maven-project-info-reports-plugin.version>2.1</maven-project-info-reports-plugin.version>
   </properties>
@@ -261,37 +260,12 @@ THE SOFTWARE.
       <profile>
           <id>hudson</id>
           <build>
-              <pluginManagement>
-                  <plugins>
-                      <plugin>
-                          <groupId>org.codehaus.mojo</groupId>
-                          <artifactId>cobertura-maven-plugin</artifactId>
-                          <version>${cobertura-maven-plugin.version}</version>
-                          <configuration>
-                              <check>
-                                  <branchRate>80</branchRate>
-                                  <lineRate>80</lineRate>
-                                  <haltOnFailure>true</haltOnFailure>
-                                  <totalBranchRate>80</totalBranchRate>
-                                  <totalLineRate>80</totalLineRate>
-                                  <packageLineRate>80</packageLineRate>
-                                  <packageBranchRate>80</packageBranchRate>
-                              </check>
-                              <formats>
-                                  <format>xml</format>
-                              </formats>
-                          </configuration>
-                          <executions>
-                              <execution>
-                                  <phase>package</phase>
-                                  <goals>
-                                      <goal>cobertura</goal>
-                                  </goals>
-                              </execution>
-                          </executions>
-                      </plugin>
-                  </plugins>
-              </pluginManagement>
+              <plugins>
+                  <plugin>
+                      <groupId>org.codehaus.mojo</groupId>
+                      <artifactId>cobertura-maven-plugin</artifactId>
+                  </plugin>
+              </plugins>
           </build>
       </profile>
 
