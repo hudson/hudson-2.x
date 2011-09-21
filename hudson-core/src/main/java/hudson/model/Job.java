@@ -69,11 +69,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -116,6 +119,8 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
         extends AbstractItem implements ExtensionPoint, StaplerOverridable, IJob {
     private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
+
+    private Set<String> overriddenValues = new CopyOnWriteArraySet<String>();
     /**
      * Next build number. Kept in a separate file because this is the only
      * information that gets updated often. This allows the rest of the
@@ -178,6 +183,18 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     protected Job(ItemGroup parent, String name) {
         super(parent, name);
+    }
+
+    public boolean isOverriddenValue(String propertyName) {
+        return overriddenValues.contains(propertyName);
+    }
+
+    public void registerOverriddenValue(String propertyName) {
+        overriddenValues.add(propertyName);
+    }
+
+    public void unRegisterOverriddenValue(String propertyName) {
+        overriddenValues.remove(propertyName);
     }
 
     @Override
