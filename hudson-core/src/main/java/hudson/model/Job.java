@@ -192,7 +192,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @return true - if overridden, false - otherwise.
      */
     public boolean isOverriddenProperty(String propertyName) {
-        return overriddenValues.contains(propertyName);
+        return null != propertyName && overriddenValues.contains(propertyName);
     }
 
     /**
@@ -236,6 +236,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                     return true;
                 }
             };
+        }
+        if (null == overriddenValues) {
+            overriddenValues = new CopyOnWriteArraySet<String>();
         }
         TextFile f = getNextBuildNumberFile();
         if (f.exists()) {
