@@ -98,6 +98,11 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     protected static final String TOUCH_STONE_RESULT_CONDITION_PARAM = "touchStoneResultCondition";
     protected static final String CUSTOM_WORKSPACE_PARAM = "customWorkspace";
     protected static final String CUSTOM_WORKSPACE_DIRECTORY_PARAM = "customWorkspace.directory";
+    protected static final String RUN_SEQUENTIALLY_PROPERTY_NAME = "runSequentially";
+    protected static final String COMBINATION_FILTER_PROPERTY_NAME = "combinationFilter";
+    protected static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
+    protected static final String TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME = "touchStoneResultCondition";
+    protected static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
 
     /**
      * Configuration axes.
@@ -111,7 +116,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      *
      * @see #getCombinationFilter()
      */
-    volatile String combinationFilter;
+    private volatile String combinationFilter;
 
     /**
      * List of active {@link Builder}s configured for this project.
@@ -142,21 +147,18 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     @CopyOnWrite
     private transient /*final*/ Set<MatrixConfiguration> activeConfigurations = new LinkedHashSet<MatrixConfiguration>();
 
-    //package visible for the tests only.
-    Boolean runSequentially;
+    private boolean runSequentially;
 
     /**
      * Filter to select a number of combinations to build first
      */
-    //package visible for the tests only.
-    String touchStoneCombinationFilter;
+    private String touchStoneCombinationFilter;
 
     /**
      * Required result on the touchstone combinations, in order to
      * continue with the rest
      */
-    //package visible for the tests only.
-    Result touchStoneResultCondition;
+    private Result touchStoneResultCondition;
 
     /**
      * See {@link #setCustomWorkspace(String)}.
@@ -196,37 +198,52 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public boolean isRunSequentially() {
-        return runSequentially!= null ? runSequentially : (hasCascadingProject() && getCascadingProject().isRunSequentially());
-    }
-
-    /**
-     * @deprecated use #setRunSequentially(Boolean runSequentially) instead
-     */
-    @Deprecated
-    public void setRunSequentially(boolean runSequentially) throws IOException {
-        setRunSequentially(Boolean.valueOf(runSequentially));
+        if (hasCascadingProject()) {
+            return isOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME) ? runSequentially
+                : getCascadingProject().isRunSequentially();
+        } else {
+            return runSequentially;
+        }
     }
 
     /**
      * @inheritDoc
      */
-    public void setRunSequentially(Boolean runSequentially) throws IOException {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().isRunSequentially(), runSequentially))) {
+    public void setRunSequentially(boolean runSequentially) throws IOException {
+        if (!hasCascadingProject()) {
             this.runSequentially = runSequentially;
+        } else if (!ObjectUtils.equals(getCascadingProject().isRunSequentially(), runSequentially)) {
+            this.runSequentially = runSequentially;
+            registerOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME);
         } else {
-            this.runSequentially = null;
+            unRegisterOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME);
         }
-        // TODO verify me
         save();
     }
 
     /**
      * @inheritDoc
      */
-    public void setCombinationFilter(String combinationFilter) throws IOException {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getCombinationFilter(), combinationFilter))) {
-            this.combinationFilter = combinationFilter;
+    public String getCombinationFilter() {
+        if (hasCascadingProject()) {
+            return isOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME) ? combinationFilter
+                : getCascadingProject().getCombinationFilter();
         } else {
+            return combinationFilter;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public void setCombinationFilter(String combinationFilter) throws IOException {
+        if (!hasCascadingProject()) {
+            this.combinationFilter = combinationFilter;
+        } else if (!ObjectUtils.equals(getCascadingProject().getCombinationFilter(), combinationFilter)) {
+            this.combinationFilter = combinationFilter;
+            registerOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME);
+        } else {
+            unRegisterOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME);
             this.combinationFilter = null;
         }
         rebuildConfigurations();
@@ -236,27 +253,27 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * @inheritDoc
      */
-    public String getCombinationFilter() {
-        return combinationFilter != null ? combinationFilter
-            : (hasCascadingProject() ? getCascadingProject().getCombinationFilter() : null);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public String getTouchStoneCombinationFilter() {
-        return touchStoneCombinationFilter != null ? touchStoneCombinationFilter
-            : (hasCascadingProject() ? getCascadingProject().getTouchStoneCombinationFilter() : null);
+        if (hasCascadingProject()) {
+            return isOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME) ? touchStoneCombinationFilter
+                : getCascadingProject().getTouchStoneCombinationFilter();
+        } else {
+            return touchStoneCombinationFilter;
+        }
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneCombinationFilter(String touchStoneCombinationFilter) {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneCombinationFilter(),
-            touchStoneCombinationFilter))) {
+        if (!hasCascadingProject()) {
             this.touchStoneCombinationFilter = touchStoneCombinationFilter;
+        } else if (!ObjectUtils.equals(getCascadingProject().getTouchStoneCombinationFilter(),
+            touchStoneCombinationFilter)) {
+            this.touchStoneCombinationFilter = touchStoneCombinationFilter;
+            registerOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME);
         } else {
+            unRegisterOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME);
             this.touchStoneCombinationFilter = null;
         }
     }
@@ -265,18 +282,26 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-        return touchStoneResultCondition != null ? touchStoneResultCondition
-            : (hasCascadingProject() ? getCascadingProject().getTouchStoneResultCondition() : null);
+        if (hasCascadingProject()) {
+            return isOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME) ? touchStoneResultCondition
+                : getCascadingProject().getTouchStoneResultCondition();
+        } else {
+            return touchStoneResultCondition;
+        }
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
-            touchStoneResultCondition))) {
+        if (!hasCascadingProject()) {
             this.touchStoneResultCondition = touchStoneResultCondition;
+        } else if (!ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
+            touchStoneCombinationFilter)) {
+            this.touchStoneResultCondition = touchStoneResultCondition;
+            registerOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME);
         } else {
+            unRegisterOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME);
             this.touchStoneResultCondition = null;
         }
     }
@@ -285,18 +310,25 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public String getCustomWorkspace() {
-        return customWorkspace != null ? customWorkspace
-            : (hasCascadingProject() ? getCascadingProject().getCustomWorkspace() : null);
+        if (hasCascadingProject()) {
+            return isOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME) ? customWorkspace
+                : getCascadingProject().getCustomWorkspace();
+        } else {
+            return customWorkspace;
+        }
     }
 
     /**
      * @inheritDoc
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
-            customWorkspace))) {
+        if (!hasCascadingProject()) {
             this.customWorkspace = customWorkspace;
+        } else if (!ObjectUtils.equals(getCascadingProject().getCustomWorkspace(), customWorkspace)) {
+            this.customWorkspace = customWorkspace;
+            registerOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
         } else {
+            unRegisterOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
             this.customWorkspace = null;
         }
     }
