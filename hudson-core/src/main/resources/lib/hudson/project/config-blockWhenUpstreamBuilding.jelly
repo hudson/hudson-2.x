@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Shinod 
+Copyright (c) 2004-2009, Sun Microsystems, Inc., Shinod, Oracle Corporation, Nikita Levyankov, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,5 +28,5 @@ THE SOFTWARE.
 		   title="${%Block build when upstream project is building}"
 		   help="/help/project-config/block-upstream-building.html"
 		   checked="${it.blockBuildWhenUpstreamBuilding()}"
-       isTemplateValue="${it.hasCascadingProject() and null != it.blockBuildWhenUpstreamBuilding(false)}"/>
+       isCascadingValue="${it.hasCascadingProject() and null != it.blockBuildWhenUpstreamBuilding(false)}"/>
 </j:jelly>

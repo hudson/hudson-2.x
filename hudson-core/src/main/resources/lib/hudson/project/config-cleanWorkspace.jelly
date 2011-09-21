@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Knute G. Axelson
+Copyright (c) 2004-2009, Sun Microsystems, Inc., Knute G. Axelson, Oracle Corporation, Nikita Levyankov, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,6 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <f:optionalBlock name="cleanWorkspaceRequired" title="${%Clean workspace before build}"
                    checked="${it.cleanWorkspaceRequired}"
-                   isTemplateValue="${it.hasCascadingProject() and null != it.isCleanWorkspaceRequired(false)}"
+                   isCascadingValue="${it.hasCascadingProject() and null != it.isCleanWorkspaceRequired(false)}"
                    help="/help/project-config/cleanWorkspace.html" />
 </j:jelly>
