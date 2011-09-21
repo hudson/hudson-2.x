@@ -253,45 +253,27 @@ THE SOFTWARE.
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <!-- instrumentation>
-                      <includes>
-                        <include>**/*.class</include>
-                      </includes>
-                      <excludes>
-                        <exclude>**/*ExtensionPoint.class</exclude>
-                      </excludes>
-                    </instrumentation -->
-                    <check>
-                        <branchRate>80</branchRate>
-                        <lineRate>80</lineRate>
-                        <haltOnFailure>true</haltOnFailure>
-                        <totalBranchRate>80</totalBranchRate>
-                        <totalLineRate>80</totalLineRate>
-                        <packageLineRate>80</packageLineRate>
-                        <packageBranchRate>80</packageBranchRate>
-                    </check>
-                    <formats>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>cobertura</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
   <profiles>
+      <profile>
+          <id>hudson</id>
+          <activation>
+              <property>
+                  <name>BUILD_NUMBER</name>
+              </property>
+          </activation>
+          <build>
+              <plugins>
+                  <plugin>
+                      <groupId>org.codehaus.mojo</groupId>
+                      <artifactId>cobertura-maven-plugin</artifactId>
+                  </plugin>
+              </plugins>
+          </build>
+      </profile>
+
     <profile>
       <id>debug</id>
       <activation>
