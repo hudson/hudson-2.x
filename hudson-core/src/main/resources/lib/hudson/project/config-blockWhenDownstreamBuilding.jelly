@@ -28,5 +28,5 @@ THE SOFTWARE.
 		   title="${%Block build when downstream project is building}"
 		   help="/help/project-config/block-downstream-building.html"
 		   checked="${it.blockBuildWhenDownstreamBuilding()}"
-       isCascadingValue="${it.hasCascadingProject() and null != it.blockBuildWhenDownstreamBuilding(false)}"/>
+       isCascadingValue="${it.isOverriddenProperty(it.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)}"/>
 </j:jelly>

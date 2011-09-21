@@ -43,7 +43,7 @@ import javax.servlet.ServletException;
 public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
     IFreeStyleProject {
 
-    private static final String DEFAULT_CUSTOM_WORKSPACE = "default_workspace";
+    public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
 
     /**
      * See {@link #setCustomWorkspace(String)}.
@@ -69,18 +69,10 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
     }
 
     public String getCustomWorkspace(boolean useParentValue) {
-        if (!useParentValue || !isCustomWorkspaceInherited()) {
-            return DEFAULT_CUSTOM_WORKSPACE.equals(customWorkspace) ? null : StringUtils.trimToNull(customWorkspace);
-        }
-        if (StringUtils.isNotBlank(customWorkspace)) {
+        if (!useParentValue || isOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME) || null != customWorkspace) {
             return customWorkspace;
         }
         return hasCascadingProject() ? getCascadingProject().getCustomWorkspace() : null;
-    }
-
-    public boolean isCustomWorkspaceInherited() {
-        return hasCascadingProject() && !DEFAULT_CUSTOM_WORKSPACE.equals(customWorkspace)
-            && StringUtils.isBlank(customWorkspace);
     }
 
     public String getCustomWorkspace() {
@@ -107,11 +99,15 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-;        if (!(hasCascadingProject()
-            && StringUtils.equalsIgnoreCase(getCascadingProject().getCustomWorkspace(), customWorkspace))) {
-            this.customWorkspace = null == customWorkspace? DEFAULT_CUSTOM_WORKSPACE : customWorkspace;
+        String workspace = StringUtils.trimToNull(customWorkspace);
+        if (!hasCascadingProject()) {
+            this.customWorkspace = workspace;
+        } else if (!StringUtils.equalsIgnoreCase(getCascadingProject().getCustomWorkspace(), workspace)) {
+            this.customWorkspace = workspace;
+            registerOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
         } else {
             this.customWorkspace = null;
+            unRegisterOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
         }
         save();
     }
