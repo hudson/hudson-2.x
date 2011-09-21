@@ -104,6 +104,13 @@ public class MatrixProjectTest {
         assertTrue(childProject1.isRunSequentially());
     }
 
+    @Test
+    public void testSetRunSequentially() throws IOException {
+        MatrixProject childProject1 = new MatrixProject("child1");
+        childProject1.setAllowSave(false);
+        childProject1.setRunSequentially(true);
+        assertTrue(childProject1.isRunSequentially());
+    }
 
     @Test
     public void testGetCombinationFilterChildValue() throws IOException {
@@ -195,6 +202,18 @@ public class MatrixProjectTest {
     }
 
     @Test
+    public void testSetCombinationFilterNull() throws IOException {
+        MatrixProject childProject1 = new MatrixProject("child1"){
+            @Override
+            void rebuildConfigurations() throws IOException {
+            }
+        };
+        childProject1.setAllowSave(false);
+        assertNull(childProject1.getCombinationFilter());
+    }
+
+
+    @Test
     public void testGetTouchStoneCombinationFilterChildValue() throws IOException {
         String parentCombinationFilter = "parent_filter";
         String childCombinationFilter = "child_filter";
@@ -228,6 +247,17 @@ public class MatrixProjectTest {
         childProject1.setAllowSave(false);
         childProject1.setCascadingProject(parentProject);
         assertEquals(childProject1.getTouchStoneCombinationFilter(), parentCombinationFilter);
+    }
+
+    @Test
+    public void testGetTouchStoneCombinationNull() throws IOException {
+        MatrixProject childProject1 = new MatrixProject("child1"){
+            @Override
+            void rebuildConfigurations() throws IOException {
+            }
+        };
+        childProject1.setAllowSave(false);
+        assertNull(childProject1.getTouchStoneCombinationFilter());
     }
 
     @Test
@@ -282,7 +312,7 @@ public class MatrixProjectTest {
         assertEquals(childProject1.touchStoneCombinationFilter, combinationFilter);
         assertEquals(childProject1.getTouchStoneCombinationFilter(), combinationFilter);
     }
-    //touchStoneResultCondition
+
     @Test
     public void testGetTouchStoneResultConditionChildValue() throws IOException {
         Result parentResultCondition = Result.SUCCESS;
@@ -370,6 +400,18 @@ public class MatrixProjectTest {
         childProject1.setTouchStoneResultCondition(childResultCondition);
         assertEquals(childProject1.touchStoneResultCondition, childResultCondition);
         assertEquals(childProject1.getTouchStoneResultCondition(), childResultCondition);
+    }
+
+    @Test
+    public void testSetTouchStoneResultConditionNull() throws IOException {
+
+        MatrixProject childProject1 = new MatrixProject("child1"){
+            @Override
+            void rebuildConfigurations() throws IOException {
+            }
+        };
+        childProject1.setAllowSave(false);
+        assertNull(childProject1.getTouchStoneResultCondition());
     }
 
 

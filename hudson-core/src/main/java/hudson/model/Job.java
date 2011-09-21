@@ -193,6 +193,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         overriddenValues.add(propertyName);
     }
 
+    public void unRegisterOverriddenValue(String propertyName) {
+        overriddenValues.remove(propertyName);
+    }
+
     @Override
     public synchronized void save() throws IOException {
         if (allowSave.get()) {
