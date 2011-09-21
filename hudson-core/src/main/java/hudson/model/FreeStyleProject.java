@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hudsonci.api.model.IFreeStyleProject;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -39,7 +40,8 @@ import javax.servlet.ServletException;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem, IFreeStyleProject {
+public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
+    IFreeStyleProject {
 
     private static final String DEFAULT_CUSTOM_WORKSPACE = "default_workspace";
 

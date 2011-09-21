@@ -21,57 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package org.hudsonci.api.model;
 
-import hudson.Functions;
-import hudson.tasks.LogRotator;
+import hudson.model.Descriptor;
+import hudson.tasks.BuildWrapper;
+import hudson.tasks.Builder;
+import hudson.tasks.Publisher;
+import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- * Interface that represents Job.
+ * Project interface
  * <p/>
  * Date: 9/15/11
  *
  * @author Nikita Levyankov
  */
-public interface IJob<T> {
+public interface IProject extends IAbstractProject {
+    /**
+     * @return list of project {@link Builder}
+     */
+    List<Builder> getBuilders();
 
     /**
-     * Returns cascading project name.
-     *
-     * @return cascading project name.
+     * @return map of project {@link BuildWrapper}
      */
-    String getCascadingProjectName();
+    Map<Descriptor<BuildWrapper>, BuildWrapper> getBuildWrappers();
 
     /**
-     * Returns selected cascading project.
-     *
-     * @return cascading project.
+     * @return map of project {@link Publisher}
      */
-    IJob getCascadingProject();
-
-    /**
-     * @return whether the name of this job can be changed by user.
-     */
-    boolean isNameEditable();
-
-    /**
-     * Returns the log rotator for this job, or null if none.
-     *
-     * @return {@link LogRotator} instance.
-     */
-    LogRotator getLogRotator();
-
-    /**
-     * @return true if this instance supports log rotation configuration.
-     */
-    boolean supportsLogRotator();
-
-    /**
-     * Gets all the job properties configured for this job.
-     *
-     * @return Map of properties.
-     */
-    Map<JobPropertyDescriptor, JobProperty<?>> getProperties();
+    Map<Descriptor<Publisher>, Publisher> getPublishers();
 }

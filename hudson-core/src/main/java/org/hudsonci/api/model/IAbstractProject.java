@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package org.hudsonci.api.model;
 
+import hudson.model.Label;
 import hudson.scm.SCM;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
@@ -102,9 +103,9 @@ public interface IAbstractProject extends IJob {
 
     /**
      * If this project is configured to be always built on this node,
-     * return that {@link Node}. Otherwise null.
+     * return that {@link hudson.model.Node}. Otherwise null.
      *
-     * @return {@link Label} instance.
+     * @return {@link hudson.model.Label} instance.
      */
     Label getAssignedLabel();
 

@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.matrix;
+package org.hudsonci.api.matrix;
 
+import hudson.matrix.AxisList;
 import hudson.model.Descriptor;
-import hudson.model.IAbstractProject;
+import org.hudsonci.api.model.IAbstractProject;
 import hudson.model.Result;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
-import hudson.util.DescribableList;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +42,9 @@ import java.util.Map;
 public interface IMatrixProject extends IAbstractProject {
 
     /**
-     * Returns {@link AxisList} of configured axes.
+     * Returns {@link hudson.matrix.AxisList} of configured axes.
      *
-     * @return {@link AxisList} of configured axes.
+     * @return {@link hudson.matrix.AxisList} of configured axes.
      */
     public AxisList getAxes();
 
