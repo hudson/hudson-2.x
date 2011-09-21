@@ -185,15 +185,31 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         super(parent, name);
     }
 
-    public boolean isOverriddenValue(String propertyName) {
+    /**
+     * Checks whether property is overridden by this job and doesn't equal to cascading parent
+     *
+     * @param propertyName property name.
+     * @return true - if overridden, false - otherwise.
+     */
+    public boolean isOverriddenProperty(String propertyName) {
         return overriddenValues.contains(propertyName);
     }
 
-    public void registerOverriddenValue(String propertyName) {
+    /**
+     * Marks property name as overridden. Is used to show, that given property will have overridden property value.
+     *
+     * @param propertyName name of property.
+     */
+    protected void registerOverriddenProperty(String propertyName) {
         overriddenValues.add(propertyName);
     }
 
-    public void unRegisterOverriddenValue(String propertyName) {
+    /**
+     * Un-mark property name as overridden. Property will inherit value from cascading parent.
+     *
+     * @param propertyName name of property.
+     */
+    protected void unRegisterOverriddenProperty(String propertyName) {
         overriddenValues.remove(propertyName);
     }
 
