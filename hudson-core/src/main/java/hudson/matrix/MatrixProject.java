@@ -40,9 +40,7 @@ import hudson.model.Items;
 import hudson.model.JDK;
 import hudson.model.Job;
 import hudson.model.Label;
-import hudson.model.Node;
 import hudson.model.Queue.FlyweightTask;
-import hudson.model.ResourceController;
 import hudson.model.Result;
 import hudson.model.SCMedItem;
 import hudson.model.Saveable;
@@ -59,7 +57,6 @@ import hudson.util.DescribableList;
 import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
 import net.sf.json.JSONObject;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.StaplerRequest;
@@ -82,8 +79,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static hudson.Util.*;
 
 /**
  * {@link Job} that allows you to run multiple different configurations
@@ -178,14 +173,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public AxisList getAxes() {
-        return axes!= null ? axes : (hasParentTemplate()? getTemplate().getAxes() : null);
+        return axes!= null ? axes : (hasCascadingProject()? getCascadingProject().getAxes() : null);
     }
 
     /**
      * @inheritDoc
      */
     public void setAxes(AxisList axes) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getAxes(), axes))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getAxes(), axes))) {
             this.axes = new AxisList(axes);
         } else {
             this.axes = null;
@@ -199,7 +194,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public boolean isRunSequentially() {
-        return runSequentially!= null ? runSequentially : (hasParentTemplate() && getTemplate().isRunSequentially());
+        return runSequentially!= null ? runSequentially : (hasCascadingProject() && getCascadingProject().isRunSequentially());
     }
 
     /**
@@ -214,7 +209,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public void setRunSequentially(Boolean runSequentially) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().isRunSequentially(), runSequentially))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().isRunSequentially(), runSequentially))) {
             this.runSequentially = runSequentially;
         } else {
             this.runSequentially = null;
@@ -227,7 +222,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public void setCombinationFilter(String combinationFilter) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getCombinationFilter(), combinationFilter))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getCombinationFilter(), combinationFilter))) {
             this.combinationFilter = combinationFilter;
         } else {
             this.combinationFilter = null;
@@ -241,7 +236,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public String getCombinationFilter() {
         return combinationFilter != null ? combinationFilter
-            : (hasParentTemplate() ? getTemplate().getCombinationFilter() : null);
+            : (hasCascadingProject() ? getCascadingProject().getCombinationFilter() : null);
     }
 
     /**
@@ -249,14 +244,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public String getTouchStoneCombinationFilter() {
         return touchStoneCombinationFilter != null ? touchStoneCombinationFilter
-            : (hasParentTemplate() ? getTemplate().getTouchStoneCombinationFilter() : null);
+            : (hasCascadingProject() ? getCascadingProject().getTouchStoneCombinationFilter() : null);
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneCombinationFilter(String touchStoneCombinationFilter) {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getTouchStoneCombinationFilter(),
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneCombinationFilter(),
             touchStoneCombinationFilter))) {
             this.touchStoneCombinationFilter = touchStoneCombinationFilter;
         } else {
@@ -269,14 +264,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public Result getTouchStoneResultCondition() {
         return touchStoneResultCondition != null ? touchStoneResultCondition
-            : (hasParentTemplate() ? getTemplate().getTouchStoneResultCondition() : null);
+            : (hasCascadingProject() ? getCascadingProject().getTouchStoneResultCondition() : null);
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getTouchStoneResultCondition(),
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
             touchStoneResultCondition))) {
             this.touchStoneResultCondition = touchStoneResultCondition;
         } else {
@@ -289,14 +284,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public String getCustomWorkspace() {
         return customWorkspace != null ? customWorkspace
-            : (hasParentTemplate() ? getTemplate().getCustomWorkspace() : null);
+            : (hasCascadingProject() ? getCascadingProject().getCustomWorkspace() : null);
     }
 
     /**
      * @inheritDoc
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getTouchStoneResultCondition(),
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
             customWorkspace))) {
             this.customWorkspace = customWorkspace;
         } else {
@@ -315,7 +310,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     //TODO improve it
     public DescribableList<Builder,Descriptor<Builder>> getBuildersList() {
         return !(builders == null || builders.isEmpty()) ? builders
-            : (hasParentTemplate() ? getTemplate().getBuildersList() : null);
+            : (hasCascadingProject() ? getCascadingProject().getBuildersList() : null);
     }
 
     /**
@@ -332,7 +327,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     //TODO improve it
     public DescribableList<Publisher,Descriptor<Publisher>> getPublishersList() {
         return !(publishers == null || publishers.isEmpty()) ? publishers
-            : (hasParentTemplate() ? getTemplate().getPublishersList() : null);
+            : (hasCascadingProject() ? getCascadingProject().getPublishersList() : null);
     }
 
     /**
@@ -341,7 +336,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     //TODO improve it
     public DescribableList<BuildWrapper, Descriptor<BuildWrapper>> getBuildWrappersList() {
         return !(buildWrappers == null || buildWrappers.isEmpty()) ? buildWrappers
-            : (hasParentTemplate() ? getTemplate().getBuildWrappersList() : null);
+            : (hasCascadingProject() ? getCascadingProject().getBuildWrappersList() : null);
     }
 
     /**
@@ -744,12 +739,12 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     }
 
     /**
-     * For the unit tests only. Sets template for the job.
+     * For the unit tests only. Sets cascadingProject for the job.
      *
-     * @param template parent job
+     * @param cascadingProject parent job
      */
-    void setTemplate(MatrixProject template) {
-        this.template = template;
+    void setCascadingProject(MatrixProject cascadingProject) {
+        this.cascadingProject = cascadingProject;
     }
 
     /**

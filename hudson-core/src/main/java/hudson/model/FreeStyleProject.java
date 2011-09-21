@@ -67,7 +67,7 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
        if (!useParentValue || StringUtils.isNotBlank(customWorkspace)) {
            return customWorkspace;
        }
-       return hasParentTemplate()? getTemplate().getCustomWorkspace() : null;
+       return hasCascadingProject()? getCascadingProject().getCustomWorkspace() : null;
     }
 
     public String getCustomWorkspace() {
@@ -94,8 +94,8 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        if (!(hasParentTemplate()
-            && StringUtils.equalsIgnoreCase(getTemplate().getCustomWorkspace(), customWorkspace))) {
+        if (!(hasCascadingProject()
+            && StringUtils.equalsIgnoreCase(getCascadingProject().getCustomWorkspace(), customWorkspace))) {
             this.customWorkspace = customWorkspace;
         } else {
             this.customWorkspace = null;

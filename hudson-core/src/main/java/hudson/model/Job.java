@@ -159,14 +159,14 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     protected CopyOnWriteList<JobProperty<? super JobT>> properties = new CopyOnWriteList<JobProperty<? super JobT>>();
 
     /**
-     * The name of the template.
+     * The name of the cascadingProject.
      */
-    private String templateName;
+    private String cascadingProjectName;
 
     /**
-     * Selected template for this job.
+     * Selected cascadingProject for this job.
      */
-    protected transient JobT template;
+    protected transient JobT cascadingProject;
 
     protected transient ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
         @Override
@@ -192,7 +192,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public void onLoad(ItemGroup<? extends Item> parent, String name)
             throws IOException {
         super.onLoad(parent, name);
-        template = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+        cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+            cascadingProjectName);
         //TODO investigate why allowSave is null
         if (null == allowSave) {// Initialize property if null.
             allowSave = new ThreadLocal<Boolean>() {
@@ -373,7 +374,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Returns the log rotator for this job, or null if none.
      */
     public LogRotator getLogRotator() {
-        return logRotator!= null ? logRotator : (hasParentTemplate()? getTemplate().getLogRotator() : null);
+        return logRotator!= null ? logRotator : (hasCascadingProject()? getCascadingProject().getLogRotator() : null);
     }
 
     /**
@@ -382,7 +383,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @param logRotator log rotator.
      */
     public void setLogRotator(LogRotator logRotator) {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getLogRotator(), logRotator))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getLogRotator(), logRotator))) {
             this.logRotator = logRotator;
         } else {
             this.logRotator = null;
@@ -1338,53 +1339,55 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
-     * Returns template name.
+     * Returns cascading project name.
      *
-     * @return template name.
+     * @return cascading project name.
      */
-    public String getTemplateName() {
-        return templateName;
+    public String getCascadingProjectName() {
+        return cascadingProjectName;
     }
 
     /**
-     * Sets template name.
+     * Sets cascadingProject name.
      *
-     * @param templateName template name.
+     * @param cascadingProjectName cascadingProject name.
      */
     @SuppressWarnings("unchecked")
-    public void setTemplateName(String templateName) {
-        this.templateName = templateName;
-        this.template = (JobT)Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+    public void setCascadingProjectName(String cascadingProjectName) {
+        this.cascadingProjectName = cascadingProjectName;
+        this.cascadingProject = (JobT)Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+            cascadingProjectName);
     }
 
     /**
-     * Returns selected template.
+     * Returns selected ccascading project.
      *
-     * @return template.
+     * @return cascading project.
      */
     @SuppressWarnings({"unchecked"})
-    public JobT getTemplate() {
-        if (StringUtils.isNotBlank(templateName) && template == null) {
-            template = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()), templateName);
+    public synchronized JobT getCascadingProject() {
+        if (StringUtils.isNotBlank(cascadingProjectName) && cascadingProject == null) {
+            cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+                cascadingProjectName);
         }
-        return template;
+        return cascadingProject;
     }
 
     /**
-     * For the unit tests only. Sets template for the job.
+     * For the unit tests only. Sets cascadingProject for the job.
      *
-     * @param template parent job
+     * @param cascadingProject parent job
      */
-    void setTemplate(JobT template) {
-        this.template = template;
+    void setCascadingProject(JobT cascadingProject) {
+        this.cascadingProject = cascadingProject;
     }
 
     /**
      * Checks whether current job is inherited from other project.
      * @return boolean.
      */
-    protected boolean hasParentTemplate() {
-        return null != getTemplate();
+    protected boolean hasCascadingProject() {
+        return null != getCascadingProject();
     }
 
     /**

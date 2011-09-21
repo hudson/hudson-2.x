@@ -23,8 +23,10 @@
  */
 package hudson.model;
 
+import hudson.Functions;
 import hudson.tasks.LogRotator;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Interface that represents Job.
@@ -34,6 +36,21 @@ import java.util.Map;
  * @author Nikita Levyankov
  */
 public interface IJob<T> {
+
+    /**
+     * Returns cascading project name.
+     *
+     * @return cascading project name.
+     */
+    String getCascadingProjectName();
+
+    /**
+     * Returns selected cascading project.
+     *
+     * @return cascading project.
+     */
+    IJob getCascadingProject();
+
     /**
      * @return whether the name of this job can be changed by user.
      */

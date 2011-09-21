@@ -37,13 +37,6 @@ import java.util.Map;
  */
 public interface IAbstractProject extends IJob {
     /**
-     * Returns template name if project based on template, null otherwise..
-     *
-     * @return template name.
-     */
-    String getTemplateName();
-
-    /**
      * Returns configured SCM for project,
      *
      * @return {@link SCM} instance

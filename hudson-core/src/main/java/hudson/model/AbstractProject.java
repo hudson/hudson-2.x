@@ -321,7 +321,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             if (null != concurrentBuild) {
                 return Hudson.CONCURRENT_BUILD && concurrentBuild;
             }
-            return hasParentTemplate() && getTemplate().isConcurrentBuild();
+            return hasCascadingProject() && getCascadingProject().isConcurrentBuild();
         }
     }
 
@@ -336,8 +336,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setConcurrentBuild(Boolean b) throws IOException {
-        if (!(hasParentTemplate()
-            && ObjectUtils.equals(getTemplate().isConcurrentBuild(), b))) {
+        if (!(hasCascadingProject()
+            && ObjectUtils.equals(getCascadingProject().isConcurrentBuild(), b))) {
             concurrentBuild = b;
         } else {
             this.concurrentBuild = null;
@@ -357,7 +357,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             if (null != cleanWorkspaceRequired) {
                 return cleanWorkspaceRequired;
             }
-            return hasParentTemplate() && getTemplate().isCleanWorkspaceRequired();
+            return hasCascadingProject() && getCascadingProject().isCleanWorkspaceRequired();
         }
     }
 
@@ -371,8 +371,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setCleanWorkspaceRequired(Boolean cleanWorkspaceRequired) {
-        if (!(hasParentTemplate()
-            && ObjectUtils.equals(getTemplate().isCleanWorkspaceRequired(), cleanWorkspaceRequired))) {
+        if (!(hasCascadingProject()
+            && ObjectUtils.equals(getCascadingProject().isCleanWorkspaceRequired(), cleanWorkspaceRequired))) {
             this.cleanWorkspaceRequired = cleanWorkspaceRequired;
         } else {
             this.cleanWorkspaceRequired = null;
@@ -580,19 +580,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if (null != quietPeriod) {
             return quietPeriod;
         }
-        return hasParentTemplate() ? getTemplate().getQuietPeriod() : Hudson.getInstance().getQuietPeriod();
+        return hasCascadingProject() ? getCascadingProject().getQuietPeriod() : Hudson.getInstance().getQuietPeriod();
     }
 
     public int getScmCheckoutRetryCount() {
         if (null != scmCheckoutRetryCount) {
             return scmCheckoutRetryCount;
         }
-        return hasParentTemplate() ?
-            getTemplate().getScmCheckoutRetryCount() : Hudson.getInstance().getScmCheckoutRetryCount();
+        return hasCascadingProject() ?
+            getCascadingProject().getScmCheckoutRetryCount() : Hudson.getInstance().getScmCheckoutRetryCount();
     }
 
     public void setScmCheckoutRetryCount(Integer retryCount) {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getScmCheckoutRetryCount(), retryCount))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getScmCheckoutRetryCount(), retryCount))) {
             this.scmCheckoutRetryCount = retryCount;
         } else {
             this.scmCheckoutRetryCount = null;
@@ -625,7 +625,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @throws IOException if any.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().getQuietPeriod(), seconds))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getQuietPeriod(), seconds))) {
             this.quietPeriod = seconds;
         } else {
             this.quietPeriod = null;
@@ -677,7 +677,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             if (null != blockBuildWhenDownstreamBuilding) {
                 return blockBuildWhenDownstreamBuilding;
             }
-            return hasParentTemplate() && getTemplate().blockBuildWhenDownstreamBuilding();
+            return hasCascadingProject() && getCascadingProject().blockBuildWhenDownstreamBuilding();
         }
     }
 
@@ -692,7 +692,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setBlockBuildWhenDownstreamBuilding(Boolean b) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().blockBuildWhenDownstreamBuilding(), b))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().blockBuildWhenDownstreamBuilding(), b))) {
             blockBuildWhenDownstreamBuilding = b;
         } else {
             blockBuildWhenDownstreamBuilding = null;
@@ -712,7 +712,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             if (null != blockBuildWhenUpstreamBuilding) {
                 return blockBuildWhenUpstreamBuilding;
             }
-            return hasParentTemplate() && getTemplate().blockBuildWhenUpstreamBuilding();
+            return hasCascadingProject() && getCascadingProject().blockBuildWhenUpstreamBuilding();
         }
     }
 
@@ -727,7 +727,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setBlockBuildWhenUpstreamBuilding(Boolean b) throws IOException {
-        if (!(hasParentTemplate() && ObjectUtils.equals(getTemplate().blockBuildWhenUpstreamBuilding(), b))) {
+        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().blockBuildWhenUpstreamBuilding(), b))) {
             blockBuildWhenUpstreamBuilding = b;
         } else {
             blockBuildWhenUpstreamBuilding = null;
@@ -1060,7 +1060,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if (StringUtils.isNotBlank(jdk)) {
             return jdk;
         }
-        return hasParentTemplate()? getTemplate().getJDKName() : null;
+        return hasCascadingProject()? getCascadingProject().getJDKName() : null;
     }
 
     /**
@@ -1079,8 +1079,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setJDK(String jdk) {
-        if (!(hasParentTemplate()
-            && StringUtils.equalsIgnoreCase(getTemplate().getJDKName(), jdk))) {
+        if (!(hasCascadingProject()
+            && StringUtils.equalsIgnoreCase(getCascadingProject().getJDKName(), jdk))) {
             this.jdk = jdk;
         } else {
             this.jdk = null;
@@ -1858,7 +1858,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         super.submit(req,rsp);
 
         makeDisabled(null != req.getParameter("disable"));
-        setTemplateName(StringUtils.trimToNull(req.getParameter("templateName")));
+        setCascadingProjectName(StringUtils.trimToNull(req.getParameter("cascadingProjectName")));
         setJDK(req.getParameter("jdk"));
         setQuietPeriod(null != req.getParameter("hasCustomQuietPeriod") ? req.getParameter("quiet_period") : null);
         setScmCheckoutRetryCount(null != req.getParameter("hasCustomScmCheckoutRetryCount")

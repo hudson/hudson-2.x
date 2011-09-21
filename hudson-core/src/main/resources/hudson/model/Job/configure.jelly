@@ -39,8 +39,8 @@ THE SOFTWARE.
             <f:textbox name="name" value="${it.name}" />
           </f:entry>
         </j:if>
-        <f:entry title="${%templateName}">
-           <f:textbox name="templateName" value="${it.templateName}" />
+        <f:entry title="${%cascadingProjectName}">
+           <f:textbox name="cascadingProjectName" value="${it.cascadingProjectName}" />
         </f:entry>
         <f:entry title="${%Description}" help="/help/project-config/description.html">
           <f:textarea name="description" value="${it.description}"/>
