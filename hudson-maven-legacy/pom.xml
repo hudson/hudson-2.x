@@ -38,7 +38,7 @@
     <wagon.version>1.0-beta-7</wagon.version>
     <wagonVersion>${wagon.version}</wagonVersion><!--backward compatible property-->
     <commons-httpclient.version>4.1.2</commons-httpclient.version>
-    <plexus-classworlds.version>2.3</plexus-classworlds.version>
+    <plexus-classworlds.version>2.4</plexus-classworlds.version>
   </properties>
 
   <modules>
