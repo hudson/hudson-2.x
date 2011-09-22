@@ -32,7 +32,7 @@ import java.io.Serializable;
  *
  * @author Nikita Levyankov
  */
-public interface IProperty<T> extends Serializable {
+public interface IProjectProperty<T> extends Serializable {
 
     /**
      * Sets key for given property.

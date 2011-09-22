@@ -24,16 +24,17 @@
 package hudson.model;
 
 import org.hudsonci.api.model.IJob;
-import org.hudsonci.api.model.IProperty;
+import org.hudsonci.api.model.IProjectProperty;
 
 /**
- * Base property implementation. Contains common methods for setting and getting cascading and overrridden properties.
+ * Base property implementation for project.
+ * Contains common methods for setting and getting cascading and overridden properties.
  * <p/>
  * Date: 9/22/11
  *
  * @author Nikita Levyankov
  */
-public abstract class BaseProperty<T> implements IProperty<T> {
+public abstract class BaseProjectProperty<T> implements IProjectProperty<T> {
 
     private String propertyKey;
     private transient IJob job;

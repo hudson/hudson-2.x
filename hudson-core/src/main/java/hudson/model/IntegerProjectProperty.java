@@ -23,26 +23,20 @@
  */
 package hudson.model;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
- * String property.
+ * Represents integer property for project.
  * <p/>
  * Date: 9/22/11
  *
  * @author Nikita Levyankov
  */
-public class StringProperty extends BaseProperty<String> {
-
-    @Override
-    protected String prepareValue(String candidateValue) {
-        return StringUtils.trimToNull(candidateValue);
-    }
-
+public class IntegerProjectProperty extends BaseProjectProperty<Integer> {
     /**
      * {@inheritDoc}
      */
-    protected boolean allowOverrideValue(String cascadingValue, String candidateValue) {
-        return !StringUtils.equalsIgnoreCase(cascadingValue, candidateValue);
+    protected boolean allowOverrideValue(Integer cascadingValue, Integer candidateValue) {
+        return !ObjectUtils.equals(cascadingValue, candidateValue);
     }
 }
