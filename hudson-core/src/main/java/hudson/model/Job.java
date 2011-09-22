@@ -69,13 +69,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
@@ -83,6 +83,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.IProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -138,6 +139,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private transient volatile boolean holdOffBuildUntilSave;
 
     private volatile LogRotator logRotator;
+
+    private ConcurrentMap<Enum, IProperty> jobProperties = new ConcurrentHashMap<Enum, IProperty>();
+
+    public enum PROPERTY_NAME {
+        CUSTOM_WORKSPACE
+    }
 
     /**
      * Not all plugins are good at calculating their health report quickly.
@@ -213,6 +220,49 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         overriddenValues.remove(propertyName);
     }
 
+    /**
+     * Put job property to properties map.
+     * @param key key.
+     * @param property property instance.
+     */
+    protected void putJobProperty(Enum key, IProperty property) {
+        jobProperties.put(key, property);
+    }
+
+    /**
+     * Returns job property by specified key.
+     * @param key key.
+     * @return {@link org.hudsonci.api.model.IProperty} instance or null.
+     * @throws IOException if any.
+     */
+    public IProperty getProperty(Enum key) throws IOException {
+        return getProperty(key, null);
+    }
+
+    /**
+     * Returns null safe job property by specified key. if property is not present, try instantiate it.
+     * @param key key.
+     * @param clazz type of property..
+     * @return {@link org.hudsonci.api.model.IProperty} instance or null.
+     * @throws IOException if any.
+     */
+    public IProperty getProperty(Enum key, Class clazz) throws IOException {
+        IProperty t = jobProperties.get(key);
+        if (null == t && null != clazz) {
+            try {
+                t = (IProperty)clazz.newInstance();
+                t.setJob(this);
+                t.setKey(key);
+                putJobProperty(key, t);
+            } catch (InstantiationException e) {
+                throw new IOException(e);
+            } catch (IllegalAccessException e) {
+                throw new IOException(e);
+            }
+        }
+        return t;
+    }
+
     @Override
     public synchronized void save() throws IOException {
         if (allowSave.get()) {
@@ -263,6 +313,13 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
         for (JobProperty p : properties)
             p.setOwner(this);
+
+        if (null == jobProperties) {
+            jobProperties = new ConcurrentHashMap<Enum, IProperty>();
+        }
+        for (IProperty property : jobProperties.values()) {
+            property.setJob(this);
+        }
     }
 
     @Override

@@ -23,6 +23,8 @@
  */
 package org.hudsonci.api.model;
 
+import java.io.IOException;
+
 /**
  * FreeStyle project interface.
  * <p/>
@@ -36,6 +38,7 @@ public interface IFreeStyleProject extends IProject {
      * Returns user-specified workspace directory, or null if it's up to Hudson
      *
      * @return string representation of directory.
+     * @throws IOException if any.
      */
-    String getCustomWorkspace();
+    String getCustomWorkspace() throws IOException;
 }

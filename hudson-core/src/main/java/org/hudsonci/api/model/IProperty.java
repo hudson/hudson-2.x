@@ -23,73 +23,67 @@
  */
 package org.hudsonci.api.model;
 
-import hudson.model.JobProperty;
-import hudson.model.JobPropertyDescriptor;
-import hudson.tasks.LogRotator;
 import java.io.IOException;
-import java.util.Map;
+import java.io.Serializable;
 
 /**
- * Interface that represents Job.
+ * Represents Properties for Job,
  * <p/>
- * Date: 9/15/11
+ * Date: 9/22/11
  *
  * @author Nikita Levyankov
  */
-public interface IJob<T extends IJob> {
+public interface IProperty<T> extends Serializable {
 
     /**
-     * Returns cascading project name.
-     *
-     * @return cascading project name.
-     */
-    String getCascadingProjectName();
-
-    /**
-     * Returns selected cascading project.
-     *
-     * @return cascading project.
-     */
-    T getCascadingProject();
-
-    /**
-     * Returns job property by specified key.
+     * Sets key for given property.
      *
      * @param key key.
-     * @param clazz IProperty subclass.
-     * @return {@link org.hudsonci.api.model.IProperty} instance or null.
-     * @throws java.io.IOException if any.
      */
-    IProperty getProperty(Enum key, Class<? extends IProperty> clazz) throws IOException;
+    void setKey(Enum key);
 
     /**
-     * Checks whether current job is inherited from other project.
+     * Sets the job, which is owner of current property.
      *
-     * @return boolean.
+     * @param job {@link IJob}
      */
-    boolean hasCascadingProject();
+    void setJob(IJob job);
 
     /**
-     * @return whether the name of this job can be changed by user.
-     */
-    boolean isNameEditable();
-
-    /**
-     * Returns the log rotator for this job, or null if none.
+     * Sets property value.
      *
-     * @return {@link LogRotator} instance.
+     * @param value value to set.
+     * @throws IOException if any.
      */
-    LogRotator getLogRotator();
+    void setValue(T value) throws IOException;
 
     /**
-     * @return true if this instance supports log rotation configuration.
-     */
-    boolean supportsLogRotator();
-
-    /**
-     * Gets all the job properties configured for this job.
+     * Returns original property value.
      *
-     * @return Map of properties.
+     * @return T
      */
-    Map<JobPropertyDescriptor, JobProperty<?>> getProperties();
+    T getOriginalValue();
+
+    /**
+     * Returns cascading value if any.
+     *
+     * @return string.
+     * @throws IOException if any.
+     */
+    T getCascadingValue() throws IOException;
+
+    /**
+     * @return true if value inherited from cascading project, false - otherwise,
+     */
+    boolean isPropertyOverridden();
+
+    /**
+     * Returns property value. If originalValue is not null or value was overridden for this
+     * property - call {@link #getOriginalValue()}, otherwise call {@link #getCascadingValue()}.
+     *
+     * @return string.
+     * @throws IOException if any.
+     */
+    T getValue() throws IOException;
+
 }
