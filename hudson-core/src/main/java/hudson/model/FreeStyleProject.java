@@ -44,6 +44,8 @@ import javax.servlet.ServletException;
 public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
     IFreeStyleProject {
 
+    public static final String CUSTOM_WORKSPACE_PROPERTY_KEY = "customWorkspace";
+
     /**
      * See {@link #setCustomWorkspace(String)}.
      *
@@ -67,16 +69,12 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
         return FreeStyleBuild.class;
     }
 
-    public String getCustomWorkspace(boolean useParentValue) throws IOException{
-        StringProperty jobProperty = getCustomWorkspaceProperty();
+    public String getCustomWorkspace(boolean useParentValue) throws IOException {
+        StringProperty jobProperty = getStringProperty(CUSTOM_WORKSPACE_PROPERTY_KEY);
         if (!useParentValue) {
-           return jobProperty.getOriginalValue();
+            return jobProperty.getOriginalValue();
         }
         return jobProperty.getValue();
-    }
-
-    public StringProperty getCustomWorkspaceProperty() throws IOException {
-        return (StringProperty)getProperty(PROPERTY_NAME.CUSTOM_WORKSPACE, StringProperty.class);
     }
 
     public String getCustomWorkspace() throws IOException {
@@ -103,15 +101,16 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        StringProperty jobProperty = getCustomWorkspaceProperty();
+        StringProperty jobProperty = getStringProperty(CUSTOM_WORKSPACE_PROPERTY_KEY);
         jobProperty.setValue(customWorkspace);
         save();
     }
 
     @Override
-    protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, Descriptor.FormException {
+    protected void submit(StaplerRequest req, StaplerResponse rsp)
+        throws IOException, ServletException, Descriptor.FormException {
         setCustomWorkspace(
-            req.hasParameter("customWorkspace")?  req.getParameter("customWorkspace.directory") : null);
+            req.hasParameter("customWorkspace") ? req.getParameter("customWorkspace.directory") : null);
         super.submit(req, rsp);
     }
 

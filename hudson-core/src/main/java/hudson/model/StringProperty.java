@@ -23,10 +23,7 @@
  */
 package hudson.model;
 
-import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
-import org.hudsonci.api.model.IJob;
-import org.hudsonci.api.model.IProperty;
 
 /**
  * String property.
@@ -35,55 +32,17 @@ import org.hudsonci.api.model.IProperty;
  *
  * @author Nikita Levyankov
  */
-public class StringProperty implements IProperty<String> {
+public class StringProperty extends BaseProperty<String> {
 
-    private Enum propertyKey;
-    private transient IJob job;
-    private String originalValue;
-    private boolean propertyOverridden;
-
-    public void setKey(Enum propertyKey) {
-        this.propertyKey = propertyKey;
+    @Override
+    protected String prepareValue(String candidateValue) {
+        return StringUtils.trimToNull(candidateValue);
     }
 
-    public void setJob(IJob job) {
-        this.job = job;
-    }
-
-    public StringProperty() {
-    }
-
-    public void setValue(String value) throws IOException {
-        value = StringUtils.trimToNull(value);
-        if (!job.hasCascadingProject()) {
-            originalValue = value;
-        } else if (!StringUtils.equalsIgnoreCase(
-            (String) job.getCascadingProject().getProperty(propertyKey, this.getClass()).getValue(), value)) {
-            originalValue = value;
-            propertyOverridden = true;
-        } else {
-            this.originalValue = null;
-            propertyOverridden = false;
-        }
-    }
-
-    public String getOriginalValue() {
-        return originalValue;
-    }
-
-    public String getCascadingValue() throws IOException {
-        return job.hasCascadingProject() ?
-            (String) job.getCascadingProject().getProperty(propertyKey, this.getClass()).getValue() : null;
-    }
-
-    public boolean isPropertyOverridden() {
-        return propertyOverridden;
-    }
-
-    public String getValue() throws IOException {
-        if (isPropertyOverridden() || null != getOriginalValue()) {
-            return getOriginalValue();
-        }
-        return getCascadingValue();
+    /**
+     * {@inheritDoc}
+     */
+    protected boolean allowOverrideValue(String cascadingValue, String candidateValue) {
+        return !StringUtils.equalsIgnoreCase(cascadingValue, candidateValue);
     }
 }
