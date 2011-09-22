@@ -42,7 +42,7 @@
         <json-lib.version>2.4</json-lib.version>
         <annotation-indexer.version>1.2</annotation-indexer.version>
         <task-reactor.version>1.2</task-reactor.version>
-        <antlr.version>2.7.6</antlr.version>
+        <antlr.version>3.0</antlr.version>
         <commons-digester.version>3.0</commons-digester.version>
         <commons-beanutils.version>1.8.0</commons-beanutils.version>
         <commons-jelly-tags-fmt.version>1.0</commons-jelly-tags-fmt.version>
@@ -381,7 +381,7 @@
             <artifactId>localizer</artifactId>
         </dependency>
         <dependency>
-            <groupId>antlr</groupId>
+            <groupId>org.antlr</groupId>
             <artifactId>antlr</artifactId>
             <version>${antlr.version}</version>
         </dependency>
