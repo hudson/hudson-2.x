@@ -150,6 +150,7 @@ THE SOFTWARE.
     <finalName>${project.artifactId}</finalName>
 
     <plugins>
+      <!--TODO doesn't compile on JDK7 -->
       <!-- plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
