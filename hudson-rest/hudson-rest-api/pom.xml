@@ -42,7 +42,8 @@ THE SOFTWARE.
     </dependency>
   </dependencies>
 
-  <build>
+  <!--TODO doesn't compile on JDK7 -->
+  <!-- build>
     <plugins>
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
@@ -95,6 +96,6 @@ THE SOFTWARE.
         </executions>
       </plugin>
     </plugins>
-  </build>
+  </build -->
 
 </project>

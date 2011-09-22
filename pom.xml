@@ -111,7 +111,7 @@ THE SOFTWARE.
     <gwt-maven-plugin.version>2.3.0-1</gwt-maven-plugin.version>
     <plexus-component-metadata-plugin.version>1.5.4</plexus-component-metadata-plugin.version>
     <maven-jaxb2-plugin.version>0.7.4</maven-jaxb2-plugin.version>
-    <maven-enunciate-plugin.version>1.22</maven-enunciate-plugin.version>
+    <maven-enunciate-plugin.version>1.24</maven-enunciate-plugin.version>
   </properties>
 
   <modules>
@@ -159,6 +159,7 @@ THE SOFTWARE.
           -->
           <groupId>org.kohsuke.stapler</groupId>
           <artifactId>maven-stapler-plugin</artifactId>
+          <version>1.16</version>
           <extensions>true</extensions>
           <dependencies>
             <dependency>
