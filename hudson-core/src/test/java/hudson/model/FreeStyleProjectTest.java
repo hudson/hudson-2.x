@@ -691,7 +691,8 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
-        assertFalse(childProject.isCleanWorkspaceRequired(false));
+        assertFalse(
+            childProject.getBooleanProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
@@ -706,17 +707,19 @@ public class FreeStyleProjectTest {
         childProject.setCascadingProject(parentProject);
         childProject.setCleanWorkspaceRequired(childCleanWorkspaceRequired);
         //if child value is not equals to parent one, field should be populated
-        assertFalse(childProject.isCleanWorkspaceRequired(false));
+        assertFalse(
+            childProject.getBooleanProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
     public void testSetCleanWorkspaceRequiredParentNull() throws IOException {
-        boolean cleanWorkspaceRequired = true;
+        Boolean cleanWorkspaceRequired = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
         childProject.allowSave.set(false);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(cleanWorkspaceRequired, childProject.isCleanWorkspaceRequired(false));
+        assertEquals(cleanWorkspaceRequired,
+            childProject.getBooleanProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
@@ -747,7 +750,7 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(concurrentBuild);
-        assertFalse(childProject.isConcurrentBuild(false));
+        assertFalse(childProject.getBooleanProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
@@ -762,7 +765,8 @@ public class FreeStyleProjectTest {
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(childConcurrentBuild);
         //if child value is not equals to parent one, field should be populated
-        assertEquals(childConcurrentBuild, (Boolean) childProject.isConcurrentBuild(false));
+        assertEquals(childConcurrentBuild,
+            childProject.getBooleanProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
@@ -772,13 +776,14 @@ public class FreeStyleProjectTest {
         childProject.allowSave.set(false);
         childProject.setConcurrentBuild(concurrentBuild);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(concurrentBuild, (Boolean) childProject.isConcurrentBuild(false));
+        assertEquals(concurrentBuild,
+            childProject.getBooleanProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME).getOriginalValue());
     }
 
     @Test
     public void testIsConcurrentBuild() throws IOException {
-        Boolean childConcurrentBuild = false;
-        Boolean parentConcurrentBuild = true;
+        boolean childConcurrentBuild = false;
+        boolean parentConcurrentBuild = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
         parentProject.allowSave.set(false);
         parentProject.setConcurrentBuild(parentConcurrentBuild);
@@ -787,10 +792,10 @@ public class FreeStyleProjectTest {
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(true);
         //Value should be taken from cascadingProject
-        assertEquals(parentConcurrentBuild, (Boolean) childProject.isConcurrentBuild());
+        assertEquals(parentConcurrentBuild, childProject.isConcurrentBuild());
         childProject.setConcurrentBuild(childConcurrentBuild);
         //Child value is not equals to parent - override value in child.
-        assertEquals(childConcurrentBuild, (Boolean) childProject.isConcurrentBuild());
+        assertEquals(childConcurrentBuild, childProject.isConcurrentBuild());
     }
 
     private class FreeStyleProjectMock extends FreeStyleProject {

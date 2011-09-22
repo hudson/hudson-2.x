@@ -231,21 +231,15 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *
      * @param key key.
      * @return {@link org.hudsonci.api.model.IProperty} instance or null.
-     * @throws IOException if any.
      */
-    public IProperty getProperty(String key) throws IOException {
+    public IProperty getProperty(String key){
         return getProperty(key, null);
     }
 
     /**
-     * Returns null safe job property by specified key. if property is not present, try instantiate it.
-     *
-     * @param key key.
-     * @param clazz type of property..
-     * @return {@link org.hudsonci.api.model.IProperty} instance or null.
-     * @throws IOException if any.
+     * {@inheritDoc}
      */
-    public IProperty getProperty(String key, Class clazz) throws IOException {
+    public IProperty getProperty(String key, Class clazz) {
         IProperty t = jobProperties.get(key);
         if (null == t && null != clazz) {
             try {
@@ -254,16 +248,20 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 t.setKey(key);
                 putJobProperty(key, t);
             } catch (InstantiationException e) {
-                throw new IOException(e);
+                e.printStackTrace();
             } catch (IllegalAccessException e) {
-                throw new IOException(e);
+                e.printStackTrace();
             }
         }
         return t;
     }
 
-    public StringProperty getStringProperty(String key) throws IOException {
+    public StringProperty getStringProperty(String key) {
         return (StringProperty) getProperty(key, StringProperty.class);
+    }
+
+    public BooleanProperty getBooleanProperty(String key){
+        return (BooleanProperty) getProperty(key, BooleanProperty.class);
     }
 
     @Override

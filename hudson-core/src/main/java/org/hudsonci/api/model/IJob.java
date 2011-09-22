@@ -26,7 +26,6 @@ package org.hudsonci.api.model;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 import hudson.tasks.LogRotator;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -58,9 +57,8 @@ public interface IJob<T extends IJob> {
      * @param key key.
      * @param clazz IProperty subclass.
      * @return {@link org.hudsonci.api.model.IProperty} instance or null.
-     * @throws java.io.IOException if any.
      */
-    IProperty getProperty(String key, Class<? extends IProperty> clazz) throws IOException;
+    IProperty getProperty(String key, Class<? extends IProperty> clazz);
 
     /**
      * Checks whether current job is inherited from other project.

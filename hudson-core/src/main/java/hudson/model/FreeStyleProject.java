@@ -29,7 +29,6 @@ import hudson.Extension;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IFreeStyleProject;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -44,7 +43,7 @@ import javax.servlet.ServletException;
 public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
     IFreeStyleProject {
 
-    public static final String CUSTOM_WORKSPACE_PROPERTY_KEY = "customWorkspace";
+    public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
 
     /**
      * See {@link #setCustomWorkspace(String)}.
@@ -69,16 +68,8 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
         return FreeStyleBuild.class;
     }
 
-    public String getCustomWorkspace(boolean useParentValue) throws IOException {
-        StringProperty jobProperty = getStringProperty(CUSTOM_WORKSPACE_PROPERTY_KEY);
-        if (!useParentValue) {
-            return jobProperty.getOriginalValue();
-        }
-        return jobProperty.getValue();
-    }
-
     public String getCustomWorkspace() throws IOException {
-        return getCustomWorkspace(true);
+        return getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -101,8 +92,7 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        StringProperty jobProperty = getStringProperty(CUSTOM_WORKSPACE_PROPERTY_KEY);
-        jobProperty.setValue(customWorkspace);
+        getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
         save();
     }
 

@@ -21,72 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.hudsonci.api.model;
+package hudson.model;
 
-import java.io.Serializable;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
- * Represents Properties for Job,
+ * Represents boolean property.
  * <p/>
  * Date: 9/22/11
  *
  * @author Nikita Levyankov
  */
-public interface IProperty<T> extends Serializable {
+public class BooleanProperty extends BaseProperty<Boolean> {
 
     /**
-     * Sets key for given property.
-     *
-     * @param key key.
+     * {@inheritDoc}
      */
-    void setKey(String key);
+    protected boolean allowOverrideValue(Boolean cascadingValue, Boolean candidateValue) {
+        return !ObjectUtils.equals(cascadingValue, candidateValue);
+    }
 
     /**
-     * Sets the job, which is owner of current property.
-     *
-     * @param job {@link IJob}
+     * {@inheritDoc}
      */
-    void setJob(IJob job);
+    @Override
+    public Boolean getOriginalValue() {
+        Boolean originalValue = super.getOriginalValue();
+        return null != originalValue ? originalValue : getDefaultValue();
+    }
 
     /**
-     * Sets property value.
-     *
-     * @param value value to set.
+     * {@inheritDoc}
      */
-    void setValue(T value);
-
-    /**
-     * Returns original property value.
-     *
-     * @return T
-     */
-    T getOriginalValue();
-
-    /**
-     * Returns cascading value if any.
-     *
-     * @return string.
-     */
-    T getCascadingValue();
-
-    /**
-     * @return true if value inherited from cascading project, false - otherwise,
-     */
-    boolean isPropertyOverridden();
-
-    /**
-     * Returns property value. If originalValue is not null or value was overridden for this
-     * property - call {@link #getOriginalValue()}, otherwise call {@link #getCascadingValue()}.
-     *
-     * @return string.
-     */
-    T getValue();
-
-    /**
-     * This value will be taken if both cascading project and current project don't have values. Null by default.
-     *
-     * @return value
-     */
-    T getDefaultValue();
-
+    @Override
+    public Boolean getDefaultValue() {
+        return false;
+    }
 }

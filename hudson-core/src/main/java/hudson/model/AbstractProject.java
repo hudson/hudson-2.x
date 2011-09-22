@@ -315,52 +315,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     @Exported
     public boolean isConcurrentBuild() {
-        return isConcurrentBuild(true);
-    }
-
-    public boolean isConcurrentBuild(boolean useParentValue) {
-        if (!useParentValue || !hasCascadingProject() || isOverriddenProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
-            return Hudson.CONCURRENT_BUILD && concurrentBuild;
-        } else {
-            return hasCascadingProject() && getCascadingProject().isConcurrentBuild();
-        }
+        return getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).getValue();
     }
 
     public void setConcurrentBuild(boolean b) throws IOException {
-        if (!hasCascadingProject()) {
-            this.concurrentBuild = b;
-        } else if (!ObjectUtils.equals(getCascadingProject().isConcurrentBuild(), b)) {
-            this.concurrentBuild = b;
-            registerOverriddenProperty(CONCURRENT_BUILD_PROPERTY_NAME);
-        } else {
-            this.concurrentBuild = false;
-            unRegisterOverriddenProperty(CONCURRENT_BUILD_PROPERTY_NAME);
-        }
+        getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean isCleanWorkspaceRequired() {
-        return isCleanWorkspaceRequired(true);
-    }
-
-    public boolean isCleanWorkspaceRequired(boolean useParentValue) {
-        if (!useParentValue || !hasCascadingProject() || isOverriddenProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
-            return cleanWorkspaceRequired;
-        } else {
-            return hasCascadingProject() && getCascadingProject().isCleanWorkspaceRequired();
-        }
+        return getBooleanProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getValue();
     }
 
     public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired) {
-        if (!hasCascadingProject()) {
-            this.cleanWorkspaceRequired = cleanWorkspaceRequired;
-        } else if (!ObjectUtils.equals(getCascadingProject().isCleanWorkspaceRequired(), cleanWorkspaceRequired)) {
-            registerOverriddenProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME);
-            this.cleanWorkspaceRequired = cleanWorkspaceRequired;
-        } else {
-            this.cleanWorkspaceRequired = false;
-            unRegisterOverriddenProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME);
-        }
+        getBooleanProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).setValue(cleanWorkspaceRequired);
     }
 
     /**
