@@ -160,7 +160,6 @@ THE SOFTWARE.
           -->
           <groupId>org.kohsuke.stapler</groupId>
           <artifactId>maven-stapler-plugin</artifactId>
-          <version>1.16</version>
           <extensions>true</extensions>
           <dependencies>
             <dependency>
