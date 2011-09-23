@@ -250,8 +250,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         return (ResultProjectProperty) getProperty(key, ResultProjectProperty.class);
     }
 
-    public BooleanProjectProperty getBooleanProperty(String key){
+    public BooleanProjectProperty getBooleanProperty(String key) {
         return (BooleanProjectProperty) getProperty(key, BooleanProjectProperty.class);
+    }
+
+    public IntegerProjectProperty getIntegerProperty(String key) {
+        return (IntegerProjectProperty) getProperty(key, IntegerProjectProperty.class);
     }
 
     @Override

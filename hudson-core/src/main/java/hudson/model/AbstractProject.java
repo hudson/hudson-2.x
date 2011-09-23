@@ -99,7 +99,6 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
@@ -132,6 +131,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME = "cleanWorkspaceRequired";
     public static final String BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME = "blockBuildWhenDownstreamBuilding";
     public static final String BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME = "blockBuildWhenUpstreamBuilding";
+    public static final String QUIET_PERIOD_PROPERTY_NAME = "quietPeriod";
+    public static final String SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "scmCheckoutRetryCount";
 
     /**
      * {@link SCM} associated with the project.
@@ -152,11 +153,17 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * The quiet period. Null to delegate to the system default.
+     * @deprecated as of 2.1.2
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private volatile Integer quietPeriod = null;
 
     /**
      * The retry count. Null to delegate to the system default.
+     * @deprecated as of 2.1.2
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private volatile Integer scmCheckoutRetryCount = null;
 
@@ -192,14 +199,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected volatile boolean disabled;
 
     /**
-     * True to keep builds of this project in queue when downstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when downstream projects are building.
+     *
+     * @deprecated as of 2.1.2.
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected volatile boolean blockBuildWhenDownstreamBuilding;
 
     /**
-     * True to keep builds of this project in queue when upstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when upstream projects are building.
+     *
+     * @deprecated 2.1.2
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected volatile boolean blockBuildWhenUpstreamBuilding;
 
@@ -237,10 +250,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @CopyOnWrite
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
+    /**
+     * @deprecated as of 2.1.2
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
     private boolean concurrentBuild;
 
     /**
      * True to clean the workspace prior to each build.
+     *
+     * @deprecated as of 2.1.2
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private volatile boolean cleanWorkspaceRequired;
 
@@ -293,6 +315,29 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if(transientActions==null)
             transientActions = new Vector<Action>();    // happens when loaded from disk
         updateTransientActions();
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+        }
+        if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+        }
+        if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
+            setConcurrentBuild(concurrentBuild);
+        }
+        if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
+            setCleanWorkspaceRequired(cleanWorkspaceRequired);
+        }
+        if (null == getProperty(QUIET_PERIOD_PROPERTY_NAME)) {
+            setQuietPeriod(quietPeriod);
+        }
+        if (null == getProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)) {
+            setScmCheckoutRetryCount(scmCheckoutRetryCount);
+        }
     }
 
     @Override
@@ -529,26 +574,29 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public int getQuietPeriod() {
-        if (null != quietPeriod) {
-            return quietPeriod;
-        }
-        return hasCascadingProject() ? getCascadingProject().getQuietPeriod() : Hudson.getInstance().getQuietPeriod();
+        IntegerProjectProperty property = getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME);
+        Integer value = property.getValue();
+        return property.getDefaultValue().equals(value) ? Hudson.getInstance().getQuietPeriod() : value;
+    }
+
+    /**
+     * Sets the custom quiet period of this project, or revert to the global default if null is given.
+     * @param seconds quiet period
+     * @throws IOException if any.
+     */
+    public void setQuietPeriod(Integer seconds) throws IOException {
+        getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).setValue(seconds);
+        save();
     }
 
     public int getScmCheckoutRetryCount() {
-        if (null != scmCheckoutRetryCount) {
-            return scmCheckoutRetryCount;
-        }
-        return hasCascadingProject() ?
-            getCascadingProject().getScmCheckoutRetryCount() : Hudson.getInstance().getScmCheckoutRetryCount();
+        IntegerProjectProperty property = getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME);
+        Integer value = property.getValue();
+        return property.getDefaultValue().equals(value) ? Hudson.getInstance().getScmCheckoutRetryCount() : value;
     }
 
     public void setScmCheckoutRetryCount(Integer retryCount) {
-        if (!(hasCascadingProject() && ObjectUtils.equals(getCascadingProject().getScmCheckoutRetryCount(), retryCount))) {
-            this.scmCheckoutRetryCount = retryCount;
-        } else {
-            this.scmCheckoutRetryCount = null;
-        }
+        getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).setValue(retryCount);
     }
 
     /**
@@ -570,22 +618,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public boolean getHasCustomQuietPeriod() {
         return (hasCascadingProject() && getCascadingProject().getHasCustomQuietPeriod())
             || (!hasCascadingProject() && quietPeriod!=null);
-    }
-
-    /**
-     * Sets the custom quiet period of this project, or revert to the global default if null is given.
-     * @param seconds quiet period
-     * @throws IOException if any.
-     */
-    public void setQuietPeriod(Integer seconds) throws IOException {
-        if (!(hasCascadingProject()
-            && (ObjectUtils.equals(getCascadingProject().getQuietPeriod(), seconds))
-            && ObjectUtils.notEqual(seconds, Hudson.getInstance().getQuietPeriod()))) {
-            this.quietPeriod = seconds;
-        } else {
-            this.quietPeriod = null;
-        }
-        save();
     }
 
     /**
