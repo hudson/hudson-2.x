@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2004-2011, Oracle Corporation, Inc., Nikita Levyankov
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Anton Kozak
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,19 @@
  */
 package hudson.model;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.hudsonci.api.model.IJob;
 
 /**
- * Represents boolean property.
+ * Represents {@link Result} property.
  * <p/>
- * Date: 9/22/11
+ * Date: 9/23/11
  *
- * @author Nikita Levyankov
+ * @author Anton Kozak
  */
-public class BooleanProjectProperty extends BaseProjectProperty<Boolean> {
+//TODO try to replace it with generics
+public class ResultProjectProperty extends BaseProjectProperty<Result> {
 
-    public BooleanProjectProperty(IJob job) {
+    public ResultProjectProperty(IJob job) {
         super(job);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean getOriginalValue() {
-        Boolean originalValue = super.getOriginalValue();
-        return null != originalValue ? originalValue : getDefaultValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean getDefaultValue() {
-        return false;
     }
 }

@@ -42,7 +42,8 @@ public class IntegerProjectProperty extends BaseProjectProperty<Integer> {
     /**
      * {@inheritDoc}
      */
-    protected boolean allowOverrideValue(Integer cascadingValue, Integer candidateValue) {
-        return !ObjectUtils.equals(cascadingValue, candidateValue);
+    @Override
+    public Integer getDefaultValue() {
+        return 0;
     }
 }

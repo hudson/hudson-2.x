@@ -30,6 +30,7 @@ import hudson.Util;
 import hudson.XmlFile;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
+import hudson.model.BaseProjectProperty;
 import hudson.model.BuildableItemWithBuildWrappers;
 import hudson.model.DependencyGraph;
 import hudson.model.Descriptor;
@@ -43,6 +44,7 @@ import hudson.model.Job;
 import hudson.model.Label;
 import hudson.model.Queue.FlyweightTask;
 import hudson.model.Result;
+import hudson.model.ResultProjectProperty;
 import hudson.model.SCMedItem;
 import hudson.model.Saveable;
 import hudson.model.TopLevelItem;
@@ -106,7 +108,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * Configuration axes.
      */
-    private volatile AxisList axes; //TODO verify it = new AxisList();
+    private volatile AxisList axes = new AxisList();
 
     /**
      * The filter that is applied to combinations. It is a Groovy if condition.
@@ -242,28 +244,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-         //TODO fix this method
-//        if (hasCascadingProject()) {
-//            return isOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME) ? touchStoneResultCondition
-//                : getCascadingProject().getTouchStoneResultCondition();
-//        } else {
-            return touchStoneResultCondition;
-//        }
+        return getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        //TODO fix this method
-        if (!hasCascadingProject()) {
-            this.touchStoneResultCondition = touchStoneResultCondition;
-        } else if (!ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
-            touchStoneCombinationFilter)) {
-            this.touchStoneResultCondition = touchStoneResultCondition;
-        } else {
-            this.touchStoneResultCondition = null;
-        }
+        getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).setValue(touchStoneResultCondition);
     }
 
     /**

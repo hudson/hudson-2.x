@@ -232,8 +232,6 @@ public class MatrixProjectTest {
     }
 
     @Test
-    @Ignore
-    //TODO fix method
     public void testGetTouchStoneResultConditionParentValue() throws IOException {
         Result parentResultCondition = Result.SUCCESS;
         MatrixProject parentProject = new MatrixProjectMock("parent");
