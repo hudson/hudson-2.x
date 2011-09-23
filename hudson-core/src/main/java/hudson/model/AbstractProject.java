@@ -192,14 +192,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected volatile boolean disabled;
 
     /**
-     * True to keep builds of this project in queue when downstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when downstream projects are building.
+     *
+     * @since 2.1.2
+     * @deprecated don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected volatile boolean blockBuildWhenDownstreamBuilding;
 
     /**
-     * True to keep builds of this project in queue when upstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when upstream projects are building.
+     *
+     * @since 2.1.2
+     * @deprecated don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected volatile boolean blockBuildWhenUpstreamBuilding;
 
@@ -237,10 +243,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @CopyOnWrite
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
+    /**
+     * @since 2.1.2
+     * @deprecated don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
     private boolean concurrentBuild;
 
     /**
      * True to clean the workspace prior to each build.
+     *
+     * @since 2.1.2
+     * @deprecated don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private volatile boolean cleanWorkspaceRequired;
 
@@ -293,6 +308,23 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if(transientActions==null)
             transientActions = new Vector<Action>();    // happens when loaded from disk
         updateTransientActions();
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+        }
+        if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+        }
+        if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
+            setConcurrentBuild(concurrentBuild);
+        }
+        if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
+            setCleanWorkspaceRequired(cleanWorkspaceRequired);
+        }
     }
 
     @Override

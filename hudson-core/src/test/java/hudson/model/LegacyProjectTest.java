@@ -21,18 +21,28 @@ import static junit.framework.Assert.assertNull;
 public class LegacyProjectTest {
 
     /**
-     * Tests unmarshalls FreeStyleProject configuration and checks whether CustomWorkspace property is set,
+     * Tests unmarshalls FreeStyleProject configuration and checks whether properties are configured based
+     * on legacy values,
      *
      * @throws Exception if any.
      */
     @Test
     public void testLoadFreeStyleProject() throws Exception {
         File freeStyleProjectConfig = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
-        FreeStyleProject freeStyleProject = (FreeStyleProject) Items.getConfigFile(freeStyleProjectConfig).read();
-        freeStyleProject.setAllowSave(false);
-        freeStyleProject.initProjectProperties();
-        assertNull(freeStyleProject.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
-        freeStyleProject.buildProjectProperties();
-        assertNotNull(freeStyleProject.getCustomWorkspace());
+        FreeStyleProject project = (FreeStyleProject) Items.getConfigFile(freeStyleProjectConfig).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        //Checks customWorkspace value
+        assertNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME));
+        project.buildProjectProperties();
+        assertNotNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME));
     }
 }
