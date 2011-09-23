@@ -27,6 +27,7 @@ package org.hudsonci.service.internal;
 import net.sf.json.JSONObject;
 import org.apache.commons.fileupload.FileItem;
 import org.kohsuke.stapler.Ancestor;
+import org.kohsuke.stapler.BindInterceptor;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -48,6 +49,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.kohsuke.stapler.WebApp;
+import org.kohsuke.stapler.bind.BoundObjectTable;
 
 /**
  * A dummy {@link StaplerRequest}.
@@ -389,5 +392,25 @@ public class DummyStaplerRequest
 
     public int getLocalPort() {
         return 0;
+    }
+
+    public String createJavaScriptProxy(Object o) {
+        return null;
+    }
+
+    public WebApp getWebApp() {
+        return null;
+    }
+
+    public BindInterceptor getBindInterceptor() {
+        return null;
+    }
+
+    public BindInterceptor setBindListener(BindInterceptor bindInterceptor) {
+        return null;
+    }
+
+    public BoundObjectTable getBoundObjectTable() {
+        return null;
     }
 }
