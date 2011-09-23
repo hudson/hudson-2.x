@@ -57,8 +57,7 @@ THE SOFTWARE.
     <finalName>${project.artifactId}</finalName>
         
     <plugins>
-      <!--TODO enable me when maven-enunciate-plugin will be fixed-->
-      <!-- plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
@@ -80,7 +79,7 @@ THE SOFTWARE.
             </configuration>
           </execution>
         </executions>
-      </plugin -->
+      </plugin>
 
       <plugin>
         <groupId>org.jvnet.hudson.tools</groupId>
