@@ -621,54 +621,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean blockBuildWhenDownstreamBuilding() {
-        return blockBuildWhenDownstreamBuilding(true);
-    }
-
-    public boolean blockBuildWhenDownstreamBuilding(boolean useParentValue) {
-        if (!useParentValue || !hasCascadingProject()
-            || isOverriddenProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
-            return blockBuildWhenDownstreamBuilding;
-        } else {
-            return hasCascadingProject() && getCascadingProject().blockBuildWhenDownstreamBuilding();
-        }
+        return getBooleanProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenDownstreamBuilding(boolean b) throws IOException {
-        if (!hasCascadingProject()) {
-            this.blockBuildWhenDownstreamBuilding = b;
-        } else if (!ObjectUtils.equals(getCascadingProject().blockBuildWhenDownstreamBuilding(), b)) {
-            this.blockBuildWhenDownstreamBuilding = b;
-            registerOverriddenProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME);
-        } else {
-            this.blockBuildWhenDownstreamBuilding = false;
-            unRegisterOverriddenProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME);
-        }
+        getBooleanProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean blockBuildWhenUpstreamBuilding() {
-        return blockBuildWhenUpstreamBuilding(true);
-    }
-
-    public boolean blockBuildWhenUpstreamBuilding(boolean useParentValue) {
-        if (!useParentValue || !hasCascadingProject()
-            || isOverriddenProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
-            return blockBuildWhenUpstreamBuilding;
-        } else {
-            return hasCascadingProject() && getCascadingProject().blockBuildWhenUpstreamBuilding();
-        }
+        return getBooleanProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenUpstreamBuilding(boolean b) throws IOException {
-        if (!hasCascadingProject()) {
-            this.blockBuildWhenUpstreamBuilding = b;
-        } else if (!ObjectUtils.equals(getCascadingProject().blockBuildWhenUpstreamBuilding(), b)) {
-            this.blockBuildWhenUpstreamBuilding = b;
-            registerOverriddenProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME);
-        } else {
-            this.blockBuildWhenUpstreamBuilding = false;
-            unRegisterOverriddenProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME);
-        }
+        getBooleanProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 

@@ -24,6 +24,7 @@
 package hudson.model;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.hudsonci.api.model.IJob;
 
 /**
  * Represents boolean property.
@@ -33,6 +34,10 @@ import org.apache.commons.lang3.ObjectUtils;
  * @author Nikita Levyankov
  */
 public class BooleanProjectProperty extends BaseProjectProperty<Boolean> {
+
+    public BooleanProjectProperty(IJob job) {
+        super(job);
+    }
 
     /**
      * {@inheritDoc}

@@ -24,9 +24,12 @@ THE SOFTWARE.
 
 <!-- Block build when downstream dependency is building -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <j:set var="blockBuildWhenDownstreamBuildingProperty"
+         value="${it.getBooleanProperty(it.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)}"/>
+  <j:set var="blockBuildWhenDownstreamBuilding" value="${blockBuildWhenDownstreamBuildingProperty.getValue()}"/>
   <f:optionalBlock name="blockBuildWhenDownstreamBuilding"
 		   title="${%Block build when downstream project is building}"
 		   help="/help/project-config/block-downstream-building.html"
-		   checked="${it.blockBuildWhenDownstreamBuilding()}"
-       isCascadingValue="${it.isOverriddenProperty(it.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)}"/>
+		   checked="${blockBuildWhenDownstreamBuilding}"
+       isCascadingValue="${blockBuildWhenDownstreamBuildingProperty.isPropertyOverridden()}"/>
 </j:jelly>

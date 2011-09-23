@@ -24,6 +24,7 @@
 package hudson.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hudsonci.api.model.IJob;
 
 /**
  * String property for project.
@@ -33,6 +34,10 @@ import org.apache.commons.lang3.StringUtils;
  * @author Nikita Levyankov
  */
 public class StringProjectProperty extends BaseProjectProperty<String> {
+
+    public StringProjectProperty(IJob job) {
+        super(job);
+    }
 
     @Override
     protected String prepareValue(String candidateValue) {

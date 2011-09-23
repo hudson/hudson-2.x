@@ -250,11 +250,9 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetCustomWorkspaceValueEqualsWithParent() throws IOException{
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         String customWorkspace = "/tmp";
         parentProject.setCustomWorkspace(customWorkspace);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setCustomWorkspace(customWorkspace);
         childProject.setCascadingProject(null);
@@ -264,12 +262,10 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetCustomWorkspaceValueNotEqualsWithParent() throws IOException{
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         String parentCustomWorkspace = "/tmp";
         String childCustomWorkspace = "/tmp1";
         parentProject.setCustomWorkspace(parentCustomWorkspace);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setCustomWorkspace(childCustomWorkspace);
         assertEquals(childCustomWorkspace, childProject.getCustomWorkspace());
@@ -279,7 +275,6 @@ public class FreeStyleProjectTest {
     public void testSetCustomWorkspaceValueParentNull() throws IOException{
         String childCustomWorkspace = "/tmp";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCustomWorkspace(childCustomWorkspace);
         assertEquals(childCustomWorkspace, childProject.getCustomWorkspace());
     }
@@ -288,12 +283,10 @@ public class FreeStyleProjectTest {
     public void testGetCustomWorkspace() throws IOException{
         String customWorkspace = "/tmp";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCustomWorkspace(customWorkspace);
         assertEquals(customWorkspace, childProject.getCustomWorkspace());
 
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setCustomWorkspace(customWorkspace);
         childProject.setCustomWorkspace(" ");
         childProject.setCascadingProject(parentProject);
@@ -305,11 +298,9 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetJdkValueEqualsWithParent() throws IOException{
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         String jdkName = "sun-java5-jdk32";
         parentProject.setJDK(jdkName);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setJDK(jdkName);
         childProject.setCascadingProject(null);
@@ -319,12 +310,10 @@ public class FreeStyleProjectTest {
     @Test
     public void testSetJdkValueNotEqualsWithParent() throws IOException{
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         String parentJdkName = "sun-java5-jdk32";
         String childJdkName = "sun-java6-jdk32";
         parentProject.setJDK(parentJdkName);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setJDK(childJdkName);
         assertEquals(childJdkName, childProject.getJDKName());
@@ -334,7 +323,6 @@ public class FreeStyleProjectTest {
     public void testSetJdkValueParentNull() throws IOException{
         String childJdkName = "sun-java6-jdk32";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setJDK(childJdkName);
         assertEquals(childJdkName, childProject.getJDKName());
     }
@@ -343,12 +331,10 @@ public class FreeStyleProjectTest {
     public void testGetJdkName() throws IOException{
         String JdkName = "sun-java6-jdk32";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setJDK(JdkName);
         assertEquals(JdkName, childProject.getJDKName());
 
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setJDK(JdkName);
         childProject.setJDK(" ");
         childProject.setCascadingProject(parentProject);
@@ -368,9 +354,7 @@ public class FreeStyleProjectTest {
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
-        parentProject.allowSave.set(false);
         parentProject.setQuietPeriod(quietPeriod);
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setQuietPeriod(quietPeriod);
         childProject.setCascadingProject(null);
@@ -388,9 +372,7 @@ public class FreeStyleProjectTest {
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
-        parentProject.allowSave.set(false);
         parentProject.setQuietPeriod(quietPeriod);
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setQuietPeriod(quietPeriod);
         childProject.setCascadingProject(null);
@@ -403,10 +385,8 @@ public class FreeStyleProjectTest {
         String parentQuietPeriod = "10";
         String childQuietPeriod = "11";
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setQuietPeriod(parentQuietPeriod);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setQuietPeriod(childQuietPeriod);
 
@@ -422,7 +402,6 @@ public class FreeStyleProjectTest {
     public void testSetQuietPeriodParentNull() throws IOException{
         String quietPeriod = "10";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setQuietPeriod(quietPeriod);
         assertEquals(Integer.parseInt(quietPeriod), childProject.getQuietPeriod());
     }
@@ -432,7 +411,6 @@ public class FreeStyleProjectTest {
         String quietPeriod = "asd10asdasd";
         int globalQuietPeriod = 4;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setQuietPeriod(quietPeriod);
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getQuietPeriod()).andReturn(globalQuietPeriod).anyTimes();
@@ -456,11 +434,9 @@ public class FreeStyleProjectTest {
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
 
-        childProject.allowSave.set(false);
         childProject.setQuietPeriod(quietPeriodString);
         assertEquals(quietPeriod, childProject.getQuietPeriod());
 
-        parentProject.allowSave.set(false);
         parentProject.setQuietPeriod(quietPeriodString);
         childProject.setQuietPeriod(" ");
         childProject.setCascadingProject(parentProject);
@@ -476,10 +452,8 @@ public class FreeStyleProjectTest {
         String scmCheckoutRetryCount = "10";
         int globalScmCheckoutRetryCount = 4;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount);
         mockStatic(Hudson.class);
@@ -497,10 +471,8 @@ public class FreeStyleProjectTest {
         String parentScmCheckoutRetryCount = "10";
         String childScmCheckoutRetryCount = "11";
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setScmCheckoutRetryCount(parentScmCheckoutRetryCount);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setScmCheckoutRetryCount(childScmCheckoutRetryCount);
 
@@ -516,7 +488,6 @@ public class FreeStyleProjectTest {
     public void testSetScmCheckoutRetryCountParentNull() throws IOException{
         String scmCheckoutRetryCount = "10";
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
         assertEquals(Integer.parseInt(scmCheckoutRetryCount), childProject.getScmCheckoutRetryCount());
     }
@@ -526,7 +497,6 @@ public class FreeStyleProjectTest {
         String scmCheckoutRetryCount = "asd10asdasd";
         int globalScmCheckoutRetryCount = 4;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setScmCheckoutRetryCount(scmCheckoutRetryCount);
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getScmCheckoutRetryCount()).andReturn(globalScmCheckoutRetryCount).anyTimes();
@@ -550,11 +520,9 @@ public class FreeStyleProjectTest {
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         replayAll();
 
-        childProject.allowSave.set(false);
         childProject.setScmCheckoutRetryCount(scmCheckoutRetryCountString);
         assertEquals(scmCheckoutRetryCount, childProject.getScmCheckoutRetryCount());
 
-        parentProject.allowSave.set(false);
         parentProject.setScmCheckoutRetryCount(scmCheckoutRetryCountString);
         childProject.setScmCheckoutRetryCount(" ");
         childProject.setCascadingProject(parentProject);
@@ -569,10 +537,8 @@ public class FreeStyleProjectTest {
     public void testSetBlockBuildWhenDownstreamBuildingEqualsWithParent() throws IOException {
         Boolean blockBuildWhenDownstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
         assertFalse(childProject.blockBuildWhenDownstreamBuilding);
@@ -583,10 +549,8 @@ public class FreeStyleProjectTest {
         Boolean childBlockBuildWhenDownstreamBuilding = false;
         Boolean parentBlockBuildWhenDownstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setBlockBuildWhenDownstreamBuilding(childBlockBuildWhenDownstreamBuilding);
         //if child value is not equals to parent one, field should be populated
@@ -595,12 +559,13 @@ public class FreeStyleProjectTest {
 
     @Test
     public void testSetBlockBuildWhenDownstreamBuildingParentNull() throws IOException {
-        boolean blockBuildWhenDownstreamBuilding = true;
+        Boolean blockBuildWhenDownstreamBuilding = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(blockBuildWhenDownstreamBuilding, childProject.blockBuildWhenDownstreamBuilding(false));
+        assertEquals(blockBuildWhenDownstreamBuilding,
+            childProject.getBooleanProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)
+                .getOriginalValue());
     }
 
     @Test
@@ -608,11 +573,9 @@ public class FreeStyleProjectTest {
         boolean childBlockBuildWhenDownstreamBuilding = false;
         boolean parentBlockBuildWhenDownstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
         assertEquals(parentBlockBuildWhenDownstreamBuilding, parentProject.blockBuildWhenDownstreamBuilding());
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         //Set equal to parent in order to inherit from cascading project
         childProject.setCascadingProject(parentProject);
         childProject.setBlockBuildWhenDownstreamBuilding(parentBlockBuildWhenDownstreamBuilding);
@@ -627,13 +590,12 @@ public class FreeStyleProjectTest {
     public void testSetBlockBuildWhenUpstreamBuildingEqualsWithParent() throws IOException {
         boolean blockBuildWhenUpstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
-        assertFalse(childProject.blockBuildWhenUpstreamBuilding(false));
+        assertFalse(childProject.getBooleanProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)
+            .getOriginalValue());
     }
 
     @Test
@@ -641,24 +603,23 @@ public class FreeStyleProjectTest {
         Boolean childBlockBuildWhenUpstreamBuilding = false;
         Boolean parentBlockBuildWhenUpstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setBlockBuildWhenUpstreamBuilding(childBlockBuildWhenUpstreamBuilding);
         //if child value is not equals to parent one, field should be populated
-        assertNotNull(childProject.blockBuildWhenUpstreamBuilding(false));
+        assertNotNull(childProject.blockBuildWhenUpstreamBuilding);
     }
 
     @Test
     public void testSetBlockBuildWhenUpstreamBuildingParentNull() throws IOException {
-        boolean blockBuildWhenUpstreamBuilding = true;
+        Boolean blockBuildWhenUpstreamBuilding = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
         //if parent is not set, value should be populated according to existing logic
-        assertEquals(blockBuildWhenUpstreamBuilding, childProject.blockBuildWhenUpstreamBuilding(false));
+        assertEquals(blockBuildWhenUpstreamBuilding,
+            childProject.getBooleanProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)
+                .getOriginalValue());
     }
 
     @Test
@@ -666,10 +627,8 @@ public class FreeStyleProjectTest {
         boolean childBlockBuildWhenUpstreamBuilding = false;
         boolean parentBlockBuildWhenUpstreamBuilding = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
                 //Set equal to parent in order to inherit from cascading project
         childProject.setBlockBuildWhenUpstreamBuilding(parentBlockBuildWhenUpstreamBuilding);
         childProject.setCascadingProject(parentProject);
@@ -685,10 +644,8 @@ public class FreeStyleProjectTest {
     public void testSetCleanWorkspaceRequiredEqualsWithParent() throws IOException {
         boolean cleanWorkspaceRequired = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
         assertFalse(
@@ -700,10 +657,8 @@ public class FreeStyleProjectTest {
         Boolean childCleanWorkspaceRequired = false;
         Boolean parentCleanWorkspaceRequired = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setCleanWorkspaceRequired(parentCleanWorkspaceRequired);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setCleanWorkspaceRequired(childCleanWorkspaceRequired);
         //if child value is not equals to parent one, field should be populated
@@ -715,7 +670,6 @@ public class FreeStyleProjectTest {
     public void testSetCleanWorkspaceRequiredParentNull() throws IOException {
         Boolean cleanWorkspaceRequired = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCleanWorkspaceRequired(cleanWorkspaceRequired);
         //if parent is not set, value should be populated according to existing logic
         assertEquals(cleanWorkspaceRequired,
@@ -727,10 +681,8 @@ public class FreeStyleProjectTest {
         boolean childCleanWorkspaceRequired = false;
         boolean parentCleanWorkspaceRequired = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setCleanWorkspaceRequired(parentCleanWorkspaceRequired);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCleanWorkspaceRequired(parentCleanWorkspaceRequired);
         childProject.setCascadingProject(parentProject);
         //Value should be taken from cascadingProject
@@ -744,10 +696,8 @@ public class FreeStyleProjectTest {
     public void testSetConcurrentBuildEqualsWithParent() throws IOException {
         Boolean concurrentBuild = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setConcurrentBuild(concurrentBuild);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(concurrentBuild);
         assertFalse(childProject.getBooleanProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME).getOriginalValue());
@@ -758,10 +708,8 @@ public class FreeStyleProjectTest {
         Boolean childConcurrentBuild = false;
         Boolean parentConcurrentBuild = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setConcurrentBuild(parentConcurrentBuild);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(childConcurrentBuild);
         //if child value is not equals to parent one, field should be populated
@@ -773,7 +721,6 @@ public class FreeStyleProjectTest {
     public void testSetConcurrentBuildParentNull() throws IOException {
         Boolean concurrentBuild = true;
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setConcurrentBuild(concurrentBuild);
         //if parent is not set, value should be populated according to existing logic
         assertEquals(concurrentBuild,
@@ -785,10 +732,8 @@ public class FreeStyleProjectTest {
         boolean childConcurrentBuild = false;
         boolean parentConcurrentBuild = true;
         FreeStyleProject parentProject = new FreeStyleProjectMock("parent");
-        parentProject.allowSave.set(false);
         parentProject.setConcurrentBuild(parentConcurrentBuild);
         FreeStyleProject childProject = new FreeStyleProjectMock("child");
-        childProject.allowSave.set(false);
         childProject.setCascadingProject(parentProject);
         childProject.setConcurrentBuild(true);
         //Value should be taken from cascadingProject
@@ -802,6 +747,7 @@ public class FreeStyleProjectTest {
 
         private FreeStyleProjectMock(String name) {
             super((ItemGroup)null, name);
+            setAllowSave(false);
         }
 
         @Override

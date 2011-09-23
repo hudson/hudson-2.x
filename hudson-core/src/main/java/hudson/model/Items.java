@@ -137,5 +137,10 @@ public class Items {
         XSTREAM.alias("matrix-project",MatrixProject.class);
         XSTREAM.alias("axis", Axis.class);
         XSTREAM.alias("matrix-config",MatrixConfiguration.class);
+
+        //aliases for project properties.
+        XSTREAM.alias("integer-property", IntegerProjectProperty.class);
+        XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
+        XSTREAM.alias("string-property", StringProjectProperty.class);
     }
 }

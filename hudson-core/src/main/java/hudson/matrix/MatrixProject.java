@@ -57,15 +57,6 @@ import hudson.util.CopyOnWriteMap;
 import hudson.util.DescribableList;
 import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang3.ObjectUtils;
-import org.hudsonci.api.matrix.IMatrixProject;
-import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
-import org.kohsuke.stapler.TokenList;
-
-import javax.servlet.ServletException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -81,6 +72,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletException;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.ObjectUtils;
+import org.hudsonci.api.matrix.IMatrixProject;
+import org.kohsuke.stapler.HttpResponse;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.TokenList;
 
 /**
  * {@link Job} that allows you to run multiple different configurations
@@ -198,26 +197,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public boolean isRunSequentially() {
-        if (hasCascadingProject()) {
-            return isOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME) ? runSequentially
-                : getCascadingProject().isRunSequentially();
-        } else {
-            return runSequentially;
-        }
+        return getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setRunSequentially(boolean runSequentially) throws IOException {
-        if (!hasCascadingProject()) {
-            this.runSequentially = runSequentially;
-        } else if (!ObjectUtils.equals(getCascadingProject().isRunSequentially(), runSequentially)) {
-            this.runSequentially = runSequentially;
-            registerOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME);
-        } else {
-            unRegisterOverriddenProperty(RUN_SEQUENTIALLY_PROPERTY_NAME);
-        }
+        getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).setValue(runSequentially);
         save();
     }
 
@@ -225,27 +212,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public String getCombinationFilter() {
-        if (hasCascadingProject()) {
-            return isOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME) ? combinationFilter
-                : getCascadingProject().getCombinationFilter();
-        } else {
-            return combinationFilter;
-        }
+        return getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setCombinationFilter(String combinationFilter) throws IOException {
-        if (!hasCascadingProject()) {
-            this.combinationFilter = combinationFilter;
-        } else if (!ObjectUtils.equals(getCascadingProject().getCombinationFilter(), combinationFilter)) {
-            this.combinationFilter = combinationFilter;
-            registerOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME);
-        } else {
-            unRegisterOverriddenProperty(COMBINATION_FILTER_PROPERTY_NAME);
-            this.combinationFilter = null;
-        }
+        getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
         rebuildConfigurations();
         save();
     }
@@ -254,54 +228,40 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public String getTouchStoneCombinationFilter() {
-        if (hasCascadingProject()) {
-            return isOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME) ? touchStoneCombinationFilter
-                : getCascadingProject().getTouchStoneCombinationFilter();
-        } else {
-            return touchStoneCombinationFilter;
-        }
+        return getStringProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneCombinationFilter(String touchStoneCombinationFilter) {
-        if (!hasCascadingProject()) {
-            this.touchStoneCombinationFilter = touchStoneCombinationFilter;
-        } else if (!ObjectUtils.equals(getCascadingProject().getTouchStoneCombinationFilter(),
-            touchStoneCombinationFilter)) {
-            this.touchStoneCombinationFilter = touchStoneCombinationFilter;
-            registerOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME);
-        } else {
-            unRegisterOverriddenProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME);
-            this.touchStoneCombinationFilter = null;
-        }
+        getStringProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME).setValue(touchStoneCombinationFilter);
     }
 
     /**
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-        if (hasCascadingProject()) {
-            return isOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME) ? touchStoneResultCondition
-                : getCascadingProject().getTouchStoneResultCondition();
-        } else {
+         //TODO fix this method
+//        if (hasCascadingProject()) {
+//            return isOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME) ? touchStoneResultCondition
+//                : getCascadingProject().getTouchStoneResultCondition();
+//        } else {
             return touchStoneResultCondition;
-        }
+//        }
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
+        //TODO fix this method
         if (!hasCascadingProject()) {
             this.touchStoneResultCondition = touchStoneResultCondition;
         } else if (!ObjectUtils.equals(getCascadingProject().getTouchStoneResultCondition(),
             touchStoneCombinationFilter)) {
             this.touchStoneResultCondition = touchStoneResultCondition;
-            registerOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME);
         } else {
-            unRegisterOverriddenProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME);
             this.touchStoneResultCondition = null;
         }
     }
@@ -310,27 +270,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public String getCustomWorkspace() {
-        if (hasCascadingProject()) {
-            return isOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME) ? customWorkspace
-                : getCascadingProject().getCustomWorkspace();
-        } else {
-            return customWorkspace;
-        }
+        return getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        if (!hasCascadingProject()) {
-            this.customWorkspace = customWorkspace;
-        } else if (!ObjectUtils.equals(getCascadingProject().getCustomWorkspace(), customWorkspace)) {
-            this.customWorkspace = customWorkspace;
-            registerOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
-        } else {
-            unRegisterOverriddenProperty(CUSTOM_WORKSPACE_PROPERTY_NAME);
-            this.customWorkspace = null;
-        }
+        getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
     }
 
     /**
@@ -779,15 +726,6 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     void setCascadingProject(MatrixProject cascadingProject) {
         this.cascadingProject = cascadingProject;
-    }
-
-    /**
-     * For the unit tests only.
-     *
-     * @param allowSave allow set.
-     */
-    void setAllowSave(Boolean allowSave) {
-        this.allowSave.set(allowSave);
     }
 
     private static final Logger LOGGER = Logger.getLogger(MatrixProject.class.getName());
