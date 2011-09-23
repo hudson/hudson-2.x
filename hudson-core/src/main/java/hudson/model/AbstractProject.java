@@ -133,6 +133,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME = "blockBuildWhenUpstreamBuilding";
     public static final String QUIET_PERIOD_PROPERTY_NAME = "quietPeriod";
     public static final String SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "scmCheckoutRetryCount";
+    public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
 
     /**
      * {@link SCM} associated with the project.

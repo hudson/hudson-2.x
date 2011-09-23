@@ -43,8 +43,6 @@ import javax.servlet.ServletException;
 public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
     IFreeStyleProject {
 
-    public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
-
     /**
      * See {@link #setCustomWorkspace(String)}.
      *

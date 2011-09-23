@@ -103,7 +103,6 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     protected static final String COMBINATION_FILTER_PROPERTY_NAME = "combinationFilter";
     protected static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
     protected static final String TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME = "touchStoneResultCondition";
-    protected static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
 
     /**
      * Configuration axes.
