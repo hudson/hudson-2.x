@@ -189,6 +189,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @param allowSave allow save.
      */
     protected void setAllowSave(Boolean allowSave) {
+        if (null == this.allowSave) {
+            initAllowSave();
+        }
         this.allowSave.set(allowSave);
     }
 
@@ -219,7 +222,6 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * {@inheritDoc}
      */
-    //TODO improve error handling for this method
     public IProjectProperty getProperty(String key, Class clazz) {
         IProjectProperty t = jobProperties.get(key);
         if (null == t && null != clazz) {
@@ -254,6 +256,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     @Override
     public synchronized void save() throws IOException {
+        if (null == allowSave) {
+           initAllowSave();
+        }
         if (allowSave.get()) {
             super.save();
             holdOffBuildUntilSave = false;
@@ -267,14 +272,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         super.onLoad(parent, name);
         cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
             cascadingProjectName);
-        if (null == allowSave) {// Initialize property if null for legacy config.
-            allowSave = new ThreadLocal<Boolean>() {
-                @Override
-                protected Boolean initialValue() {
-                    return true;
-                }
-            };
-        }
+        initAllowSave();
         TextFile f = getNextBuildNumberFile();
         if (f.exists()) {
             // starting 1.28, we store nextBuildNumber in a separate file.
@@ -299,13 +297,39 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         for (JobProperty p : properties)
             p.setOwner(this);
 
-        if (null == jobProperties) {
-            jobProperties = new ConcurrentHashMap<String, IProjectProperty>();
-        }
+        buildProjectProperties();
+    }
+
+    protected void initAllowSave() {
+        allowSave = new ThreadLocal<Boolean>() {
+            @Override
+            protected Boolean initialValue() {
+                return true;
+            }
+        };
+    }
+
+    /**
+     * Initializes and builds project properties. Also converts legacy properties to IProjectProperties.
+     * Subclasses should inherit and override this behavior.
+     *
+     * @throws IOException if any.
+     */
+    protected void buildProjectProperties() throws IOException {
+        initProjectProperties();
         for (Map.Entry<String, IProjectProperty> entry : jobProperties.entrySet()) {
             IProjectProperty property = entry.getValue();
             property.setKey(entry.getKey());
             property.setJob(this);
+        }
+    }
+
+    /**
+     * Initialize project properties if null.
+     */
+    protected final void initProjectProperties() {
+        if (null == jobProperties) {
+            jobProperties = new ConcurrentHashMap<String, IProjectProperty>();
         }
     }
 

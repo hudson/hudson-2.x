@@ -49,6 +49,8 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * See {@link #setCustomWorkspace(String)}.
      *
      * @since 1.216
+     * @deprecated left for backward compatibility
+     * @since 2.1.2
      */
     private String customWorkspace;
 
@@ -102,6 +104,16 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
         setCustomWorkspace(
             req.hasParameter("customWorkspace") ? req.getParameter("customWorkspace.directory") : null);
         super.submit(req, rsp);
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        //Convert legacy cust   omWorkspace property to IProjectProperty logic
+        if (null != customWorkspace && null == getProperty(CUSTOM_WORKSPACE_PROPERTY_NAME)) {
+            setCustomWorkspace(customWorkspace);
+            customWorkspace = null;//Reset to null. No longer needed.
+        }
     }
 
     public DescriptorImpl getDescriptor() {
