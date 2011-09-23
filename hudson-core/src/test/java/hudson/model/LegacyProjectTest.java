@@ -27,22 +27,41 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testLoadFreeStyleProject() throws Exception {
+    public void testLoadLegacyFreeStyleProject() throws Exception {
         File freeStyleProjectConfig = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
         FreeStyleProject project = (FreeStyleProject) Items.getConfigFile(freeStyleProjectConfig).read();
         project.setAllowSave(false);
         project.initProjectProperties();
         //Checks customWorkspace value
         assertNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
+        project.buildProjectProperties();
+        assertNotNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
+    }
+
+    /**
+     * Tests unmarshalls FreeStyleProject configuration and checks whether properties
+     * from AbstractProject are configured
+     *
+     * @throws Exception if any.
+     */
+    @Test
+    public void testLoadLegacyAbstractProject() throws Exception {
+        File freeStyleProjectConfig = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
+        AbstractProject project = (AbstractProject) Items.getConfigFile(freeStyleProjectConfig).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
         assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
         assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
         assertNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
         assertNull(project.getProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.QUIET_PERIOD_PROPERTY_NAME));
+        assertNull(project.getProperty(AbstractProject.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME));
         project.buildProjectProperties();
-        assertNotNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.QUIET_PERIOD_PROPERTY_NAME));
+        assertNotNull(project.getProperty(AbstractProject.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME));
     }
 }
