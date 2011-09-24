@@ -103,7 +103,7 @@ THE SOFTWARE.
             <configuration>
               <tasks>
                 <!-- fix Akuma groupId so it can still be found by pre-split org.jvnet.hudson:executable-war:1.17 -->
-                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke" value="com.sun.akuma"/>
+                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke:akuma" value="com.sun.akuma:akuma"/>
               </tasks>
             </configuration>
           </execution>
