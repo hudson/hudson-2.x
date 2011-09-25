@@ -72,6 +72,7 @@ public class ReadyDetector
         while (true) {
             if (isReady()) {
                 publisher.publish(new ReadyEvent(hudson));
+                log.info("Hudson is ready.");
                 break;
             }
             else {
