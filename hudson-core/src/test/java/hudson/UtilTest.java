@@ -75,6 +75,7 @@ public class UtilTest extends TestCase {
         assertEquals("a.b", Util.replaceMacro("a.b", m));
         assertEquals("ab", Util.replaceMacro("${A.B}", m));
         assertEquals("xyz.c", Util.replaceMacro("${a.b}.c",m));
+        assertEquals("xyz.d", Util.replaceMacro("${a.b.c}.d",m));
         //Java can't determine where key ends. So, '.' can be used only as part of the key and when enclosed into {}
         assertEquals("a.b.c.d", Util.replaceMacro("$A.b.c.d",m));
     }
