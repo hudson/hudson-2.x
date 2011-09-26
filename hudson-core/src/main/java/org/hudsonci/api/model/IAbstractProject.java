@@ -81,13 +81,6 @@ public interface IAbstractProject extends IJob {
     boolean blockBuildWhenUpstreamBuilding();
 
     /**
-     * Checks whether scmRetryCount is configured
-     *
-     * @return true if yes, false - otherwise.
-     */
-    boolean hasCustomScmCheckoutRetryCount();
-
-    /**
      * Returns scm checkout retry count.
      *
      * @return int value.

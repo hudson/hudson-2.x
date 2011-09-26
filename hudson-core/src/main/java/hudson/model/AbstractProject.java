@@ -367,7 +367,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     @Exported
     public boolean isConcurrentBuild() {
-        return getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).getValue();
+        return Hudson.CONCURRENT_BUILD && getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).getValue();
     }
 
     public void setConcurrentBuild(boolean b) throws IOException {
@@ -588,6 +588,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * Sets the custom quiet period of this project, or revert to the global default if null is given.
+     *
      * @param seconds quiet period
      * @throws IOException if any.
      */
@@ -621,6 +622,11 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         setScmCheckoutRetryCount(retryCount);
     }
 
+    /**
+     * @return true if quiet period was configured.
+     * @deprecated as of 2.1.2
+     *             This method was used only on UI side. No longer required.
+     */
     // ugly name because of EL
     public boolean getHasCustomQuietPeriod() {
         return null != getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).getValue();
@@ -641,6 +647,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         setQuietPeriod(period);
     }
 
+    /**
+     * Checks whether scmRetryCount is configured
+     *
+     * @return true if yes, false - otherwise.
+     * @deprecated as of 2.1.2
+     */
     public boolean hasCustomScmCheckoutRetryCount(){
         return null != getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).getValue();
     }
