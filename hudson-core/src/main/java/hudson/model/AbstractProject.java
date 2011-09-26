@@ -323,21 +323,27 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         super.buildProjectProperties();
         if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+            blockBuildWhenUpstreamBuilding = false;
         }
         if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+            blockBuildWhenDownstreamBuilding = false;
         }
         if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
             setConcurrentBuild(concurrentBuild);
+            concurrentBuild = false;
         }
         if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
             setCleanWorkspaceRequired(cleanWorkspaceRequired);
+            cleanWorkspaceRequired = false;
         }
         if (null == getProperty(QUIET_PERIOD_PROPERTY_NAME)) {
             setQuietPeriod(quietPeriod);
+            quietPeriod = null;
         }
         if (null == getProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)) {
             setScmCheckoutRetryCount(scmCheckoutRetryCount);
+            scmCheckoutRetryCount = null;
         }
     }
 
@@ -617,8 +623,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     // ugly name because of EL
     public boolean getHasCustomQuietPeriod() {
-        return (hasCascadingProject() && getCascadingProject().getHasCustomQuietPeriod())
-            || (!hasCascadingProject() && quietPeriod!=null);
+        return null != getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -637,7 +642,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean hasCustomScmCheckoutRetryCount(){
-        return scmCheckoutRetryCount != null;
+        return null != getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).getValue();
     }
 
     @Override
