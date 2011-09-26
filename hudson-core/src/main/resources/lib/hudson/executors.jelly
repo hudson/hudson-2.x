@@ -33,7 +33,7 @@ THE SOFTWARE.
   </st:documentation>
   <d:taglib uri="local">
     <d:tag name="computerCaption">
-      <a href="${rootURL}/${c.url}">${title}</a><st:nbsp/>
+      <a href="${rootURL}/${c.url}" title="${c.node!=null? c.node.nodeDescription : ''}">${title}</a><st:nbsp/>
       <j:choose>
         <j:when test="${c.offline}">
           ${%offline}
