@@ -46,6 +46,8 @@ public class UtilTest extends TestCase {
         m.put("B","B");
         m.put("DOLLAR", "$");
         m.put("ENCLOSED", "a${A}");
+        m.put("a.b", "xyz");
+        m.put("a.b.c", "xyz");
 
         // longest match
         assertEquals("aa",Util.replaceMacro("$AA",m));
@@ -61,15 +63,21 @@ public class UtilTest extends TestCase {
         assertEquals("$", Util.replaceMacro("$$",m));
         assertEquals("$$", Util.replaceMacro("$$$$",m));
 
-        // test that . is a valid variable character
-        assertEquals("a.b", Util.replaceMacro("a.b", m));
-        assertEquals("ab", Util.replaceMacro("${A.B}", m));
-
         // test that more complex scenarios work
         assertEquals("/a/B/aa", Util.replaceMacro("/$A/$B/$AA",m));
         assertEquals("a-aa", Util.replaceMacro("$A-$AA",m));
         assertEquals("/a/foo/can/B/you-believe_aa~it?", Util.replaceMacro("/$A/foo/can/$B/you-believe_$AA~it?",m));
         assertEquals("$$aa$Ba${A}$it", Util.replaceMacro("$$$DOLLAR${AA}$$B${ENCLOSED}$it",m));
+
+        //Test complex case related to Hudson-8209.
+
+        // test that . is a valid variable character
+        assertEquals("a.b", Util.replaceMacro("a.b", m));
+        assertEquals("ab", Util.replaceMacro("${A.B}", m));
+        assertEquals("xyz.c", Util.replaceMacro("${a.b}.c",m));
+        assertEquals("xyz.d", Util.replaceMacro("${a.b.c}.d",m));
+        //Java can't determine where key ends. So, '.' can be used only as part of the key and when enclosed into {}
+        assertEquals("a.b.c.d", Util.replaceMacro("$A.b.c.d",m));
     }
 
 
