@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package org.hudsonci.model.project.property;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 
 /**
- * Represents boolean property.
+ * String property for project.
  * <p/>
  * Date: 9/22/11
  *
  * @author Nikita Levyankov
  */
-public class BooleanProjectProperty extends BaseProjectProperty<Boolean> {
+public class StringProjectProperty extends BaseProjectProperty<String> {
 
-    public BooleanProjectProperty(IJob job) {
+    public StringProjectProperty(IJob job) {
         super(job);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public Boolean getOriginalValue() {
-        Boolean originalValue = super.getOriginalValue();
-        return null != originalValue ? originalValue : getDefaultValue();
+    protected String prepareValue(String candidateValue) {
+        return StringUtils.trimToNull(candidateValue);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public Boolean getDefaultValue() {
-        return false;
+    protected boolean allowOverrideValue(String cascadingValue, String candidateValue) {
+        return !StringUtils.equalsIgnoreCase(cascadingValue, candidateValue);
     }
 }

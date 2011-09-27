@@ -84,6 +84,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
+import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.IntegerProjectProperty;
+import org.hudsonci.model.project.property.StringProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -1476,15 +1479,6 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 cascadingProjectName);
         }
         return cascadingProject;
-    }
-
-    /**
-     * For the unit tests only. Sets cascadingProject for the job.
-     *
-     * @param cascadingProject parent job
-     */
-    void setCascadingProject(JobT cascadingProject) {
-        this.cascadingProject = cascadingProject;
     }
 
     /**

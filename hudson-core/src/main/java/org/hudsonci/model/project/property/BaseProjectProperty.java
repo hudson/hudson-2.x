@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package hudson.model;
+package org.hudsonci.model.project.property;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.hudsonci.api.model.IJob;

@@ -26,22 +26,21 @@ package hudson.model;
 import com.thoughtworks.xstream.XStream;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
-import hudson.scm.RepositoryBrowser;
-import hudson.matrix.MatrixProject;
-import hudson.matrix.MatrixConfiguration;
 import hudson.XmlFile;
 import hudson.matrix.Axis;
 import hudson.matrix.MatrixConfiguration;
 import hudson.matrix.MatrixProject;
 import hudson.util.DescriptorList;
 import hudson.util.XStream2;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.IntegerProjectProperty;
+import org.hudsonci.model.project.property.StringProjectProperty;
 
 /**
  * Convenience methods related to {@link Item}.
@@ -142,5 +141,6 @@ public class Items {
         XSTREAM.alias("integer-property", IntegerProjectProperty.class);
         XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
         XSTREAM.alias("string-property", StringProjectProperty.class);
+        XSTREAM.aliasField("project-properties", Job.class, "jobProperties");
     }
 }
