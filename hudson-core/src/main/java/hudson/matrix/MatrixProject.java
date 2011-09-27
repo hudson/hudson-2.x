@@ -30,7 +30,6 @@ import hudson.Util;
 import hudson.XmlFile;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
-import hudson.model.BaseProjectProperty;
 import hudson.model.BuildableItemWithBuildWrappers;
 import hudson.model.DependencyGraph;
 import hudson.model.Descriptor;
@@ -44,7 +43,6 @@ import hudson.model.Job;
 import hudson.model.Label;
 import hudson.model.Queue.FlyweightTask;
 import hudson.model.Result;
-import hudson.model.ResultProjectProperty;
 import hudson.model.SCMedItem;
 import hudson.model.Saveable;
 import hudson.model.TopLevelItem;
@@ -92,17 +90,16 @@ import org.kohsuke.stapler.TokenList;
 public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> implements IMatrixProject, TopLevelItem,
     SCMedItem, ItemGroup<MatrixConfiguration>, Saveable, FlyweightTask, BuildableItemWithBuildWrappers {
 
-    protected static final String HAS_COMBINATION_FILTER_PARAM = "hasCombinationFilter";
-    protected static final String COMBINATION_FILTER_PARAM = "combinationFilter";
-    protected static final String HAS_TOUCH_STONE_COMBINATION_FILTER_PARAM = "hasTouchStoneCombinationFilter";
-    protected static final String TOUCH_STONE_COMBINATION_FILTER_PARAM = "touchStoneCombinationFilter";
-    protected static final String TOUCH_STONE_RESULT_CONDITION_PARAM = "touchStoneResultCondition";
-    protected static final String CUSTOM_WORKSPACE_PARAM = "customWorkspace";
-    protected static final String CUSTOM_WORKSPACE_DIRECTORY_PARAM = "customWorkspace.directory";
-    protected static final String RUN_SEQUENTIALLY_PROPERTY_NAME = "runSequentially";
-    protected static final String COMBINATION_FILTER_PROPERTY_NAME = "combinationFilter";
-    protected static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
-    protected static final String TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME = "touchStoneResultCondition";
+    public static final String HAS_COMBINATION_FILTER_PARAM = "hasCombinationFilter";
+    public static final String HAS_TOUCH_STONE_COMBINATION_FILTER_PARAM = "hasTouchStoneCombinationFilter";
+    public static final String TOUCH_STONE_COMBINATION_FILTER_PARAM = "touchStoneCombinationFilter";
+    public static final String TOUCH_STONE_RESULT_CONDITION_PARAM = "touchStoneResultCondition";
+    public static final String CUSTOM_WORKSPACE_PARAM = "customWorkspace";
+    public static final String CUSTOM_WORKSPACE_DIRECTORY_PARAM = "customWorkspace.directory";
+
+    public static final String RUN_SEQUENTIALLY_PROPERTY_NAME = "runSequentially";
+    public static final String COMBINATION_FILTER_PROPERTY_NAME = "combinationFilter";
+    public static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
 
     /**
      * Configuration axes.
@@ -163,7 +160,6 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * Required result on the touchstone combinations, in order to
      * continue with the rest
      *
-     * @deprecated as of 2.1.2, use #getTouchStoneResultCondition() and #setTouchStoneResultCondition() instead
      */
     private Result touchStoneResultCondition;
 
@@ -250,14 +246,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-        return getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).getValue();
+        return touchStoneResultCondition;
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).setValue(touchStoneResultCondition);
+        this.touchStoneResultCondition = touchStoneResultCondition;
     }
 
     /**
@@ -629,7 +625,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
 
         setCombinationFilter(
             req.getParameter(HAS_COMBINATION_FILTER_PARAM) != null ? Util.nullify(req.getParameter(
-                COMBINATION_FILTER_PARAM)) : null);
+                COMBINATION_FILTER_PROPERTY_NAME)) : null);
 
         if (req.getParameter(HAS_TOUCH_STONE_COMBINATION_FILTER_PARAM)!=null) {
             setTouchStoneCombinationFilter(Util.nullify(req.getParameter(TOUCH_STONE_COMBINATION_FILTER_PARAM)));
@@ -647,7 +643,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
         checkAxisNames(newAxes);
         this.axes = new AxisList(newAxes.toList());
 
-        runSequentially = json.has("runSequentially");
+        setRunSequentially(json.has(RUN_SEQUENTIALLY_PROPERTY_NAME));
 
         getBuildWrappersList().rebuild(req, json, BuildWrappers.getFor(this));
         getBuildersList().rebuildHetero(req, json, Builder.all(), "builder");
