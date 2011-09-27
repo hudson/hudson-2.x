@@ -89,4 +89,9 @@ public interface IProjectProperty<T> extends Serializable {
      */
     T getDefaultValue();
 
+    /**
+     * Resets value for given job. Default implementation sets Null value and resets propertyOverridden flag to false.
+     */
+    void resetValue();
+
 }

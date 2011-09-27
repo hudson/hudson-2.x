@@ -349,4 +349,20 @@ public class ProjectPropertyTest {
             fail("PropertyKey is valid");
         }
     }
+
+    /**
+     * Resets project property value,
+     */
+    @Test
+    public void testResetValue() {
+        BaseProjectProperty property = new BaseProjectProperty(project);
+        property.setKey(propertyKey);
+        property.setValue(new Object());
+        property.setPropertyOverridden(true);
+        assertNotNull(property.getOriginalValue());
+        assertTrue(property.isPropertyOverridden());
+        property.resetValue();
+        assertNull(property.getOriginalValue());
+        assertFalse(property.isPropertyOverridden());
+    }
 }
