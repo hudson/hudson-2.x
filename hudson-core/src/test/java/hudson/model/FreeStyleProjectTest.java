@@ -742,16 +742,4 @@ public class FreeStyleProjectTest {
         //Child value is not equals to parent - override value in child.
         assertEquals(childConcurrentBuild, childProject.isConcurrentBuild());
     }
-
-    private class FreeStyleProjectMock extends FreeStyleProject {
-
-        private FreeStyleProjectMock(String name) {
-            super((ItemGroup)null, name);
-            setAllowSave(false);
-        }
-
-        @Override
-        protected void updateTransientActions() {
-        }
-    }
 }
