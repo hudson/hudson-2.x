@@ -83,31 +83,6 @@
                     </execution>
                     
                     <execution>
-                        <id>unpackJavascript</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                  yui/build/**/*
-                            </includes>
-                            <artifactItems>
-                               
-                                <artifactItem>
-                                    <groupId>com.yahoo.platform.yui</groupId>
-                                    <artifactId>yui</artifactId>
-                                    <version>2.5.0</version>
-                                    <type>zip</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>target/javascripts</outputDirectory>             
-                                </artifactItem>
-             
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    
-                    <execution>
                         <id>unpackExecWar</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -274,29 +249,6 @@
                                 
                             </artifactItems>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>copy-javascripts</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/generated-resources/scripts/yui</outputDirectory>
-                            <resources>          
-                                <resource>
-                                    <directory>${basedir}/target/javascripts/yui/build</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>              
-                        </configuration>            
                     </execution>
                 </executions>
             </plugin>
