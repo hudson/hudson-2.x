@@ -55,8 +55,8 @@
     <maven-war-plugin.version>2.1.1</maven-war-plugin.version>
     <findbugs-maven-plugin.version>2.3.1</findbugs-maven-plugin.version>
     <maven-localizer-plugin.version>1.10</maven-localizer-plugin.version>
-    <maven-hpi-plugin.version>2.1.0</maven-hpi-plugin.version>
-    <maven-stapler-plugin.version>1.15</maven-stapler-plugin.version>
+    <maven-hpi-plugin.version>2.1.1</maven-hpi-plugin.version>
+    <maven-stapler-plugin.version>1.16</maven-stapler-plugin.version>
   </properties>
 
   <organization>
