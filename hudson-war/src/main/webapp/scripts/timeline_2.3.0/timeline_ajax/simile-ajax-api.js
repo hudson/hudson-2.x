@@ -1,11 +1,14 @@
 /*==================================================
  *  Simile Ajax API
+ *
+ *  Include this file in your HTML file as follows:
+ *
+ *    <script src="http://simile.mit.edu/ajax/api/simile-ajax-api.js" type="text/javascript"></script>
+ *
  *==================================================
  */
 
 if (typeof SimileAjax == "undefined") {
-    var isCompiled = ("SimileAjax_isCompiled" in window) && window.SimileAjax_isCompiled;
-
     var SimileAjax = {
         loaded:                 false,
         loadingScriptsCount:    0,
@@ -15,7 +18,7 @@ if (typeof SimileAjax == "undefined") {
     
     SimileAjax.Platform = new Object();
         /*
-            WORK AROUND: We need these 2 things here because we cannot simply append
+            HACK: We need these 2 things here because we cannot simply append
             a <script> element containing code that accesses SimileAjax.Platform
             to initialize it because IE executes that <script> code first
             before it loads ajax.js and platform.js.
@@ -138,14 +141,12 @@ if (typeof SimileAjax == "undefined") {
             var eq = param.indexOf("=");
             var name = decode(param.slice(0,eq));
             var old = parsed[name];
-            var replacement = decode(param.slice(eq+1));
-            
             if (typeof old == "undefined") {
                 old = [];
             } else if (!(old instanceof Array)) {
                 old = [old];
             }
-            parsed[name] = old.concat(replacement);
+            parsed[name] = old.concat(decode(param.slice(eq+1)));
         }
         for (var i in parsed) {
             if (!parsed.hasOwnProperty(i)) continue;
@@ -162,57 +163,50 @@ if (typeof SimileAjax == "undefined") {
         }
         return to;
     };
-    
-    if (!isCompiled) {
-        (function() {
-            var javascriptFiles = [
-                "platform.js",
-                "debug.js",
-                "xmlhttp.js",
-                "json.js",
-                "dom.js",
-                "graphics.js",
-                "date-time.js",
-                "string.js",
-                "html.js",
-                "data-structure.js",
-                "units.js",
-                
-                "ajax.js",
-                "history.js",
-                "window-manager.js",
-                "remoteLog.js"
-            ];
-            var cssFiles = [
-                "graphics.css"
-            ];
-            if (!("jQuery" in window) && !("$" in window)) {
-                javascriptFiles.unshift("jquery-1.4.2.min.js");
-            }
-            
-            if (typeof SimileAjax_urlPrefix == "string") {
-                SimileAjax.urlPrefix = SimileAjax_urlPrefix;
-            } else {
-                var url = SimileAjax.findScript(document, "simile-ajax-api.js");
-                if (url == null) {
-                    SimileAjax.error = new Error("Failed to derive URL prefix for Simile Ajax API code files");
-                    return;
-                }
 
-                SimileAjax.urlPrefix = url.substr(0, url.indexOf("simile-ajax-api.js"));
-                SimileAjax.parseURLParameters(url, SimileAjax.params, { bundle: Boolean });
+    (function() {
+        var javascriptFiles = [
+            "jquery-1.2.6.min.js",
+            "platform.js",
+            "debug.js",
+            "xmlhttp.js",
+            "json.js",
+            "dom.js",
+            "graphics.js",
+            "date-time.js",
+            "string.js",
+            "html.js",
+            "data-structure.js",
+            "units.js",
+            
+            "ajax.js",
+            "history.js",
+            "window-manager.js"
+        ];
+        var cssFiles = [
+            "graphics.css"
+        ];
+        
+        if (typeof SimileAjax_urlPrefix == "string") {
+            SimileAjax.urlPrefix = SimileAjax_urlPrefix;
+        } else {
+            var url = SimileAjax.findScript(document, "simile-ajax-api.js");
+            if (url == null) {
+                SimileAjax.error = new Error("Failed to derive URL prefix for Simile Ajax API code files");
+                return;
             }
 
-            if (!isCompiled) {
-                if (SimileAjax.params.bundle) {
-                    SimileAjax.includeJavascriptFiles(document, SimileAjax.urlPrefix, [ "simile-ajax-bundle.js" ]);
-                } else {
-                    SimileAjax.includeJavascriptFiles(document, SimileAjax.urlPrefix + "scripts/", javascriptFiles);
-                }
-                SimileAjax.includeCssFiles(document, SimileAjax.urlPrefix + "styles/", cssFiles);
-            }
-            
-            SimileAjax.loaded = true;
-        })();
-    }
+            SimileAjax.urlPrefix = url.substr(0, url.indexOf("simile-ajax-api.js"));
+        }
+
+        SimileAjax.parseURLParameters(url, SimileAjax.params, {bundle:Boolean});
+        if (SimileAjax.params.bundle) {
+            SimileAjax.includeJavascriptFiles(document, SimileAjax.urlPrefix, [ "simile-ajax-bundle.js" ]);
+        } else {
+            SimileAjax.includeJavascriptFiles(document, SimileAjax.urlPrefix + "scripts/", javascriptFiles);
+        }
+        SimileAjax.includeCssFiles(document, SimileAjax.urlPrefix + "styles/", cssFiles);
+        
+        SimileAjax.loaded = true;
+    })();
 }
