@@ -27,7 +27,7 @@ THE SOFTWARE.
   <j:set var="customWorkspaceProperty" value="${it.getStringProperty(it.CUSTOM_WORKSPACE_PROPERTY_NAME)}"/>
   <j:set var="customWorkspace" value="${customWorkspaceProperty.getValue()}"/>
   <f:optionalBlock name="customWorkspace" title="${%Use custom workspace}" checked="${customWorkspace!=null}"
-                   isCascadingValue="${customWorkspaceProperty.isPropertyOverridden()}"
+                   isPropertyOverridden="${customWorkspaceProperty.isPropertyOverridden()}"
                    help="/help/project-config/custom-workspace.html">
       <f:entry title="${%Directory}">
         <f:textbox name="customWorkspace.directory" value="${customWorkspace}" />

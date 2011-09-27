@@ -1009,6 +1009,17 @@ div.deleteSlaveDialog h4 {
     color: #F89938;
 }
 /* ======================== "Cascading project" ==========================*/
-tr.optional-block-start > td.modified {
+/* --- Optional Block, Entry Block --- */
+tr.optional-block-start > td.modified,
+tr.modified > td.setting-name, tr.modified > td.setting-main, tr.modified > td.setting-leftspace {
     background-color: #FFE8C9;
+}
+
+/* ======================= Job Configuration table ========================== */
+table.configure {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+table.configure > td {
+    padding: 0px;
 }

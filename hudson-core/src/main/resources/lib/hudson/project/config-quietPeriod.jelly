@@ -28,7 +28,7 @@ THE SOFTWARE.
   <j:set var="quietPeriod" value="${quietPeriodProperty.getValue()}"/>
   <f:optionalBlock name="hasCustomQuietPeriod" title="${%Quiet period}"
                    checked="${quietPeriod!=null and quietPeriod!=quietPeriodProperty.getDefaultValue()}"
-                   isCascadingValue="${quietPeriodProperty.isPropertyOverridden()}"
+                   isPropertyOverridden="${quietPeriodProperty.isPropertyOverridden()}"
                    help="/help/project-config/quietPeriod.html">
     <f:entry title="${%Quiet period}"
       description="${%Number of seconds}">

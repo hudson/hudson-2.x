@@ -28,6 +28,6 @@ THE SOFTWARE.
   <j:set var="cleanWorkspaceRequired" value="${cleanWorkspaceRequiredProperty.getValue()}"/>
   <f:optionalBlock name="cleanWorkspaceRequired" title="${%Clean workspace before build}"
                    checked="${cleanWorkspaceRequired}"
-                   isCascadingValue="${cleanWorkspaceRequiredProperty.isPropertyOverridden()}"
+                   isPropertyOverridden="${cleanWorkspaceRequiredProperty.isPropertyOverridden()}"
                    help="/help/project-config/cleanWorkspace.html" />
 </j:jelly>

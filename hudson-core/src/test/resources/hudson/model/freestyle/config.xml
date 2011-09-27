@@ -31,6 +31,7 @@
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
+  <jdk>jdk1.5</jdk>
   <buildWrappers/>
   <customWorkspace>/tmp</customWorkspace>
 </project>
