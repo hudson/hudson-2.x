@@ -24,6 +24,8 @@
 package hudson.model;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -43,6 +45,12 @@ import static junit.framework.Assert.assertNull;
 @PrepareForTest({Hudson.class})
 public class LegacyProjectTest {
 
+    private File config;
+    @Before
+    public void setUp() throws URISyntaxException {
+        config = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
+    }
+
     /**
      * Tests unmarshalls FreeStyleProject configuration and checks whether properties are configured based
      * on legacy values,
@@ -51,8 +59,7 @@ public class LegacyProjectTest {
      */
     @Test
     public void testLoadLegacyFreeStyleProject() throws Exception {
-        File freeStyleProjectConfig = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
-        FreeStyleProject project = (FreeStyleProject) Items.getConfigFile(freeStyleProjectConfig).read();
+        FreeStyleProject project = (FreeStyleProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
         //Checks customWorkspace value
@@ -69,8 +76,7 @@ public class LegacyProjectTest {
      */
     @Test
     public void testLoadLegacyAbstractProject() throws Exception {
-        File freeStyleProjectConfig = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
-        AbstractProject project = (AbstractProject) Items.getConfigFile(freeStyleProjectConfig).read();
+        AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
         assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
@@ -88,5 +94,21 @@ public class LegacyProjectTest {
         assertNotNull(project.getProperty(AbstractProject.QUIET_PERIOD_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME));
         assertNotNull(project.getProperty(AbstractProject.JDK_PROPERTY_NAME));
+    }
+
+    /**
+     * Tests unmarshalls FreeStyleProject configuration and checks whether properties
+     * from Job are configured
+     *
+     * @throws Exception if any.
+     */
+    @Test
+    public void testLoadLegacyJob() throws Exception {
+        Job project = (Job) Items.getConfigFile(config).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        assertNull(project.getProperty(Job.LOG_ROTATOR_PROPERTY_NAME));
+        project.buildProjectProperties();
+        assertNotNull(project.getProperty(Job.LOG_ROTATOR_PROPERTY_NAME));
     }
 }
