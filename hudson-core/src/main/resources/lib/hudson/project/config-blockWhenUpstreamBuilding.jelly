@@ -31,5 +31,5 @@ THE SOFTWARE.
 		   title="${%Block build when upstream project is building}"
 		   help="/help/project-config/block-upstream-building.html"
 		   checked="${blockBuildWhenUpstreamBuilding}"
-       isPropertyOverridden="${blockBuildWhenUpstreamBuildingProperty.isPropertyOverridden()}"/>
+       isPropertyOverridden="${blockBuildWhenUpstreamBuildingProperty.isOverridden()}"/>
 </j:jelly>

@@ -108,6 +108,7 @@ THE SOFTWARE.
     <!--l:yui module="editor" suffix="-beta" /-->
 
     <script src="${resURL}/scripts/hudson-behavior.js" type="text/javascript"></script>
+    <script src="${resURL}/scripts/cascading.js" type="text/javascript"></script>
 
     <script>
         crumb.init("${h.getCrumbRequestField()}", "${h.getCrumb(request)}");

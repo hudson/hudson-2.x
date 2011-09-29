@@ -78,11 +78,9 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     }
 
     /**
-     * Sets the overridden flag.
-     *
-     * @param overridden true - mark property as overridden, false - otherwise.
+     * {@inheritDoc}
      */
-    final void setPropertyOverridden(boolean overridden) {
+    public final void setOverridden(boolean overridden) {
         propertyOverridden = overridden;
     }
 
@@ -101,7 +99,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     /**
      * {@inheritDoc}
      */
-    public boolean isPropertyOverridden() {
+    public boolean isOverridden() {
         return propertyOverridden;
     }
 
@@ -116,7 +114,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      * {@inheritDoc}
      */
     public T getValue() {
-        if (isPropertyOverridden() || null != originalValue) {
+        if (isOverridden() || null != originalValue) {
             return getOriginalValue();
         }
         return getCascadingValue();
@@ -133,12 +131,15 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
         value = prepareValue(value);
         if (!getJob().hasCascadingProject()) {
             originalValue = value;
-        } else if (allowOverrideValue(
-            (T) getJob().getCascadingProject().getProperty(propertyKey, this.getClass()).getValue(), value)) {
-            originalValue = value;
-            setPropertyOverridden(true);
         } else {
-            resetValue();
+            T cascadingValue = (T) getJob().getCascadingProject().getProperty(propertyKey, this.getClass()).getValue();
+            T candidateValue = null == value ? getDefaultValue() : value;
+            if (allowOverrideValue(cascadingValue, candidateValue)) {
+                originalValue = value;
+                setOverridden(true);
+            } else {
+                resetValue();
+            }
         }
     }
 
@@ -147,7 +148,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     public void resetValue() {
         this.originalValue = null;
-        setPropertyOverridden(false);
+        setOverridden(false);
     }
 
     /**

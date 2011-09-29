@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov, id:cactusman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ THE SOFTWARE.
   <j:set var="quietPeriod" value="${quietPeriodProperty.getValue()}"/>
   <f:optionalBlock name="hasCustomQuietPeriod" title="${%Quiet period}"
                    checked="${quietPeriod!=null and quietPeriod!=quietPeriodProperty.getDefaultValue()}"
-                   isPropertyOverridden="${quietPeriodProperty.isPropertyOverridden()}"
+                   isPropertyOverridden="${quietPeriodProperty.isOverridden()}"
                    help="/help/project-config/quietPeriod.html">
     <f:entry title="${%Quiet period}"
       description="${%Number of seconds}">

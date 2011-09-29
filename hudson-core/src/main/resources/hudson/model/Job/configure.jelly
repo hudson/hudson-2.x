@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov, id:cactusman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,6 @@ THE SOFTWARE.
                 </j:if>
               </j:forEach>
             </select>
-            <!--<f:textbox name="cascadingProjectName" value="${it.cascadingProjectName}"/>-->
           </f:entry>
         </j:if>
         <f:entry title="${%Description}" help="/help/project-config/description.html">

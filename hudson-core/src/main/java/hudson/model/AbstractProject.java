@@ -102,6 +102,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
+import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -1900,6 +1901,14 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             return new HttpRedirect(".");
         }else{
             return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
+        }
+    }
+
+    public void doResetProjectProperty(@QueryParameter final String propertyName) {
+        checkPermission(CONFIGURE);
+        final IProjectProperty property = getProperty(propertyName);
+        if (null != property) {
+            property.resetValue();
         }
     }
 

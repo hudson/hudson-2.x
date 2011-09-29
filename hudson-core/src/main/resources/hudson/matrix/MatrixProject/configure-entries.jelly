@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Stephen Connolly
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Stephen Connolly, Nikita Levyankov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,13 +64,13 @@ THE SOFTWARE.
             checked="${runSequentially}"
             field="runSequentially"
             title="${%Run each configuration sequentially}"
-            isPropertyOverridden="${runSequentiallyProperty.isPropertyOverridden()}"/>
+            isPropertyOverridden="${runSequentiallyProperty.isOverridden()}"/>
 
     <j:set var="combinationFilterProperty" value="${it.getStringProperty(it.COMBINATION_FILTER_PROPERTY_NAME)}"/>
     <j:set var="combinationFilter" value="${combinationFilterProperty.getValue()}"/>
     <f:optionalBlock name="hasCombinationFilter" title="${%Combination Filter}"
                      checked="${!empty(combinationFilter)}"
-                     isPropertyOverridden="${combinationFilterProperty.isPropertyOverridden()}"
+                     isPropertyOverridden="${combinationFilterProperty.isOverridden()}"
                      help="/help/matrix/combinationfilter.html">
 	    <f:entry title="${%Filter}">
 	      <f:textbox name="combinationFilter" value="${combinationFilter}" />
@@ -81,7 +81,7 @@ THE SOFTWARE.
     <j:set var="touchStoneCombinationFilter" value="${touchStoneCombinationFilterProperty.getValue()}"/>
     <f:optionalBlock name="hasTouchStoneCombinationFilter" title="${%Execute touchstone builds first}"
                      checked="${!empty(touchStoneCombinationFilter)}"
-                     isPropertyOverridden="${touchStoneCombinationFilterProperty.isPropertyOverridden()}"
+                     isPropertyOverridden="${touchStoneCombinationFilterProperty.isOverridden()}"
                      help="/help/matrix/touchstone.html">
         <f:entry title="${%Filter}">
           <f:textbox name="touchStoneCombinationFilter" value="${touchStoneCombinationFilter}" />
