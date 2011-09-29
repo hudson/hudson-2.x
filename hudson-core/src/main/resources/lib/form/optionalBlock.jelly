@@ -52,6 +52,9 @@ THE SOFTWARE.
     <st:attribute name="inline">
       if present, the foldable section will not be grouped into a separate JSON object upon submission
     </st:attribute>
+    <st:attribute name="resetUrl">
+      If present, Redo icon will rendered and Reset will be available.
+    </st:attribute>
     <st:attribute name="isPropertyOverridden">
       if present and true - value is overridden
     </st:attribute>
@@ -70,6 +73,13 @@ THE SOFTWARE.
       <f:checkbox name="${attrs.name}" onclick="javascript:updateOptionalBlock(this,true)"
                   negative="${attrs.negative}" checked="${attrs.checked}" field="${attrs.field}" title="${title}" />
     </td>
+    <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
+      <td>
+        <a href="#" class="reset-button" resetURL="${resetUrl}">
+          <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}" />
+        </a>
+      </td>
+    </j:if>
     <j:if test="${attrs.help!=null}">
       <td>
         <a href="#" class="help-button" helpURL="${rootURL}${attrs.help}"><img src="${imagesURL}/16x16/help.gif" alt="Help for feature: ${title}" /></a>

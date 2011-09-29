@@ -31,5 +31,6 @@ THE SOFTWARE.
 		   title="${%Block build when downstream project is building}"
 		   help="/help/project-config/block-downstream-building.html"
 		   checked="${blockBuildWhenDownstreamBuilding}"
+       resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME}"
        isPropertyOverridden="${blockBuildWhenDownstreamBuildingProperty.isOverridden()}"/>
 </j:jelly>

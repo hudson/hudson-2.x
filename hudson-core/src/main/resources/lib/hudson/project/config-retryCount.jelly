@@ -29,6 +29,7 @@ THE SOFTWARE.
   <f:optionalBlock name="hasCustomScmCheckoutRetryCount" title="${%Retry Count}"
                    checked="${scmCheckoutRetryCount!=null and scmCheckoutRetryCount!=scmCheckoutRetryCountProperty.getDefaultValue()}"
                    isPropertyOverridden="${scmCheckoutRetryCountProperty.isOverridden()}"
+                   resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME}"
                    help="/help/project-config/scmCheckoutRetryCount.html">
     <f:entry title="${%SCM checkout retry count}">
       <f:textbox name="scmCheckoutRetryCount" value="${scmCheckoutRetryCount}"/>

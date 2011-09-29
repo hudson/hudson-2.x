@@ -28,6 +28,7 @@ THE SOFTWARE.
   <j:set var="cleanWorkspaceRequired" value="${cleanWorkspaceRequiredProperty.getValue()}"/>
   <f:optionalBlock name="cleanWorkspaceRequired" title="${%Clean workspace before build}"
                    checked="${cleanWorkspaceRequired}"
+                   resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME}"
                    isPropertyOverridden="${cleanWorkspaceRequiredProperty.isOverridden()}"
                    help="/help/project-config/cleanWorkspace.html" />
 </j:jelly>

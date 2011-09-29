@@ -29,6 +29,7 @@ THE SOFTWARE.
   <f:optionalBlock name="hasCustomQuietPeriod" title="${%Quiet period}"
                    checked="${quietPeriod!=null and quietPeriod!=quietPeriodProperty.getDefaultValue()}"
                    isPropertyOverridden="${quietPeriodProperty.isOverridden()}"
+                   resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.QUIET_PERIOD_PROPERTY_NAME}"
                    help="/help/project-config/quietPeriod.html">
     <f:entry title="${%Quiet period}"
       description="${%Number of seconds}">
