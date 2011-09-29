@@ -39,9 +39,20 @@ THE SOFTWARE.
             <f:textbox name="name" value="${it.name}" />
           </f:entry>
         </j:if>
-        <f:entry title="${%cascadingProjectName}">
-           <f:textbox name="cascadingProjectName" value="${it.cascadingProjectName}" />
-        </f:entry>
+        <j:set var="cascadingCandidates" value="${app.getAllItems(it.class)}"/>
+        <j:if test="${cascadingCandidates.size() gt 1}">
+          <f:entry title="${%cascadingProjectName}">
+            <select class="setting-input" name="cascadingProjectName">
+              <f:option/>
+              <j:forEach var="job" items="${cascadingCandidates}">
+                <j:if test="${job.name != it.name}">
+                  <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
+                </j:if>
+              </j:forEach>
+            </select>
+            <!--<f:textbox name="cascadingProjectName" value="${it.cascadingProjectName}"/>-->
+          </f:entry>
+        </j:if>
         <f:entry title="${%Description}" help="/help/project-config/description.html">
           <f:textarea name="description" value="${it.description}"/>
         </f:entry>
