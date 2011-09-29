@@ -160,7 +160,7 @@ THE SOFTWARE.
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="ssh-slaves" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.1.0_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.1.1_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
               </tasks>
             </configuration>
           </execution>
