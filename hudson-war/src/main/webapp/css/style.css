@@ -1011,7 +1011,7 @@ div.deleteSlaveDialog h4 {
 /* ======================== "Cascading project" ==========================*/
 /* --- Optional Block, Entry Block --- */
 tr.optional-block-start > td.modified,
-tr.modified > td.setting-name, tr.modified > td.setting-main, tr.modified > td.setting-leftspace {
+tr.modified > td.setting-name, tr.modified > td.setting-main, tr.modified > td.setting-leftspace, td.modified {
     background-color: #FFE8C9;
 }
 
