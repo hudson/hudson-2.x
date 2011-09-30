@@ -48,7 +48,7 @@ jQuery(document).ready(function(){
             method : 'get',
             onSuccess : function(x) {
                 location.reload(true);
-            },
+            }
         });
    });
 });
