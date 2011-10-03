@@ -44,7 +44,7 @@ public class SubClassGenerator extends ClassLoader {
     }
 
     public <T> Class<? extends T> generate(Class<T> base, String name) {
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);//?
+        ClassWriter cw = new ClassWriter(false, false);//?
         cw.visit(49, ACC_PUBLIC, name.replace('.', '/'), null,
                 Type.getInternalName(base),null);
 
