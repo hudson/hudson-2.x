@@ -232,6 +232,57 @@ public class MatrixProjectTest {
     }
 
     @Test
+    public void testGetTouchStoneResultConditionParentValue() throws IOException {
+        Result parentResultCondition = Result.SUCCESS;
+        MatrixProject parentProject = new MatrixProjectMock("parent");
+        parentProject.setTouchStoneResultCondition(parentResultCondition);
+
+        MatrixProject childProject1 = new MatrixProjectMock("child1");
+        childProject1.setCascadingProject(parentProject);
+        assertEquals(childProject1.getTouchStoneResultCondition(), parentResultCondition);
+    }
+
+    @Test
+    public void testSetTouchStoneResultConditionDifferentValues() throws IOException {
+        Result parentResultCondition = Result.SUCCESS;
+        Result childResultCondition = Result.FAILURE;
+        MatrixProject parentProject = new MatrixProjectMock("parent");
+        parentProject.setTouchStoneResultCondition(parentResultCondition);
+
+        MatrixProject childProject1 = new MatrixProjectMock("child1");
+        childProject1.setCascadingProject(parentProject);
+        childProject1.setTouchStoneResultCondition(childResultCondition);
+        assertEquals(childProject1.getTouchStoneResultCondition(), childResultCondition);
+    }
+
+    @Test
+    public void testSetTouchStoneResultConditionTheSameValues() throws IOException {
+        Result parentResultCondition = Result.SUCCESS;
+        MatrixProject parentProject = new MatrixProjectMock("parent");
+        parentProject.setTouchStoneResultCondition(parentResultCondition);
+
+        MatrixProject childProject1 = new MatrixProjectMock("child1");
+        childProject1.setCascadingProject(parentProject);
+        childProject1.setTouchStoneResultCondition(parentResultCondition);
+        assertEquals(childProject1.getTouchStoneResultCondition(), parentResultCondition);
+    }
+
+    @Test
+    public void testSetTouchStoneResultConditionParentNull() throws IOException {
+        Result childResultCondition = Result.FAILURE;
+
+        MatrixProject childProject1 = new MatrixProjectMock("child1");
+        childProject1.setTouchStoneResultCondition(childResultCondition);
+        assertEquals(childProject1.getTouchStoneResultCondition(), childResultCondition);
+    }
+
+    @Test
+    public void testSetTouchStoneResultConditionNull() throws IOException {
+        MatrixProject childProject1 = new MatrixProjectMock("child1");
+        assertNull(childProject1.getTouchStoneResultCondition());
+    }
+
+    @Test
     public void testGetCustomWorkspaceChildValue() throws IOException {
         String parentWorkspace = "/tmp";
         String childWorkspace = "/tmp2";

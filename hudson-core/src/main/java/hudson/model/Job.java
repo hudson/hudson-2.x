@@ -87,6 +87,7 @@ import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
+import org.hudsonci.model.project.property.ResultProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -256,6 +257,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public StringProjectProperty getStringProperty(String key) {
         return (StringProjectProperty) getProperty(key, StringProjectProperty.class);
+    }
+
+    public ResultProjectProperty getResultProperty(String key) {
+        return (ResultProjectProperty) getProperty(key, ResultProjectProperty.class);
     }
 
     public BooleanProjectProperty getBooleanProperty(String key) {

@@ -96,10 +96,10 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     public static final String TOUCH_STONE_RESULT_CONDITION_PARAM = "touchStoneResultCondition";
     public static final String CUSTOM_WORKSPACE_PARAM = "customWorkspace";
     public static final String CUSTOM_WORKSPACE_DIRECTORY_PARAM = "customWorkspace.directory";
-
     public static final String RUN_SEQUENTIALLY_PROPERTY_NAME = "runSequentially";
     public static final String COMBINATION_FILTER_PROPERTY_NAME = "combinationFilter";
     public static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
+    public static final String TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME = "touchStoneResultCondition";
 
     /**
      * Configuration axes.
@@ -160,6 +160,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * Required result on the touchstone combinations, in order to
      * continue with the rest
      *
+     * @deprecated as of 2.1.2, use #getTouchStoneResultCondition() and #setTouchStoneResultCondition() instead
      */
     private Result touchStoneResultCondition;
 
@@ -246,14 +247,14 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-        return touchStoneResultCondition;
+        return getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        this.touchStoneResultCondition = touchStoneResultCondition;
+        getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).setValue(touchStoneResultCondition);
     }
 
     /**
