@@ -29,6 +29,7 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
 
   <p:config-disableBuild/>
+  <j:set var="jobUrl" value="${h.getNearestAncestorUrl(request,it)}"/>
 
   <f:section title="${%Advanced Project Options}">
     <f:advanced>
@@ -64,6 +65,7 @@ THE SOFTWARE.
             checked="${runSequentially}"
             field="runSequentially"
             title="${%Run each configuration sequentially}"
+            resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.RUN_SEQUENTIALLY_PROPERTY_NAME}"
             isPropertyOverridden="${runSequentiallyProperty.isOverridden()}"/>
 
     <j:set var="combinationFilterProperty" value="${it.getStringProperty(it.COMBINATION_FILTER_PROPERTY_NAME)}"/>
@@ -71,6 +73,7 @@ THE SOFTWARE.
     <f:optionalBlock name="hasCombinationFilter" title="${%Combination Filter}"
                      checked="${!empty(combinationFilter)}"
                      isPropertyOverridden="${combinationFilterProperty.isOverridden()}"
+                     resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.COMBINATION_FILTER_PROPERTY_NAME}"
                      help="/help/matrix/combinationfilter.html">
 	    <f:entry title="${%Filter}">
 	      <f:textbox name="combinationFilter" value="${combinationFilter}" />
@@ -79,17 +82,21 @@ THE SOFTWARE.
 
     <j:set var="touchStoneCombinationFilterProperty" value="${it.getStringProperty(it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME)}"/>
     <j:set var="touchStoneCombinationFilter" value="${touchStoneCombinationFilterProperty.getValue()}"/>
+    <j:set var="touchStoneResultConditionProperty" value="${it.getResultProperty(it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME)}"/>
+    <j:set var="touchStoneResultCondition" value="${touchStoneResultConditionProperty.getValue()}"/>
+
     <f:optionalBlock name="hasTouchStoneCombinationFilter" title="${%Execute touchstone builds first}"
                      checked="${!empty(touchStoneCombinationFilter)}"
-                     isPropertyOverridden="${touchStoneCombinationFilterProperty.isOverridden()}"
+                     isPropertyOverridden="${touchStoneCombinationFilterProperty.isOverridden() || touchStoneResultConditionProperty.isOverridden()}"
+                     resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME}"
                      help="/help/matrix/touchstone.html">
         <f:entry title="${%Filter}">
           <f:textbox name="touchStoneCombinationFilter" value="${touchStoneCombinationFilter}" />
         </f:entry>
         <f:entry title="${%Required result}" description="${%required.result.description}">
             <select name="touchStoneResultCondition">
-                <f:option value="SUCCESS" selected='${it.touchStoneResultCondition.toExportedObject()=="SUCCESS"}'>${%Stable}</f:option>
-                <f:option value="UNSTABLE" selected='${it.touchStoneResultCondition.toExportedObject()=="UNSTABLE"}'>${%Unstable}</f:option>
+                <f:option value="SUCCESS" selected='${touchStoneResultCondition.toExportedObject()=="SUCCESS"}'>${%Stable}</f:option>
+                <f:option value="UNSTABLE" selected='${touchStoneResultCondition.toExportedObject()=="UNSTABLE"}'>${%Unstable}</f:option>
             </select>
          </f:entry>
     </f:optionalBlock>
