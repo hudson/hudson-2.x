@@ -51,6 +51,9 @@ THE SOFTWARE.
       For each item, add a caption from descriptor.getDisplayName().
       This also activates drag&amp;drop (where the header is a grip), and help text support.
     </st:attribute>
+    <st:attribute name="isPropertyOverridden">
+      if present and true - value is overridden
+    </st:attribute>
   </st:documentation>
   <d:taglib uri="local">
     <d:tag name="body">
@@ -88,9 +91,11 @@ THE SOFTWARE.
       <input type="hidden" name="kind" value="${descriptor.class.name}" />
     </d:tag>
   </d:taglib>
-
+   <j:if test="${attrs.isPropertyOverridden==null}">
+    <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
+  </j:if>
   <j:set var="targetType" value="${attrs.targetType?:it.class}"/>
-  <div class="hetero-list-container${hasHeader?' with-drag-drop':''}">
+  <div class="hetero-list-container${hasHeader?' with-drag-drop':''}${attrs.isPropertyOverridden? ' modified' :''}">
     <!-- display existing items -->
     <j:forEach var="i" items="${attrs.items}">
       <j:set var="descriptor" value="${i.descriptor}" />
