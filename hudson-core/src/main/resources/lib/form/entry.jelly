@@ -86,7 +86,7 @@ THE SOFTWARE.
   <!-- used to display the form validation error -->
   <tr class="validation-error-area"><td colspan="2" /><td /></tr>
   <j:if test="${!empty(attrs.description)}">
-    <f:description>
+    <f:description isPropertyOverridden="${attrs.isPropertyOverridden}">
       ${description}
     </f:description>
   </j:if>

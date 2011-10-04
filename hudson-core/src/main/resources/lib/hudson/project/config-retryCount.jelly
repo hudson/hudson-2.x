@@ -31,7 +31,7 @@ THE SOFTWARE.
                    isPropertyOverridden="${scmCheckoutRetryCountProperty.isOverridden()}"
                    resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME}"
                    help="/help/project-config/scmCheckoutRetryCount.html">
-    <f:entry title="${%SCM checkout retry count}">
+    <f:entry title="${%SCM checkout retry count}" isPropertyOverridden="${scmCheckoutRetryCountProperty.isOverridden()}">
       <f:textbox name="scmCheckoutRetryCount" value="${scmCheckoutRetryCount}"/>
     </f:entry>
   </f:optionalBlock>

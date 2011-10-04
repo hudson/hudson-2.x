@@ -30,7 +30,7 @@ THE SOFTWARE.
                    isPropertyOverridden="${customWorkspaceProperty.isOverridden()}"
                    resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.CUSTOM_WORKSPACE_PROPERTY_NAME}"
                    help="/help/project-config/custom-workspace.html">
-      <f:entry title="${%Directory}">
+      <f:entry title="${%Directory}" isPropertyOverridden="${customWorkspaceProperty.isOverridden()}">
         <f:textbox name="customWorkspace.directory" value="${customWorkspace}" />
       </f:entry>
   </f:optionalBlock>

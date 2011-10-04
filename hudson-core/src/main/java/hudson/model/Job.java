@@ -270,6 +270,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         return (IntegerProjectProperty) getProperty(key, IntegerProjectProperty.class);
     }
 
+    public LogRotatorProjectProperty getLogRotatorProjectProperty(String key) {
+        return (LogRotatorProjectProperty) getProperty(key, LogRotatorProjectProperty.class);
+    }
+
     @Override
     public synchronized void save() throws IOException {
         if (null == allowSave) {

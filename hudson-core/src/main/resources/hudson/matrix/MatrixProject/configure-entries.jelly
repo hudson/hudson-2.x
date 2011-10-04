@@ -75,7 +75,7 @@ THE SOFTWARE.
                      isPropertyOverridden="${combinationFilterProperty.isOverridden()}"
                      resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.COMBINATION_FILTER_PROPERTY_NAME}"
                      help="/help/matrix/combinationfilter.html">
-	    <f:entry title="${%Filter}">
+	    <f:entry title="${%Filter}" isPropertyOverridden="${combinationFilterProperty.isOverridden()}">
 	      <f:textbox name="combinationFilter" value="${combinationFilter}" />
 	    </f:entry>
     </f:optionalBlock>
@@ -85,16 +85,20 @@ THE SOFTWARE.
     <j:set var="touchStoneResultConditionProperty" value="${it.getResultProperty(it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME)}"/>
     <j:set var="touchStoneResultCondition" value="${touchStoneResultConditionProperty.getValue()}"/>
 
+    <j:set var="isTouchStoneCombinationFilterOverridden" value="${touchStoneCombinationFilterProperty.isOverridden() ||
+    touchStoneResultConditionProperty.isOverridden()}"/>
+
     <f:optionalBlock name="hasTouchStoneCombinationFilter" title="${%Execute touchstone builds first}"
                      checked="${!empty(touchStoneCombinationFilter)}"
-                     isPropertyOverridden="${touchStoneCombinationFilterProperty.isOverridden() || touchStoneResultConditionProperty.isOverridden()}"
+                     isPropertyOverridden="${isTouchStoneCombinationFilterOverridden}"
                      resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME +
                      it.PROPERTY_NAME_SEPARATOR + it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME}"
                      help="/help/matrix/touchstone.html">
-        <f:entry title="${%Filter}">
+        <f:entry title="${%Filter}" isPropertyOverridden="${isTouchStoneCombinationFilterOverridden}">
           <f:textbox name="touchStoneCombinationFilter" value="${touchStoneCombinationFilter}" />
         </f:entry>
-        <f:entry title="${%Required result}" description="${%required.result.description}">
+        <f:entry title="${%Required result}" description="${%required.result.description}"
+                 isPropertyOverridden="${isTouchStoneCombinationFilterOverridden}">
             <select name="touchStoneResultCondition">
                 <f:option value="SUCCESS" selected='${touchStoneResultCondition.toExportedObject()=="SUCCESS"}'>${%Stable}</f:option>
                 <f:option value="UNSTABLE" selected='${touchStoneResultCondition.toExportedObject()=="UNSTABLE"}'>${%Unstable}</f:option>

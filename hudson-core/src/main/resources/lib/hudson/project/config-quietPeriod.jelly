@@ -32,7 +32,7 @@ THE SOFTWARE.
                    resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.QUIET_PERIOD_PROPERTY_NAME}"
                    help="/help/project-config/quietPeriod.html">
     <f:entry title="${%Quiet period}"
-      description="${%Number of seconds}">
+      description="${%Number of seconds}" isPropertyOverridden="${quietPeriodProperty.isOverridden()}">
       <f:textbox clazz="number" name="quiet_period" value="${quietPeriod}"/>
     </f:entry>
   </f:optionalBlock>
