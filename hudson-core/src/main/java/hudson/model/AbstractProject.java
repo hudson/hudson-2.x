@@ -137,6 +137,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "scmCheckoutRetryCount";
     public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
     public static final String JDK_PROPERTY_NAME = "jdk";
+    public static final String PROPERTY_NAME_SEPARATOR = ";";
 
     /**
      * {@link SCM} associated with the project.
@@ -1904,12 +1905,22 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         }
     }
 
-    public void doResetProjectProperty(@QueryParameter final String propertyName) {
+    /**
+     * Resets overridden properties to the values defined in parent.
+     *
+     * @param propertyName the name of the properties. It possible to pass several names
+     * separated with {@link #PROPERTY_NAME_SEPARATOR}.
+     * @throws java.io.IOException exception.
+     */
+    public void doResetProjectProperty(@QueryParameter final String propertyName) throws IOException {
         checkPermission(CONFIGURE);
-        final IProjectProperty property = getProperty(propertyName);
-        if (null != property) {
-            property.resetValue();
+        for (String name : StringUtils.split(propertyName, PROPERTY_NAME_SEPARATOR)) {
+            final IProjectProperty property = getProperty(name);
+            if (null != property) {
+                property.resetValue();
+            }
         }
+        save();
     }
 
     public boolean cleanWorkspace() throws IOException, InterruptedException{

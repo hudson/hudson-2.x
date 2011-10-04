@@ -88,7 +88,8 @@ THE SOFTWARE.
     <f:optionalBlock name="hasTouchStoneCombinationFilter" title="${%Execute touchstone builds first}"
                      checked="${!empty(touchStoneCombinationFilter)}"
                      isPropertyOverridden="${touchStoneCombinationFilterProperty.isOverridden() || touchStoneResultConditionProperty.isOverridden()}"
-                     resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME}"
+                     resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME +
+                     it.PROPERTY_NAME_SEPARATOR + it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME}"
                      help="/help/matrix/touchstone.html">
         <f:entry title="${%Filter}">
           <f:textbox name="touchStoneCombinationFilter" value="${touchStoneCombinationFilter}" />
