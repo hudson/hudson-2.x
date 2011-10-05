@@ -55,19 +55,11 @@ public class Shell extends CommandInterpreter {
     private static String fixCrLf(String s) {
         // eliminate CR
         int idx;
-        while((idx=s.indexOf("\r\n"))!=-1)
-            s = s.substring(0,idx)+s.substring(idx+1);
-
-        //// add CR back if this is for Windows
-        //if(isWindows()) {
-        //    idx=0;
-        //    while(true) {
-        //        idx = s.indexOf('\n',idx);
-        //        if(idx==-1) break;
-        //        s = s.substring(0,idx)+'\r'+s.substring(idx);
-        //        idx+=2;
-        //    }
-        //}
+        if (null != s) { //avoid potential NullPointerException if command is null.
+            while ((idx = s.indexOf("\r\n")) != -1) {
+                s = s.substring(0, idx) + s.substring(idx + 1);
+            }
+        }
         return s;
     }
 

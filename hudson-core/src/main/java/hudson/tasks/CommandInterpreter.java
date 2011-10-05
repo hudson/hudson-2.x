@@ -33,6 +33,7 @@ import hudson.model.TaskListener;
 
 import java.io.IOException;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Common part between {@link Shell} and {@link BatchFile}.
@@ -95,6 +96,24 @@ public abstract class CommandInterpreter extends Builder {
                 e.printStackTrace( listener.fatalError(Messages.CommandInterpreter_UnableToDelete(script)) );
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CommandInterpreter that = (CommandInterpreter) o;
+        return StringUtils.equalsIgnoreCase(command, that.command);
+    }
+
+    @Override
+    public int hashCode() {
+        return command != null ? command.hashCode() : 0;
     }
 
     /**
