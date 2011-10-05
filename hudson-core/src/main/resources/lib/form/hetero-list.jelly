@@ -54,6 +54,9 @@ THE SOFTWARE.
     <st:attribute name="isPropertyOverridden">
       if present and true - value is overridden
     </st:attribute>
+    <st:attribute name="resetUrl">
+      If present, Redo icon will rendered and Reset will be available.
+    </st:attribute>
   </st:documentation>
   <d:taglib uri="local">
     <d:tag name="body">
@@ -120,4 +123,11 @@ THE SOFTWARE.
       <input type="button" value="${attrs.addCaption?:'%Add'}" class="hetero-list-add" />
     </div>
   </div>
+  <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
+      <div class="hetero-list-reset">
+        <a href="#" class="reset-button" resetURL="${resetUrl}">
+          <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}" />
+        </a>
+      </div>
+    </j:if>
 </j:jelly>
