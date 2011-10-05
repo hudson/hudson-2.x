@@ -1,21 +1,21 @@
 /*
  * The MIT License
- * 
+ *
  * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi,
  * Brian Westrich, Erik Ramfelt, Ertan Deniz, Jean-Baptiste Quenot,
  * Luca Domenico Milanesio, R. Tyler Ballance, Stephen Connolly, Tom Huybrechts,
  * id:cactusman, Yahoo! Inc., Anton Kozak, Nikita Levyankov
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -158,18 +158,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * The quiet period. Null to delegate to the system default.
-     * @deprecated as of 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile Integer quietPeriod = null;
 
     /**
      * The retry count. Null to delegate to the system default.
-     * @deprecated as of 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile Integer scmCheckoutRetryCount = null;
 
     /**
@@ -210,15 +212,17 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     protected volatile boolean blockBuildWhenDownstreamBuilding;
 
     /**
      * True to keep builds of this project in queue when upstream projects are building.
      *
-     * @deprecated 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     protected volatile boolean blockBuildWhenUpstreamBuilding;
 
     /**
@@ -230,15 +234,17 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * are saved independently.
      *
      * @see Hudson#getJDK(String)
-     * @deprecated 2.2.0
+     * @deprecated 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile String jdk;
 
     /**
      * @deprecated since 2007-01-29.
      */
+    @Deprecated
     private transient boolean enableRemoteTrigger;
 
     private volatile BuildAuthorizationToken authToken = null;
@@ -259,19 +265,21 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
     /**
-     * @deprecated as of 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private boolean concurrentBuild;
 
     /**
      * True to clean the workspace prior to each build.
      *
-     * @deprecated as of 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile boolean cleanWorkspaceRequired;
 
     protected AbstractProject(ItemGroup parent, String name) {

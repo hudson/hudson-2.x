@@ -47,9 +47,11 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * See {@link #setCustomWorkspace(String)}.
      *
      * @since 1.216
-     * @deprecated left for backward compatibility
-     * @since 2.1.2
+     * @deprecated as of 2.2.1
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private String customWorkspace;
 
     /**

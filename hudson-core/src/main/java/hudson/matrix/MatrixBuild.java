@@ -200,7 +200,9 @@ public class MatrixBuild extends AbstractBuild<MatrixProject,MatrixBuild> {
             Collection<MatrixConfiguration> touchStoneConfigurations = new HashSet<MatrixConfiguration>();
             Collection<MatrixConfiguration> delayedConfigurations = new HashSet<MatrixConfiguration>();
             for (MatrixConfiguration c: activeConfigurations) {
-                if (touchStoneFilter != null && c.getCombination().evalGroovyExpression(p.getAxes(), p.getTouchStoneCombinationFilter())) {
+                AxisList axes = p.getAxes();
+                String touchStoneCombinationFilter = p.getTouchStoneCombinationFilter();
+                if (touchStoneFilter != null && c.getCombination().evalGroovyExpression(axes, touchStoneCombinationFilter)) {
                     touchStoneConfigurations.add(c);
                 } else {
                     delayedConfigurations.add(c);
