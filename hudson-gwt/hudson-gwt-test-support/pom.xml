@@ -28,7 +28,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson-gwt</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.1.2</version>
   </parent>
 
   <artifactId>hudson-gwt-test-support</artifactId>

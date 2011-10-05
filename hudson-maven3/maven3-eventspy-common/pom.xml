@@ -28,11 +28,11 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson-maven3</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.1.2</version>
   </parent>
 
   <artifactId>maven3-eventspy-common</artifactId>
-  <version>2.1.2-SNAPSHOT</version>
+  <version>2.1.2</version>
   <name>Hudson :: Maven 3 :: Event Spy Common</name>
 
   <dependencies>
