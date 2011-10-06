@@ -209,6 +209,15 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         this.allowSave.set(allowSave);
     }
 
+    /**
+     * Returns true if save operation for config is permitted.
+     *
+     * @return true if save operation for config is permitted.
+     */
+    protected Boolean isAllowSave() {
+        return allowSave.get();
+    }
+
     protected Job(ItemGroup parent, String name) {
         super(parent, name);
     }
@@ -289,7 +298,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         if (null == allowSave) {
            initAllowSave();
         }
-        if (allowSave.get()) {
+        if (isAllowSave()) {
             super.save();
             holdOffBuildUntilSave = false;
         }
@@ -361,7 +370,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * Initialize project properties if null.
      */
-    protected final void initProjectProperties() {
+    public final void initProjectProperties() {
         if (null == jobProperties) {
             jobProperties = new ConcurrentHashMap<String, IProjectProperty>();
         }

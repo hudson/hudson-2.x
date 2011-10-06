@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-config>
+  <keepDependencies>false</keepDependencies>
+  <creationTime>0</creationTime>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <cleanWorkspaceRequired>false</cleanWorkspaceRequired>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+</matrix-config>
