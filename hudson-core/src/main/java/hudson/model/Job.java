@@ -31,6 +31,7 @@ import hudson.ExtensionPoint;
 import hudson.Functions;
 import hudson.PermalinkList;
 import hudson.cli.declarative.CLIResolver;
+import hudson.matrix.AxisList;
 import hudson.model.Descriptor.FormException;
 import hudson.model.Fingerprint.Range;
 import hudson.model.Fingerprint.RangeSet;
@@ -83,6 +84,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
+import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
@@ -145,7 +147,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private transient volatile boolean holdOffBuildUntilSave;
 
     /**
-     * @deprecated as of 2.1.2
+     * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -272,6 +274,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public LogRotatorProjectProperty getLogRotatorProjectProperty(String key) {
         return (LogRotatorProjectProperty) getProperty(key, LogRotatorProjectProperty.class);
+    }
+
+    public AxisListProjectProperty getAxesListProjectProperty(String key) {
+        return (AxisListProjectProperty) getProperty(key, AxisListProjectProperty.class);
     }
 
     @Override

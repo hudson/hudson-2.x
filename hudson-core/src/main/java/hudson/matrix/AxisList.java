@@ -35,6 +35,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Arrays;
 import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 
 /**
  * List of {@link Axis}.
@@ -42,6 +44,7 @@ import java.util.Set;
  * @author Kohsuke Kawaguchi
  */
 public class AxisList extends ArrayList<Axis> {
+
     public AxisList() {
     }
 
@@ -71,6 +74,27 @@ public class AxisList extends ArrayList<Axis> {
     @Override
     public boolean add(Axis axis) {
         return axis!=null && super.add(axis);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        AxisList axisList = (AxisList) o;
+
+        return CollectionUtils.isEqualCollection(this, axisList);
+    }
+
+    @Override
+    public int hashCode() {
+        return ListUtils.hashCodeForList(this);
     }
 
     /**

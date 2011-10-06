@@ -53,10 +53,15 @@ THE SOFTWARE.
           href="${rootURL}/scripts/yui/treeview/assets/skins/sam/treeview.css" />
 
     <f:block>
+        <j:set var="axesProperty" value="${it.getAxesListProjectProperty(it.AXES_PROPERTY_NAME)}"/>
+        <j:set var="axes" value="${axesProperty.getValue()}"/>
+
       <f:hetero-list name="axis" hasHeader="true"
                      descriptors="${descriptor.axisDescriptors}"
-                     items="${it.axes}"
-                     addCaption="${%Add axis}"/>
+                     items="${axes}"
+                     addCaption="${%Add axis}"
+                     resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.AXES_PROPERTY_NAME}"
+                     isPropertyOverridden="${axesProperty.isOverridden()}"/>
     </f:block>
 
     <j:set var="runSequentiallyProperty" value="${it.getBooleanProperty(it.RUN_SEQUENTIALLY_PROPERTY_NAME)}"/>
