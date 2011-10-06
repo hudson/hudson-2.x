@@ -23,6 +23,7 @@
  */
 package hudson.model;
 
+import hudson.tasks.Maven;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.junit.Before;
@@ -31,8 +32,11 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Test for legacy
@@ -46,6 +50,7 @@ import static junit.framework.Assert.assertNull;
 public class LegacyProjectTest {
 
     private File config;
+
     @Before
     public void setUp() throws URISyntaxException {
         config = new File(FreeStyleProject.class.getResource("/hudson/model/freestyle").toURI());
@@ -66,6 +71,38 @@ public class LegacyProjectTest {
         assertNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
         project.buildProjectProperties();
         assertNotNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
+    }
+
+    /**
+     * Tests unmarshalls FreeStyleProject configuration and checks whether properties
+     * from Project are configured
+     *
+     * @throws Exception if any.
+     */
+    @Test
+    public void testLoadLegacyProject() throws Exception {
+        Project project = (Project) Items.getConfigFile(config).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        //All properties should be null, because of legacy implementation. Version < 2.2.1
+        assertNull(project.getProperty(Project.BUILDERS_PROPERTY_NAME));
+        assertNull(project.getProperty(Project.BUILD_WRAPPERS_PROPERTY_NAME));
+        assertNull(project.getProperty(Project.PUBLISHERS_PROPERTY_NAME));
+        project.buildProjectProperties();
+        //Verify builders
+        assertNotNull(project.getProperty(Project.BUILDERS_PROPERTY_NAME));
+        assertFalse(project.getBuildersList().isEmpty());
+        assertEquals(1, project.getBuildersList().size());
+        assertTrue(project.getBuildersList().get(0) instanceof Maven);
+
+        //Verify buildWrappers
+        assertNotNull(project.getProperty(Project.BUILD_WRAPPERS_PROPERTY_NAME));
+        assertTrue(project.getBuildWrappersList().isEmpty());
+
+        //Verify publishers
+        assertNotNull(project.getProperty(Project.PUBLISHERS_PROPERTY_NAME));
+        assertFalse(project.getPublishersList().isEmpty());
+        assertEquals(2, project.getPublishersList().size());
     }
 
     /**

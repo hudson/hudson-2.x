@@ -30,8 +30,20 @@
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <hudson.tasks.junit.JUnitResultArchiver>
+      <testResults>hudson-core/target/surefire-reports/*.xml, hudson-remoting/target/surefire-reports/*.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+    </hudson.tasks.junit.JUnitResultArchiver>
   </publishers>
   <jdk>jdk1.5</jdk>
   <buildWrappers/>
+  <builders>
+    <hudson.tasks.Maven>
+      <targets>clean install -P debug,hudson</targets>
+      <mavenName>maven-3.0.3</mavenName>
+      <usePrivateRepository>false</usePrivateRepository>
+    </hudson.tasks.Maven>
+  </builders>
   <customWorkspace>/tmp</customWorkspace>
 </project>

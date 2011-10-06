@@ -63,30 +63,37 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
 
     public static final String BUILDERS_PROPERTY_NAME = "builders";
     public static final String BUILD_WRAPPERS_PROPERTY_NAME = "buildWrappers";
+    public static final String PUBLISHERS_PROPERTY_NAME = "publishers";
 
     /**
      * List of active {@link Builder}s configured for this project.
+     *
      * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
-    private DescribableList<Builder,Descriptor<Builder>> builders =
-            new DescribableList<Builder,Descriptor<Builder>>(this);
+    private DescribableList<Builder, Descriptor<Builder>> builders =
+        new DescribableList<Builder, Descriptor<Builder>>(this);
 
     /**
      * List of active {@link Publisher}s configured for this project.
-     */
-    private DescribableList<Publisher,Descriptor<Publisher>> publishers =
-            new DescribableList<Publisher,Descriptor<Publisher>>(this);
-
-    /**
-     * List of active {@link BuildWrapper}s configured for this project.
+     *
      * @deprecated as of 2.2.1
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
-    private DescribableList<BuildWrapper,Descriptor<BuildWrapper>> buildWrappers =
-            new DescribableList<BuildWrapper,Descriptor<BuildWrapper>>(this);
+    private DescribableList<Publisher, Descriptor<Publisher>> publishers =
+        new DescribableList<Publisher, Descriptor<Publisher>>(this);
+
+    /**
+     * List of active {@link BuildWrapper}s configured for this project.
+     *
+     * @deprecated as of 2.2.1
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
+    private DescribableList<BuildWrapper, Descriptor<BuildWrapper>> buildWrappers =
+        new DescribableList<BuildWrapper, Descriptor<BuildWrapper>>(this);
 
     /**
      * Creates a new project.
@@ -100,7 +107,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         super.onLoad(parent, name);
 
         getBuildersList().setOwner(this);
-        publishers.setOwner(this);
+        getPublishersList().setOwner(this);
         getBuildWrappersList().setOwner(this);
     }
 
@@ -115,6 +122,10 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
             setBuildWrappers(buildWrappers);
             buildWrappers = null;
         }
+        if (null == getProperty(PUBLISHERS_PROPERTY_NAME)) {
+            setPublishers(publishers);
+            publishers = null;
+        }
     }
 
     public AbstractProject<?, ?> asProject() {
@@ -126,7 +137,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     }
 
     public Map<Descriptor<Publisher>,Publisher> getPublishers() {
-        return publishers.toMap();
+        return getPublishersList().toMap();
     }
 
     public void setBuilders(DescribableList<Builder,Descriptor<Builder>> builders) {
@@ -136,9 +147,13 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     public DescribableList<Builder,Descriptor<Builder>> getBuildersList() {
         return getDescribableListProjectProperty(BUILDERS_PROPERTY_NAME).getValue();
     }
-    
-    public DescribableList<Publisher,Descriptor<Publisher>> getPublishersList() {
-        return publishers;
+
+    public DescribableList<Publisher, Descriptor<Publisher>> getPublishersList() {
+        return getDescribableListProjectProperty(PUBLISHERS_PROPERTY_NAME).getValue();
+    }
+
+    public void setPublishers(DescribableList<Publisher, Descriptor<Publisher>> publishers) {
+        getDescribableListProjectProperty(PUBLISHERS_PROPERTY_NAME).setValue(publishers);
     }
 
     public Map<Descriptor<BuildWrapper>,BuildWrapper> getBuildWrappers() {
@@ -159,7 +174,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
 
         activities.addAll(super.getResourceActivities());
         activities.addAll(Util.filter(getBuildersList(), ResourceActivity.class));
-        activities.addAll(Util.filter(publishers,ResourceActivity.class));
+        activities.addAll(Util.filter(getPublishersList(),ResourceActivity.class));
         activities.addAll(Util.filter(getBuildWrappersList(), ResourceActivity.class));
 
         return activities;
@@ -172,7 +187,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *      Use {@code getPublishersList().add(x)}
      */
     public void addPublisher(Publisher buildStep) throws IOException {
-        publishers.add(buildStep);
+        getPublishersList().add(buildStep);
     }
 
     /**
@@ -182,11 +197,11 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *      Use {@code getPublishersList().remove(x)}
      */
     public void removePublisher(Descriptor<Publisher> descriptor) throws IOException {
-        publishers.remove(descriptor);
+        getPublishersList().remove(descriptor);
     }
 
     public Publisher getPublisher(Descriptor<Publisher> descriptor) {
-        for (Publisher p : publishers) {
+        for (Publisher p : getPublishersList()) {
             if(p.getDescriptor()==descriptor)
                 return p;
         }
@@ -194,7 +209,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     }
 
     protected void buildDependencyGraph(DependencyGraph graph) {
-        publishers.buildDependencyGraph(this,graph);
+        getPublishersList().buildDependencyGraph(this, graph);
         getBuildersList().buildDependencyGraph(this, graph);
         getBuildWrappersList().buildDependencyGraph(this, graph);
     }
@@ -221,7 +236,8 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         JSONObject json = req.getSubmittedForm();
         setBuildWrappers(DescribableListUtil.buildFromJson(this, req, json, BuildWrappers.getFor(this)));
         setBuilders(DescribableListUtil.buildFromHetero(this, req, json, "builder", Builder.all()));
-        publishers.rebuild(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
+        setPublishers(DescribableListUtil.buildFromJson(this, req, json,
+            BuildStepDescriptor.filter(Publisher.all(), this.getClass())));
     }
 
     @Override
