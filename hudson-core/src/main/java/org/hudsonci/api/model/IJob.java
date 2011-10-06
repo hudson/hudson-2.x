@@ -23,6 +23,7 @@
  */
 package org.hudsonci.api.model;
 
+import hudson.model.Item;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 import hudson.tasks.LogRotator;
@@ -35,7 +36,7 @@ import java.util.Map;
  *
  * @author Nikita Levyankov
  */
-public interface IJob<T extends IJob> {
+public interface IJob<T extends IJob> extends Item {
 
     /**
      * Returns cascading project name.

@@ -89,6 +89,12 @@ public class ProjectPropertyTest {
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
+        try {
+            new DescribableListProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
         BaseProjectProperty property = new BaseProjectProperty(project);
         assertNotNull(property.getJob());
         assertEquals(project, property.getJob());
@@ -137,16 +143,12 @@ public class ProjectPropertyTest {
      */
     @Test
     public void testGetDefaultValue() {
-        BaseProjectProperty property = new BaseProjectProperty(project);
-        assertNull(property.getDefaultValue());
-        property = new StringProjectProperty(project);
-        assertNull(property.getDefaultValue());
-        property = new IntegerProjectProperty(project);
-        assertEquals(0, property.getDefaultValue());
-        property = new BooleanProjectProperty(project);
-        assertFalse((Boolean) property.getDefaultValue());
-        property = new LogRotatorProjectProperty(project);
-        assertNull(property.getDefaultValue());
+        assertNull(new BaseProjectProperty(project).getDefaultValue());
+        assertNull(new StringProjectProperty(project).getDefaultValue());
+        assertEquals(new Integer(0), new IntegerProjectProperty(project).getDefaultValue());
+        assertFalse(new BooleanProjectProperty(project).getDefaultValue());
+        assertNull(new LogRotatorProjectProperty(project).getDefaultValue());
+        assertNotNull(new DescribableListProjectProperty(project).getDefaultValue());
     }
 
     /**
