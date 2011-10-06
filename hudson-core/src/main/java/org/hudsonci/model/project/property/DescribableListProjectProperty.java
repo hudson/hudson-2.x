@@ -24,6 +24,7 @@
 package org.hudsonci.model.project.property;
 
 import hudson.util.DescribableList;
+import org.apache.commons.collections.CollectionUtils;
 import org.hudsonci.api.model.IJob;
 
 /**
@@ -42,4 +43,12 @@ public class DescribableListProjectProperty extends BaseProjectProperty<Describa
     public DescribableList getDefaultValue() {
         return new DescribableList(getJob());
     }
+
+    @Override
+    protected boolean allowOverrideValue(DescribableList cascadingValue, DescribableList candidateValue) {
+        return (null != candidateValue || null != cascadingValue)
+            && ((null == cascadingValue || null == candidateValue)
+            || !CollectionUtils.isEqualCollection(cascadingValue.toList(), candidateValue.toList()));
+    }
+
 }

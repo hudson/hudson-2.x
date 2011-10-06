@@ -27,6 +27,9 @@ import hudson.matrix.Axis;
 import hudson.matrix.AxisList;
 import hudson.model.FreeStyleProjectMock;
 import hudson.tasks.LogRotator;
+import hudson.tasks.Shell;
+import hudson.util.DescribableList;
+import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -279,6 +282,33 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(new LogRotator(1, 1, 1, 1), null));
         assertTrue(property.allowOverrideValue(null, new LogRotator(1, 1, 1, 1)));
         assertTrue(property.allowOverrideValue(new LogRotator(1, 1, 1, 2), new LogRotator(1, 1, 1, 1)));
+    }
+
+    @Test
+    public void testDescribableListProjectPropertyAllowOverrideValue() throws IOException{
+        BaseProjectProperty property = new DescribableListProjectProperty(project);
+        //Don't need to override null values
+        assertFalse(property.allowOverrideValue(null, null));
+        //Allow override if cascading or candidate are null
+        assertTrue(property.allowOverrideValue(new DescribableList(project), null));
+        assertTrue(property.allowOverrideValue(null, new DescribableList(project)));
+        //Don't need to override Describable lists which has same Describable#data values, even if owners are not equal.
+        assertFalse(property.allowOverrideValue(new DescribableList(project), new DescribableList(project)));
+        assertFalse(property.allowOverrideValue(new DescribableList(project), new DescribableList(parent)));
+        DescribableList describableList1 = new DescribableList(project);
+        DescribableList describableList2 = new DescribableList(project);
+        describableList1.add(new Shell("echo 'test3'"));
+        describableList1.add(new Shell("echo 'test2'"));
+        describableList2.add(new Shell("echo 'test2'"));
+        describableList2.add(new Shell("echo 'test3'"));
+        assertFalse(property.allowOverrideValue(describableList1, describableList2));
+
+        DescribableList describableList3 = new DescribableList(parent);
+        describableList3.replaceBy(describableList2.toList());
+        assertFalse(property.allowOverrideValue(describableList1, describableList3));
+
+        describableList2.add(new Shell("echo 'test1'"));
+        assertTrue(property.allowOverrideValue(describableList1, describableList2));
     }
 
     @Test
