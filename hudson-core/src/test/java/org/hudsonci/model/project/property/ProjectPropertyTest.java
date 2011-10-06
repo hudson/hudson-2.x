@@ -227,7 +227,7 @@ public class ProjectPropertyTest {
     @Test
     public void testDescribableListProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new DescribableListProjectProperty(project);
-        assertNull(property.getDefaultValue());
+        assertNotNull(property.getDefaultValue());
     }
 
     /**
