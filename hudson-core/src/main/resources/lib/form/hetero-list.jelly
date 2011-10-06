@@ -98,6 +98,13 @@ THE SOFTWARE.
     <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
   </j:if>
   <j:set var="targetType" value="${attrs.targetType?:it.class}"/>
+  <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
+    <div class="hetero-list-reset">
+      <a href="#" class="reset-button" resetURL="${resetUrl}">
+        <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}"/>
+      </a>
+    </div>
+  </j:if>
   <div class="hetero-list-container${hasHeader?' with-drag-drop':''}${attrs.isPropertyOverridden? ' modified' :''}">
     <!-- display existing items -->
     <j:forEach var="i" items="${attrs.items}">
@@ -123,11 +130,4 @@ THE SOFTWARE.
       <input type="button" value="${attrs.addCaption?:'%Add'}" class="hetero-list-add" />
     </div>
   </div>
-  <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
-      <div class="hetero-list-reset">
-        <a href="#" class="reset-button" resetURL="${resetUrl}">
-          <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}" />
-        </a>
-      </div>
-    </j:if>
 </j:jelly>

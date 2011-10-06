@@ -1020,6 +1020,12 @@ tr.modified > td.setting-leftspace {
     background-color: #FFE8C9;
 }
 
+/* --- Reset button container for hetero-list --- */
+.hetero-list-reset {
+    float: right;
+    margin-right: -20px;
+    margin-top: 5px;
+}
 
 /* ======================= Job Configuration table ========================== */
 table.configure {
