@@ -38,8 +38,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.hudsonci.model.project.property.AxisListProjectProperty;
+import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
+import org.hudsonci.model.project.property.LogRotatorProjectProperty;
+import org.hudsonci.model.project.property.ResultProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
 
 /**
@@ -138,9 +143,15 @@ public class Items {
         XSTREAM.alias("matrix-config",MatrixConfiguration.class);
 
         //aliases for project properties.
+        XSTREAM.alias("base-property", BaseProjectProperty.class);
         XSTREAM.alias("integer-property", IntegerProjectProperty.class);
         XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
         XSTREAM.alias("string-property", StringProjectProperty.class);
+        XSTREAM.alias("log-rotator-property", LogRotatorProjectProperty.class);
+        XSTREAM.alias("result-property", ResultProjectProperty.class);
+
+        XSTREAM.alias("axis-list-property", AxisListProjectProperty.class);
+        XSTREAM.alias("describable-list-property", DescribableListProjectProperty.class);
         XSTREAM.aliasField("project-properties", Job.class, "jobProperties");
     }
 }
