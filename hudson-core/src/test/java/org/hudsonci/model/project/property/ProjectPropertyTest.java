@@ -106,7 +106,16 @@ public class ProjectPropertyTest {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
     }
-
+    @Test
+    public void testDescribableListProjectPropertyConstructor() {
+        try {
+            new DescribableListProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+    
     @Test
     public void testAxisListProjectPropertyConstructor() {
         try {
@@ -212,6 +221,12 @@ public class ProjectPropertyTest {
     @Test
     public void testAxisListProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new AxisListProjectProperty(project);
+        assertNull(property.getDefaultValue());
+    }   
+    
+    @Test
+    public void testDescribableListProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new DescribableListProjectProperty(project);
         assertNull(property.getDefaultValue());
     }
 
