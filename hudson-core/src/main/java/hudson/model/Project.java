@@ -60,8 +60,13 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     extends AbstractProject<P, B>
     implements SCMedItem, Saveable, ProjectWithMaven, BuildableItemWithBuildWrappers, IProject {
 
+    public static final String BUILDERS_PROPERTY_NAME = "builders";
+
     /**
      * List of active {@link Builder}s configured for this project.
+     * @deprecated as of 2.2.1
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private DescribableList<Builder,Descriptor<Builder>> builders =
             new DescribableList<Builder,Descriptor<Builder>>(this);
@@ -94,9 +99,18 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
             buildWrappers = new DescribableList<BuildWrapper, Descriptor<BuildWrapper>>(this);
             OldDataMonitor.report(this, "1.64");
         }
-        builders.setOwner(this);
+        getBuildersList().setOwner(this);
         publishers.setOwner(this);
         buildWrappers.setOwner(this);
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        if (null == getProperty(BUILDERS_PROPERTY_NAME)) {
+            setBuilders(builders);
+            builders = null;
+        }
     }
 
     public AbstractProject<?, ?> asProject() {
@@ -104,15 +118,19 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     }
 
     public List<Builder> getBuilders() {
-        return builders.toList();
+        return getBuildersList().toList();
     }
 
     public Map<Descriptor<Publisher>,Publisher> getPublishers() {
         return publishers.toMap();
     }
 
+    public void setBuilders(DescribableList<Builder,Descriptor<Builder>> builders) {
+        getDescribableListProjectProperty(BUILDERS_PROPERTY_NAME).setValue(builders);
+    }
+
     public DescribableList<Builder,Descriptor<Builder>> getBuildersList() {
-        return builders;
+        return getDescribableListProjectProperty(BUILDERS_PROPERTY_NAME).getValue();
     }
     
     public DescribableList<Publisher,Descriptor<Publisher>> getPublishersList() {
@@ -195,8 +213,11 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
 
         JSONObject json = req.getSubmittedForm();
 
-        buildWrappers.rebuild(req,json, BuildWrappers.getFor(this));
-        builders.rebuildHetero(req,json, Builder.all(), "builder");
+        buildWrappers.rebuild(req, json, BuildWrappers.getFor(this));
+        DescribableList<Builder, Descriptor<Builder>> buildersCandidates
+            = new DescribableList<Builder, Descriptor<Builder>>(this);
+        buildersCandidates.replaceBy(Descriptor.newInstancesFromHeteroList(req, json, "builder", Builder.all()));
+        setBuilders(buildersCandidates);
         publishers.rebuild(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
     }
 

@@ -31,7 +31,6 @@ import hudson.ExtensionPoint;
 import hudson.Functions;
 import hudson.PermalinkList;
 import hudson.cli.declarative.CLIResolver;
-import hudson.matrix.AxisList;
 import hudson.model.Descriptor.FormException;
 import hudson.model.Fingerprint.Range;
 import hudson.model.Fingerprint.RangeSet;
@@ -86,6 +85,7 @@ import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
@@ -274,6 +274,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public LogRotatorProjectProperty getLogRotatorProjectProperty(String key) {
         return (LogRotatorProjectProperty) getProperty(key, LogRotatorProjectProperty.class);
+    }
+
+    public DescribableListProjectProperty getDescribableListProjectProperty(String key) {
+        return (DescribableListProjectProperty) getProperty(key, DescribableListProjectProperty.class);
     }
 
     public AxisListProjectProperty getAxesListProjectProperty(String key) {

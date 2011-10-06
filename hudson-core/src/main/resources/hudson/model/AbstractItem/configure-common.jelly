@@ -32,7 +32,6 @@ THE SOFTWARE.
     <j:if test="${app.CONCURRENT_BUILD}">
         <f:optionalBlock field="concurrentBuild" title="${%title.concurrentbuilds}"/>
     </j:if>
-    <j:set var="jobUrl" value="${h.getNearestAncestorUrl(request,it)}"/>
     <j:set var="jdks" value="${app.JDKs}"/>
     <j:if test="${jdks.size() gt 1}">
         <!-- if there's only one JDK configured, always use that. -->
