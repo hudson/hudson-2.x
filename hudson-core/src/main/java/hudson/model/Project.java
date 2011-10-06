@@ -39,6 +39,7 @@ import hudson.tasks.Maven.ProjectWithMaven;
 import hudson.tasks.Maven.MavenInstallation;
 import hudson.triggers.Trigger;
 import hudson.util.DescribableList;
+import hudson.util.DescribableListUtil;
 import net.sf.json.JSONObject;
 import org.hudsonci.api.model.IProject;
 import org.kohsuke.stapler.StaplerRequest;
@@ -61,6 +62,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     implements SCMedItem, Saveable, ProjectWithMaven, BuildableItemWithBuildWrappers, IProject {
 
     public static final String BUILDERS_PROPERTY_NAME = "builders";
+    public static final String BUILD_WRAPPERS_PROPERTY_NAME = "buildWrappers";
 
     /**
      * List of active {@link Builder}s configured for this project.
@@ -79,6 +81,9 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
 
     /**
      * List of active {@link BuildWrapper}s configured for this project.
+     * @deprecated as of 2.2.1
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     private DescribableList<BuildWrapper,Descriptor<BuildWrapper>> buildWrappers =
             new DescribableList<BuildWrapper,Descriptor<BuildWrapper>>(this);
@@ -94,14 +99,9 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     public void onLoad(ItemGroup<? extends Item> parent, String name) throws IOException {
         super.onLoad(parent, name);
 
-        if (buildWrappers==null) {
-            // it didn't exist in < 1.64
-            buildWrappers = new DescribableList<BuildWrapper, Descriptor<BuildWrapper>>(this);
-            OldDataMonitor.report(this, "1.64");
-        }
         getBuildersList().setOwner(this);
         publishers.setOwner(this);
-        buildWrappers.setOwner(this);
+        getBuildWrappersList().setOwner(this);
     }
 
     @Override
@@ -110,6 +110,10 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         if (null == getProperty(BUILDERS_PROPERTY_NAME)) {
             setBuilders(builders);
             builders = null;
+        }
+        if (null == getProperty(BUILD_WRAPPERS_PROPERTY_NAME)) {
+            setBuildWrappers(buildWrappers);
+            buildWrappers = null;
         }
     }
 
@@ -138,11 +142,15 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     }
 
     public Map<Descriptor<BuildWrapper>,BuildWrapper> getBuildWrappers() {
-        return buildWrappers.toMap();
+        return getBuildWrappersList().toMap();
     }
 
     public DescribableList<BuildWrapper, Descriptor<BuildWrapper>> getBuildWrappersList() {
-        return buildWrappers;
+        return getDescribableListProjectProperty(BUILD_WRAPPERS_PROPERTY_NAME).getValue();
+    }
+
+    public void setBuildWrappers(DescribableList<BuildWrapper, Descriptor<BuildWrapper>> buildWrappers) {
+        getDescribableListProjectProperty(BUILD_WRAPPERS_PROPERTY_NAME).setValue(buildWrappers);
     }
 
     @Override
@@ -150,9 +158,9 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         final Set<ResourceActivity> activities = new HashSet<ResourceActivity>();
 
         activities.addAll(super.getResourceActivities());
-        activities.addAll(Util.filter(builders,ResourceActivity.class));
+        activities.addAll(Util.filter(getBuildersList(), ResourceActivity.class));
         activities.addAll(Util.filter(publishers,ResourceActivity.class));
-        activities.addAll(Util.filter(buildWrappers,ResourceActivity.class));
+        activities.addAll(Util.filter(getBuildWrappersList(), ResourceActivity.class));
 
         return activities;
     }
@@ -187,8 +195,8 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
 
     protected void buildDependencyGraph(DependencyGraph graph) {
         publishers.buildDependencyGraph(this,graph);
-        builders.buildDependencyGraph(this,graph);
-        buildWrappers.buildDependencyGraph(this,graph);
+        getBuildersList().buildDependencyGraph(this, graph);
+        getBuildWrappersList().buildDependencyGraph(this, graph);
     }
 
     @Override
@@ -210,14 +218,9 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     @Override
     protected void submit( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException, FormException {
         super.submit(req,rsp);
-
         JSONObject json = req.getSubmittedForm();
-
-        buildWrappers.rebuild(req, json, BuildWrappers.getFor(this));
-        DescribableList<Builder, Descriptor<Builder>> buildersCandidates
-            = new DescribableList<Builder, Descriptor<Builder>>(this);
-        buildersCandidates.replaceBy(Descriptor.newInstancesFromHeteroList(req, json, "builder", Builder.all()));
-        setBuilders(buildersCandidates);
+        setBuildWrappers(DescribableListUtil.buildFromJson(this, req, json, BuildWrappers.getFor(this)));
+        setBuilders(DescribableListUtil.buildFromHetero(this, req, json, "builder", Builder.all()));
         publishers.rebuild(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
     }
 
