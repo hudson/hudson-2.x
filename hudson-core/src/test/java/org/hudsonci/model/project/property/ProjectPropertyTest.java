@@ -23,17 +23,14 @@
  */
 package org.hudsonci.model.project.property;
 
+import hudson.matrix.Axis;
+import hudson.matrix.AxisList;
 import hudson.model.FreeStyleProjectMock;
 import hudson.tasks.LogRotator;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 
 /**
  * Contains test-cases for IProjectProperty and its' implementations.
@@ -58,33 +55,9 @@ public class ProjectPropertyTest {
      * Verify all constructors for ProjectProperties hierarchy.
      */
     @Test
-    public void testConstructor() {
+    public void testBaseProjectConstructor() {
         try {
             new BaseProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-        try {
-            new StringProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-        try {
-            new IntegerProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-        try {
-            new BooleanProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-        try {
-            new LogRotatorProjectProperty(null);
             fail("Null should be handled by ProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
@@ -94,37 +67,99 @@ public class ProjectPropertyTest {
         assertEquals(project, property.getJob());
     }
 
+    @Test
+    public void testStringProjectConstructor() {
+        try {
+            new StringProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testIntegerProjectConstructor() {
+        try {
+            new IntegerProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBooleanProjectPropertyConstructor() {
+        try {
+            new BooleanProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testLogRotatorProjectPropertyConstructor() {
+        try {
+            new LogRotatorProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAxisListProjectPropertyConstructor() {
+        try {
+            new AxisListProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
     /**
      * Checks prepareValue method.
      */
     @Test
-    public void testPrepareValue() {
+    public void testBaseProjectPropertyPrepareValue() {
         //BaseProject property doesn't perform any changes with value.
         BaseProjectProperty property = new BaseProjectProperty(project);
         assertNull(property.prepareValue(null));
         Object value = new Object();
         assertEquals(value, property.prepareValue(value));
+    }
 
+    @Test
+    public void testBooleanProjectPropertyPrepareValue() {
         //Boolean property acts as BaseProperty
-        property = new BooleanProjectProperty(project);
+        BaseProjectProperty property = new BooleanProjectProperty(project);
         assertNull(property.prepareValue(null));
         assertFalse((Boolean) property.prepareValue(false));
         assertTrue((Boolean) property.prepareValue(true));
+    }
 
+    @Test
+    public void testLogRotatorProjectPropertyPrepareValue() {
         //Boolean property acts as BaseProperty
-        property = new LogRotatorProjectProperty(project);
+        BaseProjectProperty property = new LogRotatorProjectProperty(project);
         assertNull(property.prepareValue(null));
-        value = new LogRotator(1, 1, 1, 1);
+        LogRotator value = new LogRotator(1, 1, 1, 1);
         assertEquals(value, property.prepareValue(value));
+    }
 
+    @Test
+    public void testIntegerProjectPropertyPrepareValue() {
         //Integer property acts as BaseProperty
-        property = new IntegerProjectProperty(project);
+        BaseProjectProperty property = new IntegerProjectProperty(project);
         assertNull(property.prepareValue(null));
         int intValue = 10;
         assertEquals(intValue, property.prepareValue(intValue));
+    }
 
+    @Test
+    public void testStringProjectPropertyPrepareValue() {
         //String project property trims string values to null and uses StringUtils.trimToNull logic.
-        property = new StringProjectProperty(project);
+        BaseProjectProperty property = new StringProjectProperty(project);
         assertNull(property.prepareValue(null));
         assertNull(property.prepareValue(""));
         assertNull(property.prepareValue("     "));
@@ -132,20 +167,51 @@ public class ProjectPropertyTest {
         assertEquals("abc", property.prepareValue("    abc    "));
     }
 
+    @Test
+    public void testAxisListProjectPropertyPrepareValue() {
+        //Boolean property acts as BaseProperty
+        BaseProjectProperty property = new AxisListProjectProperty(project);
+        assertNull(property.prepareValue(null));
+        AxisList value = new AxisList();
+        assertEquals(value, property.prepareValue(value));
+    }
+
     /**
      * Verify getDefaultValue method.
      */
     @Test
-    public void testGetDefaultValue() {
+    public void testBaseProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new BaseProjectProperty(project);
         assertNull(property.getDefaultValue());
-        property = new StringProjectProperty(project);
+    }
+
+    @Test
+    public void testStringProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new StringProjectProperty(project);
         assertNull(property.getDefaultValue());
-        property = new IntegerProjectProperty(project);
+    }
+
+    @Test
+    public void testIntegerProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new IntegerProjectProperty(project);
         assertEquals(0, property.getDefaultValue());
-        property = new BooleanProjectProperty(project);
+    }
+
+    @Test
+    public void testBooleanProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new BooleanProjectProperty(project);
         assertFalse((Boolean) property.getDefaultValue());
-        property = new LogRotatorProjectProperty(project);
+    }
+
+    @Test
+    public void testLogRotatorProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new LogRotatorProjectProperty(project);
+        assertNull(property.getDefaultValue());
+    }
+
+    @Test
+    public void testAxisListProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new AxisListProjectProperty(project);
         assertNull(property.getDefaultValue());
     }
 
@@ -153,30 +219,35 @@ public class ProjectPropertyTest {
      * Verify allowOverrideValue method.
      */
     @Test
-    public void testAllowOverrideValue() {
-        //Test BaseProjectProperty.
+    public void testBaseProjectPropertyAllowOverrideValue() {
         BaseProjectProperty property = new BaseProjectProperty(project);
         assertFalse(property.allowOverrideValue(null, null));
         assertTrue(property.allowOverrideValue(new Object(), null));
         assertTrue(property.allowOverrideValue(null, new Object()));
+    }
 
-        //Test BooleanProjectProperty.
-        property = new BooleanProjectProperty(project);
+    @Test
+    public void testBooleanProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new BooleanProjectProperty(project);
         assertFalse(property.allowOverrideValue(null, null));
         assertFalse(property.allowOverrideValue(false, false));
         assertFalse(property.allowOverrideValue(true, true));
         assertTrue(property.allowOverrideValue(true, false));
         assertTrue(property.allowOverrideValue(false, true));
+    }
 
-        //Test IntegerProjectProperty.
-        property = new IntegerProjectProperty(project);
+    @Test
+    public void testIntegerProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new IntegerProjectProperty(project);
         assertFalse(property.allowOverrideValue(null, null));
         assertFalse(property.allowOverrideValue(1, 1));
         assertTrue(property.allowOverrideValue(1, 0));
         assertTrue(property.allowOverrideValue(0, 1));
+    }
 
-        //Test StringProjectProperty.
-        property = new StringProjectProperty(project);
+    @Test
+    public void testStringProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new StringProjectProperty(project);
         assertFalse(property.allowOverrideValue(null, null));
         assertFalse(property.allowOverrideValue("", ""));
         assertFalse(property.allowOverrideValue("abc", "abc"));
@@ -184,19 +255,31 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(null, "abc"));
         assertTrue(property.allowOverrideValue("abc", null));
         assertTrue(property.allowOverrideValue("abc", "abcd"));
+    }
 
-        property = new LogRotatorProjectProperty(project);
+    @Test
+    public void testLogRotatorProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new LogRotatorProjectProperty(project);
         assertFalse(property.allowOverrideValue(null, null));
         assertTrue(property.allowOverrideValue(new LogRotator(1, 1, 1, 1), null));
         assertTrue(property.allowOverrideValue(null, new LogRotator(1, 1, 1, 1)));
         assertTrue(property.allowOverrideValue(new LogRotator(1, 1, 1, 2), new LogRotator(1, 1, 1, 1)));
     }
 
+    @Test
+    public void testAxisListProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new AxisListProjectProperty(project);
+        assertFalse(property.allowOverrideValue(null, null));
+        assertTrue(property.allowOverrideValue(new AxisList(), null));
+        assertTrue(property.allowOverrideValue(null, new AxisList()));
+        assertTrue(property.allowOverrideValue(new AxisList().add(new Axis("DB", "mysql")), new AxisList()));
+    }
+
     /**
      * Verify getCascadingValue method.
      */
     @Test
-    public void testGetCascadingValue() {
+    public void testBaseProjectPropertyGetCascadingValue() {
         String parentValue = "parentValue";
 
         BaseProjectProperty property = new BaseProjectProperty(project);
@@ -226,39 +309,60 @@ public class ProjectPropertyTest {
      * Verify getOriginalValue method.
      */
     @Test
-    public void testGetOriginalValue() {
+    public void testBaseProjectPropertyGetOriginalValue() {
         BaseProjectProperty property = new BaseProjectProperty(project);
         assertNull(property.getOriginalValue());
         Object value = new Object();
-
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
         property.setValue(null);
         assertNull(property.getOriginalValue());
+    }
 
-        value = 10;
-        property = new IntegerProjectProperty(project);
+    @Test
+    public void testIntegerProjectPropertyGetOriginalValue() {
+        int value = 10;
+        BaseProjectProperty property = new IntegerProjectProperty(project);
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
+    }
 
-        value = "abs";
-        property = new StringProjectProperty(project);
+    @Test
+    public void testStringProjectPropertyGetOriginalValue() {
+        String value = "abs";
+        BaseProjectProperty property = new StringProjectProperty(project);
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
+    }
 
-        value = Boolean.TRUE;
-        property = new BooleanProjectProperty(project);
+    @Test
+    public void testBooleanProjectPropertyGetOriginalValue() {
+        boolean value = Boolean.TRUE;
+        BaseProjectProperty property = new BooleanProjectProperty(project);
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
         property.setValue(null);
         assertFalse((Boolean) property.getOriginalValue());
+    }
 
-        value = new LogRotator(1, 1, 1, 1);
-        property = new LogRotatorProjectProperty(project);
+    @Test
+    public void testLogRotatorProjectPropertyGetOriginalValue() {
+        LogRotator value = new LogRotator(1, 1, 1, 1);
+        BaseProjectProperty property = new LogRotatorProjectProperty(project);
+        property.setKey(propertyKey);
+        property.setValue(value);
+        assertEquals(value, property.getOriginalValue());
+    }
+
+    @Test
+    public void testAxisListProjectPropertyGetOriginalValue() {
+        AxisList value = new AxisList();
+        value.add(new Axis("DB", "mysql"));
+        BaseProjectProperty property = new AxisListProjectProperty(project);
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
