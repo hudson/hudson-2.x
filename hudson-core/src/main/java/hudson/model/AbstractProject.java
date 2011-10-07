@@ -161,7 +161,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * The quiet period. Null to delegate to the system default.
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -170,7 +170,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * The retry count. Null to delegate to the system default.
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -221,7 +221,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     /**
      * True to keep builds of this project in queue when upstream projects are building.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -237,7 +237,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * are saved independently.
      *
      * @see Hudson#getJDK(String)
-     * @deprecated 2.2.1
+     * @deprecated 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -268,7 +268,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
     /**
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -278,7 +278,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     /**
      * True to clean the workspace prior to each build.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */

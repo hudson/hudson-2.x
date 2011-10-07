@@ -84,7 +84,7 @@ public class LegacyProjectTest {
         Project project = (Project) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
-        //All properties should be null, because of legacy implementation. Version < 2.2.1
+        //All properties should be null, because of legacy implementation. Version < 2.2.0
         assertNull(project.getProperty(Project.BUILDERS_PROPERTY_NAME));
         assertNull(project.getProperty(Project.BUILD_WRAPPERS_PROPERTY_NAME));
         assertNull(project.getProperty(Project.PUBLISHERS_PROPERTY_NAME));

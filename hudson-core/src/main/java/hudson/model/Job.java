@@ -147,7 +147,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private transient volatile boolean holdOffBuildUntilSave;
 
     /**
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
