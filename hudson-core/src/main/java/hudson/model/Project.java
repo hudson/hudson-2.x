@@ -64,7 +64,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     /**
      * List of active {@link Builder}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -75,7 +75,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     /**
      * List of active {@link Publisher}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -86,7 +86,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     /**
      * List of active {@link BuildWrapper}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */

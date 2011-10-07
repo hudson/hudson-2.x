@@ -104,7 +104,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
 
     /**
      * Configuration axes.
-     * @deprecated as of 2.2.1, use #getAxes() and #setAxes() instead
+     * @deprecated as of 2.2.0, use #getAxes() and #setAxes() instead
      */
     @Deprecated
     private volatile AxisList axes = new AxisList();
@@ -114,7 +114,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * This can be null, which means "true".
      * Package visible for the tests only.
      *
-     * @deprecated as of 2.2.1, use #getCombinationFilter() and #setCombinationFilter() instead
+     * @deprecated as of 2.2.0, use #getCombinationFilter() and #setCombinationFilter() instead
      */
     @Deprecated
     private volatile String combinationFilter;
@@ -122,7 +122,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * List of active {@link Builder}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -133,7 +133,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * List of active {@link Publisher}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -144,7 +144,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * List of active {@link BuildWrapper}s configured for this project.
      *
-     * @deprecated as of 2.2.1
+     * @deprecated as of 2.2.0
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
@@ -164,7 +164,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     private transient /*final*/ Set<MatrixConfiguration> activeConfigurations = new LinkedHashSet<MatrixConfiguration>();
 
     /**
-     * @deprecated as of 2.2.1, use #isRunSequentially() and #setRunSequentially() instead
+     * @deprecated as of 2.2.0, use #isRunSequentially() and #setRunSequentially() instead
      */
     @Deprecated
     private boolean runSequentially;
@@ -172,7 +172,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     /**
      * Filter to select a number of combinations to build first
      *
-     * @deprecated as of 2.2.1, use #getTouchStoneCombinationFilter() and #setTouchStoneCombinationFilter() instead
+     * @deprecated as of 2.2.0, use #getTouchStoneCombinationFilter() and #setTouchStoneCombinationFilter() instead
      */
     @Deprecated
     private String touchStoneCombinationFilter;
@@ -181,13 +181,13 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * Required result on the touchstone combinations, in order to
      * continue with the rest
      *
-     * @deprecated as of 2.2.1, use #getTouchStoneResultCondition() and #setTouchStoneResultCondition() instead
+     * @deprecated as of 2.2.0, use #getTouchStoneResultCondition() and #setTouchStoneResultCondition() instead
      */
     @Deprecated
     private Result touchStoneResultCondition;
 
     /**
-     * @deprecated as of 2.2.1, use #getCustomWorkspace() and #setCustomWorkspace() instead
+     * @deprecated as of 2.2.0, use #getCustomWorkspace() and #setCustomWorkspace() instead
      */
     @Deprecated
     private String customWorkspace;
@@ -715,8 +715,8 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
             req.hasParameter(CUSTOM_WORKSPACE_PARAM) ? req.getParameter(CUSTOM_WORKSPACE_DIRECTORY_PARAM) : null);
 
         // parse system axes
-        DescribableList<Axis,AxisDescriptor> newAxes = new DescribableList<Axis,AxisDescriptor>(this);
-        newAxes.rebuildHetero(req, json, Axis.all(),"axis");
+        DescribableList<Axis, AxisDescriptor> newAxes = DescribableListUtil.buildFromHetero(this, req, json, "axis",
+            Axis.all());
         checkAxisNames(newAxes);
         setAxes(new AxisList(newAxes.toList()));
 
