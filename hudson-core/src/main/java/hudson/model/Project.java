@@ -61,10 +61,6 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
     extends AbstractProject<P, B>
     implements SCMedItem, Saveable, ProjectWithMaven, BuildableItemWithBuildWrappers, IProject {
 
-    public static final String BUILDERS_PROPERTY_NAME = "builders";
-    public static final String BUILD_WRAPPERS_PROPERTY_NAME = "buildWrappers";
-    public static final String PUBLISHERS_PROPERTY_NAME = "publishers";
-
     /**
      * List of active {@link Builder}s configured for this project.
      *
@@ -72,6 +68,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private DescribableList<Builder, Descriptor<Builder>> builders =
         new DescribableList<Builder, Descriptor<Builder>>(this);
 
@@ -82,6 +79,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private DescribableList<Publisher, Descriptor<Publisher>> publishers =
         new DescribableList<Publisher, Descriptor<Publisher>>(this);
 
@@ -92,6 +90,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
      *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private DescribableList<BuildWrapper, Descriptor<BuildWrapper>> buildWrappers =
         new DescribableList<BuildWrapper, Descriptor<BuildWrapper>>(this);
 
