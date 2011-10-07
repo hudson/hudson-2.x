@@ -130,6 +130,17 @@
 
   <profiles>
     <profile>
+      <id>hudson</id>
+      <build>
+        <plugins>
+           <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+               <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>release</id>
       <properties>
         <!-- for releases, just use the POM version. See above ant-run plugin for how this gets used. -->

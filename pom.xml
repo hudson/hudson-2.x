@@ -113,6 +113,7 @@ THE SOFTWARE.
     <maven-jaxb2-plugin.version>0.7.4</maven-jaxb2-plugin.version>
     <!--TODO migrate to 2.6 to resolve issue with compilation on JDK7 (https://jira.codehaus.org/browse/ENUNCIATE-603) -->
     <maven-enunciate-plugin.version>1.24</maven-enunciate-plugin.version>
+    <cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
   </properties>
 
   <modules>
@@ -735,6 +736,42 @@ THE SOFTWARE.
         <hudson.sign.storepass>hudson</hudson.sign.storepass>
       </properties>
     </profile>
+    <profile>
+      <id>hudson</id>
+          <build>
+              <pluginManagement>
+                  <plugins>
+                      <plugin>
+                          <groupId>org.codehaus.mojo</groupId>
+                          <artifactId>cobertura-maven-plugin</artifactId>
+                          <version>${cobertura-maven-plugin.version}</version>
+                          <configuration>
+                              <check>
+                                  <branchRate>80</branchRate>
+                                  <lineRate>80</lineRate>
+                                  <haltOnFailure>true</haltOnFailure>
+                                  <totalBranchRate>80</totalBranchRate>
+                                  <totalLineRate>80</totalLineRate>
+                                  <packageLineRate>80</packageLineRate>
+                                  <packageBranchRate>80</packageBranchRate>
+                              </check>
+                              <formats>
+                                  <format>xml</format>
+                              </formats>
+                          </configuration>
+                          <executions>
+                              <execution>
+                                  <phase>package</phase>
+                                  <goals>
+                                      <goal>cobertura</goal>
+                                  </goals>
+                              </execution>
+                          </executions>
+                      </plugin>
+                  </plugins>
+              </pluginManagement>
+          </build>
+      </profile>
   </profiles>
 
 </project>
