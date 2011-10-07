@@ -256,6 +256,17 @@ THE SOFTWARE.
 
   <profiles>
     <profile>
+      <id>hudson</id>
+      <build>
+        <plugins>
+           <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+               <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>debug</id>
       <activation>
         <activeByDefault>true</activeByDefault>
