@@ -135,7 +135,7 @@ public class DescribableList<T extends Describable<T>, D extends Descriptor<T>> 
      * This method does not invoke the save method.
      *
      * @param json Structured form data that includes the data for nested descriptor list.
-     * @deprecated as of 2.2.1,
+     * @deprecated as of 2.2.0,
      *             use {@link DescribableListUtil#buildFromJson(hudson.model.Saveable, org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject, java.util.List)}
      */
     public void rebuild(StaplerRequest req, JSONObject json, List<? extends Descriptor<T>> descriptors)
@@ -168,7 +168,7 @@ public class DescribableList<T extends Describable<T>, D extends Descriptor<T>> 
      * is allowed to create multiple instances of the same descriptor. Order is also
      * significant.
      *
-     * @deprecated as of 2.2.1,
+     * @deprecated as of 2.2.0,
      *             use {@link DescribableListUtil#buildFromHetero(hudson.model.Saveable, org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject, String, java.util.Collection)}
      *             or {@link Descriptor#newInstancesFromHeteroList(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject, String, java.util.Collection)}
      */
