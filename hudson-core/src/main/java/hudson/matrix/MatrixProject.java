@@ -212,8 +212,8 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public void setAxes(AxisList axes) throws IOException {
         getAxesListProjectProperty(AXES_PROPERTY_NAME).setValue(axes);
-        rebuildConfigurations();
-        save();
+//        rebuildConfigurations();
+//        save();
     }
 
     /**
@@ -228,7 +228,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public void setRunSequentially(boolean runSequentially) throws IOException {
         getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).setValue(runSequentially);
-        save();
+//        save();
     }
 
     /**
@@ -243,8 +243,8 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public void setCombinationFilter(String combinationFilter) throws IOException {
         getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
-        rebuildConfigurations();
-        save();
+//        rebuildConfigurations();
+//        save();
     }
 
     /**
@@ -350,17 +350,15 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
         super.buildProjectProperties();
         //Convert legacy properties to IProjectProperty logic
         if (null != axes && null == getProperty(AXES_PROPERTY_NAME)) {
-            //we shouldn't rebuild the axis configuration
-            getAxesListProjectProperty(AXES_PROPERTY_NAME).setValue(axes);
+            setAxes(axes);
             axes = null;//Reset to null. No longer needed.
         }
         if (null != combinationFilter && null == getProperty(COMBINATION_FILTER_PROPERTY_NAME)) {
-            //we shouldn't rebuild the axis configuration
-            getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
+            setCombinationFilter(combinationFilter);
             combinationFilter = null;//Reset to null. No longer needed.
         }
         if ( null == getProperty(RUN_SEQUENTIALLY_PROPERTY_NAME)) {
-            getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).setValue(runSequentially);
+            setRunSequentially(runSequentially);
             runSequentially = false;
         }
         if (null != touchStoneCombinationFilter && null == getProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME)) {
@@ -517,10 +515,6 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      * Rebuilds the {@link #configurations} list and {@link #activeConfigurations}.
      */
     void rebuildConfigurations() throws IOException {
-        // for the tests
-        if(!isAllowSave()){
-            return;
-        }
         // backward compatibility check to see if there's any data in the old structure
         // if so, bring them to the newer structure.
         File[] oldDirs = getConfigurationsDir().listFiles(new FileFilter() {
@@ -801,6 +795,16 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     protected void setAllowSave(Boolean allowSave) {
         super.setAllowSave(allowSave);
+    }
+
+    @Override
+    public void setCascadingProjectName(String cascadingProjectName) {
+        super.setCascadingProjectName(cascadingProjectName);
+        try {
+            rebuildConfigurations();
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to rebuild matrix configuration", e);
+        }
     }
 
     private static final Logger LOGGER = Logger.getLogger(MatrixProject.class.getName());
