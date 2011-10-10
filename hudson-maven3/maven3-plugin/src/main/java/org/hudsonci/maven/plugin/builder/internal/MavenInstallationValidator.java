@@ -146,50 +146,55 @@ public class MavenInstallationValidator
 
     private String getMavenVersion() throws Exception {
         if (mavenVersion == null) {
-            muxlog.info("Checking Maven 3 installation version");
-
-            ArgumentListBuilder args = new ArgumentListBuilder();
-            args.add(getExecutable());
-            args.add("--version");
-
-            EnvVars env = new EnvVars();
-            maybyPut(JAVA_HOME, buildEnv, env);
-            env.put(M2_HOME, getHome().getRemote());
-            env.put(MAVEN_SKIP_RC, TRUE);
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            Proc process = launcher.launch()
-                .cmds(args)
-                .envs(env)
-                .pwd(build.getWorkspace())
-                .stdout(buffer)
-                .start();
-
-            int result = process.joinWithTimeout(timeout, timeoutUnit, listener);
-
-            String output = new String(buffer.toByteArray());
-            if (muxlog.isTraceEnabled()) {
-                muxlog.trace("Process output:\n{}", output);
-            }
-
-            if (result != 0) {
-                throw new AbortException(
-                    format("Failed to determine Maven 3 installation version;" +
-                            " unexpected exit code: %d, command output: %s", process.join(), output));
-            }
-
-            BufferedReader reader = new BufferedReader(new StringReader(output));
-            mavenVersion = new MavenVersionParser().parse(reader);
-            if (mavenVersion == null) {
-                throw new AbortException(format("Failed to determine Maven " +
-                        "3 installation version; unable to parse version " +
-                        "from: %s", output));
-            }
-
-            muxlog.info("Detected Maven 3 installation version: {}",
-                    mavenVersion);
+            mavenVersion = scrapeMavenVersion();
         }
         return mavenVersion;
+    }
+
+    private String scrapeMavenVersion() throws Exception {
+        muxlog.info("Checking Maven 3 installation version");
+
+        ArgumentListBuilder args = new ArgumentListBuilder();
+        args.add(getExecutable());
+        args.add("--version");
+
+        EnvVars env = new EnvVars();
+        maybyPut(JAVA_HOME, buildEnv, env);
+        env.put(M2_HOME, getHome().getRemote());
+        env.put(MAVEN_SKIP_RC, TRUE);
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        Proc process = launcher.launch()
+            .cmds(args)
+            .envs(env)
+            .pwd(build.getWorkspace())
+            .stdout(buffer)
+            .start();
+
+        int result = process.joinWithTimeout(timeout, timeoutUnit, listener);
+
+        String output = new String(buffer.toByteArray());
+        if (muxlog.isTraceEnabled()) {
+            muxlog.trace("Process output:\n{}", output);
+        }
+
+        if (result != 0) {
+            throw new AbortException(
+                format("Failed to determine Maven 3 installation version;" +
+                        " unexpected exit code: %d, command output: %s", process.join(), output));
+        }
+
+        BufferedReader reader = new BufferedReader(new StringReader(output));
+        String version = new MavenVersionParser().parse(reader);
+        if (version == null) {
+            throw new AbortException(format("Failed to determine Maven " +
+                    "3 installation version; unable to parse version " +
+                    "from: %s", output));
+        }
+
+        muxlog.info("Detected Maven 3 installation version: {}", version);
+
+        return version;
     }
 
     private void maybyPut(final String key, final EnvVars source, final EnvVars target) {
