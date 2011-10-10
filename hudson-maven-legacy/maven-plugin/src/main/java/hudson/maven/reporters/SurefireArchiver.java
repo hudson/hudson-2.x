@@ -182,6 +182,7 @@ public class SurefireArchiver extends MavenReporter {
         if ((!mojo.is("com.sun.maven", "maven-junit-plugin", "test"))
             && (!mojo.is("org.sonatype.flexmojos", "flexmojos-maven-plugin", "test-run"))
             && (!mojo.is("com.jayway.maven.plugins.android.generation2", "maven-android-plugin", "internal-integration-test"))
+            && (!mojo.is("com.theserverlabs.maven.utplsql", "maven-utplsql-plugin", "execute"))
             && (!mojo.is("org.apache.maven.plugins", "maven-surefire-plugin", "test"))
             && (!mojo.is("org.apache.maven.plugins", "maven-failsafe-plugin", "integration-test")))
             return false;
