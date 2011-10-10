@@ -44,6 +44,7 @@ import org.sonatype.inject.BeanEntry;
 
 import java.lang.annotation.Annotation;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -160,7 +161,11 @@ public class DelegatingEventSpy
         // Load the delegate, default to RemotingEventSpy
         String name = getProperty(DELEGATE_PROPERTY, RemotingEventSpy.class.getName());
         log.debug("Loading delegate named: {}", name);
-        return injector.getInstance(Key.get(EventSpy.class, Names.named(name)));
+        Iterator<BeanEntry<Annotation, EventSpy>> itr = locator.locate(Key.get(EventSpy.class, Names.named(name))).iterator();
+        if (itr.hasNext()) {
+            return itr.next().getValue();
+        }
+        throw new RuntimeException("No such delegate: "+name);
     }
 
     @Override
