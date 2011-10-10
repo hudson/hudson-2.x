@@ -49,7 +49,10 @@ import org.sonatype.aether.version.VersionScheme;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
@@ -146,13 +149,50 @@ public class MavenInstallationValidator
 
     private String getMavenVersion() throws Exception {
         if (mavenVersion == null) {
-            mavenVersion = scrapeMavenVersion();
+            mavenVersion = checkMavenVersion();
+            if (mavenVersion == null) {
+                mavenVersion = scrapeMavenVersion();
+            }
         }
         return mavenVersion;
     }
 
-    private String scrapeMavenVersion() throws Exception {
+    private String checkMavenVersion() {
         muxlog.info("Checking Maven 3 installation version");
+
+        Properties properties = new Properties();
+
+        try {
+            // search for build.properties in maven-core jar
+            for (FilePath f : getHome().child("lib").list()) {
+                if (f.getBaseName().contains("maven-core")) {
+                    JarInputStream is = new JarInputStream(f.read());
+                    try {
+                        for (JarEntry e = is.getNextJarEntry(); e != null; e = is.getNextJarEntry()) {
+                            if ("org/apache/maven/messages/build.properties".equals(e.getName())) {
+                                properties.load(is);
+                                break; // skip remaining entries
+                            }
+                        }
+                    } finally {
+                        is.close();
+                    }
+                    break; // skip remaining files
+                }
+            }
+        } catch (Exception e) {
+            muxlog.warn("Problem finding maven-core build.properties", e);
+        }
+
+        String version = properties.getProperty("version");
+        if (version != null) {
+            muxlog.info("Detected Maven 3 installation version: {}", version);
+        }
+        return version;
+    }
+
+    private String scrapeMavenVersion() throws Exception {
+        muxlog.info("Scraping Maven 3 installation version");
 
         ArgumentListBuilder args = new ArgumentListBuilder();
         args.add(getExecutable());
