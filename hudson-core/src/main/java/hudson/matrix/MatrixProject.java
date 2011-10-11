@@ -101,6 +101,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     public static final String TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME = "touchStoneCombinationFilter";
     public static final String TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME = "touchStoneResultCondition";
     public static final String AXES_PROPERTY_NAME = "axes";
+    protected static final String AXIS_CONFIGURATIONS_DIR = "configurations";
 
     /**
      * Configuration axes.
@@ -559,7 +560,8 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     }
 
     private File getConfigurationsDir() {
-        return new File(getRootDir(),"configurations");
+        return (getRootDir() != null ? new File(getRootDir(), AXIS_CONFIGURATIONS_DIR)
+            : new File(AXIS_CONFIGURATIONS_DIR));
     }
 
     /**

@@ -113,7 +113,7 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
     }
 
     public File getRootDir() {
-        return parent.getRootDirFor(this);
+        return (parent != null ? parent.getRootDirFor(this) : null);
     }
 
     /**

@@ -23,21 +23,28 @@
  */
 package hudson.matrix;
 
+import com.google.common.collect.Lists;
+import hudson.ExtensionList;
+import hudson.init.InitMilestone;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
 import hudson.model.Items;
+import hudson.model.Node;
 import hudson.model.Result;
+import hudson.model.TransientProjectActionFactory;
+import hudson.model.listeners.SaveableListener;
 import hudson.tasks.LogRotator;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import static junit.framework.Assert.*;
+import static org.easymock.EasyMock.expect;
+import static org.powermock.api.easymock.PowerMock.*;
 
 /**
  * Test to verify legacy matrix project configuration loading.
@@ -63,13 +70,25 @@ public class LegacyMatrixConfigurationTest {
      * @throws Exception if any.
      */
     @Test
-    @Ignore
-    //TODO find way how to set parent with correct root dir.
     public void testLoadLegacyMatrixProject() throws Exception {
+        Hudson hudson = createMock(Hudson.class);
+        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).anyTimes();
+        expect(hudson.getInitLevel()).andReturn(InitMilestone.STARTED).anyTimes();
+        ExtensionList<TransientProjectActionFactory> actionList = ExtensionList.create(hudson,
+            TransientProjectActionFactory.class);
+        expect(hudson.getExtensionList(TransientProjectActionFactory.class)).andReturn(actionList).anyTimes();
+        ExtensionList<SaveableListener> saveableListenerList = ExtensionList.create(hudson, SaveableListener.class);
+        expect(hudson.getExtensionList(SaveableListener.class)).andReturn(saveableListenerList).anyTimes();
+        expect(hudson.getAllItems(MatrixConfiguration.class)).andReturn(Lists.<MatrixConfiguration>newArrayList())
+            .times(3);
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
         MatrixProject project = (MatrixProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
         project.buildProjectProperties();
+        verifyAll();
         assertEquals("/tmp/1", project.getProperty(AbstractProject.CUSTOM_WORKSPACE_PROPERTY_NAME).getValue());
         assertEquals(new Integer(7), project.getIntegerProperty(AbstractProject.QUIET_PERIOD_PROPERTY_NAME).getValue());
 
@@ -92,7 +111,8 @@ public class LegacyMatrixConfigurationTest {
         assertEquals(2, axes.get(1).getValues().size());
         assertEquals("unix", axes.get(1).getValues().get(0));
         assertEquals("win", axes.get(1).getValues().get(1));
-        //TODO add matrix configuration verification
 
+        assertEquals(3, project.getActiveConfigurations().size());
+        assertEquals(2, project.getActiveConfigurations().iterator().next().getCombination().size());
     }
 }
