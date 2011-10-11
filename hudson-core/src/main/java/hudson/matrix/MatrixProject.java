@@ -560,8 +560,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
     }
 
     private File getConfigurationsDir() {
-        return (getRootDir() != null ? new File(getRootDir(), AXIS_CONFIGURATIONS_DIR)
-            : new File(new File("target"), AXIS_CONFIGURATIONS_DIR)); //For the tests
+        return new File(getRootDir(), AXIS_CONFIGURATIONS_DIR);
     }
 
     /**

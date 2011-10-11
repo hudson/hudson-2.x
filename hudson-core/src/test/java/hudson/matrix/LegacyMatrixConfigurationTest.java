@@ -74,6 +74,7 @@ public class LegacyMatrixConfigurationTest {
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).anyTimes();
         expect(hudson.getInitLevel()).andReturn(InitMilestone.STARTED).anyTimes();
+        expect(hudson.getRootDir()).andReturn(new File("./target/matrix")).anyTimes();
         ExtensionList<TransientProjectActionFactory> actionList = ExtensionList.create(hudson,
             TransientProjectActionFactory.class);
         expect(hudson.getExtensionList(TransientProjectActionFactory.class)).andReturn(actionList).anyTimes();
