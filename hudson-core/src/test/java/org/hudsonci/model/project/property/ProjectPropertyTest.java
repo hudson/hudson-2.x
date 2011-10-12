@@ -23,12 +23,24 @@
  */
 package org.hudsonci.model.project.property;
 
+import hudson.FilePath;
+import hudson.Launcher;
 import hudson.matrix.Axis;
 import hudson.matrix.AxisList;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.BuildListener;
 import hudson.model.FreeStyleProjectMock;
+import hudson.model.TaskListener;
+import hudson.scm.ChangeLogParser;
+import hudson.scm.NullSCM;
+import hudson.scm.PollingResult;
+import hudson.scm.SCM;
+import hudson.scm.SCMRevisionState;
 import hudson.tasks.LogRotator;
 import hudson.tasks.Shell;
 import hudson.util.DescribableList;
+import java.io.File;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,6 +141,16 @@ public class ProjectPropertyTest {
         }
     }
 
+    @Test
+    public void testSCMProjectPropertyConstructor() {
+        try {
+            new SCMProjectProperty(null);
+            fail("Null should be handled by ProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
     /**
      * Checks prepareValue method.
      */
@@ -188,6 +210,15 @@ public class ProjectPropertyTest {
         assertEquals(value, property.prepareValue(value));
     }
 
+    @Test
+    public void testSCMProjectPropertyPrepareValue() {
+        //Boolean property acts as BaseProperty
+        BaseProjectProperty property = new SCMProjectProperty(project);
+        assertNull(property.prepareValue(null));
+        SCM value = new NullSCM();
+        assertEquals(value, property.prepareValue(value));
+    }
+
     /**
      * Verify getDefaultValue method.
      */
@@ -233,6 +264,12 @@ public class ProjectPropertyTest {
         assertNotNull(property.getDefaultValue());
     }
 
+
+    @Test
+    public void testScmtProjectPropertyGetDefaultValue() {
+        BaseProjectProperty property = new SCMProjectProperty(project);
+        assertEquals(new NullSCM(), property.getDefaultValue());
+    }
     /**
      * Verify allowOverrideValue method.
      */
@@ -319,6 +356,16 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(null, new AxisList()));
         assertTrue(property.allowOverrideValue(new AxisList().add(new Axis("DB", "mysql")), new AxisList()));
     }
+
+    @Test
+    public void testSCMProjectPropertyAllowOverrideValue() {
+        BaseProjectProperty property = new SCMProjectProperty(project);
+        assertFalse(property.allowOverrideValue(null, null));
+        assertTrue(property.allowOverrideValue(new NullSCM(), null));
+        assertTrue(property.allowOverrideValue(null, new NullSCM()));
+        assertTrue(property.allowOverrideValue(new NullSCM(), new FakeSCM()));
+    }
+
 
     /**
      * Verify getCascadingValue method.
@@ -408,6 +455,15 @@ public class ProjectPropertyTest {
         AxisList value = new AxisList();
         value.add(new Axis("DB", "mysql"));
         BaseProjectProperty property = new AxisListProjectProperty(project);
+        property.setKey(propertyKey);
+        property.setValue(value);
+        assertEquals(value, property.getOriginalValue());
+    }
+
+    @Test
+    public void testScmProjectPropertyGetOriginalValue() {
+        SCM value = new NullSCM();
+        BaseProjectProperty property = new SCMProjectProperty(project);
         property.setKey(propertyKey);
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
@@ -559,4 +615,34 @@ public class ProjectPropertyTest {
         property.setOverridden(false);
         assertFalse(property.isOverridden());
     }
+
+    private class FakeSCM extends SCM {
+        @Override
+        public SCMRevisionState calcRevisionsFromBuild(AbstractBuild<?, ?> build, Launcher launcher,
+                                                       TaskListener listener)
+            throws IOException, InterruptedException {
+            return null;
+        }
+
+        @Override
+        protected PollingResult compareRemoteRevisionWith(AbstractProject<?, ?> project, Launcher launcher,
+                                                          FilePath workspace, TaskListener listener,
+                                                          SCMRevisionState baseline)
+            throws IOException, InterruptedException {
+            return null;
+        }
+
+        @Override
+        public boolean checkout(AbstractBuild<?, ?> build, Launcher launcher, FilePath workspace,
+                                BuildListener listener,
+                                File changelogFile) throws IOException, InterruptedException {
+            return false;
+        }
+
+        @Override
+        public ChangeLogParser createChangeLogParser() {
+            return null;
+        }
+    }
+
 }
