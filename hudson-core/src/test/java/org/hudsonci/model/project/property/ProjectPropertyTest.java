@@ -26,8 +26,10 @@ package org.hudsonci.model.project.property;
 import hudson.matrix.Axis;
 import hudson.matrix.AxisList;
 import hudson.model.FreeStyleProjectMock;
+import hudson.tasks.JavadocArchiver;
 import hudson.tasks.LogRotator;
 import hudson.tasks.Shell;
+import hudson.tasks.junit.JUnitResultArchiver;
 import hudson.util.DescribableList;
 import java.io.IOException;
 import org.junit.Before;
@@ -242,6 +244,9 @@ public class ProjectPropertyTest {
         assertFalse(property.allowOverrideValue(null, null));
         assertTrue(property.allowOverrideValue(new Object(), null));
         assertTrue(property.allowOverrideValue(null, new Object()));
+        //Test properties that don't have correct equals methods
+        assertFalse(property.allowOverrideValue(new JavadocArchiver("", false), new JavadocArchiver("", false)));
+        assertTrue(property.allowOverrideValue(new JavadocArchiver("", true), new JavadocArchiver("", false)));
     }
 
     @Test
