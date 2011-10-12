@@ -22,27 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <st:documentation>
-    Section header in the form table.
-
-    <st:attribute name="title" use="required">
-      The section header text.
-      If null is given, the entire &lt;f:section> tag becomes no-op.
-    </st:attribute>
-    <st:attribute name="name">
-      Optional attribute to create a JSON object from this section.
-    </st:attribute>
-  </st:documentation>
-
-  <f:rowSet name="${attrs.name}">
-    <j:if test="${attrs.title!=null}">
-      <f:block>
-        <div style="font-weight:bold; border-bottom: 1px solid black; margin-bottom:0.2em; margin-top:0.4em">
-          ${title}
-        </div>
-      </f:block>
-    </j:if>
-    <d:invokeBody />
-  </f:rowSet>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <st:documentation>
+        Section header in the form table.
+        <st:attribute name="title" use="required">
+            The section header text.
+            If null is given, the entire &lt;f:section> tag becomes no-op.
+        </st:attribute>
+        <st:attribute name="name">
+            Optional attribute to create a JSON object from this section.
+        </st:attribute>
+        <st:attribute name="resetUrl">
+            If present, Redo icon will rendered and Reset will be available.
+        </st:attribute>
+    </st:documentation>
+    <f:rowSet name="${attrs.name}">
+        <j:if test="${attrs.title!=null}">
+            <f:block>
+                <div style="font-weight:bold; border-bottom: 1px solid black; margin-bottom:0.2em; margin-top:0.4em">
+                    ${title}
+                </div>
+                <j:if test="${!empty(attrs.resetUrl)}">
+                    <div class="section-reset">
+                        <a href="#" class="reset-button" resetURL="${resetUrl}">
+                            <img src="${imagesURL}/16x16/undo.png" alt="Reset ${attrs.title}"/>
+                        </a>
+                    </div>
+                </j:if>
+            </f:block>
+        </j:if>
+        <d:invokeBody/>
+    </f:rowSet>
 </j:jelly>

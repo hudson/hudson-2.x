@@ -90,6 +90,7 @@ import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
+import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -259,6 +260,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         return getProperty(key, null);
     }
 
+    //TODO relocate it to functions
     /**
      * {@inheritDoc}
      */
@@ -312,6 +314,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public AxisListProjectProperty getAxesListProjectProperty(String key) {
         return (AxisListProjectProperty) getProperty(key, AxisListProjectProperty.class);
+    }
+
+    public SCMProjectProperty getScmProjectProperty(String key) {
+        return (SCMProjectProperty) getProperty(key, SCMProjectProperty.class);
     }
 
     @Override
