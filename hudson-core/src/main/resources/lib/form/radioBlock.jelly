@@ -46,25 +46,33 @@ THE SOFTWARE.
       If specified, the (?) help icon will be rendered on the right,
       for in place help text. See &lt;f:entry> for the details.
     </st:attribute>
+    <st:attribute name="isPropertyOverridden">
+      if present and true - value is overridden
+    </st:attribute>
   </st:documentation>
 
-	<tr class="radio-block-start" hasHelp="${attrs.help!=null}"><!-- this ID marks the beginning -->
-	  <td colspan="3">
-	    <input type="radio" name="${name}" value="${value}"
-             class="radio-block-control" checked="${checked?'true':null}" />
-      <st:nbsp/>
-      <label class="attach-previous">${title}</label>
-    </td>
-    <j:if test="${attrs.help!=null}">
-      <td>
-        <a href="#" class="help-button" helpURL="${rootURL}${help}"><img src="${imagesURL}/16x16/help.gif" alt="Help for feature: ${title}" /></a>
-      </td>
+    <j:if test="${attrs.isPropertyOverridden==null}">
+        <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
     </j:if>
-	</tr>
-  <j:if test="${attrs.help!=null}">
-    <f:helpArea />
-  </j:if>
-	<d:invokeBody />
-	<!-- end marker -->
-	<tr class="radio-block-end" style="display:none" />
+    <tr class="radio-block-start" hasHelp="${attrs.help!=null}"><!-- this ID marks the beginning -->
+        <td colspan="3" class="${attrs.isPropertyOverridden? 'modified': 'original'}">
+            <input type="radio" name="${name}" value="${value}"
+                   class="radio-block-control" checked="${checked?'true':null}"/>
+            <st:nbsp/>
+            <label class="attach-previous">${title}</label>
+        </td>
+        <j:if test="${attrs.help!=null}">
+            <td>
+                <a href="#" class="help-button" helpURL="${rootURL}${help}">
+                    <img src="${imagesURL}/16x16/help.gif" alt="Help for feature: ${title}"/>
+                </a>
+            </td>
+        </j:if>
+    </tr>
+    <j:if test="${attrs.help!=null}">
+        <f:helpArea/>
+    </j:if>
+    <d:invokeBody/>
+    <!-- end marker -->
+    <tr class="radio-block-end" style="display:none"/>
 </j:jelly>

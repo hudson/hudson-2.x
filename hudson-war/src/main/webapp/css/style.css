@@ -1021,10 +1021,16 @@ tr.modified > td.setting-leftspace {
 }
 
 /* --- Reset button container for hetero-list --- */
-.hetero-list-reset {
+.hetero-list-reset{
     float: right;
     margin-right: -20px;
     margin-top: 5px;
+}
+
+.section-reset{
+    float: right;
+    margin-right: -20px;
+    margin-top: -10px;
 }
 
 /* ======================= Job Configuration table ========================== */
