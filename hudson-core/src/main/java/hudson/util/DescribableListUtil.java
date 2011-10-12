@@ -23,6 +23,7 @@
  */
 package hudson.util;
 
+import com.google.common.collect.Maps;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Saveable;
@@ -30,7 +31,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import net.sf.json.JSONObject;
+import org.hudsonci.api.model.IJob;
+import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
@@ -100,6 +104,31 @@ public final class DescribableListUtil {
         Collection<D> descriptors)
         throws Descriptor.FormException, IOException {
         return new DescribableList<T, D>(owner, Descriptor.newInstancesFromHeteroList(req, formData, key, descriptors));
+    }
+
+    /**
+     * Converts describableList data to project properties map. {@link hudson.model.Descriptor#getJsonSafeClassName()}
+     * is used as key, value - {@link BaseProjectProperty}.
+     *
+     * @param describableList source.
+     * @param owner new owner for properties.
+     * @param <T> T describable
+     * @param <D> Descriptor
+     * @return map of converted properties.
+     */
+    public static <T extends Describable<T>, D extends Descriptor<T>>
+    Map<String, BaseProjectProperty<T>> convertToProjectProperties(DescribableList<T, D> describableList, IJob owner) {
+        Map<String, BaseProjectProperty<T>> result = Maps.newConcurrentMap();
+        if (null != describableList) {
+            for (Map.Entry<D, T> entry : describableList.toMap().entrySet()) {
+                BaseProjectProperty<T> property = new BaseProjectProperty<T>(owner);
+                String key = entry.getKey().getJsonSafeClassName();
+                property.setKey(key);
+                property.setValue(entry.getValue());
+                result.put(key, property);
+            }
+        }
+        return result;
     }
 
 }

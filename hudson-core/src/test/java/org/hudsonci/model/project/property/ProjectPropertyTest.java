@@ -29,13 +29,17 @@ import hudson.model.FreeStyleProjectMock;
 import hudson.tasks.JavadocArchiver;
 import hudson.tasks.LogRotator;
 import hudson.tasks.Shell;
-import hudson.tasks.junit.JUnitResultArchiver;
 import hudson.util.DescribableList;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * Contains test-cases for IProjectProperty and its' implementations.
