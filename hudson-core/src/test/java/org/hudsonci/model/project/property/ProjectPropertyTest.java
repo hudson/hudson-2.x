@@ -286,7 +286,6 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(new Object(), null));
         assertTrue(property.allowOverrideValue(null, new Object()));
         //Test properties that don't have correct equals methods
-        //TODO fix me
         assertFalse(property.allowOverrideValue(new JavadocArchiver("", false), new JavadocArchiver("", false)));
         assertTrue(property.allowOverrideValue(new JavadocArchiver("", true), new JavadocArchiver("", false)));
     }
