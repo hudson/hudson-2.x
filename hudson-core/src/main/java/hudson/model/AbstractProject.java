@@ -346,30 +346,58 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @Override
     protected void buildProjectProperties() throws IOException {
         super.buildProjectProperties();
+        convertBlockBuildWhenUpstreamBuildingProperty();
+        convertBlockBuildWhenDownstreamBuildingProperty();
+        convertConcurrentBuildProperty();
+        convertCleanWorkspaceRequiredProperty();
+        convertQuietPeriodProperty();
+        convertScmCheckoutRetryCountProperty();
+        convertJDKProperty();
+    }
+
+    void convertBlockBuildWhenUpstreamBuildingProperty() throws IOException {
         if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
             blockBuildWhenUpstreamBuilding = false;
         }
+    }
+
+    void convertBlockBuildWhenDownstreamBuildingProperty() throws IOException {
         if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
             blockBuildWhenDownstreamBuilding = false;
         }
+    }
+
+    void convertConcurrentBuildProperty() throws IOException {
         if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
             setConcurrentBuild(concurrentBuild);
             concurrentBuild = false;
         }
+    }
+
+    void convertCleanWorkspaceRequiredProperty() throws IOException {
         if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
             setCleanWorkspaceRequired(cleanWorkspaceRequired);
             cleanWorkspaceRequired = false;
         }
+    }
+
+    void convertQuietPeriodProperty() throws IOException {
         if (null == getProperty(QUIET_PERIOD_PROPERTY_NAME)) {
             setQuietPeriod(quietPeriod);
             quietPeriod = null;
         }
+    }
+
+    void convertScmCheckoutRetryCountProperty() throws IOException {
         if (null == getProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)) {
             setScmCheckoutRetryCount(scmCheckoutRetryCount);
             scmCheckoutRetryCount = null;
         }
+    }
+
+    void convertJDKProperty() throws IOException {
         if (null == getProperty(JDK_PROPERTY_NAME)) {
             setJDK(jdk);
             jdk = null;

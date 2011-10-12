@@ -37,6 +37,7 @@ import hudson.scm.NullSCM;
 import hudson.scm.PollingResult;
 import hudson.scm.SCM;
 import hudson.scm.SCMRevisionState;
+import hudson.tasks.JavadocArchiver;
 import hudson.tasks.LogRotator;
 import hudson.tasks.Shell;
 import hudson.util.DescribableList;
@@ -45,7 +46,12 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * Contains test-cases for IProjectProperty and its' implementations.
@@ -279,6 +285,10 @@ public class ProjectPropertyTest {
         assertFalse(property.allowOverrideValue(null, null));
         assertTrue(property.allowOverrideValue(new Object(), null));
         assertTrue(property.allowOverrideValue(null, new Object()));
+        //Test properties that don't have correct equals methods
+        //TODO fix me
+        assertFalse(property.allowOverrideValue(new JavadocArchiver("", false), new JavadocArchiver("", false)));
+        assertTrue(property.allowOverrideValue(new JavadocArchiver("", true), new JavadocArchiver("", false)));
     }
 
     @Test

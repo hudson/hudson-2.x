@@ -25,15 +25,12 @@
 package hudson.model;
 
 import hudson.Extension;
-
 import java.io.File;
 import java.io.IOException;
-
+import javax.servlet.ServletException;
 import org.hudsonci.api.model.IFreeStyleProject;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-
-import javax.servlet.ServletException;
 
 /**
  * Free-style software project.
@@ -109,7 +106,15 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
     @Override
     protected void buildProjectProperties() throws IOException {
         super.buildProjectProperties();
-        //Convert legacy customWorkspace property to IProjectProperty logic
+        convertCustomWorkspaceProperty();
+    }
+
+    /**
+     * Converts customWorkspace property to ProjectProperty.
+     *
+     * @throws IOException if any.
+     */
+    void convertCustomWorkspaceProperty() throws IOException {
         if (null != customWorkspace && null == getProperty(CUSTOM_WORKSPACE_PROPERTY_NAME)) {
             setCustomWorkspace(customWorkspace);
             customWorkspace = null;//Reset to null. No longer needed.
