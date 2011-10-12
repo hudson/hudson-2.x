@@ -26,7 +26,21 @@ THE SOFTWARE.
   Publisher config pane
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project">
-  <f:descriptorList title="${%Post-build Actions}"
-                    descriptors="${h.getPublisherDescriptors(it)}"
-                    instances="${it.publishers}" />
+  <j:set var="targetType" value="${it.class}"/>
+  <j:set var="descriptors" value="${h.getPublisherDescriptors(it)}"/>
+
+  <j:if test="${!empty(descriptors)}">
+    <f:section title="${%Post-build Actions}" name="${entry.field}">
+      <j:forEach var="descriptor" items="${descriptors}">
+        <j:set var="instanceProperty" value="${it.getBaseProjectProperty(descriptor.jsonSafeClassName)}"/>
+        <j:set var="instance" value="${instanceProperty.getValue()}"/>
+        <f:optionalBlock name="${descriptor.jsonSafeClassName}" help="${descriptor.helpFile}"
+                         title="${descriptor.displayName}" checked="${instance!=null}"
+                         resetUrl="${jobUrl}/resetProjectProperty?propertyName=${descriptor.jsonSafeClassName}"
+                         isPropertyOverridden="${instanceProperty.isOverridden()}">
+          <st:include from="${descriptor}" page="${descriptor.configPage}" optional="true"/>
+        </f:optionalBlock>
+      </j:forEach>
+    </f:section>
+  </j:if>
 </j:jelly>
