@@ -71,7 +71,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyCustomWorkspaceProperty() throws Exception {
+    public void testConvertLegacyCustomWorkspaceProperty() throws Exception {
         FreeStyleProject project = (FreeStyleProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -87,7 +87,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyBuildersProperty() throws Exception {
+    public void testConvertLegacyBuildersProperty() throws Exception {
         Project project = (Project) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -108,7 +108,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyBuildWrappersProperty() throws Exception {
+    public void testConvertLegacyBuildWrappersProperty() throws Exception {
         Project project = (Project) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -129,7 +129,7 @@ public class LegacyProjectTest {
     @Test
     @Ignore
     //TODO investigate how to mock descriptor loading and creation.
-    public void testСonvertPublishersProperty() throws Exception {
+    public void testConvertPublishersProperty() throws Exception {
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getDescriptorOrDie(Mailer.class)).andReturn(new Mailer.DescriptorImpl());
         expect(hudson.getDescriptorOrDie(JUnitResultArchiver.class)).andReturn(
@@ -158,7 +158,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyBlockBuildWhenDownstreamBuildingProperty() throws Exception {
+    public void testConvertLegacyBlockBuildWhenDownstreamBuildingProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -174,7 +174,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyBlockBuildWhenUpstreamBuildingProperty() throws Exception {
+    public void testConvertLegacyBlockBuildWhenUpstreamBuildingProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -190,7 +190,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyConcurrentBuildProperty() throws Exception {
+    public void testConvertLegacyConcurrentBuildProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -206,7 +206,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyCleanWorkspaceRequiredProperty() throws Exception {
+    public void testConvertLegacyCleanWorkspaceRequiredProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -222,7 +222,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyQuietPeriodProperty() throws Exception {
+    public void testConvertLegacyQuietPeriodProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -238,7 +238,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyScmCheckoutRetryCountProperty() throws Exception {
+    public void testConvertLegacyScmCheckoutRetryCountProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -254,7 +254,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyJDKProperty() throws Exception {
+    public void testConvertLegacyJDKProperty() throws Exception {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -270,7 +270,7 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    public void testСonvertLegacyLogRotatorProperty() throws Exception {
+    public void testConvertLegacyLogRotatorProperty() throws Exception {
         Job project = (Job) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
