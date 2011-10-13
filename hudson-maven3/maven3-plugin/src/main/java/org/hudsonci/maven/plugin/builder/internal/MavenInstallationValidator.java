@@ -37,6 +37,7 @@ import hudson.Launcher;
 import hudson.Proc;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
+import hudson.remoting.VirtualChannel;
 import hudson.util.ArgumentListBuilder;
 import hudson.util.ClasspathBuilder;
 import org.slf4j.Logger;
@@ -48,11 +49,14 @@ import org.sonatype.aether.version.VersionScheme;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
@@ -149,51 +153,56 @@ public class MavenInstallationValidator
 
     private String getMavenVersion() throws Exception {
         if (mavenVersion == null) {
-            mavenVersion = checkMavenVersion();
+            muxlog.info("Checking Maven 3 installation version");
+            mavenVersion = getMavenVersionFromProperties();
             if (mavenVersion == null) {
-                mavenVersion = scrapeMavenVersion();
+                mavenVersion = getMavenVersionFromConsole();
             }
+            muxlog.info("Detected Maven 3 installation version: {}", mavenVersion);
         }
         return mavenVersion;
     }
 
-    private String checkMavenVersion() {
-        muxlog.info("Checking Maven 3 installation version");
-
-        Properties properties = new Properties();
-
+    private String getMavenVersionFromProperties() {
         try {
-            // search for build.properties in maven-core jar
-            for (FilePath f : getHome().child("lib").list()) {
-                if (f.getBaseName().contains("maven-core")) {
-                    JarInputStream is = new JarInputStream(f.read());
-                    try {
-                        for (JarEntry e = is.getNextJarEntry(); e != null; e = is.getNextJarEntry()) {
-                            if ("org/apache/maven/messages/build.properties".equals(e.getName())) {
-                                properties.load(is);
-                                break; // skip remaining entries
+            FilePath[] jars = getHome().child( "lib" ).list("maven-core-*.jar, maven-*-uber.jar");
+            if (jars != null && jars.length > 0) {
+                FilePath jar = jars[0];
+                Properties mavenProperties = jar.act(new FilePath.FileCallable<Properties>() {
+                    private static final long serialVersionUID = 1L;
+
+                    public Properties invoke(File file, VirtualChannel channel) throws IOException {
+                        ZipFile zipFile = new ZipFile(file);
+                        try {
+                            ZipEntry zipEntry = zipFile.getEntry("org/apache/maven/messages/build.properties");
+                            if (zipEntry == null) {
+                                zipEntry = zipFile.getEntry("META-INF/maven/org.apache.maven/maven-core/pom.properties");
+                                if (zipEntry == null) {
+                                    return null; // unable to find Maven properties
+                                }
                             }
+                            InputStream is = zipFile.getInputStream(zipEntry);
+                            Properties properties = new Properties();
+                            properties.load(is);
+                            return properties;
+                        } finally {
+                            zipFile.close();
                         }
-                    } finally {
-                        is.close();
-                    }
-                    break; // skip remaining files
+                    }});
+                if (muxlog.isTraceEnabled()) {
+                    muxlog.trace("Maven installation properties: {}", mavenProperties);
+                }
+                if (mavenProperties != null) {
+                    return mavenProperties.getProperty("version");
                 }
             }
         } catch (Exception e) {
-            muxlog.warn("Problem finding maven-core build.properties", e);
+            // ignore; revert to checking the version on the console
         }
-
-        String version = properties.getProperty("version");
-        if (version != null) {
-            muxlog.info("Detected Maven 3 installation version: {}", version);
-        }
-        return version;
+        return null;
     }
 
-    private String scrapeMavenVersion() throws Exception {
-        muxlog.info("Scraping Maven 3 installation version");
-
+    private String getMavenVersionFromConsole() throws Exception {
         ArgumentListBuilder args = new ArgumentListBuilder();
         args.add(getExecutable());
         args.add("--version");
@@ -231,9 +240,6 @@ public class MavenInstallationValidator
                     "3 installation version; unable to parse version " +
                     "from: %s", output));
         }
-
-        muxlog.info("Detected Maven 3 installation version: {}", version);
-
         return version;
     }
 
