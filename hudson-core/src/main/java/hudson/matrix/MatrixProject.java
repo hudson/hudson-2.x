@@ -214,7 +214,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public void setAxes(AxisList axes) throws IOException {
         getAxesListProjectProperty(AXES_PROPERTY_NAME).setValue(axes);
-//        rebuildConfigurations();
+        rebuildConfigurations();
         save();
     }
 
@@ -245,7 +245,7 @@ public class MatrixProject extends AbstractProject<MatrixProject, MatrixBuild> i
      */
     public void setCombinationFilter(String combinationFilter) throws IOException {
         getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
-//        rebuildConfigurations();
+        rebuildConfigurations();
         save();
     }
 

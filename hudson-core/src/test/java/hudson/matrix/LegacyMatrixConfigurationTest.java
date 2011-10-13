@@ -37,6 +37,7 @@ import hudson.tasks.LogRotator;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -70,6 +71,7 @@ public class LegacyMatrixConfigurationTest {
      * @throws Exception if any.
      */
     @Test
+    @Ignore
     public void testLoadLegacyMatrixProject() throws Exception {
         Hudson hudson = createMock(Hudson.class);
         expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).anyTimes();
