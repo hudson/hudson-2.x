@@ -260,8 +260,8 @@ public class ProjectPropertyTest {
 
     @Test
     public void testAxisListProjectPropertyGetDefaultValue() {
-        BaseProjectProperty property = new AxisListProjectProperty(project);
-        assertNull(property.getDefaultValue());
+        AxisListProjectProperty property = new AxisListProjectProperty(project);
+        assertEquals(property.getDefaultValue().size(), 0);
     }   
     
     @Test
