@@ -97,7 +97,7 @@ dt {
 }
 
 #main-panel {
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
 }
 
 #side-panel {
@@ -1008,6 +1008,14 @@ div.deleteSlaveDialog div.radioButtons {
 div.deleteSlaveDialog h4 {
     color: #F89938;
 }
+
+.section-title {
+    font-weight:bold;
+    border-bottom: 1px solid black;
+    margin-bottom:0.2em;
+    margin-top:0.4em;
+}
+
 /* ======================== "Cascading project" ==========================*/
 /* --- Optional Block, Entry Block --- */
 td.modified,
@@ -1020,17 +1028,22 @@ tr.modified > td.setting-leftspace {
     background-color: #FFE8C9;
 }
 
+.optional-reset {
+    float: left;
+    margin-left: -20px;
+    display: inline;
+}
 /* --- Reset button container for hetero-list --- */
 .hetero-list-reset{
-    float: right;
-    margin-right: -20px;
-    margin-top: 5px;
+    float: left;
+    margin-left: -20px;
+    display: inline;
 }
 
-.section-reset{
-    float: right;
-    margin-right: -20px;
-    margin-top: -10px;
+.section-reset {
+    float: left;
+    margin-left: -20px;
+    display: inline;
 }
 
 /* ======================= Job Configuration table ========================== */
