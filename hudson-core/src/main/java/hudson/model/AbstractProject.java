@@ -138,9 +138,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "scmCheckoutRetryCount";
     public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
     public static final String JDK_PROPERTY_NAME = "jdk";
-    public static final String BUILDERS_PROPERTY_NAME = "builders";
-    public static final String BUILD_WRAPPERS_PROPERTY_NAME = "buildWrappers";
-    public static final String PUBLISHERS_PROPERTY_NAME = "publishers";
     public static final String SCM_PROPERTY_NAME = "scm";
     public static final String PROPERTY_NAME_SEPARATOR = ";";
 

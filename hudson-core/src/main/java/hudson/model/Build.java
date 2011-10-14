@@ -77,7 +77,7 @@ import static hudson.model.Result.ABORTED;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class Build <P extends Project<P,B>,B extends Build<P,B>>
+public abstract class Build <P extends BaseBuildableProject<P,B>,B extends Build<P,B>>
     extends AbstractBuild<P,B> {
 
     /**
