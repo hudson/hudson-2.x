@@ -195,4 +195,33 @@ public class MavenBuilder
             build.addAction(new MavenBuildAction(build));
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        MavenBuilder that = (MavenBuilder) o;
+
+        if (!config.equals(that.config)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public int hashCode() {
+        return config.hashCode();
+    }
 }
