@@ -97,7 +97,7 @@ dt {
 }
 
 #main-panel {
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
 }
 
 #side-panel {
@@ -1020,17 +1020,22 @@ tr.modified > td.setting-leftspace {
     background-color: #FFE8C9;
 }
 
+.optional-reset {
+    float: left;
+    margin-left: -20px;
+    position: absolute;
+}
 /* --- Reset button container for hetero-list --- */
 .hetero-list-reset{
-    float: right;
-    margin-right: -20px;
-    margin-top: 5px;
+    float: left;
+    margin-left: -20px;
+    position: absolute;
 }
 
 .section-reset{
-    float: right;
-    margin-right: -20px;
-    margin-top: -10px;
+    float: left;
+    margin-left: -20px;
+    position: absolute;
 }
 
 /* ======================= Job Configuration table ========================== */
