@@ -40,9 +40,6 @@ THE SOFTWARE.
     <f:rowSet name="${attrs.name}">
         <j:if test="${attrs.title!=null}">
             <f:block>
-                <div style="font-weight:bold; border-bottom: 1px solid black; margin-bottom:0.2em; margin-top:0.4em">
-                    ${title}
-                </div>
                 <j:if test="${!empty(attrs.resetUrl)}">
                     <div class="section-reset">
                         <a href="#" class="reset-button" resetURL="${resetUrl}">
@@ -50,6 +47,9 @@ THE SOFTWARE.
                         </a>
                     </div>
                 </j:if>
+                <div style="font-weight:bold; border-bottom: 1px solid black; margin-bottom:0.2em; margin-top:0.4em">
+                    ${title}
+                </div>
             </f:block>
         </j:if>
         <d:invokeBody/>
