@@ -45,7 +45,7 @@ public class DescribableListProjectProperty extends BaseProjectProperty<Describa
     }
 
     @Override
-    protected boolean allowOverrideValue(DescribableList cascadingValue, DescribableList candidateValue) {
+    public boolean allowOverrideValue(DescribableList cascadingValue, DescribableList candidateValue) {
         return (null != candidateValue || null != cascadingValue)
             && ((null == cascadingValue || null == candidateValue)
             || !CollectionUtils.isEqualCollection(cascadingValue.toList(), candidateValue.toList()));

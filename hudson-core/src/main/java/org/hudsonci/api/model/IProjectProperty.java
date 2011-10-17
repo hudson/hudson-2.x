@@ -95,6 +95,15 @@ public interface IProjectProperty<T> extends Serializable {
     void resetValue();
 
     /**
+     * Returns true, if cascading value should be overridden by candidate value.
+     *
+     * @param cascadingValue value from cascading project if any.
+     * @param candidateValue candidate value.
+     * @return true if cascading value should be replaced by candidate value.
+     */
+    boolean allowOverrideValue(T cascadingValue, T candidateValue);
+
+    /**
      * Sets the overridden flag.
      *
      * @param overridden true - mark property as overridden, false - otherwise.
