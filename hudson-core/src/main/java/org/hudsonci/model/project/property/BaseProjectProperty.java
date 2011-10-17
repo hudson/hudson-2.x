@@ -133,7 +133,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
         if (!getJob().hasCascadingProject()) {
             setOriginalValue(value, false);
         } else {
-            T cascadingValue = (T) getJob().getCascadingProject().getProperty(propertyKey, this.getClass()).getValue();
+            T cascadingValue = getCascadingValue();
             T candidateValue = null == value ? getDefaultValue() : value;
             if (allowOverrideValue(cascadingValue, candidateValue)) {
                 setOriginalValue(value, true);
@@ -164,13 +164,9 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     }
 
     /**
-     * Returns true, if cascading value should be overridden by candidate value.
-     *
-     * @param cascadingValue value from cascading project if any.
-     * @param candidateValue candidate value.
-     * @return true if cascading value should be replaced by candidate value.
+     * {@inheritDoc}
      */
-    protected boolean allowOverrideValue(T cascadingValue, T candidateValue) {
+    public boolean allowOverrideValue(T cascadingValue, T candidateValue) {
         return ObjectUtils.notEqual(cascadingValue, candidateValue)
             && !EqualsBuilder.reflectionEquals(cascadingValue, candidateValue);
     }
