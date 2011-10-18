@@ -561,9 +561,33 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *
      * @param logRotator log rotator.
      */
-    @SuppressWarnings("unchecked")
     public void setLogRotator(LogRotator logRotator) {
-        getProperty(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class).setValue(logRotator);
+        setLogRotator(logRotator, true);
+    }
+
+    public void setLogRotator(LogRotator logRotator, boolean forceModify) {
+        setProjectPropertyValue(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class, logRotator, forceModify);
+    }
+
+    /**
+     * Update project property with new value. ForceModify flag is taken into account.
+     * If property is null - it will be initialized and added to current job.
+     *
+     * @param key property key.
+     * @param clazz property class.
+     * @param value new value.
+     * @param forceModify true - to set property value even if it was not modified from UI. Basically this parameter is
+     * used for cascading functionality.
+     */
+    @SuppressWarnings("unchecked")
+    protected void setProjectPropertyValue(String key, Class clazz, Object value, boolean forceModify) {
+        IProjectProperty property = getProperty(key, clazz);
+        if (null != property) {
+            if (forceModify) {
+                property.setModified(forceModify);
+            }
+            property.setValue(value);
+        }
     }
 
     /**
@@ -1527,6 +1551,15 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         setCascadingProjectName(projectName);
     }
 
+    public synchronized void doModifyCascadingProperty(@QueryParameter(fixEmpty = true) String propertyName) {
+        if (null != propertyName) {
+            IProjectProperty property = getProperty(propertyName);
+            if (null != property) {
+                property.setModified(true);
+            }
+        }
+    }
+
     /**
      * Sets cascadingProject name.
      *
@@ -1541,7 +1574,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             this.cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
             for (IProjectProperty property : jobProperties.values()) {
-                property.setOverridden(property.getValue() != property.getCascadingValue());
+                property.setOverridden(property.isModified());
             }
         }
     }
