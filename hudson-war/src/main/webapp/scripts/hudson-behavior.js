@@ -768,7 +768,7 @@ var hudsonRules = {
 
     "TR.optional-block-start": function(e) { // see optionalBlock.jelly
         // set start.ref to checkbox in preparation of row-set-end processing
-        var checkbox = e.firstChild.firstChild;
+        var checkbox = e.firstChild.getElementsByTagName('input')[0];
         e.setAttribute("ref", checkbox.id = "cb"+(iota++));
     },
 
@@ -794,7 +794,7 @@ var hudsonRules = {
         // this is suffixed by a pointless string so that two processing for optional-block-start
         // can sandwitch row-set-end
         // this requires "TR.row-set-end" to mark rows
-        var checkbox = e.firstChild.firstChild;
+        var checkbox = e.firstChild.getElementsByTagName('input')[0];
         updateOptionalBlock(checkbox,false);
     },
 
