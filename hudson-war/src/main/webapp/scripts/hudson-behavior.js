@@ -250,7 +250,7 @@ function findFollowingTR(input, className) {
     // then next TR that matches the CSS
     do {
         tr = tr.nextSibling;
-    } while (tr != null && (tr.tagName != "TR" || tr.className != className));
+    } while (tr != null && (tr.tagName != "TR" || !Element.hasClassName(tr,className)));
 
     return tr;
 }
@@ -532,8 +532,12 @@ var hudsonRules = {
             var nameRef = tr.getAttribute("nameref");
             while (container.lastChild != null) {
                 var row = container.lastChild;
-                if(nameRef!=null && row.getAttribute("nameref")==null)
+                if(nameRef!=null && row.getAttribute("nameref")==null){
                     row.setAttribute("nameref",nameRef); // to handle inner rowSets, don't override existing values
+                }
+                if(Element.hasClassName(link,"modified")){
+                    Element.addClassName(row,"modified");
+                }
                 tr.parentNode.insertBefore(row, tr.nextSibling);
             }
         });
@@ -706,7 +710,7 @@ var hudsonRules = {
         }
 
         var handle = textarea.nextSibling;
-        if(handle==null || handle.className!="textarea-handle") return;
+        if(handle==null || !Element.hasClassName(handle, "textarea-handle")) return;
 
         var Event = YAHOO.util.Event;
 
@@ -885,6 +889,11 @@ var hudsonRules = {
             g.updateSingleButton(r,s,e);
         };
         applyNameRef(s,e,r.id);
+        if (Element.hasClassName(r.parentNode,'modified')){
+           jQuery('[nameref='+ r.id +']').children().addClass('modified');
+           //required for the advanced sections (hudson generates content inside div).
+           jQuery('[nameref='+ r.id +'] div.advancedLink').addClass('modified');
+        }
         g.buttons.push(u);
 
         // apply the initial visibility
@@ -916,7 +925,7 @@ var hudsonRules = {
         e.subForms = [];
         var start = findFollowingTR(e, 'dropdownList-container').firstChild.nextSibling, end;
         do { start = start.firstChild; } while (start && start.tagName != 'TR');
-        if (start && start.className != 'dropdownList-start')
+        if (start && !Element.hasClassName(start,'dropdownList-start'))
             start = findFollowingTR(start, 'dropdownList-start');
         while (start != null) {
             end = findFollowingTR(start, 'dropdownList-end');
@@ -1401,12 +1410,12 @@ var repeatableSupport = {
             // noop
         } else
         if(children.length==1) {
-            children[0].className = "repeated-chunk first last only";
+            children[0].addClassName("repeated-chunk first last only");
         } else {
-            children[0].className = "repeated-chunk first";
+            children[0].addClassName("repeated-chunk first");
             for(var i=1; i<children.length-1; i++)
-                children[i].className = "repeated-chunk middle";
-            children[children.length-1].className = "repeated-chunk last";
+                children[i].addClassName("repeated-chunk middle");
+            children[children.length-1].addClassName("repeated-chunk last");
         }
     },
 
