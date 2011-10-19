@@ -200,7 +200,12 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
      * @inheritDoc
      */
     public void setRunSequentially(boolean runSequentially) throws IOException {
-        setProjectPropertyValue(RUN_SEQUENTIALLY_PROPERTY_NAME, BooleanProjectProperty.class, runSequentially, true);
+        setRunSequentially(runSequentially, true);
+    }
+
+    protected void setRunSequentially(boolean runSequentially, boolean forceModify) throws IOException {
+        setProjectPropertyValue(RUN_SEQUENTIALLY_PROPERTY_NAME, BooleanProjectProperty.class, runSequentially,
+            forceModify);
         save();
     }
 
