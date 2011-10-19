@@ -504,6 +504,7 @@ public class ProjectPropertyTest {
         project.setCascadingProject(parent);
 
         //If value set to null, need to check whether default value is equals to cascading
+        property.setModified(true);
         property.setValue(null);
         assertTrue(property.isOverridden());
         String overriddenValue = "newValue";
