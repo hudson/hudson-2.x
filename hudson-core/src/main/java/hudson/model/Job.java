@@ -1230,7 +1230,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
             JSONObject json = req.getSubmittedForm();
             setLogRotator(req.getParameter("logrotate") != null ? LogRotator.DESCRIPTOR
-                .newInstance(req, json.getJSONObject("logrotate")) : null);
+                .newInstance(req, json.getJSONObject("logrotate")) : null, false);
 
             int i = 0;
             for (JobPropertyDescriptor d : JobPropertyDescriptor
