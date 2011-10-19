@@ -223,7 +223,7 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
      * @param req {@link StaplerRequest}
      * @param json {@link JSONObject}
      * @param descriptors list of descriptors.
-     * @throws hudson.model.Descriptor.FormException
+     * @throws hudson.model.Descriptor.FormException if any.
      */
     @SuppressWarnings("unchecked")
     protected void buildPublishers( StaplerRequest req, JSONObject json, List<Descriptor<Publisher>> descriptors) throws FormException{
