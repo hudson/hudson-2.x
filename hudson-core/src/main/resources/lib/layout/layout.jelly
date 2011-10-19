@@ -73,7 +73,7 @@ THE SOFTWARE.
     ${h.checkPermission(it,permission)}
 
     <title>${h.appendIfNotNull(title, ' [Hudson]', 'Hudson')}</title>
-    <link rel="stylesheet" href="${resURL}/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="${resURL}/css/style.css?${h.version}" type="text/css" />
     <link rel="stylesheet" href="${resURL}/css/color.css" type="text/css" />
     <j:if test="${attrs.css!=null}">
       <link rel="stylesheet" href="${rootURL}${attrs.css}" type="text/css" />
@@ -107,8 +107,8 @@ THE SOFTWARE.
     <l:yui module="button" />
     <!--l:yui module="editor" suffix="-beta" /-->
 
-    <script src="${resURL}/scripts/hudson-behavior.js" type="text/javascript"></script>
-    <script src="${resURL}/scripts/cascading.js" type="text/javascript"></script>
+    <script src="${resURL}/scripts/hudson-behavior.js?${h.version}" type="text/javascript"></script>
+    <script src="${resURL}/scripts/cascading.js?${h.version}" type="text/javascript"></script>
 
     <script>
         crumb.init("${h.getCrumbRequestField()}", "${h.getCrumb(request)}");
