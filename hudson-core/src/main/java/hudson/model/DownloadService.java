@@ -26,6 +26,7 @@ package hudson.model;
 import hudson.Extension;
 import hudson.ExtensionList;
 import hudson.ExtensionPoint;
+import hudson.Util;
 import hudson.util.IOUtils;
 import hudson.util.QuotedStringTokenizer;
 import hudson.util.TextFile;
@@ -75,7 +76,9 @@ public class DownloadService extends PageDecorator {
                        .append(',')
                        .append(QuotedStringTokenizer.quote(d.getUrl()))
                        .append(',')
-                       .append("{version:"+QuotedStringTokenizer.quote(Hudson.VERSION)+'}')
+                       .append("{version:")
+                       .append(QuotedStringTokenizer.quote(Hudson.VERSION + "-" + Util.getDigestOf(Hudson.getInstance().getSecretKey())))
+                       .append('}')
                        .append(',')
                        .append(QuotedStringTokenizer.quote(Stapler.getCurrentRequest().getContextPath()+'/'+getUrl()+"/byId/"+d.getId()+"/postBack"))
                        .append(',')

@@ -27,6 +27,8 @@ package org.hudsonci.maven.plugin.builder.internal;
 import com.google.common.collect.ImmutableList;
 import org.hudsonci.maven.model.MavenCoordinatesDTO;
 import org.hudsonci.maven.model.state.ArtifactDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +44,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ArtifactRegistry
 {
+    private static final Logger log = LoggerFactory.getLogger(ArtifactRegistry.class);
+
     // TODO: What's a sane starting point?  Could even size based on the number in the last build.
     // TODO: maybe use ConcurrentMap or javolution FastMap or FastTable; need to time and compare.
     private final Map<MavenCoordinatesDTO,ArtifactDTO> map = new HashMap<MavenCoordinatesDTO,ArtifactDTO>(1000);
@@ -52,8 +56,14 @@ public class ArtifactRegistry
      * Non-null attributes will be overwritten; collection based attributes will have values added.
      */
     public void recordArtifact(final ArtifactDTO artifact) {
-        checkNotNull(artifact);
-        checkNotNull(artifact.getCoordinates());
+        if (artifact == null) {
+            log.warn("Artifact is null");
+            return;
+        }
+        if (artifact.getCoordinates() == null) {
+            log.warn("Artifact coordinates are null");
+            return;
+        }
         
         synchronized (this) {
             ArtifactDTO entry = get(artifact.getCoordinates());

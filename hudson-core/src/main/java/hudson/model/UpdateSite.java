@@ -523,10 +523,13 @@ public class UpdateSite {
         }
 
         private String get(JSONObject o, String prop) {
-            if(o.has(prop))
-                return o.getString(prop);
-            else
-                return null;
+            if(o.has(prop)) {
+                String value = o.getString(prop);
+                if (!"null".equals(value)) {
+                    return value;
+                }
+            }
+            return null;
         }
 
         public String getDisplayName() {
