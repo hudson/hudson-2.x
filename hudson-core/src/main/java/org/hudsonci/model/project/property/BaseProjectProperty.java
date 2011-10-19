@@ -44,6 +44,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     private transient IJob job;
     private T originalValue;
     private boolean propertyOverridden;
+    private boolean modified;
 
     /**
      * Instantiate new property.
@@ -83,6 +84,20 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     public void setOverridden(boolean overridden) {
         propertyOverridden = overridden;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModified() {
+        return modified;
     }
 
     /**
@@ -135,10 +150,12 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
         } else {
             T cascadingValue = getCascadingValue();
             T candidateValue = null == value ? getDefaultValue() : value;
-            if (allowOverrideValue(cascadingValue, candidateValue)) {
-                setOriginalValue(value, true);
-            } else {
-                resetValue();
+            if (isModified()) {
+                if (allowOverrideValue(cascadingValue, candidateValue)) {
+                    setOriginalValue(value, true);
+                } else {
+                    resetValue();
+                }
             }
         }
     }
