@@ -168,6 +168,10 @@ public abstract class DownloadFromUrlInstaller extends ToolInstaller {
         public Installable[] getList() {
             return list;
         }
+
+        public void setList(Installable[] list) {
+            this.list = list;
+        }
     }
 
     /**
@@ -198,6 +202,18 @@ public abstract class DownloadFromUrlInstaller extends ToolInstaller {
 
         public String getUrl() {
             return url;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
     }
 }

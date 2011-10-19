@@ -159,9 +159,10 @@ public class BuildRecorder
      * Synchronizes recording of artifacts.
      */
     public void recordArtifact(final ArtifactDTO artifact) {
-        recordedArtifacts.add(checkNotNull(artifact));
-        
-        recordedArtifactCount++;
+        synchronized (recordedArtifacts) {
+            recordedArtifacts.add(checkNotNull(artifact));
+            recordedArtifactCount++;
+        }
     }
 
     public void recordDependencyResolutionStarted(final MavenProject mavenProject) {
@@ -257,18 +258,23 @@ public class BuildRecorder
 
     @TestAccessible
     List<ArtifactDTO> getRecordedArtifacts() {
-        return recordedArtifacts;
+        synchronized (recordedArtifacts) {
+            return recordedArtifacts;
+        }
     }
     
     private void commitArtifacts() {
-        long start = System.currentTimeMillis();
-        callback.addArtifacts(recordedArtifacts);
-        // Takes advantage of the callback being remote and de/serialization breaking the reference to the recordedArtifacts.
-        recordedArtifacts.clear();
-        long duration = System.currentTimeMillis() - start;
-        
-        commitDurationToDate += duration;
-        log.debug("Committed {} artifacts in {}ms of cumulative {}ms: {} dependencies of {} recorded", new Object[] {
-            recordedArtifacts.size(),duration,commitDurationToDate,dependencyArtifactCount, recordedArtifactCount});
+        synchronized (recordedArtifacts) {
+            long start = System.currentTimeMillis();
+            callback.addArtifacts(recordedArtifacts);
+            long duration = System.currentTimeMillis() - start;
+
+            commitDurationToDate += duration;
+            log.debug("Committed {} artifacts in {}ms of cumulative {}ms: {} dependencies of {} recorded", new Object[] {
+                recordedArtifacts.size(),duration,commitDurationToDate,dependencyArtifactCount, recordedArtifactCount});
+
+            // Takes advantage of the callback being remote and de/serialization breaking the reference to the recordedArtifacts.
+            recordedArtifacts.clear();
+        }
     }
 }

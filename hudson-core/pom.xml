@@ -45,7 +45,7 @@ THE SOFTWARE.
     <jtidy.version>r938</jtidy.version>
     <jna-posix.version>1.0.3</jna-posix.version>
     <trilead-putty-extension.version>1.0</trilead-putty-extension.version>
-    <stapler-jelly.version>1.155</stapler-jelly.version>
+    <stapler-jelly.version>1.167</stapler-jelly.version>
     <bridge-method-annotation.version>1.4</bridge-method-annotation.version>
     <json-lib.version>2.4</json-lib.version>
     <annotation-indexer.version>1.2</annotation-indexer.version>
@@ -257,19 +257,18 @@ THE SOFTWARE.
     </build>
 
   <profiles>
-      <profile>
-          <id>hudson</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.codehaus.mojo</groupId>
-                      <artifactId>cobertura-maven-plugin</artifactId>
-                  </plugin>
-              </plugins>
-          </build>
-      </profile>
-
-      <profile>
+    <profile>
+      <id>hudson</id>
+      <build>
+        <plugins>
+           <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+               <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>debug</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -583,6 +582,10 @@ THE SOFTWARE.
         <exclusion>
           <groupId>commons-cli</groupId>
           <artifactId>commons-cli</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jvnet.hudson</groupId>
+          <artifactId>commons-jelly</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

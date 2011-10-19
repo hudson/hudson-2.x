@@ -111,7 +111,8 @@ THE SOFTWARE.
     <gwt-maven-plugin.version>2.3.0-1</gwt-maven-plugin.version>
     <plexus-component-metadata-plugin.version>1.5.4</plexus-component-metadata-plugin.version>
     <maven-jaxb2-plugin.version>0.7.4</maven-jaxb2-plugin.version>
-    <maven-enunciate-plugin.version>1.22</maven-enunciate-plugin.version>
+    <!--TODO migrate to 2.6 to resolve issue with compilation on JDK7 (https://jira.codehaus.org/browse/ENUNCIATE-603) -->
+    <maven-enunciate-plugin.version>1.24</maven-enunciate-plugin.version>
     <cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
   </properties>
 
@@ -720,24 +721,23 @@ THE SOFTWARE.
       </build>
     </profile>
 
-      <profile>
-          <id>integration-tests</id>
-          <activation>
-              <property>
-                  <name>it</name>
-              </property>
-          </activation>
-
-          <!--TODO find better solution to use properties for hudson-remoting-->
-          <properties>
-              <hudson.sign.alias>hudson</hudson.sign.alias>
-              <hudson.sign.keystore>../dummy.keystore</hudson.sign.keystore>
-              <hudson.sign.storepass>hudson</hudson.sign.storepass>
-          </properties>
-      </profile>
-
-      <profile>
-          <id>hudson</id>
+    <profile>
+      <id>integration-tests</id>
+      <activation>
+        <property>
+          <name>it</name>
+        </property>
+      </activation>
+       
+      <!--TODO find better solution to use properties for hudson-remoting-->
+      <properties>
+        <hudson.sign.alias>hudson</hudson.sign.alias>
+        <hudson.sign.keystore>../dummy.keystore</hudson.sign.keystore>
+        <hudson.sign.storepass>hudson</hudson.sign.storepass>
+      </properties>
+    </profile>
+    <profile>
+      <id>hudson</id>
           <build>
               <pluginManagement>
                   <plugins>
