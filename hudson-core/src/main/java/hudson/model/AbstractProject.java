@@ -142,6 +142,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String JDK_PROPERTY_NAME = "jdk";
     public static final String SCM_PROPERTY_NAME = "scm";
     public static final String PROPERTY_NAME_SEPARATOR = ";";
+    public static final String HAS_QUIET_PERIOD_PROPERTY_NAME = "hasQuietPeriod";
+    public static final String HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "hasScmCheckoutRetryCount";
 
     /**
      * {@link SCM} associated with the project.
@@ -1911,9 +1913,9 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         makeDisabled(null != req.getParameter("disable"));
         setCascadingProjectName(StringUtils.trimToNull(req.getParameter("cascadingProjectName")));
         setJDK(req.getParameter("jdk"), false);
-        setQuietPeriod(null != req.getParameter("hasCustomQuietPeriod") ? req.getParameter("quiet_period") : null,
+        setQuietPeriod(null != req.getParameter(HAS_QUIET_PERIOD_PROPERTY_NAME) ? req.getParameter("quiet_period") : null,
             false);
-        setScmCheckoutRetryCount(null != req.getParameter("hasCustomScmCheckoutRetryCount")
+        setScmCheckoutRetryCount(null != req.getParameter(HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)
             ? req.getParameter("scmCheckoutRetryCount") : null, false);
         setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"), false);
         setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"), false);
