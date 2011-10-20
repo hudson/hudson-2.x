@@ -67,10 +67,12 @@ function onProjectPropertyChanged() {
             var childRef = jQuery(this).parents('tr').attr('nameref');
             cascadingProperty = jQuery('#'+childRef).attr('name');
         }
-        var jobUrl = getJobUrl()+'/modifyCascadingProperty?propertyName='+cascadingProperty;
-        new Ajax.Request(jobUrl, {
-            method : 'get'
-        });
+        if(cascadingProperty !== undefined){
+            var jobUrl = getJobUrl()+'/modifyCascadingProperty?propertyName='+cascadingProperty;
+            new Ajax.Request(jobUrl, {
+                method : 'get'
+            });
+        }
     });
 }
 
