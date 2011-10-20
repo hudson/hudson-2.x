@@ -129,6 +129,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
         extends AbstractItem implements ExtensionPoint, StaplerOverridable, IJob {
     private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
+    private static transient final String PROJECT_PROPERTY_KEY_PREFIX = "has";
 
     public static final String LOG_ROTATOR_PROPERTY_NAME = "logRotator";
 
@@ -1553,6 +1554,13 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public synchronized void doModifyCascadingProperty(@QueryParameter(fixEmpty = true) String propertyName) {
         if (null != propertyName) {
+            if (StringUtils.startsWith(propertyName, PROJECT_PROPERTY_KEY_PREFIX)) {
+                propertyName = StringUtils.substring(propertyName, 3);
+                propertyName = new StringBuilder(propertyName.length())
+                    .append(Character.toLowerCase((propertyName.charAt(0))))
+                    .append(propertyName.substring(1))
+                    .toString();
+            }
             IProjectProperty property = getProperty(propertyName);
             if (null != property) {
                 property.setModified(true);
