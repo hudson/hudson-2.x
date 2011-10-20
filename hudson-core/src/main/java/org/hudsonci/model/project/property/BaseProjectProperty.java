@@ -44,7 +44,6 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     private transient IJob job;
     private T originalValue;
     private boolean propertyOverridden;
-    private boolean modified;
 
     /**
      * Instantiate new property.
@@ -60,6 +59,13 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     public void setKey(String propertyKey) {
         this.propertyKey = propertyKey;
+    }
+
+    /**
+     * @return key for current property
+     */
+    final String getPropertyKey() {
+        return propertyKey;
     }
 
     /**
@@ -84,20 +90,6 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     public void setOverridden(boolean overridden) {
         propertyOverridden = overridden;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setModified(boolean modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isModified() {
-        return modified;
     }
 
     /**
@@ -157,15 +149,24 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
         if (!getJob().hasCascadingProject()) {
             setOriginalValue(value, false);
         } else {
-            T cascadingValue = getCascadingValue();
-            T candidateValue = null == value ? getDefaultValue() : value;
-            if (isModified()) {
-                if (allowOverrideValue(cascadingValue, candidateValue)) {
-                    setOriginalValue(value, true);
-                } else {
-                    resetValue();
-                }
-            }
+            updateOriginalValue(value, getCascadingValue());
+        }
+    }
+
+    /**
+     * Update value for cascading property. Before setting new value it will be checked for equality with cascading
+     * value. If two values are equals - current value will be reset and will retrieved from parent. If not - value will
+     * be set directly.
+     *
+     * @param value new value to be set.
+     * @param cascadingValue current cascading value.
+     */
+    protected void updateOriginalValue(T value, T cascadingValue) {
+        T candidateValue = null == value ? getDefaultValue() : value;
+        if (allowOverrideValue(cascadingValue, candidateValue)) {
+            setOriginalValue(value, true);
+        } else {
+            resetValue();
         }
     }
 
@@ -185,8 +186,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      * {@inheritDoc}
      */
     public void resetValue() {
-        this.originalValue = null;
-        setOverridden(false);
+        setOriginalValue(null, false);
     }
 
     /**

@@ -50,12 +50,9 @@ public interface IProjectProperty<T> extends Serializable {
 
     /**
      * Sets property value.
-     * If property has cascading value, than modified flag will be checked.
-     * If property was modified and {@link #allowOverrideValue(Object, Object)} method returns true, that value will be
-     * set to current property.<br/>
+     * If property has cascading value and properties' {@link #allowOverrideValue(Object, Object)} method returns true,
+     * than value will be set to current property.<br/>
      * If property doesn't have cascading value, than value will be set directly.
-     *
-     * NOTE: use should call {@link #setModified(boolean)} method before setting cascading value.
      *
      * @param value value to set.
      */
@@ -115,17 +112,5 @@ public interface IProjectProperty<T> extends Serializable {
      * @param overridden true - mark property as overridden, false - otherwise.
      */
     void setOverridden(boolean overridden);
-
-    /**
-     * Method set modified state for current property.
-     *
-     * @param modified true if property was modified by user.
-     */
-    void setModified(boolean modified);
-
-    /**
-     * @return true if property was modified, false - otherwise.
-     */
-    boolean isModified();
 
 }

@@ -28,8 +28,6 @@ import hudson.tasks.Maven;
 import hudson.tasks.junit.JUnitResultArchiver;
 import java.io.File;
 import java.net.URISyntaxException;
-import org.hudsonci.api.model.IProjectProperty;
-import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,9 +77,7 @@ public class LegacyProjectTest {
         project.initProjectProperties();
         assertNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
         project.convertCustomWorkspaceProperty();
-        IProjectProperty property = project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME);
-        assertNotNull(property);
-        assertEquals("/tmp", property.getValue());
+        assertNotNull(project.getProperty(FreeStyleProject.CUSTOM_WORKSPACE_PROPERTY_NAME));
     }
 
     /**
@@ -168,10 +164,7 @@ public class LegacyProjectTest {
         project.initProjectProperties();
         assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
         project.convertBlockBuildWhenDownstreamBuildingProperty();
-        BooleanProjectProperty property = (BooleanProjectProperty)project.getProperty(
-            AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME);
-        assertNotNull(property);
-        assertTrue(property.getValue());
+        assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME));
     }
 
     /**
@@ -187,10 +180,7 @@ public class LegacyProjectTest {
         project.initProjectProperties();
         assertNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
         project.convertBlockBuildWhenUpstreamBuildingProperty();
-        BooleanProjectProperty property = (BooleanProjectProperty)project.getProperty(
-            AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME);
-        assertNotNull(property);
-        assertTrue(property.getValue());
+        assertNotNull(project.getProperty(AbstractProject.BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME));
     }
 
     /**
@@ -206,10 +196,7 @@ public class LegacyProjectTest {
         project.initProjectProperties();
         assertNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
         project.convertConcurrentBuildProperty();
-        BooleanProjectProperty property = (BooleanProjectProperty)project.getProperty(
-            AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME);
-        assertNotNull(property);
-        assertTrue(property.getValue());
+        assertNotNull(project.getProperty(AbstractProject.CONCURRENT_BUILD_PROPERTY_NAME));
     }
 
     /**
