@@ -103,10 +103,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
 import org.hudsonci.api.model.IProjectProperty;
-import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.SCMProjectProperty;
-import org.hudsonci.model.project.property.StringProjectProperty;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.ForwardToView;
@@ -357,29 +355,28 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     void convertBlockBuildWhenUpstreamBuildingProperty() throws IOException {
-        if (blockBuildWhenUpstreamBuilding && null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
+        if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
             blockBuildWhenUpstreamBuilding = false;
         }
     }
 
     void convertBlockBuildWhenDownstreamBuildingProperty() throws IOException {
-        if (blockBuildWhenDownstreamBuilding
-            && null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
+        if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
             setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
             blockBuildWhenDownstreamBuilding = false;
         }
     }
 
     void convertConcurrentBuildProperty() throws IOException {
-        if (concurrentBuild && null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
+        if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
             setConcurrentBuild(concurrentBuild);
             concurrentBuild = false;
         }
     }
 
     void convertCleanWorkspaceRequiredProperty() throws IOException {
-        if (cleanWorkspaceRequired && null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
+        if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
             setCleanWorkspaceRequired(cleanWorkspaceRequired);
             cleanWorkspaceRequired = false;
         }
@@ -434,11 +431,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setConcurrentBuild(boolean b) throws IOException {
-        setConcurrentBuild(b, true);
-    }
-
-    public void setConcurrentBuild(boolean b, boolean forceModify) throws IOException {
-        setProjectPropertyValue(CONCURRENT_BUILD_PROPERTY_NAME, BooleanProjectProperty.class, b, forceModify);
+        getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).setValue(b);
         save();
     }
 
@@ -447,12 +440,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired) {
-        setCleanWorkspaceRequired(cleanWorkspaceRequired, true);
-    }
-
-    public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired, boolean forceModify) {
-        setProjectPropertyValue(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME, BooleanProjectProperty.class,
-            cleanWorkspaceRequired, forceModify);
+        getBooleanProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).setValue(cleanWorkspaceRequired);
     }
 
     /**
@@ -665,11 +653,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @throws IOException if any.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
-        setQuietPeriod(seconds, true);
-    }
-
-    protected void setQuietPeriod(Integer seconds, boolean forceModify) throws IOException {
-        setProjectPropertyValue(QUIET_PERIOD_PROPERTY_NAME, IntegerProjectProperty.class, seconds, forceModify);
+        getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).setValue(seconds);
         save();
     }
 
@@ -680,12 +664,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setScmCheckoutRetryCount(Integer retryCount) {
-        setScmCheckoutRetryCount(retryCount, true);
-    }
-
-    public void setScmCheckoutRetryCount(Integer retryCount, boolean forceModify) {
-        setProjectPropertyValue(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME, IntegerProjectProperty.class, retryCount,
-            forceModify);
+        getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).setValue(retryCount);
     }
 
     /**
@@ -696,15 +675,11 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @throws IOException if any.
      */
     protected void setScmCheckoutRetryCount(String scmCheckoutRetryCount) throws IOException {
-        setScmCheckoutRetryCount(scmCheckoutRetryCount, true);
-    }
-
-    protected void setScmCheckoutRetryCount(String scmCheckoutRetryCount, boolean forceModify) throws IOException {
         Integer retryCount = null;
         if (NumberUtils.isNumber(scmCheckoutRetryCount)) {
             retryCount = NumberUtils.createInteger(scmCheckoutRetryCount);
         }
-        setScmCheckoutRetryCount(retryCount, forceModify);
+        setScmCheckoutRetryCount(retryCount);
     }
 
     /**
@@ -725,15 +700,11 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @throws IOException if any.
      */
     protected void setQuietPeriod(String seconds) throws IOException {
-        setQuietPeriod(seconds, true);
-    }
-
-    protected void setQuietPeriod(String seconds, boolean forceModify) throws IOException {
         Integer period = null;
         if (NumberUtils.isNumber(seconds)) {
             period = NumberUtils.createInteger(seconds);
         }
-        setQuietPeriod(period, forceModify);
+        setQuietPeriod(period);
     }
 
     /**
@@ -764,12 +735,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setBlockBuildWhenDownstreamBuilding(boolean b) throws IOException {
-        setBlockBuildWhenDownstreamBuilding(b, true);
-    }
-
-    public void setBlockBuildWhenDownstreamBuilding(boolean b, boolean forceModify) throws IOException {
-        setProjectPropertyValue(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME,
-            BooleanProjectProperty.class, b, forceModify);
+        getBooleanProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
@@ -778,12 +744,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setBlockBuildWhenUpstreamBuilding(boolean b) throws IOException {
-        setBlockBuildWhenUpstreamBuilding(b, true);
-    }
-
-    public void setBlockBuildWhenUpstreamBuilding(boolean b, boolean forceModify) throws IOException {
-        setProjectPropertyValue(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME,
-            BooleanProjectProperty.class, b, forceModify);
+        getBooleanProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
@@ -1128,11 +1089,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setJDK(String jdk) {
-        setJDK(jdk, true);
-    }
-
-    public void setJDK(String jdk, boolean forceModify) {
-        setProjectPropertyValue(JDK_PROPERTY_NAME, StringProjectProperty.class, jdk, forceModify);
+        getStringProperty(JDK_PROPERTY_NAME).setValue(jdk);
     }
 
     public BuildAuthorizationToken getAuthToken() {
@@ -1624,11 +1581,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     @SuppressWarnings("unchecked")
     public void setScm(SCM scm) throws IOException {
-        setScm(scm, true);
-    }
-
-    public void setScm(SCM scm, boolean forceModify) throws IOException {
-        setProjectPropertyValue(SCM_PROPERTY_NAME, SCMProjectProperty.class, scm, forceModify);
+        getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).setValue(scm);
         //save();
     }
 
@@ -1912,13 +1865,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
         makeDisabled(null != req.getParameter("disable"));
         setCascadingProjectName(StringUtils.trimToNull(req.getParameter("cascadingProjectName")));
-        setJDK(req.getParameter("jdk"), false);
-        setQuietPeriod(null != req.getParameter(HAS_QUIET_PERIOD_PROPERTY_NAME) ? req.getParameter("quiet_period") : null,
-            false);
+        setJDK(req.getParameter("jdk"));
+        setQuietPeriod(null != req.getParameter(HAS_QUIET_PERIOD_PROPERTY_NAME)
+            ? req.getParameter("quiet_period") : null);
         setScmCheckoutRetryCount(null != req.getParameter(HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)
-            ? req.getParameter("scmCheckoutRetryCount") : null, false);
-        setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"), false);
-        setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"), false);
+            ? req.getParameter("scmCheckoutRetryCount") : null);
+        setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"));
+        setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"));
 
         if (req.getParameter("hasSlaveAffinity") != null) {
             // New logic for handling whether this choice came from the dropdown or textfield.
@@ -1935,15 +1888,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         }
 
 
-        setCleanWorkspaceRequired(null != req.getParameter("cleanWorkspaceRequired"), false);
+        setCleanWorkspaceRequired(null != req.getParameter("cleanWorkspaceRequired"));
 
         canRoam = assignedNode==null;
 
-        setConcurrentBuild(req.getSubmittedForm().has("concurrentBuild"), false);
+        setConcurrentBuild(req.getSubmittedForm().has("concurrentBuild"));
 
         authToken = BuildAuthorizationToken.create(req);
 
-        setScm(SCMS.parseSCM(req,this), false);
+        setScm(SCMS.parseSCM(req,this));
 
         for (Trigger t : triggers)
             t.stop();

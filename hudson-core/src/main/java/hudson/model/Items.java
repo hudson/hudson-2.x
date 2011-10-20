@@ -42,6 +42,7 @@ import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.hudsonci.model.project.property.DescribableListProjectProperty;
+import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
@@ -144,6 +145,7 @@ public class Items {
 
         //aliases for project properties.
         XSTREAM.alias("base-property", BaseProjectProperty.class);
+        XSTREAM.alias("external-property", ExternalProjectProperty.class);
         XSTREAM.alias("integer-property", IntegerProjectProperty.class);
         XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
         XSTREAM.alias("string-property", StringProjectProperty.class);
