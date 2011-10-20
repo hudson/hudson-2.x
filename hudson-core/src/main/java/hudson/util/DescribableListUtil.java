@@ -35,6 +35,7 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.model.project.property.BaseProjectProperty;
+import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
@@ -117,11 +118,11 @@ public final class DescribableListUtil {
      * @return map of converted properties.
      */
     public static <T extends Describable<T>, D extends Descriptor<T>>
-    Map<String, BaseProjectProperty<T>> convertToProjectProperties(DescribableList<T, D> describableList, IJob owner) {
-        Map<String, BaseProjectProperty<T>> result = Maps.newConcurrentMap();
+    Map<String, ExternalProjectProperty<T>> convertToProjectProperties(DescribableList<T, D> describableList, IJob owner) {
+        Map<String, ExternalProjectProperty<T>> result = Maps.newConcurrentMap();
         if (null != describableList) {
             for (Map.Entry<D, T> entry : describableList.toMap().entrySet()) {
-                BaseProjectProperty<T> property = new BaseProjectProperty<T>(owner);
+                ExternalProjectProperty<T> property = new ExternalProjectProperty<T>(owner);
                 String key = entry.getKey().getJsonSafeClassName();
                 property.setKey(key);
                 property.setValue(entry.getValue());

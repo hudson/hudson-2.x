@@ -85,7 +85,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      *      Use {@code getPublishersList().add(x)}
      */
     public void addPublisher(Publisher buildStep) throws IOException {
-        getBaseProjectProperty(buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
+        getExternalProjectProperty(buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
     }
 
     /**

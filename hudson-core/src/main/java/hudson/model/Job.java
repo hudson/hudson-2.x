@@ -87,6 +87,7 @@ import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
 import org.hudsonci.model.project.property.DescribableListProjectProperty;
+import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
@@ -291,6 +292,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public BaseProjectProperty getBaseProjectProperty(String key) {
         return (BaseProjectProperty) getProperty(key, BaseProjectProperty.class);
+    }
+
+    public ExternalProjectProperty getExternalProjectProperty(String key) {
+        return (ExternalProjectProperty) getProperty(key, ExternalProjectProperty.class);
     }
 
     public ResultProjectProperty getResultProperty(String key) {
@@ -562,33 +567,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *
      * @param logRotator log rotator.
      */
-    public void setLogRotator(LogRotator logRotator) {
-        setLogRotator(logRotator, true);
-    }
-
-    public void setLogRotator(LogRotator logRotator, boolean forceModify) {
-        setProjectPropertyValue(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class, logRotator, forceModify);
-    }
-
-    /**
-     * Update project property with new value. ForceModify flag is taken into account.
-     * If property is null - it will be initialized and added to current job.
-     *
-     * @param key property key.
-     * @param clazz property class.
-     * @param value new value.
-     * @param forceModify true - to set property value even if it was not modified from UI. Basically this parameter is
-     * used for cascading functionality.
-     */
     @SuppressWarnings("unchecked")
-    protected void setProjectPropertyValue(String key, Class clazz, Object value, boolean forceModify) {
-        IProjectProperty property = getProperty(key, clazz);
-        if (null != property) {
-            if (forceModify) {
-                property.setModified(forceModify);
-            }
-            property.setValue(value);
-        }
+    public void setLogRotator(LogRotator logRotator) {
+        getProperty(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class).setValue(logRotator);
     }
 
     /**
@@ -1231,7 +1212,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
             JSONObject json = req.getSubmittedForm();
             setLogRotator(req.getParameter("logrotate") != null ? LogRotator.DESCRIPTOR
-                .newInstance(req, json.getJSONObject("logrotate")) : null, false);
+                .newInstance(req, json.getJSONObject("logrotate")) : null);
 
             int i = 0;
             for (JobPropertyDescriptor d : JobPropertyDescriptor
@@ -1562,8 +1543,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                     .toString();
             }
             IProjectProperty property = getProperty(propertyName);
-            if (null != property) {
-                property.setModified(true);
+            if (null != property && property instanceof ExternalProjectProperty) {
+                ((ExternalProjectProperty) property).setModified(true);
             }
         }
     }
@@ -1582,7 +1563,11 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             this.cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
             for (IProjectProperty property : jobProperties.values()) {
-                property.setOverridden(property.isModified());
+                if (property instanceof ExternalProjectProperty) {
+                    property.setOverridden(((ExternalProjectProperty) property).isModified());
+                } else {
+                    property.setOverridden(property.getValue() != property.getCascadingValue());
+                }
             }
         }
     }
