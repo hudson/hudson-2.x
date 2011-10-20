@@ -130,10 +130,19 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      * {@inheritDoc}
      */
     public T getValue() {
-        if (isOverridden() || null != originalValue) {
+        if (returnOriginalValue()) {
             return getOriginalValue();
         }
         return getCascadingValue();
+    }
+
+    /**
+     * Checks whether original or cascading value should be used.
+     *
+     * @return true to use original value, false - cascading value.
+     */
+    protected boolean returnOriginalValue() {
+        return isOverridden() || null != originalValue;
     }
 
     /**

@@ -51,4 +51,8 @@ public class DescribableListProjectProperty extends BaseProjectProperty<Describa
             || !CollectionUtils.isEqualCollection(cascadingValue.toList(), candidateValue.toList()));
     }
 
+    @Override
+    protected boolean returnOriginalValue() {
+        return isOverridden() || (null != getOriginalValue() && !getOriginalValue().isEmpty());
+    }
 }
