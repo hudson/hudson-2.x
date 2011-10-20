@@ -43,6 +43,7 @@ import hudson.tasks.Shell;
 import hudson.util.DescribableList;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -624,6 +625,45 @@ public class ProjectPropertyTest {
         assertTrue(property.isOverridden());
         property.setOverridden(false);
         assertFalse(property.isOverridden());
+    }
+
+    /**
+     * Test returnOriginalValue method for BaseProjectProperty.
+     */
+    @Test
+    public void testBaseProjectPropertyReturnOriginalValue() {
+        BaseProjectProperty property = new BaseProjectProperty(project);
+        //False - If isOverridden flag is false and original value is null
+        assertFalse(property.returnOriginalValue());
+        property.setOverridden(true);
+        //True - If isOverridden flag is true or original value is not null
+        assertTrue(property.returnOriginalValue());
+        property.setOriginalValue(new Object(), false);
+        assertTrue(property.returnOriginalValue());
+    }
+
+    /**
+     * Test returnOriginalValue method for DescribableListProjectProperty.
+     */
+    @Test
+    public void testDescribableListProjectPropertyReturnOriginalValue() throws IOException{
+        DescribableListProjectProperty property = new DescribableListProjectProperty(project);
+        //False - If isOverridden flag is false and original value is null
+        assertFalse(property.returnOriginalValue());
+
+        //False - If isOverridden flag is false and Describable list is null or empty
+        property.setOriginalValue(null, false);
+        assertFalse(property.returnOriginalValue());
+        property.setOriginalValue(new DescribableList(project), false);
+        assertFalse(property.returnOriginalValue());
+
+        //True - If isOverridden flag is true or original value is not null
+        property.setOverridden(true);
+        assertTrue(property.returnOriginalValue());
+
+        DescribableList originalValue = new DescribableList(project, Arrays.asList(new Object()));
+        property.setOriginalValue(originalValue, false);
+        assertTrue(property.returnOriginalValue());
     }
 
     private class FakeSCM extends SCM {
