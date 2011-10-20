@@ -26,7 +26,7 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <j:set var="scmCheckoutRetryCountProperty" value="${it.getIntegerProperty(it.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)}"/>
   <j:set var="scmCheckoutRetryCount" value="${scmCheckoutRetryCountProperty.getValue()}"/>
-  <f:optionalBlock name="hasCustomScmCheckoutRetryCount" title="${%Retry Count}"
+  <f:optionalBlock name="hasScmCheckoutRetryCount" title="${%Retry Count}"
                    checked="${scmCheckoutRetryCount!=null and scmCheckoutRetryCount!=scmCheckoutRetryCountProperty.getDefaultValue()}"
                    isPropertyOverridden="${scmCheckoutRetryCountProperty.isOverridden()}"
                    resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME}"

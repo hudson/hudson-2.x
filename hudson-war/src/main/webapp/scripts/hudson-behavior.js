@@ -1412,6 +1412,7 @@ var repeatableSupport = {
         if(children.length==1) {
             children[0].addClassName("repeated-chunk first last only");
         } else {
+            Element.removeClassName(children[0], "last only");
             children[0].addClassName("repeated-chunk first");
             for(var i=1; i<children.length-1; i++)
                 children[i].addClassName("repeated-chunk middle");
