@@ -3,7 +3,12 @@ package org.hudsonci.model.project.property;
 import org.hudsonci.api.model.IJob;
 
 /**
- * //TODO class description
+ * Class property is intended to be used for ProjectProperties without correct equals and hashCode methods, such as
+ * Builders, Publishers, etc.
+ * <p/>
+ * This property has additional {@link #modified} flag, that is used to define, whether current property was changed
+ * from UI. If yes, cascading value will be updated. {@link #updateOriginalValue(Object, Object)} method for details.
+ * <p/>
  * <p/>
  * Date: 10/20/11
  *
@@ -42,11 +47,10 @@ public class ExternalProjectProperty<T> extends BaseProjectProperty<T> {
      *
      * @param value new value to be set.
      * @param cascadingValue current cascading value.
+     * @return true if value was updated, false - otherwise.
      */
     @Override
-    protected void updateOriginalValue(T value, T cascadingValue) {
-        if (isModified()) {
-            super.updateOriginalValue(value, cascadingValue);
-        }
+    protected boolean updateOriginalValue(T value, T cascadingValue) {
+        return isModified() && super.updateOriginalValue(value, cascadingValue);
     }
 }
