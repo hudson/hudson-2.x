@@ -67,8 +67,8 @@ THE SOFTWARE.
     <!--Libraries-->
     <localizer.version>1.10</localizer.version>
     <aspectj.version>1.6.11</aspectj.version>
-    <sisuGuice.version>3.0.3</sisuGuice.version>
-    <sisuInject.version>2.2.3</sisuInject.version>
+    <sisuGuice.version>3.1.0</sisuGuice.version>
+    <sisuInject.version>2.3.0</sisuInject.version>
     <jetty.version>6.1.26</jetty.version>
     <wagon-http.version>1.0-beta-5</wagon-http.version>
     <animal-sniffer-annotation.version>1.0</animal-sniffer-annotation.version>
@@ -79,7 +79,7 @@ THE SOFTWARE.
     <slf4j-jdk14.version>1.6.1</slf4j-jdk14.version>
     <jul-to-slf4j.version>1.6.1</jul-to-slf4j.version>
     <logback-classic.version>0.9.28</logback-classic.version>
-    <guava.version>r09</guava.version>
+    <guava.version>10.0.1</guava.version>
     <ant.version>1.8.0</ant.version>
     <xstream.version>1.4.1-hudson-2</xstream.version>
     <jsr305.version>1.3.9</jsr305.version>
@@ -418,6 +418,12 @@ THE SOFTWARE.
         <artifactId>sisu-guice</artifactId>
         <version>${sisuGuice.version}</version>
         <classifier>no_aop</classifier>
+        <exclusions>
+          <exclusion>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-guava</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.sonatype.sisu</groupId>
