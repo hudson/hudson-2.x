@@ -62,13 +62,6 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     }
 
     /**
-     * @return key for current property
-     */
-    final String getPropertyKey() {
-        return propertyKey;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public void setJob(IJob job) {
@@ -160,14 +153,16 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      *
      * @param value new value to be set.
      * @param cascadingValue current cascading value.
+     * @return true - if property was updated, false - otherwise.
      */
-    protected void updateOriginalValue(T value, T cascadingValue) {
+    protected boolean updateOriginalValue(T value, T cascadingValue) {
         T candidateValue = null == value ? getDefaultValue() : value;
         if (allowOverrideValue(cascadingValue, candidateValue)) {
             setOriginalValue(value, true);
         } else {
             resetValue();
         }
+        return true;
     }
 
     /**
