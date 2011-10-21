@@ -80,7 +80,7 @@ public class ProjectPropertyTest {
     public void testBaseProjectConstructor() {
         try {
             new BaseProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by BaseProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -93,7 +93,7 @@ public class ProjectPropertyTest {
     public void testStringProjectConstructor() {
         try {
             new StringProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by StringProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -103,7 +103,7 @@ public class ProjectPropertyTest {
     public void testIntegerProjectConstructor() {
         try {
             new IntegerProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by IntegerProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -113,7 +113,7 @@ public class ProjectPropertyTest {
     public void testBooleanProjectPropertyConstructor() {
         try {
             new BooleanProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by BooleanProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -123,26 +123,27 @@ public class ProjectPropertyTest {
     public void testLogRotatorProjectPropertyConstructor() {
         try {
             new LogRotatorProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by LogRotatorProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
     }
+
     @Test
     public void testDescribableListProjectPropertyConstructor() {
         try {
             new DescribableListProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by DescribableListProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
     }
-    
+
     @Test
     public void testAxisListProjectPropertyConstructor() {
         try {
             new AxisListProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by AxisListProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -152,7 +153,17 @@ public class ProjectPropertyTest {
     public void testSCMProjectPropertyConstructor() {
         try {
             new SCMProjectProperty(null);
-            fail("Null should be handled by ProjectProperty constructor.");
+            fail("Null should be handled by SCMProjectProperty constructor.");
+        } catch (Exception e) {
+            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testExternalProjectPropertyConstructor() {
+        try {
+            new ExternalProjectProperty(null);
+            fail("Null should be handled by ExternalProjectProperty constructor.");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
         }
@@ -263,8 +274,8 @@ public class ProjectPropertyTest {
     public void testAxisListProjectPropertyGetDefaultValue() {
         AxisListProjectProperty property = new AxisListProjectProperty(project);
         assertEquals(property.getDefaultValue().size(), 0);
-    }   
-    
+    }
+
     @Test
     public void testDescribableListProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new DescribableListProjectProperty(project);
@@ -277,6 +288,7 @@ public class ProjectPropertyTest {
         BaseProjectProperty property = new SCMProjectProperty(project);
         assertEquals(new NullSCM(), property.getDefaultValue());
     }
+
     /**
      * Verify allowOverrideValue method.
      */
@@ -332,7 +344,7 @@ public class ProjectPropertyTest {
     }
 
     @Test
-    public void testDescribableListProjectPropertyAllowOverrideValue() throws IOException{
+    public void testDescribableListProjectPropertyAllowOverrideValue() throws IOException {
         BaseProjectProperty property = new DescribableListProjectProperty(project);
         //Don't need to override null values
         assertFalse(property.allowOverrideValue(null, null));
@@ -568,19 +580,19 @@ public class ProjectPropertyTest {
         BaseProjectProperty property = new BaseProjectProperty(project);
         try {
             property.setValue("value");
-            fail("PropertyKey shouldn't be null");
+            fail("PropertyKey shouldn't be null while calling setValue");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_PROPERTY_KEY_EXCEPTION, e.getMessage());
         }
         try {
             property.getCascadingValue();
-            fail("PropertyKey shouldn't be null");
+            fail("PropertyKey shouldn't be null while calling getCascadingValue()");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_PROPERTY_KEY_EXCEPTION, e.getMessage());
         }
         try {
             property.getValue();
-            fail("PropertyKey shouldn't be null");
+            fail("PropertyKey shouldn't be null while calling getValue()");
         } catch (Exception e) {
             assertEquals(BaseProjectProperty.INVALID_PROPERTY_KEY_EXCEPTION, e.getMessage());
         }
@@ -643,9 +655,11 @@ public class ProjectPropertyTest {
 
     /**
      * Test returnOriginalValue method for DescribableListProjectProperty.
+     *
+     * @throws IOException if any.
      */
     @Test
-    public void testDescribableListProjectPropertyReturnOriginalValue() throws IOException{
+    public void testDescribableListProjectPropertyReturnOriginalValue() throws IOException {
         DescribableListProjectProperty property = new DescribableListProjectProperty(project);
         //False - If isOverridden flag is false and original value is null
         assertFalse(property.returnOriginalValue());
@@ -663,6 +677,24 @@ public class ProjectPropertyTest {
         DescribableList originalValue = new DescribableList(project, Arrays.asList(new Object()));
         property.setOriginalValue(originalValue, false);
         assertTrue(property.returnOriginalValue());
+    }
+
+    /**
+     * Test updateOriginalValue method for ExternalProjectProperty.
+     */
+    @Test
+    public void testExternalProjectPropertyUpdateOriginalValue() {
+        ExternalProjectProperty property = new ExternalProjectProperty(project);
+        //If property is not modified, than it shouldn't be updated.
+        assertFalse(property.isModified());
+        assertFalse(property.updateOriginalValue(new Object(), new Object()));
+
+        //If property is modified, than BaseProjectProperty#updateOriginalValue method will be called.
+        //Result will be true, because in this case property value will be updated.
+        property.setModified(true);
+        assertTrue(property.isModified());
+        assertTrue(property.updateOriginalValue(new Object(), new Object()));
+
     }
 
     private class FakeSCM extends SCM {
