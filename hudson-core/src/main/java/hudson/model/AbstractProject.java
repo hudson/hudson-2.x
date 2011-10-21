@@ -1582,7 +1582,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @SuppressWarnings("unchecked")
     public void setScm(SCM scm) throws IOException {
         getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).setValue(scm);
-        //save();
+        save();
     }
 
     /**
