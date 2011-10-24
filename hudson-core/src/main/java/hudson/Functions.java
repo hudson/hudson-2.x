@@ -1390,6 +1390,33 @@ public class Functions {
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 
+    public static <T extends Item> List<Job> getAllItems(Class<T> type, Job currentJob) {
+        List<T> allItems = Hudson.getInstance().getAllItems(type);
+        List<Job> result = new ArrayList<Job>(allItems.size());
+        for (T item : allItems) {
+            Job job = (Job) item;
+            if (!hasCyclicCascadingLink(job, currentJob.getCascadingChildrenNames())) {
+                result.add(job);
+            }
+        }
+        return result;
+    }
+
+    protected static boolean hasCyclicCascadingLink(Job cascadingCandidate, Set<String> cascadingChildren) {
+        if (null != cascadingCandidate && CollectionUtils.isNotEmpty(cascadingChildren)) {
+            if (cascadingChildren.contains(cascadingCandidate.getName())) {
+                return true;
+            }
+            for (String childName : cascadingChildren) {
+                Job job = getItemByName(Hudson.getInstance().getAllItems(Job.class), childName);
+                if (hasCyclicCascadingLink(cascadingCandidate, job.getCascadingChildrenNames())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Recursively unlink specified project from cascading hierarchy.
      *
