@@ -40,7 +40,7 @@ THE SOFTWARE.
             <f:textbox name="name" value="${it.name}" />
           </f:entry>
         </j:if>
-        <j:set var="cascadingCandidates" value="${app.getAllItems(it.class)}"/>
+        <j:set var="cascadingCandidates" value="${h.getAllItems(it.class, it)}"/>
         <j:if test="${cascadingCandidates.size() gt 1}">
           <f:entry title="${%cascadingProjectName}">
             <select class="setting-input" name="cascadingProjectName">

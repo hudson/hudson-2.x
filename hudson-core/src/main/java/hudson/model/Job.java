@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov,
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi,
  * Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts,
  * Anton Kozak, Nikita Levyankov
  * 
@@ -360,6 +360,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public void removeCascadingChild(String cascadingChildName) {
         cascadingChildrenNames.remove(cascadingChildName);
+    }
+
+    public boolean hasCascadingChild(String cascadingChildName) {
+        return null != cascadingChildName && cascadingChildrenNames.contains(cascadingChildName);
     }
 
     /**
