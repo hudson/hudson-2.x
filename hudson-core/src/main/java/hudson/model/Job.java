@@ -804,7 +804,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @Override
     protected void performBeforeItemRenaming(String oldName, String newName){
-        Functions.renameCascadingChildLinks(this, oldName, newName);
+        Functions.renameCascadingChildLinks(cascadingProject, oldName, newName);
         Functions.renameCascadingParentLinks(oldName, newName);
     }
 
