@@ -1,7 +1,8 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Erik Ramfelt, Tom Huybrechts, id:cactusman, Yahoo! Inc.
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Erik Ramfelt, Tom Huybrechts,
+Nikita Levyankov, id:cactusman, Yahoo! Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +54,7 @@ THE SOFTWARE.
             }
           </script>
         </j:if>
-        <l:taskWithDialog icon="images/24x24/edit-delete.gif" href="${url}/delete" dialogPanel="deleteConfirmationPanel.jelly" title="${%delete(it.pronoun)}" permission="${it.DELETE}" />
+        <l:taskWithDialog icon="images/24x24/edit-delete.gif" href="${url}/delete" dialogPanel="deleteConfirmationPanel.jelly" title="${%delete(it.pronoun)}" permission="${it.DELETE}" onclick="onDeleteClick();return false;"/>
         <j:choose>
             <j:when test="${h.hasPermission(it,it.CONFIGURE)}">
                 <l:task icon="images/24x24/setting.gif" href="${url}/configure" title="${%Configure}" />
