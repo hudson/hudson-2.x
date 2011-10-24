@@ -562,7 +562,7 @@ public class Functions {
     public static void checkPermission(Object object, Permission permission) throws IOException, ServletException {
         if (permission == null)
             return;
-        
+
         if (object instanceof AccessControlled)
             checkPermission((AccessControlled) object,permission);
         else {
@@ -1215,7 +1215,7 @@ public class Functions {
         if(Hudson.getInstance()==null)  return Collections.emptyList();
         return PageDecorator.all();
     }
-    
+
     public static List<Descriptor<Cloud>> getCloudDescriptors() {
         return Cloud.all();
     }
@@ -1248,11 +1248,11 @@ public class Functions {
     public static Date getCurrentTime() {
         return new Date();
     }
-    
+
     public static Locale getClientLocale(){
         return Stapler.getCurrentRequest().getLocale();
     }
-    
+
     public static Locale getServerLocale(){
         return Locale.getDefault();
     }
@@ -1310,7 +1310,7 @@ public class Functions {
     public List filterDescriptors(Object context, Iterable descriptors) {
         return DescriptorVisibilityFilter.apply(context,descriptors);
     }
-    
+
     private static final Pattern SCHEME = Pattern.compile("[a-z]+://.+");
 
     /**
@@ -1452,7 +1452,7 @@ public class Functions {
     }
 
     /**
-     * Updates the name of the project in the in all children cascading references.
+     * Updates the name of the project in all children cascading references.
      * If this project uses some cascading parent, the name of this project will be renamed in the cascading children
      * collection of the cascading parent project.
      *
@@ -1471,7 +1471,7 @@ public class Functions {
     }
 
     /**
-     * Updates the name of the project in the in all parent cascading references.
+     * Updates the name of the project in all parent cascading references.
      * If this project is used as cascading parent, it's name will be renamed in all children projects.
      *
      * @param oldName old project name.
@@ -1487,7 +1487,6 @@ public class Functions {
             if(oldName.equals(job.getCascadingProjectName())){
                 job.renameCascadingProjectNameTo(newName);
             }
-
         }
     }
 }
