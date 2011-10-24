@@ -995,17 +995,17 @@ table.progress-bar.red td.progress-bar-done {
 .tag8 { font-size: 1.80em; }
 .tag9 { font-size: 1.90em; }
 
-/* ========================= "Delete slave" dialog ================== */
-div.deleteSlaveDialog ul {
+/* ========================= "Delete job and slave" dialog ================== */
+div.deleteSlaveDialog ul, div.deleteJobDialog ul {
     text-align:left;
     padding-left:80px;
 }
 
-div.deleteSlaveDialog div.radioButtons {
+div.deleteSlaveDialog div.radioButtons, div.deleteJobDialog div.radioButtons {
     padding-bottom:10px;
 }
 
-div.deleteSlaveDialog h4 {
+div.deleteSlaveDialog h4, div.deleteJobDialog h4 {
     color: #F89938;
 }
 /* ======================== "Cascading project" ==========================*/
