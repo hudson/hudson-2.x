@@ -78,6 +78,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -189,6 +190,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * The name of the cascadingProject.
      */
     private String cascadingProjectName;
+
+    /**
+     * The list with the names of children cascading projects. Required to avoid cyclic references and
+     * to prohibition parent project "delete" action in case it has cascading children projects.
+     */
+    private Set<String> cascadingChildrenNames = new CopyOnWriteArraySet<String>();
 
     /**
      * Selected cascadingProject for this job.
@@ -325,6 +332,33 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     public SCMProjectProperty getScmProjectProperty(String key) {
         return (SCMProjectProperty) getProperty(key, SCMProjectProperty.class);
+    }
+
+    /**
+     * Returns list of cascading children project names.
+     *
+     * @return list of cascading children project names.
+     */
+    public Set<String> getCascadingChildrenNames() {
+        return cascadingChildrenNames;
+    }
+
+    /**
+     * Adds cascading child project name.
+     *
+     * @param cascadingChildrenName cascading children project name.
+     */
+    public void addCascadingChildren(String cascadingChildrenName) {
+        cascadingChildrenNames.add(cascadingChildrenName);
+    }
+
+    /**
+     * Remove cascading child project name.
+     *
+     * @param cascadingChildrenName cascading children project name.
+     */
+    public void removeCascadingChildren(String cascadingChildrenName) {
+        cascadingChildrenNames.remove(cascadingChildrenName);
     }
 
     @Override
@@ -1579,8 +1613,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             clearCascadingProject();
         } else if (!StringUtils.equalsIgnoreCase(this.cascadingProjectName, cascadingProjectName)) {
             this.cascadingProjectName = cascadingProjectName;
-            this.cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+            cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
+            cascadingProject.addCascadingChildren(name);
             for (IProjectProperty property : jobProperties.values()) {
                 if (property instanceof ExternalProjectProperty) {
                     property.setOverridden(((ExternalProjectProperty) property).isModified());
