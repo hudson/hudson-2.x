@@ -339,6 +339,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *
      * @return list of cascading children project names.
      */
+    @Exported
     public Set<String> getCascadingChildrenNames() {
         return cascadingChildrenNames;
     }
@@ -517,6 +518,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 // should we block until the build is cancelled?
             }
         }
+        //TODO delete cascading project
         super.performDelete();
     }
 
@@ -1615,6 +1617,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         if (StringUtils.isBlank(cascadingProjectName)) {
             clearCascadingProject();
         } else if (!StringUtils.equalsIgnoreCase(this.cascadingProjectName, cascadingProjectName)) {
+            Functions.unlinkProjectFromCascadingParents(cascadingProject, name);
             this.cascadingProjectName = cascadingProjectName;
             cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
@@ -1655,7 +1658,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Remove cascading project data and mark all project properties as non-overridden
      */
     private void clearCascadingProject() {
-        Functions.unlinkCascadingProject(cascadingProject, name);
+        Functions.unlinkProjectFromCascadingParents(cascadingProject, name);
         this.cascadingProject = null;
         this.cascadingProjectName = null;
         for (IProjectProperty property : jobProperties.values()) {
