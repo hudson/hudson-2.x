@@ -404,6 +404,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         for (JobProperty p : properties)
             p.setOwner(this);
 
+        if(cascadingChildrenNames == null){
+             cascadingChildrenNames = new CopyOnWriteArraySet<String>();
+        }
         buildProjectProperties();
     }
 
@@ -1615,7 +1618,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             this.cascadingProjectName = cascadingProjectName;
             cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
-            cascadingProject.addCascadingChildren(name);
+            Functions.linkCascadingProjectsToChild(cascadingProject, name);
             for (IProjectProperty property : jobProperties.values()) {
                 if (property instanceof ExternalProjectProperty) {
                     property.setOverridden(((ExternalProjectProperty) property).isModified());
