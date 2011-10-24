@@ -1389,4 +1389,23 @@ public class Functions {
         });
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
+
+
+    /**
+     * Links cascading project to children project. Method updates all parent cascading projects starting
+     * from the specified cascadingProject.
+     *
+     * @param cascadingProject cascadingProject.
+     * @param childProjectName the name of child project name.
+     */
+    @SuppressWarnings("unchecked")
+    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName){
+        if(cascadingProject != null){
+            cascadingProject.addCascadingChildren(childProjectName);
+            if(cascadingProject.getCascadingProjectName() !=null){
+                linkCascadingProjectsToChild(Functions.getItemByName(Hudson.getInstance().getAllItems(cascadingProject.getClass()),
+                cascadingProject.getCascadingProjectName()), childProjectName);
+            }
+        }
+    }
 }
