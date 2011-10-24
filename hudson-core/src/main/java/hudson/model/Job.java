@@ -346,19 +346,19 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * Adds cascading child project name.
      *
-     * @param cascadingChildrenName cascading children project name.
+     * @param cascadingChildName cascading child project name.
      */
-    public void addCascadingChildren(String cascadingChildrenName) {
-        cascadingChildrenNames.add(cascadingChildrenName);
+    public void addCascadingChild(String cascadingChildName) {
+        cascadingChildrenNames.add(cascadingChildName);
     }
 
     /**
      * Remove cascading child project name.
      *
-     * @param cascadingChildrenName cascading children project name.
+     * @param cascadingChildName cascading child project name.
      */
-    public void removeCascadingChildren(String cascadingChildrenName) {
-        cascadingChildrenNames.remove(cascadingChildrenName);
+    public void removeCascadingChild(String cascadingChildName) {
+        cascadingChildrenNames.remove(cascadingChildName);
     }
 
     @Override
@@ -1655,6 +1655,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Remove cascading project data and mark all project properties as non-overridden
      */
     private void clearCascadingProject() {
+        Functions.unlinkCascadingProject(cascadingProject, name);
         this.cascadingProject = null;
         this.cascadingProjectName = null;
         for (IProjectProperty property : jobProperties.values()) {
