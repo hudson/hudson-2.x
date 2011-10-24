@@ -30,7 +30,9 @@ import hudson.model.Hudson;
 import hudson.model.Job;
 import hudson.model.User;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -205,4 +207,60 @@ public class FunctionsTest {
         assertTrue(project1.getCascadingChildrenNames().contains(cascadingName));
         assertTrue(child1.getCascadingChildrenNames().contains(cascadingName));
     }
+
+
+    @Test
+    public void testRenameCascadingChildLinks() {
+        String oldName = "oldCascadingProject";
+        String newName = "newCascadingProject";
+        FreeStyleProject project1 = new FreeStyleProjectMock("project1");
+        FreeStyleProjectMock project2 = new FreeStyleProjectMock("project2");
+        FreeStyleProjectMock project3 = new FreeStyleProjectMock(oldName);
+        project2.setCascadingProject(project1);
+        Functions.linkCascadingProjectsToChild(project1, "project2");
+        project3.setCascadingProject(project2);
+        Functions.linkCascadingProjectsToChild(project2, oldName);
+        assertTrue(project2.getCascadingChildrenNames().contains(oldName));
+        assertTrue(project1.getCascadingChildrenNames().contains(oldName));
+
+        Functions.renameCascadingChildLinks(project2, oldName, newName);
+
+        assertTrue(project2.getCascadingChildrenNames().contains(newName));
+        assertFalse(project2.getCascadingChildrenNames().contains(oldName));
+        assertTrue(project1.getCascadingChildrenNames().contains(newName));
+        assertFalse(project1.getCascadingChildrenNames().contains(oldName));
+    }
+
+
+    @Test
+    @PrepareForTest(Hudson.class)
+    public void testRenameCascadingParentLinks() {
+        String oldName = "oldCascadingProject";
+        String newName = "newCascadingProject";
+        List<Job> jobs = new ArrayList<Job>();
+        FreeStyleProject project1 = new FreeStyleProjectMock(oldName);
+        FreeStyleProjectMock project2 = new FreeStyleProjectMock("child");
+        project2.setCascadingProject(project1);
+        jobs.add(project1);
+        jobs.add(project2);
+        mockStatic(Hudson.class);
+        Hudson hudson = createMock(Hudson.class);
+        expect(hudson.getAllItems(Job.class)).andReturn(jobs);
+        expect(Hudson.getInstance()).andReturn(hudson);
+        replay(Hudson.class, hudson);
+        Functions.renameCascadingParentLinks(oldName, newName);
+        verify(Hudson.class, hudson);
+        assertEquals(newName, project2.getCascadingProjectName());
+    }
+
+    @Test
+    public void testRenameCascadingParentLinksNullNames() {
+        Functions.renameCascadingParentLinks(null, null);
+    }
+
+    @Test
+    public void testRenameCascadingParentLinksEmptyNames() {
+        Functions.renameCascadingParentLinks("", "");
+    }
+
 }
