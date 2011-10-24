@@ -24,8 +24,10 @@
  */
 package hudson;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.sun.istack.internal.Nullable;
 import hudson.console.ConsoleAnnotationDescriptor;
 import hudson.console.ConsoleAnnotatorFactory;
 import hudson.model.AbstractProject;
@@ -1419,6 +1421,46 @@ public class Functions {
             if(cascadingProject.hasCascadingProject()){
                 linkCascadingProjectsToChild(cascadingProject.getCascadingProject(), childProjectName);
             }
+        }
+    }
+
+    /**
+     * Updates the name of the project in the in all children cascading references.
+     * If this project uses some cascading parent, the name of this project will be renamed in the cascading children
+     * collection of the cascading parent project.
+     *
+     * @param cascadingProject cascading project.
+     * @param oldName old project name.
+     * @param newName new project name.
+     */
+    @SuppressWarnings("unchecked")
+    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName){
+        if(cascadingProject != null){
+            cascadingProject.renameCascadingChildName(oldName, newName);
+            if(cascadingProject.hasCascadingProject()){
+                renameCascadingChildLinks(cascadingProject.getCascadingProject(), oldName, newName);
+            }
+        }
+    }
+
+    /**
+     * Updates the name of the project in the in all parent cascading references.
+     * If this project is used as cascading parent, it's name will be renamed in all children projects.
+     *
+     * @param oldName old project name.
+     * @param newName new project name.
+
+     */
+    @SuppressWarnings("unchecked")
+    public static void renameCascadingParentLinks(final String oldName, final String newName){
+        if (StringUtils.isBlank(newName)|| StringUtils.isBlank(oldName)) {
+            return;
+        }
+        for (Job job : Hudson.getInstance().getAllItems(Job.class)) {
+            if(oldName.equals(job.getCascadingProjectName())){
+                job.renameCascadingProjectNameTo(newName);
+            }
+
         }
     }
 }

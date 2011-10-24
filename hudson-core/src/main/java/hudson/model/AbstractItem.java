@@ -150,6 +150,16 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
     }
 
     /**
+     * Ad additional action which should be performed before the item will be renamed.
+     * It's possible to add some logic in the subclasses.
+     *
+     * @param oldName old item name.
+     * @param newName new item name.
+     */
+    protected void performBeforeItemRenaming(String oldName, String newName){
+    }
+
+    /**
      * Renames this item.
      * Not all the Items need to support this operation, but if you decide to do so,
      * you can use this method.
@@ -174,8 +184,10 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
                     // see http://www.nabble.com/error-on-renaming-project-tt18061629.html
                     throw new IllegalArgumentException("Job " + newName
                             + " already exists");
-
                 String oldName = this.name;
+
+                performBeforeItemRenaming(oldName,newName);
+
                 File oldRoot = this.getRootDir();
 
                 doSetName(newName);
