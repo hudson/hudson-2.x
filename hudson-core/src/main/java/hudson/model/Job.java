@@ -533,7 +533,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 // should we block until the build is cancelled?
             }
         }
-        //TODO delete cascading project
+        Functions.unlinkProjectFromCascadingParents(getCascadingProject(), name);
         super.performDelete();
     }
 
