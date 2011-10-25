@@ -41,14 +41,12 @@ THE SOFTWARE.
           </f:entry>
         </j:if>
         <j:set var="cascadingCandidates" value="${h.getAllItems(it.class, it)}"/>
-        <j:if test="${cascadingCandidates.size() gt 1}">
+        <j:if test="${cascadingCandidates.size() gt 0}">
           <f:entry title="${%cascadingProjectName}">
             <select class="setting-input" name="cascadingProjectName">
               <f:option/>
               <j:forEach var="job" items="${cascadingCandidates}">
-                <j:if test="${job.name != it.name}">
-                  <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
-                </j:if>
+                <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
               </j:forEach>
             </select>
           </f:entry>

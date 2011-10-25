@@ -336,7 +336,8 @@ public class CascadingUtil {
         List<Job> result = new ArrayList<Job>(allItems.size());
         for (T item : allItems) {
             Job job = (Job) item;
-            if (!hasCyclicCascadingLink(job, currentJob.getCascadingChildrenNames())) {
+            if (!StringUtils.equals(currentJob.getName(), job.getName())
+                && !hasCyclicCascadingLink(job, currentJob.getCascadingChildrenNames())) {
                 result.add(job);
             }
         }
