@@ -23,19 +23,21 @@
  */
 package hudson.matrix;
 
-import junit.framework.TestCase;
-
 import java.util.Map;
 import java.util.HashMap;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class CombinationTest extends TestCase {
+public class CombinationTest{
     AxisList axes = new AxisList(
             new Axis("a","X","x"),
             new Axis("b","Y","y"));
 
+    @Test
     @SuppressWarnings({"RedundantStringConstructorCall"})
     public void testEval() {
         Map<String,String> r = new HashMap<String, String>();
