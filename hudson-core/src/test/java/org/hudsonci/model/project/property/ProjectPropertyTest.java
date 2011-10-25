@@ -410,7 +410,7 @@ public class ProjectPropertyTest {
         BaseProjectProperty parentProperty = new BaseProjectProperty(parent);
         parentProperty.setKey(propertyKey);
         parentProperty.setValue(parentValue);
-        parent.putJobProperty(propertyKey, parentProperty);
+        parent.putProjectProperty(propertyKey, parentProperty);
         project.setCascadingProject(parent);
         property = new BaseProjectProperty(project);
         property.setKey(propertyKey);
@@ -513,7 +513,7 @@ public class ProjectPropertyTest {
         BaseProjectProperty parentProperty = new BaseProjectProperty(parent);
         parentProperty.setKey(propertyKey);
         parentProperty.setValue(parentValue);
-        parent.putJobProperty(propertyKey, parentProperty);
+        parent.putProjectProperty(propertyKey, parentProperty);
         project.setCascadingProject(parent);
 
         //If value set to null, need to check whether default value is equals to cascading
@@ -557,7 +557,7 @@ public class ProjectPropertyTest {
         IntegerProjectProperty parentProperty = new IntegerProjectProperty(parent);
         parentProperty.setKey(propertyKey);
         parentProperty.setValue(propertyValue);
-        parent.putJobProperty(propertyKey, parentProperty);
+        parent.putProjectProperty(propertyKey, parentProperty);
 
         project.setCascadingProject(parent);
         property = new IntegerProjectProperty(project);

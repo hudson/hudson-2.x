@@ -46,6 +46,7 @@ import hudson.security.AuthorizationMatrixProperty;
 import hudson.security.Permission;
 import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
+import hudson.util.CascadingUtil;
 import hudson.util.ChartUtil;
 import hudson.util.ColorPalette;
 import hudson.util.CopyOnWriteList;
@@ -64,7 +65,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,6 +82,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
@@ -189,7 +190,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * The name of the cascadingProject.
      */
-    private String cascadingProjectName;
+    String cascadingProjectName;
 
     /**
      * The list with the names of children cascading projects. Required to avoid cyclic references and
@@ -240,8 +241,14 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @param key key.
      * @param property property instance.
      */
-    protected void putJobProperty(String key, IProjectProperty property) {
-        jobProperties.put(key, property);
+    public void putProjectProperty(String key, IProjectProperty property) {
+        if (null != key && null != property) {
+            jobProperties.put(key, property);
+        }
+    }
+
+    public Map<String, IProjectProperty> getProjectProperties() {
+        return MapUtils.unmodifiableMap(jobProperties);
     }
 
     /**
@@ -267,71 +274,54 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @return {@link org.hudsonci.api.model.IProjectProperty} instance or null.
      */
     public IProjectProperty getProperty(String key){
-        return getProperty(key, null);
+        return CascadingUtil.getProjectProperty(this, key);
     }
 
-    //TODO relocate it to functions
     /**
      * {@inheritDoc}
      */
     public IProjectProperty getProperty(String key, Class clazz) {
-        IProjectProperty t = jobProperties.get(key);
-        if (null == t && null != clazz) {
-            try {
-                t = (IProjectProperty) clazz.getConstructor(IJob.class).newInstance(this);
-                t.setKey(key);
-                putJobProperty(key, t);
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return t;
+        return CascadingUtil.getProjectProperty(this, key, clazz);
     }
 
     public StringProjectProperty getStringProperty(String key) {
-        return (StringProjectProperty) getProperty(key, StringProjectProperty.class);
+        return CascadingUtil.getStringProjectProperty(this, key);
     }
 
     public BaseProjectProperty getBaseProjectProperty(String key) {
-        return (BaseProjectProperty) getProperty(key, BaseProjectProperty.class);
+        return CascadingUtil.getBaseProjectProperty(this, key);
     }
 
     public ExternalProjectProperty getExternalProjectProperty(String key) {
-        return (ExternalProjectProperty) getProperty(key, ExternalProjectProperty.class);
+        return CascadingUtil.getExternalProjectProperty(this, key);
     }
 
     public ResultProjectProperty getResultProperty(String key) {
-        return (ResultProjectProperty) getProperty(key, ResultProjectProperty.class);
+        return CascadingUtil.getResultProjectProperty(this, key);
     }
 
     public BooleanProjectProperty getBooleanProperty(String key) {
-        return (BooleanProjectProperty) getProperty(key, BooleanProjectProperty.class);
+        return CascadingUtil.getBooleanProjectProperty(this, key);
     }
 
     public IntegerProjectProperty getIntegerProperty(String key) {
-        return (IntegerProjectProperty) getProperty(key, IntegerProjectProperty.class);
+        return CascadingUtil.getIntegerProjectProperty(this, key);
     }
 
     public LogRotatorProjectProperty getLogRotatorProjectProperty(String key) {
-        return (LogRotatorProjectProperty) getProperty(key, LogRotatorProjectProperty.class);
+        return CascadingUtil.getLogRotatorProjectProperty(this, key);
     }
 
     public DescribableListProjectProperty getDescribableListProjectProperty(String key) {
-        return (DescribableListProjectProperty) getProperty(key, DescribableListProjectProperty.class);
+        return CascadingUtil.getDescribableListProjectProperty(this, key);
     }
 
     public AxisListProjectProperty getAxesListProjectProperty(String key) {
-        return (AxisListProjectProperty) getProperty(key, AxisListProjectProperty.class);
+        return CascadingUtil.getAxesListProjectProperty(this, key);
     }
 
     public SCMProjectProperty getScmProjectProperty(String key) {
-        return (SCMProjectProperty) getProperty(key, SCMProjectProperty.class);
+        return CascadingUtil.getScmProjectProperty(this, key);
     }
 
     /**
@@ -632,7 +622,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Returns the log rotator for this job, or null if none.
      */
     public LogRotator getLogRotator() {
-        return (LogRotator) getProperty(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class).getValue();
+        return CascadingUtil.getLogRotatorProjectProperty(this, LOG_ROTATOR_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -642,7 +632,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @SuppressWarnings("unchecked")
     public void setLogRotator(LogRotator logRotator) {
-        getProperty(LOG_ROTATOR_PROPERTY_NAME, LogRotatorProjectProperty.class).setValue(logRotator);
+        CascadingUtil.getLogRotatorProjectProperty(this, LOG_ROTATOR_PROPERTY_NAME).setValue(logRotator);
     }
 
     /**
