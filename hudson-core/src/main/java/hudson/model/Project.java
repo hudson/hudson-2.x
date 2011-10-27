@@ -32,6 +32,7 @@ import hudson.tasks.Maven;
 import hudson.tasks.Maven.MavenInstallation;
 import hudson.tasks.Maven.ProjectWithMaven;
 import hudson.tasks.Publisher;
+import hudson.util.CascadingUtil;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +78,8 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      */
     //TODO investigate, whether we can move this method to parent or completer remove it
     public void addPublisher(Publisher buildStep) throws IOException {
-        getExternalProjectProperty(buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
+        CascadingUtil.getExternalProjectProperty(this,
+            buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
     }
 
     /**

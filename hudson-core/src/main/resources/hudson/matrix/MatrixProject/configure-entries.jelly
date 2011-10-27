@@ -53,7 +53,7 @@ THE SOFTWARE.
           href="${rootURL}/scripts/yui/treeview/assets/skins/sam/treeview.css" />
 
     <f:block>
-        <j:set var="axesProperty" value="${it.getAxesListProjectProperty(it.AXES_PROPERTY_NAME)}"/>
+        <j:set var="axesProperty" value="${cu.getAxesListProjectProperty(it, it.AXES_PROPERTY_NAME)}"/>
         <j:set var="axes" value="${axesProperty.getValue()}"/>
 
       <f:hetero-list name="axis" hasHeader="true"
@@ -64,7 +64,7 @@ THE SOFTWARE.
                      isPropertyOverridden="${axesProperty.isOverridden()}"/>
     </f:block>
 
-    <j:set var="runSequentiallyProperty" value="${it.getBooleanProperty(it.RUN_SEQUENTIALLY_PROPERTY_NAME)}"/>
+    <j:set var="runSequentiallyProperty" value="${cu.getBooleanProjectProperty(it, it.RUN_SEQUENTIALLY_PROPERTY_NAME)}"/>
     <j:set var="runSequentially" value="${runSequentiallyProperty.getValue()}"/>
     <f:optionalBlock
             checked="${runSequentially}"
@@ -73,7 +73,7 @@ THE SOFTWARE.
             resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.RUN_SEQUENTIALLY_PROPERTY_NAME}"
             isPropertyOverridden="${runSequentiallyProperty.isOverridden()}"/>
 
-    <j:set var="combinationFilterProperty" value="${it.getStringProperty(it.COMBINATION_FILTER_PROPERTY_NAME)}"/>
+    <j:set var="combinationFilterProperty" value="${cu.getStringProjectProperty(it, it.COMBINATION_FILTER_PROPERTY_NAME)}"/>
     <j:set var="combinationFilter" value="${combinationFilterProperty.getValue()}"/>
     <f:optionalBlock name="hasCombinationFilter" title="${%Combination Filter}"
                      checked="${!empty(combinationFilter)}"
@@ -85,9 +85,9 @@ THE SOFTWARE.
 	    </f:entry>
     </f:optionalBlock>
 
-    <j:set var="touchStoneCombinationFilterProperty" value="${it.getStringProperty(it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME)}"/>
+    <j:set var="touchStoneCombinationFilterProperty" value="${cu.getStringProjectProperty(it, it.TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME)}"/>
     <j:set var="touchStoneCombinationFilter" value="${touchStoneCombinationFilterProperty.getValue()}"/>
-    <j:set var="touchStoneResultConditionProperty" value="${it.getResultProperty(it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME)}"/>
+    <j:set var="touchStoneResultConditionProperty" value="${cu.getResultProjectProperty(it, it.TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME)}"/>
     <j:set var="touchStoneResultCondition" value="${touchStoneResultConditionProperty.getValue()}"/>
 
     <j:set var="isTouchStoneCombinationFilterOverridden" value="${touchStoneCombinationFilterProperty.isOverridden() ||

@@ -149,7 +149,8 @@ public final class DescribableListUtil {
         List<T> describableList = new CopyOnWriteArrayList<T>();
         DescribableList<T, Descriptor<T>> result = new DescribableList<T, Descriptor<T>>(owner);
         for (Descriptor<T> descriptor : descriptors) {
-            ExternalProjectProperty<T> property = owner.getExternalProjectProperty(descriptor.getJsonSafeClassName());
+            ExternalProjectProperty<T> property = CascadingUtil.getExternalProjectProperty(owner,
+                descriptor.getJsonSafeClassName());
             if (null != property.getValue()) {
                 describableList.add(property.getValue());
             }

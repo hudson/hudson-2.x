@@ -38,7 +38,7 @@ THE SOFTWARE.
     <f:section title="${attrs.title}" name="${attrs.name}">
       <d:invokeBody/>
       <j:forEach var="descriptor" items="${descriptors}">
-        <j:set var="instanceProperty" value="${it.getExternalProjectProperty(descriptor.jsonSafeClassName)}"/>
+        <j:set var="instanceProperty" value="${cu.getExternalProjectProperty(it, descriptor.jsonSafeClassName)}"/>
         <j:set var="instance" value="${instanceProperty.getValue()}"/>
         <f:optionalBlock name="${descriptor.jsonSafeClassName}" help="${descriptor.helpFile}"
                          title="${descriptor.displayName}" checked="${instance!=null}"

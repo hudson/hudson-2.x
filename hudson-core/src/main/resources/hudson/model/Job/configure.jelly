@@ -40,7 +40,7 @@ THE SOFTWARE.
             <f:textbox name="name" value="${it.name}" />
           </f:entry>
         </j:if>
-        <j:set var="cascadingCandidates" value="${h.getAllItems(it.class, it)}"/>
+        <j:set var="cascadingCandidates" value="${cu.getCascadingParents(it.class, it)}"/>
         <j:if test="${cascadingCandidates.size() gt 0}">
           <f:entry title="${%cascadingProjectName}">
             <select class="setting-input" name="cascadingProjectName">
@@ -57,7 +57,7 @@ THE SOFTWARE.
 
         <j:if test="${it.supportsLogRotator()}">
           <!-- log rotator -->
-          <j:set var="logRotatorProperty" value="${it.getLogRotatorProjectProperty(it.LOG_ROTATOR_PROPERTY_NAME)}"/>
+          <j:set var="logRotatorProperty" value="${cu.getLogRotatorProjectProperty(it, it.LOG_ROTATOR_PROPERTY_NAME)}"/>
           <j:set var="logRotator" value="${logRotatorProperty.getValue()}"/>
           <f:optionalBlock name="logrotate"
             help="/help/project-config/log-rotation.html"

@@ -58,6 +58,7 @@ THE SOFTWARE.
 <!-- The path starts with a "/" character but does not end with a "/" character. -->
 <j:set var="rootURL" value="${request.contextPath}" />
 <j:new var="h" className="hudson.Functions" /><!-- instead of JSP functions -->
+<j:new var="cu" className="hudson.util.CascadingUtil"/> <!-- Utility for cascading functionality -->
 <j:set var="_" value="${h.configureAutoRefresh(request, response, attrs.norefresh!=null)}"/>
 <!--
   load static resources from the path dedicated to a specific version.
