@@ -86,16 +86,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
-import org.hudsonci.model.project.property.AxisListProjectProperty;
-import org.hudsonci.model.project.property.BaseProjectProperty;
-import org.hudsonci.model.project.property.BooleanProjectProperty;
-import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
-import org.hudsonci.model.project.property.IntegerProjectProperty;
-import org.hudsonci.model.project.property.LogRotatorProjectProperty;
-import org.hudsonci.model.project.property.ResultProjectProperty;
-import org.hudsonci.model.project.property.SCMProjectProperty;
-import org.hudsonci.model.project.property.StringProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -282,46 +273,6 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public IProjectProperty getProperty(String key, Class clazz) {
         return CascadingUtil.getProjectProperty(this, key, clazz);
-    }
-
-    public StringProjectProperty getStringProperty(String key) {
-        return CascadingUtil.getStringProjectProperty(this, key);
-    }
-
-    public BaseProjectProperty getBaseProjectProperty(String key) {
-        return CascadingUtil.getBaseProjectProperty(this, key);
-    }
-
-    public ExternalProjectProperty getExternalProjectProperty(String key) {
-        return CascadingUtil.getExternalProjectProperty(this, key);
-    }
-
-    public ResultProjectProperty getResultProperty(String key) {
-        return CascadingUtil.getResultProjectProperty(this, key);
-    }
-
-    public BooleanProjectProperty getBooleanProperty(String key) {
-        return CascadingUtil.getBooleanProjectProperty(this, key);
-    }
-
-    public IntegerProjectProperty getIntegerProperty(String key) {
-        return CascadingUtil.getIntegerProjectProperty(this, key);
-    }
-
-    public LogRotatorProjectProperty getLogRotatorProjectProperty(String key) {
-        return CascadingUtil.getLogRotatorProjectProperty(this, key);
-    }
-
-    public DescribableListProjectProperty getDescribableListProjectProperty(String key) {
-        return CascadingUtil.getDescribableListProjectProperty(this, key);
-    }
-
-    public AxisListProjectProperty getAxesListProjectProperty(String key) {
-        return CascadingUtil.getAxesListProjectProperty(this, key);
-    }
-
-    public SCMProjectProperty getScmProjectProperty(String key) {
-        return CascadingUtil.getScmProjectProperty(this, key);
     }
 
     /**
@@ -523,7 +474,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 // should we block until the build is cancelled?
             }
         }
-        Functions.unlinkProjectFromCascadingParents(getCascadingProject(), name);
+        CascadingUtil.unlinkProjectFromCascadingParents(getCascadingProject(), name);
         super.performDelete();
     }
 
@@ -798,8 +749,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @Override
     protected void performBeforeItemRenaming(String oldName, String newName){
-        Functions.renameCascadingChildLinks(cascadingProject, oldName, newName);
-        Functions.renameCascadingParentLinks(oldName, newName);
+        CascadingUtil.renameCascadingChildLinks(cascadingProject, oldName, newName);
+        CascadingUtil.renameCascadingParentLinks(oldName, newName);
     }
 
     /**
@@ -1631,11 +1582,11 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         if (StringUtils.isBlank(cascadingProjectName)) {
             clearCascadingProject();
         } else if (!StringUtils.equalsIgnoreCase(this.cascadingProjectName, cascadingProjectName)) {
-            Functions.unlinkProjectFromCascadingParents(cascadingProject, name);
+            CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, name);
             this.cascadingProjectName = cascadingProjectName;
             cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
                 cascadingProjectName);
-            Functions.linkCascadingProjectsToChild(cascadingProject, name);
+            CascadingUtil.linkCascadingProjectsToChild(cascadingProject, name);
             for (IProjectProperty property : jobProperties.values()) {
                 if (property instanceof ExternalProjectProperty) {
                     property.setOverridden(((ExternalProjectProperty) property).isModified());
@@ -1682,7 +1633,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Remove cascading project data and mark all project properties as non-overridden
      */
     private void clearCascadingProject() {
-        Functions.unlinkProjectFromCascadingParents(cascadingProject, name);
+        CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, name);
         this.cascadingProject = null;
         this.cascadingProjectName = null;
         for (IProjectProperty property : jobProperties.values()) {

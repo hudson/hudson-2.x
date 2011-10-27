@@ -30,7 +30,7 @@ THE SOFTWARE.
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project" xmlns:this="this">
     <p:config-disableBuild/>
 
-    <j:set var="concurrentBuildProperty" value="${it.getBooleanProperty(it.CONCURRENT_BUILD_PROPERTY_NAME)}"/>
+    <j:set var="concurrentBuildProperty" value="${cu.getBooleanProperty(it, it.CONCURRENT_BUILD_PROPERTY_NAME)}"/>
     <j:set var="concurrentBuild" value="${concurrentBuildProperty.getValue()}"/>
 
     <j:if test="${app.CONCURRENT_BUILD}">
@@ -44,7 +44,7 @@ THE SOFTWARE.
         <!-- if there's only one JDK configured, always use that. -->
         <f:entry title="JDK"
                  description="${%JDK to be used for this project}"
-                 isPropertyOverridden="${it.getStringProperty(it.JDK_PROPERTY_NAME).isOverridden()}">
+                 isPropertyOverridden="${cu.getStringProjectProperty(it, it.JDK_PROPERTY_NAME).isOverridden()}">
             <select class="setting-input validated" name="jdk"
                     checkUrl="'${rootURL}/defaultJDKCheck?value='+this.value">
                 <option>${%default.value}</option>

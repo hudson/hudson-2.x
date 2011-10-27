@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 <!-- custom quiet period -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <j:set var="quietPeriodProperty" value="${it.getIntegerProperty(it.QUIET_PERIOD_PROPERTY_NAME)}"/>
+  <j:set var="quietPeriodProperty" value="${cu.getIntegerProjectProperty(it, it.QUIET_PERIOD_PROPERTY_NAME)}"/>
   <j:set var="quietPeriod" value="${quietPeriodProperty.getValue()}"/>
   <f:optionalBlock name="hasQuietPeriod" title="${%Quiet period}"
                    checked="${quietPeriod!=null and quietPeriod!=quietPeriodProperty.getDefaultValue()}"

@@ -71,6 +71,7 @@ import hudson.triggers.SCMTrigger;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import hudson.util.AutoCompleteSeeder;
+import hudson.util.CascadingUtil;
 import hudson.util.DescribableList;
 import hudson.util.EditDistance;
 import hudson.util.FormValidation;
@@ -102,7 +103,6 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
-import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.kohsuke.args4j.Argument;
@@ -426,20 +426,22 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     @Exported
     public boolean isConcurrentBuild() {
-        return Hudson.CONCURRENT_BUILD && getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).getValue();
+        return Hudson.CONCURRENT_BUILD
+            && CascadingUtil.getBooleanProjectProperty(this, CONCURRENT_BUILD_PROPERTY_NAME).getValue();
     }
 
     public void setConcurrentBuild(boolean b) throws IOException {
-        getBooleanProperty(CONCURRENT_BUILD_PROPERTY_NAME).setValue(b);
+        CascadingUtil.getBooleanProjectProperty(this, CONCURRENT_BUILD_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean isCleanWorkspaceRequired() {
-        return getBooleanProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getValue();
+        return CascadingUtil.getBooleanProjectProperty(this, CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getValue();
     }
 
     public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired) {
-        getBooleanProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).setValue(cleanWorkspaceRequired);
+        CascadingUtil.getBooleanProjectProperty(this,
+            CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).setValue(cleanWorkspaceRequired);
     }
 
     /**
@@ -640,7 +642,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public int getQuietPeriod() {
-        IntegerProjectProperty property = getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME);
+        IntegerProjectProperty property = CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME);
         Integer value = property.getValue();
         return property.getDefaultValue().equals(value) ? Hudson.getInstance().getQuietPeriod() : value;
     }
@@ -652,18 +654,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @throws IOException if any.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
-        getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).setValue(seconds);
+        CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME).setValue(seconds);
         save();
     }
 
     public int getScmCheckoutRetryCount() {
-        IntegerProjectProperty property = getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME);
+        IntegerProjectProperty property = CascadingUtil.getIntegerProjectProperty(this,
+            SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME);
         Integer value = property.getValue();
         return property.getDefaultValue().equals(value) ? Hudson.getInstance().getScmCheckoutRetryCount() : value;
     }
 
     public void setScmCheckoutRetryCount(Integer retryCount) {
-        getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).setValue(retryCount);
+        CascadingUtil.getIntegerProjectProperty(this, SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).setValue(retryCount);
     }
 
     /**
@@ -688,7 +691,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     // ugly name because of EL
     public boolean getHasCustomQuietPeriod() {
-        return null != getIntegerProperty(QUIET_PERIOD_PROPERTY_NAME).getValue();
+        return null != CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -713,7 +716,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @deprecated as of 2.1.2
      */
     public boolean hasCustomScmCheckoutRetryCount(){
-        return null != getIntegerProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).getValue();
+        return null != CascadingUtil.getIntegerProjectProperty(this, SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).getValue();
     }
 
     @Override
@@ -730,20 +733,22 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public boolean blockBuildWhenDownstreamBuilding() {
-        return getBooleanProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).getValue();
+        return CascadingUtil.getBooleanProjectProperty(this,
+            BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenDownstreamBuilding(boolean b) throws IOException {
-        getBooleanProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
+        CascadingUtil.getBooleanProjectProperty(this, BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean blockBuildWhenUpstreamBuilding() {
-        return getBooleanProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).getValue();
+        return CascadingUtil.getBooleanProjectProperty(this,
+            BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenUpstreamBuilding(boolean b) throws IOException {
-        getBooleanProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
+        CascadingUtil.getBooleanProjectProperty(this, BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
@@ -1069,7 +1074,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @return name of jdk chosen for current project. Could taken from parent
      */
     public String getJDKName() {
-        return getStringProperty(JDK_PROPERTY_NAME).getValue();
+        return CascadingUtil.getStringProjectProperty(this, JDK_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -1088,7 +1093,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public void setJDK(String jdk) {
-        getStringProperty(JDK_PROPERTY_NAME).setValue(jdk);
+        CascadingUtil.getStringProjectProperty(this, JDK_PROPERTY_NAME).setValue(jdk);
     }
 
     public BuildAuthorizationToken getAuthToken() {
