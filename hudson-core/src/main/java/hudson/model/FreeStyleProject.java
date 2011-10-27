@@ -25,6 +25,7 @@
 package hudson.model;
 
 import hudson.Extension;
+import hudson.util.CascadingUtil;
 import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -68,7 +69,7 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
     }
 
     public String getCustomWorkspace() throws IOException {
-        return getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
+        return CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -91,7 +92,7 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
+        CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
         save();
     }
 

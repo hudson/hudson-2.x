@@ -26,14 +26,17 @@ package hudson.util;
 import com.google.common.collect.Maps;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
+import hudson.model.Job;
 import hudson.model.Saveable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.json.JSONObject;
-import org.hudsonci.api.model.IJob;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.kohsuke.stapler.StaplerRequest;
@@ -46,6 +49,8 @@ import org.kohsuke.stapler.StaplerRequest;
  * @author Nikita Levyankov
  */
 public final class DescribableListUtil {
+
+    private static final Logger LOGGER = Logger.getLogger(DescribableListUtil.class.getName());
 
     private DescribableListUtil() {
     }
@@ -117,8 +122,8 @@ public final class DescribableListUtil {
      * @param <D> Descriptor
      * @return map of converted properties.
      */
-    public static <T extends Describable<T>, D extends Descriptor<T>>
-    Map<String, ExternalProjectProperty<T>> convertToProjectProperties(DescribableList<T, D> describableList, IJob owner) {
+    public static <T extends Describable<T>, D extends Descriptor<T>> Map<String, ExternalProjectProperty<T>>
+    convertToProjectProperties(DescribableList<T, D> describableList, Job owner) {
         Map<String, ExternalProjectProperty<T>> result = Maps.newConcurrentMap();
         if (null != describableList) {
             for (Map.Entry<D, T> entry : describableList.toMap().entrySet()) {
@@ -128,6 +133,32 @@ public final class DescribableListUtil {
                 property.setValue(entry.getValue());
                 result.put(key, property);
             }
+        }
+        return result;
+    }
+    /**
+     * Converts collection of {@link ExternalProjectProperty} descriptors to {@link DescribableList}
+     *
+     * @param descriptors .
+     * @param owner new owner for properties.
+     * @return {@link DescribableList}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Describable<T>> DescribableList<T, Descriptor<T>> convertToDescribableList(
+        List<Descriptor<T>> descriptors, Job owner) {
+        List<T> describableList = new CopyOnWriteArrayList<T>();
+        DescribableList<T, Descriptor<T>> result = new DescribableList<T, Descriptor<T>>(owner);
+        for (Descriptor<T> descriptor : descriptors) {
+            ExternalProjectProperty<T> property = CascadingUtil.getExternalProjectProperty(owner,
+                descriptor.getJsonSafeClassName());
+            if (null != property.getValue()) {
+                describableList.add(property.getValue());
+            }
+        }
+        try {
+            result.addAll(describableList);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Failed to add list of describable elements", e);
         }
         return result;
     }

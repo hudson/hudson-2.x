@@ -26,7 +26,7 @@ THE SOFTWARE.
   Builder config pane
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project">
-  <j:set var="buildersProperty" value="${it.getDescribableListProjectProperty(it.BUILDERS_PROPERTY_NAME)}"/>
+  <j:set var="buildersProperty" value="${cu.getDescribableListProjectProperty(it, it.BUILDERS_PROPERTY_NAME)}"/>
   <j:set var="builders" value="${buildersProperty.getValue()}"/>
   <!-- build config pane -->
   <f:section title="${%Build}">

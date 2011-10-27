@@ -26,25 +26,17 @@ package hudson.model;
 
 import hudson.Util;
 import hudson.diagnosis.OldDataMonitor;
-import hudson.model.Descriptor.FormException;
 import hudson.tasks.BuildStep;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.BuildWrappers;
-import hudson.tasks.Builder;
 import hudson.tasks.Fingerprinter;
 import hudson.tasks.Maven;
 import hudson.tasks.Maven.MavenInstallation;
 import hudson.tasks.Maven.ProjectWithMaven;
 import hudson.tasks.Publisher;
-import hudson.util.DescribableListUtil;
+import hudson.util.CascadingUtil;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import javax.servlet.ServletException;
-import net.sf.json.JSONObject;
 import org.hudsonci.api.model.IProject;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Buildable software project.
@@ -84,8 +76,10 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      * @deprecated as of 1.290
      *      Use {@code getPublishersList().add(x)}
      */
+    //TODO investigate, whether we can move this method to parent or completer remove it
     public void addPublisher(Publisher buildStep) throws IOException {
-        getExternalProjectProperty(buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
+        CascadingUtil.getExternalProjectProperty(this,
+            buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
     }
 
     /**
@@ -94,6 +88,7 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
      * @deprecated as of 1.290
      *      Use {@code getPublishersList().remove(x)}
      */
+    //TODO investigate, whether we can move this method to parent or completer remove it
     public void removePublisher(Descriptor<Publisher> descriptor) throws IOException {
         getPublishersList().remove(descriptor);
     }
@@ -108,15 +103,6 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         Maven m = getBuildersList().get(Maven.class);
         if (m!=null)    return m.getMaven();
         return null;
-    }
-
-    @Override
-    protected void submit( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException, FormException {
-        super.submit(req,rsp);
-        JSONObject json = req.getSubmittedForm();
-        setBuildWrappers(DescribableListUtil.buildFromJson(this, req, json, BuildWrappers.getFor(this)));
-        setBuilders(DescribableListUtil.buildFromHetero(this, req, json, "builder", Builder.all()));
-        buildPublishers(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
     }
 
     /**

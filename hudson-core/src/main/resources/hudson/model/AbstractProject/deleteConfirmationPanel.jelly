@@ -27,6 +27,7 @@ THE SOFTWARE.
             jQuery.ajax({
                 url: "${rootUrl}/${it.url}api/json",
                 dataType: 'json',
+                cache: false,
                 success: function(data) {
                     jQuery('#confirmDialog').show();
                     jQuery('#childrenList').hide();

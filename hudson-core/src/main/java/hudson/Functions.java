@@ -114,7 +114,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.Script;
@@ -1390,103 +1389,4 @@ public class Functions {
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 
-    public static <T extends Item> List<Job> getAllItems(Class<T> type, Job currentJob) {
-        List<T> allItems = Hudson.getInstance().getAllItems(type);
-        List<Job> result = new ArrayList<Job>(allItems.size());
-        for (T item : allItems) {
-            Job job = (Job) item;
-            if (!hasCyclicCascadingLink(job, currentJob.getCascadingChildrenNames())) {
-                result.add(job);
-            }
-        }
-        return result;
-    }
-
-    protected static boolean hasCyclicCascadingLink(Job cascadingCandidate, Set<String> cascadingChildren) {
-        if (null != cascadingCandidate && CollectionUtils.isNotEmpty(cascadingChildren)) {
-            if (cascadingChildren.contains(cascadingCandidate.getName())) {
-                return true;
-            }
-            for (String childName : cascadingChildren) {
-                Job job = getItemByName(Hudson.getInstance().getAllItems(Job.class), childName);
-                if (hasCyclicCascadingLink(cascadingCandidate, job.getCascadingChildrenNames())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Recursively unlink specified project from cascading hierarchy.
-     *
-     * @param cascadingProject cascading project to start from.
-     * @param projectToUnlink project that should be unlinked.
-     * @return true if project was unlinked, false - if cascadingProject or projectToUnlink is Null
-     */
-    public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink) {
-        if (null != cascadingProject && null != projectToUnlink) {
-            cascadingProject.removeCascadingChild(projectToUnlink);
-            if (cascadingProject.hasCascadingProject()) {
-                unlinkProjectFromCascadingParents(cascadingProject.getCascadingProject(), projectToUnlink);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Links cascading project to children project. Method updates all parent cascading projects starting
-     * from the specified cascadingProject.
-     *
-     * @param cascadingProject cascadingProject.
-     * @param childProjectName the name of child project name.
-     */
-    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName){
-        if(cascadingProject != null){
-            cascadingProject.addCascadingChild(childProjectName);
-            if(cascadingProject.hasCascadingProject()){
-                linkCascadingProjectsToChild(cascadingProject.getCascadingProject(), childProjectName);
-            }
-        }
-    }
-
-    /**
-     * Updates the name of the project in all children cascading references.
-     * If this project uses some cascading parent, the name of this project will be renamed in the cascading children
-     * collection of the cascading parent project.
-     *
-     * @param cascadingProject cascading project.
-     * @param oldName old project name.
-     * @param newName new project name.
-     */
-    @SuppressWarnings("unchecked")
-    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName){
-        if(cascadingProject != null){
-            cascadingProject.renameCascadingChildName(oldName, newName);
-            if(cascadingProject.hasCascadingProject()){
-                renameCascadingChildLinks(cascadingProject.getCascadingProject(), oldName, newName);
-            }
-        }
-    }
-
-    /**
-     * Updates the name of the project in all parent cascading references.
-     * If this project is used as cascading parent, it's name will be renamed in all children projects.
-     *
-     * @param oldName old project name.
-     * @param newName new project name.
-
-     */
-    @SuppressWarnings("unchecked")
-    public static void renameCascadingParentLinks(final String oldName, final String newName){
-        if (StringUtils.isBlank(newName)|| StringUtils.isBlank(oldName)) {
-            return;
-        }
-        for (Job job : Hudson.getInstance().getAllItems(Job.class)) {
-            if(oldName.equals(job.getCascadingProjectName())){
-                job.renameCascadingProjectNameTo(newName);
-            }
-        }
-    }
 }

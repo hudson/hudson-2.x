@@ -44,10 +44,8 @@ import hudson.model.Result;
 import hudson.model.SCMedItem;
 import hudson.model.Saveable;
 import hudson.model.TopLevelItem;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.BuildWrappers;
-import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
+import hudson.util.CascadingUtil;
 import hudson.util.CopyOnWriteMap;
 import hudson.util.DescribableList;
 import hudson.util.DescribableListUtil;
@@ -168,14 +166,14 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
      * @inheritDoc
      */
     public AxisList getAxes() {
-        return getAxesListProjectProperty(AXES_PROPERTY_NAME).getValue();
+        return CascadingUtil.getAxesListProjectProperty(this, AXES_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setAxes(AxisList axes) throws IOException {
-        getAxesListProjectProperty(AXES_PROPERTY_NAME).setValue(axes);
+        CascadingUtil.getAxesListProjectProperty(this,AXES_PROPERTY_NAME).setValue(axes);
         rebuildConfigurations();
         save();
     }
@@ -184,14 +182,14 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
      * @inheritDoc
      */
     public boolean isRunSequentially() {
-        return getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).getValue();
+        return CascadingUtil.getBooleanProjectProperty(this,RUN_SEQUENTIALLY_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setRunSequentially(boolean runSequentially) throws IOException {
-        getBooleanProperty(RUN_SEQUENTIALLY_PROPERTY_NAME).setValue(runSequentially);
+        CascadingUtil.getBooleanProjectProperty(this,RUN_SEQUENTIALLY_PROPERTY_NAME).setValue(runSequentially);
         save();
     }
 
@@ -199,14 +197,14 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
      * @inheritDoc
      */
     public String getCombinationFilter() {
-        return getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).getValue();
+        return CascadingUtil.getStringProjectProperty(this, COMBINATION_FILTER_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setCombinationFilter(String combinationFilter) throws IOException {
-        getStringProperty(COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
+        CascadingUtil.getStringProjectProperty(this, COMBINATION_FILTER_PROPERTY_NAME).setValue(combinationFilter);
         rebuildConfigurations();
         save();
     }
@@ -215,42 +213,44 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
      * @inheritDoc
      */
     public String getTouchStoneCombinationFilter() {
-        return getStringProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME).getValue();
+        return CascadingUtil.getStringProjectProperty(this, TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneCombinationFilter(String touchStoneCombinationFilter) {
-        getStringProperty(TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME).setValue(touchStoneCombinationFilter);
+        CascadingUtil.getStringProjectProperty(this, TOUCH_STONE_COMBINATION_FILTER_PROPERTY_NAME)
+            .setValue(touchStoneCombinationFilter);
     }
 
     /**
      * @inheritDoc
      */
     public Result getTouchStoneResultCondition() {
-        return getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).getValue();
+        return CascadingUtil.getResultProjectProperty(this, TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setTouchStoneResultCondition(Result touchStoneResultCondition) {
-        getResultProperty(TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).setValue(touchStoneResultCondition);
+        CascadingUtil.getResultProjectProperty(this,
+            TOUCH_STONE_RESULT_CONDITION_PROPERTY_NAME).setValue(touchStoneResultCondition);
     }
 
     /**
      * @inheritDoc
      */
     public String getCustomWorkspace() {
-        return getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
+        return CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        getStringProperty(CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
+        CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
     }
 
     @Override
@@ -592,11 +592,6 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
         setAxes(new AxisList(newAxes.toList()));
 
         setRunSequentially(json.has(RUN_SEQUENTIALLY_PROPERTY_NAME));
-
-        setBuildWrappers(DescribableListUtil.buildFromJson(this, req, json, BuildWrappers.getFor(this)));
-        setBuilders(DescribableListUtil.buildFromHetero(this, req, json, "builder", Builder.all()));
-        buildPublishers(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
-
         rebuildConfigurations();
     }
 
