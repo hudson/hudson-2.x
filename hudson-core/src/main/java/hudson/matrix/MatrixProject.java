@@ -44,9 +44,6 @@ import hudson.model.Result;
 import hudson.model.SCMedItem;
 import hudson.model.Saveable;
 import hudson.model.TopLevelItem;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.BuildWrappers;
-import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
 import hudson.util.CopyOnWriteMap;
 import hudson.util.DescribableList;
@@ -592,11 +589,6 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
         setAxes(new AxisList(newAxes.toList()));
 
         setRunSequentially(json.has(RUN_SEQUENTIALLY_PROPERTY_NAME));
-
-        setBuildWrappers(DescribableListUtil.buildFromJson(this, req, json, BuildWrappers.getFor(this)));
-        setBuilders(DescribableListUtil.buildFromHetero(this, req, json, "builder", Builder.all()));
-        buildPublishers(req, json, BuildStepDescriptor.filter(Publisher.all(), this.getClass()));
-
         rebuildConfigurations();
     }
 
