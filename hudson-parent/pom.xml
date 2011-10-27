@@ -43,6 +43,12 @@
     <maven-localizer-plugin.version>1.10</maven-localizer-plugin.version>
     <maven-hpi-plugin.version>2.1.0</maven-hpi-plugin.version>
     <maven-stapler-plugin.version>1.15</maven-stapler-plugin.version>
+
+    <!--Test dependencies-->
+    <junit.version>4.8.1</junit.version>
+    <easymock.version>3.0</easymock.version>
+    <mockito-core.version>1.8.5</mockito-core.version>
+    <powermock.version>1.4.10</powermock.version>
   </properties>
 
   <organization>
