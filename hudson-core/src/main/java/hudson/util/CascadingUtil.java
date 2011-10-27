@@ -24,6 +24,8 @@
 package hudson.util;
 
 import hudson.Functions;
+import hudson.model.Describable;
+import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.Item;
 import hudson.model.Job;
@@ -31,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
@@ -45,6 +48,7 @@ import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
 import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
+import org.kohsuke.stapler.StaplerRequest;
 
 /**
  * Utility class for cascading functionality.
@@ -344,4 +348,28 @@ public class CascadingUtil {
         return result;
     }
 
+    /**
+     * Creates {@link ExternalProjectProperty} based on Descriptors collection, StaplerRequest and JSON resonse.
+     *
+     * @param req StaplerRequest
+     * @param json JSONObject
+     * @param descriptors list of descriptors
+     * @param owner job to be updated.
+     * @param <T> Describable
+     * @throws Descriptor.FormException if any.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Describable<T>> void buildExternalProperties(StaplerRequest req, JSONObject json,
+                                                                          List<Descriptor<T>> descriptors, Job owner)
+        throws Descriptor.FormException {
+        for (Descriptor d : descriptors) {
+            String name = d.getJsonSafeClassName();
+            ExternalProjectProperty<Describable> baseProperty = getExternalProjectProperty(owner, name);
+            Describable describable = null;
+            if (json.has(name)) {
+                describable = d.newInstance(req, json.getJSONObject(name));
+            }
+            baseProperty.setValue(describable);
+        }
+    }
 }
