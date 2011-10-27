@@ -69,6 +69,7 @@ import hudson.tasks.BuildWrappers;
 import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
 import hudson.util.Area;
+import hudson.util.CascadingUtil;
 import hudson.util.Iterators;
 import hudson.util.Secret;
 import hudson.views.MyViewsTabBar;
@@ -114,7 +115,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.JellyTagException;
 import org.apache.commons.jelly.Script;
@@ -1390,31 +1390,21 @@ public class Functions {
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 
+    /**
+     * @see CascadingUtil#getCascadingParents(Class, hudson.model.Job)
+     */
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
     public static <T extends Item> List<Job> getAllItems(Class<T> type, Job currentJob) {
-        List<T> allItems = Hudson.getInstance().getAllItems(type);
-        List<Job> result = new ArrayList<Job>(allItems.size());
-        for (T item : allItems) {
-            Job job = (Job) item;
-            if (!hasCyclicCascadingLink(job, currentJob.getCascadingChildrenNames())) {
-                result.add(job);
-            }
-        }
-        return result;
+        return CascadingUtil.getCascadingParents(type, currentJob);
     }
 
+
+    /**
+     * @see CascadingUtil#hasCyclicCascadingLink(hudson.model.Job, java.util.Set)
+     */
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
     protected static boolean hasCyclicCascadingLink(Job cascadingCandidate, Set<String> cascadingChildren) {
-        if (null != cascadingCandidate && CollectionUtils.isNotEmpty(cascadingChildren)) {
-            if (cascadingChildren.contains(cascadingCandidate.getName())) {
-                return true;
-            }
-            for (String childName : cascadingChildren) {
-                Job job = getItemByName(Hudson.getInstance().getAllItems(Job.class), childName);
-                if (hasCyclicCascadingLink(cascadingCandidate, job.getCascadingChildrenNames())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return CascadingUtil.hasCyclicCascadingLink(cascadingCandidate, cascadingChildren);
     }
 
     /**
@@ -1423,16 +1413,11 @@ public class Functions {
      * @param cascadingProject cascading project to start from.
      * @param projectToUnlink project that should be unlinked.
      * @return true if project was unlinked, false - if cascadingProject or projectToUnlink is Null
+     * @see CascadingUtil#unlinkProjectFromCascadingParents(hudson.model.Job, java.lang.String)
      */
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
     public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink) {
-        if (null != cascadingProject && null != projectToUnlink) {
-            cascadingProject.removeCascadingChild(projectToUnlink);
-            if (cascadingProject.hasCascadingProject()) {
-                unlinkProjectFromCascadingParents(cascadingProject.getCascadingProject(), projectToUnlink);
-            }
-            return true;
-        }
-        return false;
+        return CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, projectToUnlink);
     }
 
     /**
@@ -1441,14 +1426,11 @@ public class Functions {
      *
      * @param cascadingProject cascadingProject.
      * @param childProjectName the name of child project name.
+     * @see CascadingUtil#linkCascadingProjectsToChild(hudson.model.Job, java.lang.String)
      */
-    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName){
-        if(cascadingProject != null){
-            cascadingProject.addCascadingChild(childProjectName);
-            if(cascadingProject.hasCascadingProject()){
-                linkCascadingProjectsToChild(cascadingProject.getCascadingProject(), childProjectName);
-            }
-        }
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
+    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName) {
+        CascadingUtil.linkCascadingProjectsToChild(cascadingProject, childProjectName);
     }
 
     /**
@@ -1459,15 +1441,11 @@ public class Functions {
      * @param cascadingProject cascading project.
      * @param oldName old project name.
      * @param newName new project name.
+     * @see CascadingUtil#renameCascadingChildLinks(hudson.model.Job, java.lang.String, java.lang.String)
      */
-    @SuppressWarnings("unchecked")
-    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName){
-        if(cascadingProject != null){
-            cascadingProject.renameCascadingChildName(oldName, newName);
-            if(cascadingProject.hasCascadingProject()){
-                renameCascadingChildLinks(cascadingProject.getCascadingProject(), oldName, newName);
-            }
-        }
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
+    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName) {
+        CascadingUtil.renameCascadingChildLinks(cascadingProject, oldName, newName);
     }
 
     /**
@@ -1476,17 +1454,10 @@ public class Functions {
      *
      * @param oldName old project name.
      * @param newName new project name.
-
+     * @see CascadingUtil#renameCascadingParentLinks(java.lang.String, java.lang.String)
      */
-    @SuppressWarnings("unchecked")
-    public static void renameCascadingParentLinks(final String oldName, final String newName){
-        if (StringUtils.isBlank(newName)|| StringUtils.isBlank(oldName)) {
-            return;
-        }
-        for (Job job : Hudson.getInstance().getAllItems(Job.class)) {
-            if(oldName.equals(job.getCascadingProjectName())){
-                job.renameCascadingProjectNameTo(newName);
-            }
-        }
+    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
+    public static void renameCascadingParentLinks(final String oldName, final String newName) {
+        CascadingUtil.renameCascadingParentLinks(oldName, newName);
     }
 }
