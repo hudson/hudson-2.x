@@ -157,14 +157,14 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
      */
     @SuppressWarnings("unchecked")
     public DescribableList<Builder,Descriptor<Builder>> getBuildersList() {
-        return getDescribableListProjectProperty(BUILDERS_PROPERTY_NAME).getValue();
+        return CascadingUtil.getDescribableListProjectProperty(this, BUILDERS_PROPERTY_NAME).getValue();
     }
 
     /**
      * @inheritDoc
      */
     public void setBuilders(DescribableList<Builder,Descriptor<Builder>> builders) {
-        getDescribableListProjectProperty(BUILDERS_PROPERTY_NAME).setValue(builders);
+        CascadingUtil.getDescribableListProjectProperty(this, BUILDERS_PROPERTY_NAME).setValue(builders);
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
     }
 
     public Publisher getPublisher(Descriptor<Publisher> descriptor) {
-        return (Publisher) getExternalProjectProperty(descriptor.getJsonSafeClassName()).getValue();
+        return (Publisher) CascadingUtil.getExternalProjectProperty(this, descriptor.getJsonSafeClassName()).getValue();
     }
     /**
      * Returns the list of the publishers available in the hudson.

@@ -69,7 +69,6 @@ import hudson.tasks.BuildWrappers;
 import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
 import hudson.util.Area;
-import hudson.util.CascadingUtil;
 import hudson.util.Iterators;
 import hudson.util.Secret;
 import hudson.views.MyViewsTabBar;
@@ -1390,74 +1389,4 @@ public class Functions {
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 
-    /**
-     * @see CascadingUtil#getCascadingParents(Class, hudson.model.Job)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    public static <T extends Item> List<Job> getAllItems(Class<T> type, Job currentJob) {
-        return CascadingUtil.getCascadingParents(type, currentJob);
-    }
-
-
-    /**
-     * @see CascadingUtil#hasCyclicCascadingLink(hudson.model.Job, java.util.Set)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    protected static boolean hasCyclicCascadingLink(Job cascadingCandidate, Set<String> cascadingChildren) {
-        return CascadingUtil.hasCyclicCascadingLink(cascadingCandidate, cascadingChildren);
-    }
-
-    /**
-     * Recursively unlink specified project from cascading hierarchy.
-     *
-     * @param cascadingProject cascading project to start from.
-     * @param projectToUnlink project that should be unlinked.
-     * @return true if project was unlinked, false - if cascadingProject or projectToUnlink is Null
-     * @see CascadingUtil#unlinkProjectFromCascadingParents(hudson.model.Job, java.lang.String)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink) {
-        return CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, projectToUnlink);
-    }
-
-    /**
-     * Links cascading project to children project. Method updates all parent cascading projects starting
-     * from the specified cascadingProject.
-     *
-     * @param cascadingProject cascadingProject.
-     * @param childProjectName the name of child project name.
-     * @see CascadingUtil#linkCascadingProjectsToChild(hudson.model.Job, java.lang.String)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName) {
-        CascadingUtil.linkCascadingProjectsToChild(cascadingProject, childProjectName);
-    }
-
-    /**
-     * Updates the name of the project in all children cascading references.
-     * If this project uses some cascading parent, the name of this project will be renamed in the cascading children
-     * collection of the cascading parent project.
-     *
-     * @param cascadingProject cascading project.
-     * @param oldName old project name.
-     * @param newName new project name.
-     * @see CascadingUtil#renameCascadingChildLinks(hudson.model.Job, java.lang.String, java.lang.String)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName) {
-        CascadingUtil.renameCascadingChildLinks(cascadingProject, oldName, newName);
-    }
-
-    /**
-     * Updates the name of the project in all parent cascading references.
-     * If this project is used as cascading parent, it's name will be renamed in all children projects.
-     *
-     * @param oldName old project name.
-     * @param newName new project name.
-     * @see CascadingUtil#renameCascadingParentLinks(java.lang.String, java.lang.String)
-     */
-    //TODO remove this method after 2.2.0 Beta release. Use direct call to CascadingUtil
-    public static void renameCascadingParentLinks(final String oldName, final String newName) {
-        CascadingUtil.renameCascadingParentLinks(oldName, newName);
-    }
 }
