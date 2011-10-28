@@ -25,6 +25,7 @@ package hudson.model;
 
 import hudson.tasks.Mailer;
 import hudson.tasks.Maven;
+import hudson.tasks.Publisher;
 import hudson.tasks.junit.JUnitResultArchiver;
 import hudson.triggers.SCMTrigger;
 import hudson.triggers.TimerTrigger;
@@ -58,7 +59,8 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
  * @author Nikita Levyankov
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Hudson.class, SCMTrigger.DescriptorImpl.class, TimerTrigger.DescriptorImpl.class})
+@PrepareForTest({Hudson.class, SCMTrigger.DescriptorImpl.class, TimerTrigger.DescriptorImpl.class,
+    Mailer.DescriptorImpl.class, JUnitResultArchiver.DescriptorImpl.class})
 public class LegacyProjectTest {
 
     private File config;
@@ -131,27 +133,34 @@ public class LegacyProjectTest {
      * @throws Exception if any.
      */
     @Test
-    @Ignore
-    //TODO investigate how to mock descriptor loading and creation.
     public void testConvertPublishersProperty() throws Exception {
-        Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getDescriptorOrDie(Mailer.class)).andReturn(new Mailer.DescriptorImpl());
-        expect(hudson.getDescriptorOrDie(JUnitResultArchiver.class)).andReturn(
-            new JUnitResultArchiver.DescriptorImpl());
-        mockStatic(Hudson.class);
-        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
-        replayAll();
         Project project = (Project) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
+
+        Hudson hudson = createMock(Hudson.class);
+
         String mailerKey = "hudson-tasks-Mailer";
+        Descriptor<Publisher> mailerDescriptor = createMock(Mailer.DescriptorImpl.class);
+        expect(mailerDescriptor.getJsonSafeClassName()).andReturn(mailerKey);
+        expect(hudson.getDescriptorOrDie(Mailer.class)).andReturn(mailerDescriptor);
+
+        String jUnitKey = "hudson-task-JUnitResultArchiver";
+        Descriptor<Publisher> junitDescriptor = createMock(JUnitResultArchiver.DescriptorImpl.class);
+        expect(junitDescriptor.getJsonSafeClassName()).andReturn(jUnitKey);
+        expect(hudson.getDescriptorOrDie(JUnitResultArchiver.class)).andReturn(junitDescriptor);
+
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+
         //Publishers should be null, because of legacy implementation. Version < 2.2.0
         assertNull(project.getProperty(mailerKey));
+        assertNull(project.getProperty(jUnitKey));
         project.convertPublishersProperties();
         //Verify publishers
-        assertFalse(project.getPublishersList().isEmpty());
-        assertEquals(2, project.getPublishersList().size());
         assertNotNull(project.getProperty(mailerKey).getValue());
+        assertNotNull(project.getProperty(jUnitKey).getValue());
         verifyAll();
     }
 
