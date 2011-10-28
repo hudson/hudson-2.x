@@ -219,8 +219,7 @@ THE SOFTWARE.
               <!-- load view resources from the source directly, again for real time change -->
               <name>stapler.resourcePath</name>
               <value>
-                  ../hudson-core/src/main/resources;
-                  ../hudson-maven-legacy/maven-plugin/src/main/resources
+                  ../hudson-core/src/main/resources
               </value>
             </systemProperty>
             <systemProperty>
@@ -229,8 +228,7 @@ THE SOFTWARE.
               <value>
                   ${basedir}/../hudson-rest/rest-plugin/target/test-classes/the.hpl,
                   ${basedir}/../hudson-maven3/maven3-plugin/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven-legacy/maven-plugin/target/test-classes/the.hpl,
+                  ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl
                </value>
             </systemProperty>
             <systemProperty>
