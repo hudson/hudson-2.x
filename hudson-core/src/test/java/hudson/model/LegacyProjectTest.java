@@ -26,6 +26,10 @@ package hudson.model;
 import hudson.tasks.Mailer;
 import hudson.tasks.Maven;
 import hudson.tasks.junit.JUnitResultArchiver;
+import hudson.triggers.SCMTrigger;
+import hudson.triggers.TimerTrigger;
+import hudson.triggers.Trigger;
+import hudson.triggers.TriggerDescriptor;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.junit.Before;
@@ -54,7 +58,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
  * @author Nikita Levyankov
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Hudson.class})
+@PrepareForTest({Hudson.class, SCMTrigger.DescriptorImpl.class, TimerTrigger.DescriptorImpl.class})
 public class LegacyProjectTest {
 
     private File config;
@@ -277,5 +281,48 @@ public class LegacyProjectTest {
         assertNull(project.getProperty(Job.LOG_ROTATOR_PROPERTY_NAME));
         project.convertLogRotatorProperty();
         assertNotNull(project.getProperty(Job.LOG_ROTATOR_PROPERTY_NAME));
+    }
+
+    /**
+     * Tests unmarshalling FreeStyleProject configuration and checks whether Triggers properties
+     * from Job are configured.
+     *
+     * @throws Exception if any.
+     */
+    @Test
+    public void testConvertLegacyTriggers() throws Exception {
+        AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        Hudson hudson = createMock(Hudson.class);
+
+        String scmTriggerPropertyKey = "hudson-trigger-SCMTrigger";
+        TriggerDescriptor scmTriggerDescriptor = createMock(SCMTrigger.DescriptorImpl.class);
+        expect(scmTriggerDescriptor.getJsonSafeClassName()).andReturn(scmTriggerPropertyKey);
+        expect(hudson.getDescriptorOrDie(SCMTrigger.class)).andReturn(scmTriggerDescriptor);
+
+        String timerTriggerPropertyKey = "hudson-trigger-TimerTrigger";
+        TriggerDescriptor timerTriggerDescriptor = createMock(TimerTrigger.DescriptorImpl.class);
+        expect(timerTriggerDescriptor.getJsonSafeClassName()).andReturn(timerTriggerPropertyKey);
+        expect(hudson.getDescriptorOrDie(TimerTrigger.class)).andReturn(timerTriggerDescriptor);
+
+        mockStatic(Hudson.class);
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replayAll();
+
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        assertNull(project.getProperty(scmTriggerPropertyKey));
+        assertNull(project.getProperty(timerTriggerPropertyKey));
+        project.convertTriggerProperties();
+
+        assertNotNull(project.getProperty(scmTriggerPropertyKey));
+        Trigger trigger = (Trigger) project.getProperty(scmTriggerPropertyKey).getValue();
+        assertEquals("5 * * * *", trigger.getSpec());
+
+        assertNotNull(project.getProperty(timerTriggerPropertyKey));
+        trigger = (Trigger) project.getProperty(timerTriggerPropertyKey).getValue();
+        assertEquals("*/10 * * * *", trigger.getSpec());
+        verifyAll();
     }
 }

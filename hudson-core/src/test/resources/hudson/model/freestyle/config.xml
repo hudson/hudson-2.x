@@ -21,6 +21,9 @@
     <hudson.triggers.SCMTrigger>
       <spec>5 * * * *</spec>
     </hudson.triggers.SCMTrigger>
+    <hudson.triggers.TimerTrigger>
+      <spec>*/10 * * * *</spec>
+    </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
   <cleanWorkspaceRequired>true</cleanWorkspaceRequired>
