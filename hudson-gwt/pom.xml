@@ -38,7 +38,7 @@ THE SOFTWARE.
   <properties>
     <gwtVersion>2.3.0</gwtVersion>
     <gxt.version>2.2.0</gxt.version>
-    <guava-gwt.version>r08</guava-gwt.version>
+    <guava-gwt.version>${guava.version}</guava-gwt.version>
     <restygwt.version>1.1</restygwt.version>
     <gin.version>1.5.0</gin.version>
     <gwt-log.version>3.1.0</gwt-log.version>
