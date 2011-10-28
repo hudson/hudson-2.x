@@ -37,6 +37,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.json.JSONObject;
+import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.kohsuke.stapler.StaplerRequest;
@@ -143,14 +144,27 @@ public final class DescribableListUtil {
      * @param owner new owner for properties.
      * @return {@link DescribableList}
      */
-    @SuppressWarnings("unchecked")
     public static <T extends Describable<T>> DescribableList<T, Descriptor<T>> convertToDescribableList(
         List<Descriptor<T>> descriptors, Job owner) {
+        return convertToDescribableList(descriptors, owner, ExternalProjectProperty.class);
+    }
+
+    /**
+     * Converts collection of propertyClass descriptors to {@link DescribableList}
+     *
+     * @param descriptors .
+     * @param owner new owner for properties.
+     * @param propertyClass projectProperty
+     * @return {@link DescribableList}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Describable<T>, D extends Descriptor<T>, P extends IProjectProperty> DescribableList<T, D>
+    convertToDescribableList(List<D> descriptors, Job owner, Class<P> propertyClass) {
         List<T> describableList = new CopyOnWriteArrayList<T>();
-        DescribableList<T, Descriptor<T>> result = new DescribableList<T, Descriptor<T>>(owner);
+        DescribableList<T, D> result = new DescribableList<T, D>(owner);
         for (Descriptor<T> descriptor : descriptors) {
-            ExternalProjectProperty<T> property = CascadingUtil.getExternalProjectProperty(owner,
-                descriptor.getJsonSafeClassName());
+            IProjectProperty<T> property =
+                CascadingUtil.getProjectProperty(owner, descriptor.getJsonSafeClassName(), propertyClass);
             if (null != property.getValue()) {
                 describableList.add(property.getValue());
             }
