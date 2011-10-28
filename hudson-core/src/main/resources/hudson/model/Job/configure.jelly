@@ -44,7 +44,7 @@ THE SOFTWARE.
         <j:if test="${cascadingCandidates.size() gt 0}">
           <f:entry title="${%cascadingProjectName}">
             <select class="setting-input" name="cascadingProjectName">
-              <f:option/>
+              <f:option value="">${%emptyCascadingProjectName}</f:option>
               <j:forEach var="job" items="${cascadingCandidates}">
                 <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
               </j:forEach>
