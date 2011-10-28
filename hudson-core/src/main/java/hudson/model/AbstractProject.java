@@ -73,6 +73,7 @@ import hudson.triggers.TriggerDescriptor;
 import hudson.util.AutoCompleteSeeder;
 import hudson.util.CascadingUtil;
 import hudson.util.DescribableList;
+import hudson.util.DescribableListUtil;
 import hudson.util.EditDistance;
 import hudson.util.FormValidation;
 import hudson.widgets.BuildHistoryWidget;
@@ -105,6 +106,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.SCMProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.ForwardToView;
@@ -259,6 +261,11 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     /**
      * List of all {@link Trigger}s for this project.
+     *
+     * @deprecated as of 2.2.0
+     *
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected List<Trigger<?>> triggers = new Vector<Trigger<?>>();
 
@@ -326,19 +333,16 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
         // boolean! Can't tell if xml file contained false..
         if (enableRemoteTrigger) OldDataMonitor.report(this, "1.77");
-        if(triggers==null) {
-            // it didn't exist in < 1.28
-            triggers = new Vector<Trigger<?>>();
-            OldDataMonitor.report(this, "1.28");
-        }
-        for (Trigger t : triggers)
+        for (Trigger t : getTriggerDescribableList()) {
             t.start(this,false);
+        }
         if(scm==null)
             scm = new NullSCM(); // perhaps it was pointing to a plugin that no longer exists.
 
         if(transientActions==null)
             transientActions = new Vector<Action>();    // happens when loaded from disk
         updateTransientActions();
+        getTriggerDescribableList().setOwner(this);
     }
 
     @Override
@@ -351,6 +355,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         convertQuietPeriodProperty();
         convertScmCheckoutRetryCountProperty();
         convertJDKProperty();
+        convertTriggerProperties();
     }
 
     void convertBlockBuildWhenUpstreamBuildingProperty() throws IOException {
@@ -403,6 +408,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         if (null != scm && null == getProperty(SCM_PROPERTY_NAME)) {
             setScm(scm);
             scm = null;
+        }
+    }
+
+    void convertTriggerProperties() {
+        if (triggers != null) {
+            setTriggers(triggers);
+            triggers = null;
         }
     }
 
@@ -1592,12 +1604,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     /**
      * Adds a new {@link Trigger} to this {@link Project} if not active yet.
      */
+    @SuppressWarnings("unchecked")
     public void addTrigger(Trigger<?> trigger) throws IOException {
-        addToList(trigger, triggers);
+        CascadingUtil.getTriggerProjectProperty(this, trigger.getDescriptor().getJsonSafeClassName()).setValue(trigger);
     }
 
     public void removeTrigger(TriggerDescriptor trigger) throws IOException {
-        removeFromList(trigger, triggers);
+        CascadingUtil.getTriggerProjectProperty(this, trigger.getJsonSafeClassName()).setValue(null);
     }
 
     protected final synchronized <T extends Describable<T>>
@@ -1605,7 +1618,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         for( int i=0; i<collection.size(); i++ ) {
             if(collection.get(i).getDescriptor()==item.getDescriptor()) {
                 // replace
-                collection.set(i,item);
+                collection.set(i, item);
                 save();
                 return;
             }
@@ -1630,25 +1643,38 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     }
 
     public synchronized Map<TriggerDescriptor,Trigger> getTriggers() {
-        return (Map)Descriptor.toMap(triggers);
+        return (Map)Descriptor.toMap(getTriggerDescribableList());
     }
 
     /**
      * @return list of {@link Trigger} elements.
      */
     public List<Trigger<?>> getTriggersList() {
-        return triggers;
+        return getTriggerDescribableList().toList();
+    }
+
+    /**
+     * @return describable list of trigger elements.
+     */
+    public DescribableList<Trigger<?>, TriggerDescriptor> getTriggerDescribableList() {
+        return DescribableListUtil.convertToDescribableList(Trigger.for_(this), this, TriggerProjectProperty.class);
     }
 
     /**
      * Gets the specific trigger, or null if the propert is not configured for this job.
      */
     public <T extends Trigger> T getTrigger(Class<T> clazz) {
-        for (Trigger p : triggers) {
+        for (Trigger p : getTriggersList()) {
             if(clazz.isInstance(p))
                 return clazz.cast(p);
         }
         return null;
+    }
+
+    public void setTriggers(List<Trigger<?>> triggerList) {
+        for (Trigger trigger : triggerList) {
+            CascadingUtil.getTriggerProjectProperty(this, trigger.getDescriptor().getJsonSafeClassName()).setValue(trigger);
+        }
     }
 
 //
@@ -1902,11 +1928,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
         setScm(SCMS.parseSCM(req,this));
 
-        for (Trigger t : triggers)
-            t.stop();
-        triggers = buildDescribable(req, Trigger.for_(this));
-        for (Trigger t : triggers)
-            t.start(this,true);
+        buildTriggers(req, req.getSubmittedForm(), Trigger.for_(this));
     }
 
     /**
@@ -1930,6 +1952,14 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             }
         }
         return r;
+    }
+
+    protected void buildTriggers(StaplerRequest req, JSONObject json, List<TriggerDescriptor> descriptors)
+        throws FormException {
+        for (TriggerDescriptor d : descriptors) {
+            String propertyName = d.getJsonSafeClassName();
+            CascadingUtil.setChildrenTrigger(this, d, propertyName, req, json);
+        }
     }
 
     /**
