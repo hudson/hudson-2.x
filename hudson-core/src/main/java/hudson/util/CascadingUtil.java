@@ -29,6 +29,8 @@ import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.Item;
 import hudson.model.Job;
+import hudson.triggers.Trigger;
+import hudson.triggers.TriggerDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,7 @@ import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
 import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
@@ -199,6 +202,19 @@ public class CascadingUtil {
      */
     public static SCMProjectProperty getScmProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, SCMProjectProperty.class);
+    }
+
+    /**
+     * Returns TriggerProjectProperty by specified key. If property doesn't exists, it will be initialized and added to
+     * current job.
+     *
+     * @param currentJob job that should be analyzed.
+     * @param key key.
+     * @return {@link org.hudsonci.model.project.property.TriggerProjectProperty} instance.
+     * @throws NullPointerException if currentJob is null.
+     */
+    public static TriggerProjectProperty getTriggerProjectProperty(Job currentJob, String key) {
+        return getProjectProperty(currentJob, key, TriggerProjectProperty.class);
     }
 
     /**
@@ -370,6 +386,43 @@ public class CascadingUtil {
                 describable = d.newInstance(req, json.getJSONObject(name));
             }
             baseProperty.setValue(describable);
+        }
+    }
+
+ /**
+     * Sets trigger for job and all its children if necessary.
+     *
+     * @param job parentJob
+     * @param descriptor trigger descriptor
+     * @param key trigger property key
+     * @param req stapler request
+     * @param json submited json
+     * @throws hudson.model.Descriptor.FormException if incorrect parameters
+     */
+    @SuppressWarnings("unchecked")
+    public static void setChildrenTrigger(Job job, TriggerDescriptor descriptor, String key, StaplerRequest req,
+                                      JSONObject json) throws Descriptor.FormException {
+        TriggerProjectProperty<Trigger<?>> property = CascadingUtil.getTriggerProjectProperty(job, key);
+        if (property.getValue() != null) {
+            property.getValue().stop();
+        }
+        Trigger trigger = null;
+        if (json.has(key)) {
+            trigger = descriptor.newInstance(req, json.getJSONObject(key));
+            trigger.start(job, true);
+        }
+        property.setValue(trigger);
+        Set<String> cascadingChildrenNames = job.getCascadingChildrenNames();
+        for (String childName : cascadingChildrenNames) {
+            Job childJob = (Job)Hudson.getInstance().getItem(childName);
+            if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                TriggerProjectProperty childProperty = CascadingUtil.getTriggerProjectProperty(childJob, key);
+                if (!childProperty.isOverridden()) {
+                    setChildrenTrigger(childJob, descriptor, key, req, json);
+                } else if (!childProperty.allowOverrideValue(trigger, childProperty.getValue())) {
+                    childProperty.setOverridden(false);
+                }
+            }
         }
     }
 }

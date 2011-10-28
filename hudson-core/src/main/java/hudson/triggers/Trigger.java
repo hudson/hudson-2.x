@@ -2,6 +2,7 @@
  * The MIT License
  * 
  * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Brian Westrich, Jean-Baptiste Quenot, Stephen Connolly, Tom Huybrechts
+ * Oracle Corporation, Inc., Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +27,10 @@ package hudson.triggers;
 import antlr.ANTLRException;
 import hudson.DependencyRunner;
 import hudson.DependencyRunner.ProjectRunnable;
-import hudson.ExtensionPoint;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
+import hudson.ExtensionPoint;
 import hudson.init.Initializer;
-import hudson.init.InitMilestone;
-import static hudson.init.InitMilestone.JOB_LOADED;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Build;
@@ -39,27 +38,28 @@ import hudson.model.ComputerSet;
 import hudson.model.Describable;
 import hudson.model.Hudson;
 import hudson.model.Item;
-import hudson.model.Project;
 import hudson.model.PeriodicWork;
+import hudson.model.Project;
 import hudson.model.TopLevelItem;
 import hudson.model.TopLevelItemDescriptor;
 import hudson.scheduler.CronTab;
 import hudson.scheduler.CronTabList;
 import hudson.util.DoubleLaunchChecker;
-
 import java.io.InvalidObjectException;
 import java.io.ObjectStreamException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.Timer;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Timer;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static hudson.init.InitMilestone.JOB_LOADED;
 
 /**
  * Triggers a {@link Build}.
@@ -311,5 +311,28 @@ public abstract class Trigger<J extends Item> implements Describable<Trigger<?>>
             r.add(t);
         }
         return r;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Trigger trigger = (Trigger) o;
+
+        if (spec != null ? !spec.equals(trigger.spec) : trigger.spec != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return spec != null ? spec.hashCode() : 0;
     }
 }

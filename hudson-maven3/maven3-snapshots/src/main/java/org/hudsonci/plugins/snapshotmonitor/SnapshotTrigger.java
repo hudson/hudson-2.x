@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010-2011 Sonatype, Inc. All rights reserved.
+ * Oracle Corporation, Inc., Nikita Levyankov
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -118,5 +119,33 @@ public class SnapshotTrigger
         public boolean isApplicable(final Item item) {
             return item instanceof MatrixProject || item instanceof Project;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        SnapshotTrigger that = (SnapshotTrigger) o;
+
+        if (excludeInternallyProduced != that.excludeInternallyProduced) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (excludeInternallyProduced ? 1 : 0);
+        return result;
     }
 }
