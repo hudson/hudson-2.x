@@ -40,7 +40,7 @@ THE SOFTWARE.
     <pluginName>Hudson SNAPSHOT Monitoring</pluginName>
   </properties>
 
-  <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+3+SNAPSHOT+Plugin</url>
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+3+Snapshots+Plugin</url>
 
   <dependencies>
     <dependency>
