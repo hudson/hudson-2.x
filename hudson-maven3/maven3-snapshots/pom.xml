@@ -40,6 +40,8 @@ THE SOFTWARE.
     <pluginName>Hudson SNAPSHOT Monitoring</pluginName>
   </properties>
 
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+3+SNAPSHOT+Plugin</url>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
