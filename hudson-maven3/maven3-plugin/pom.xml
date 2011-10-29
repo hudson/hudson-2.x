@@ -40,6 +40,8 @@ THE SOFTWARE.
     <pluginName>Hudson Maven3 Support</pluginName>
   </properties>
 
+  <url>http://wiki.hudson-ci.org/display/HUDSON/Maven+3+Build+Plugin</url>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
