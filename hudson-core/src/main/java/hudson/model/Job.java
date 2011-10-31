@@ -1591,7 +1591,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 if (property instanceof ExternalProjectProperty) {
                     property.setOverridden(((ExternalProjectProperty) property).isModified());
                 } else {
-                    property.setOverridden(property.getValue() != property.getCascadingValue());
+                    property.setOverridden(
+                        property.allowOverrideValue(property.getCascadingValue(), property.getValue()));
                 }
             }
         }

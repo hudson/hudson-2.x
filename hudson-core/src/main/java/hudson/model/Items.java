@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,7 @@ import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 
 /**
  * Convenience methods related to {@link Item}.
@@ -146,6 +147,7 @@ public class Items {
         //aliases for project properties.
         XSTREAM.alias("base-property", BaseProjectProperty.class);
         XSTREAM.alias("external-property", ExternalProjectProperty.class);
+        XSTREAM.alias("trigger-property", TriggerProjectProperty.class);
         XSTREAM.alias("integer-property", IntegerProjectProperty.class);
         XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
         XSTREAM.alias("string-property", StringProjectProperty.class);

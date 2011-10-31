@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,9 @@ THE SOFTWARE.
   <j:invokeStatic var="triggers" className="hudson.triggers.Trigger" method="for_">
     <j:arg value="${it}" type="hudson.model.Item" />
   </j:invokeStatic>
-  <f:descriptorList title="${%Build Triggers}"
-                    descriptors="${triggers}"
-                    instances="${it.triggers}">
+  <t:cascadingDescriptorList title="${%Build Triggers}" descriptors="${triggers}">
     <d:invokeBody />
     <!-- pseudo-trigger to configure URL to trigger builds remotely. -->
     <st:include page="/hudson/model/BuildAuthorizationToken/config.jelly" />
-  </f:descriptorList>
+  </t:cascadingDescriptorList>
 </j:jelly>
