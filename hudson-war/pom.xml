@@ -153,10 +153,10 @@ THE SOFTWARE.
                 <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
                 
                 <!-- bundled plugins -->
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="${project.version}" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="ssh-slaves" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
@@ -286,26 +286,26 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>rest-plugin</artifactId>
-      <version>${project.version}</version>
+      <version>2.1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-plugin</artifactId>
-      <version>${project.version}</version>
+      <version>2.1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-snapshots</artifactId>
-      <version>${project.version}</version>
+      <version>2.1.2</version>
       <scope>provided</scope>
     </dependency>
     <!-- REMOVE when the legacy maven-plugin isn't a bundled plugin -->
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven-plugin</artifactId>
-      <version>${project.version}</version>
+      <version>2.1.2</version>
       <scope>provided</scope>
     </dependency>
 
