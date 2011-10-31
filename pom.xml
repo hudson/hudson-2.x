@@ -97,12 +97,6 @@ THE SOFTWARE.
     <sisuInjectVersion>${sisuInject.version}</sisuInjectVersion>
     <jetty-version>${jetty.version}</jetty-version>
 
-    <!--Test dependencies-->
-    <junit.version>4.8.1</junit.version>
-    <easymock.version>3.0</easymock.version>
-    <mockito-core.version>1.8.5</mockito-core.version>
-    <powermock.version>1.4.10</powermock.version>
-
     <!--Plugins-->
     <maven-antrun-extended-plugin.version>1.42</maven-antrun-extended-plugin.version>
     <maven-hudson-dev-plugin.version>6.1.7-hudson-1</maven-hudson-dev-plugin.version>
