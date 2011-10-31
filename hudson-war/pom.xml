@@ -223,15 +223,6 @@ THE SOFTWARE.
               </value>
             </systemProperty>
             <systemProperty>
-              <!-- enable the plugins in main by default -->
-              <name>hudson.bundled.plugins</name>
-              <value>
-                  ${basedir}/../hudson-rest/rest-plugin/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven3/maven3-plugin/target/test-classes/the.hpl,
-                  ${basedir}/../hudson-maven3/maven3-snapshots/target/test-classes/the.hpl
-               </value>
-            </systemProperty>
-            <systemProperty>
               <!-- stat collection pointless -->
               <name>hudson.model.UsageStatistics.disabled</name>
               <value>true</value>
@@ -301,7 +292,7 @@ THE SOFTWARE.
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
       <artifactId>maven3-plugin</artifactId>
-      <version>2.2.0-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
