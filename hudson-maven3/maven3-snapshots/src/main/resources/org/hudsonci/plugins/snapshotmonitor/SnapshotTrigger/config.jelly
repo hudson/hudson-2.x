@@ -23,11 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="Schedule" field="spec">
+    <j:set var="instanceProperty" value="${cu.getExternalProjectProperty(it, descriptor.jsonSafeClassName)}"/>
+    <j:set var="instance" value="${instanceProperty.getValue()}"/>
+
+    <f:entry title="Schedule" field="spec" isPropertyOverridden="${instanceProperty.isOverridden()}">
         <f:expandableTextbox/>
     </f:entry>
 
-    <f:entry title="Exclude internally produced dependencies" field="excludeInternallyProduced">
+    <f:entry title="Exclude internally produced dependencies" field="excludeInternallyProduced" isPropertyOverridden="${instanceProperty.isOverridden()}">
         <f:checkbox/>
     </f:entry>
 </j:jelly>
