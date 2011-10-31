@@ -67,8 +67,8 @@ THE SOFTWARE.
     <!--Libraries-->
     <localizer.version>1.10</localizer.version>
     <aspectj.version>1.6.11</aspectj.version>
-    <sisuGuice.version>3.1.0</sisuGuice.version>
-    <sisuInject.version>2.3.0</sisuInject.version>
+    <sisuGuice.version>3.0.3</sisuGuice.version>
+    <sisuInject.version>2.2.3</sisuInject.version>
     <jetty.version>6.1.26</jetty.version>
     <wagon-http.version>1.0-beta-5</wagon-http.version>
     <animal-sniffer-annotation.version>1.0</animal-sniffer-annotation.version>
