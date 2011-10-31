@@ -920,6 +920,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
                     pl.replace(new BuildTrigger(newChildProjects,
                         existing==null?Result.SUCCESS:existing.getThreshold()));
                 }
+                p.putAllProjectProperties(DescribableListUtil.convertToProjectProperties(pl, p), false);
             }
         }
 
