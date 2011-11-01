@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi,
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Nikita Levyankov
  * Yahoo! Inc., Stephen Connolly, Tom Huybrechts, Alan Harder, Romain Seguy
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,8 @@
  */
 package hudson;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import hudson.console.ConsoleAnnotationDescriptor;
 import hudson.console.ConsoleAnnotatorFactory;
 import hudson.model.AbstractProject;
@@ -35,6 +37,7 @@ import hudson.model.Hudson;
 import hudson.model.Item;
 import hudson.model.ItemGroup;
 import hudson.model.Items;
+import hudson.model.JDK;
 import hudson.model.Job;
 import hudson.model.JobPropertyDescriptor;
 import hudson.model.ModelObject;
@@ -47,7 +50,8 @@ import hudson.model.Run;
 import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.View;
-import hudson.model.JDK;
+import hudson.scm.SCM;
+import hudson.scm.SCMDescriptor;
 import hudson.search.SearchableModelObject;
 import hudson.security.AccessControlled;
 import hudson.security.AuthorizationStrategy;
@@ -66,30 +70,9 @@ import hudson.tasks.Builder;
 import hudson.tasks.Publisher;
 import hudson.util.Area;
 import hudson.util.Iterators;
-import hudson.scm.SCM;
-import hudson.scm.SCMDescriptor;
 import hudson.util.Secret;
 import hudson.views.MyViewsTabBar;
 import hudson.views.ViewsTabBar;
-import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
-import org.apache.commons.jelly.JellyContext;
-import org.apache.commons.jelly.JellyTagException;
-import org.apache.commons.jelly.Script;
-import org.apache.commons.jelly.XMLOutput;
-import org.apache.commons.jexl.parser.ASTSizeFunction;
-import org.apache.commons.jexl.util.Introspector;
-import org.jvnet.animal_sniffer.IgnoreJRERequirement;
-import org.jvnet.tiger_types.Types;
-import org.kohsuke.stapler.Ancestor;
-import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.StaplerProxy;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -100,8 +83,8 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MonitorInfo;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -112,20 +95,39 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Date;
-import java.util.Locale;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.SimpleFormatter;
 import java.util.regex.Pattern;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
+import org.apache.commons.jelly.JellyContext;
+import org.apache.commons.jelly.JellyTagException;
+import org.apache.commons.jelly.Script;
+import org.apache.commons.jelly.XMLOutput;
+import org.apache.commons.jexl.parser.ASTSizeFunction;
+import org.apache.commons.jexl.util.Introspector;
+import org.apache.commons.lang3.StringUtils;
+import org.jvnet.animal_sniffer.IgnoreJRERequirement;
+import org.jvnet.tiger_types.Types;
+import org.kohsuke.stapler.Ancestor;
+import org.kohsuke.stapler.Stapler;
+import org.kohsuke.stapler.StaplerProxy;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 /**
  * Utility functions used in views.
@@ -559,7 +561,7 @@ public class Functions {
     public static void checkPermission(Object object, Permission permission) throws IOException, ServletException {
         if (permission == null)
             return;
-        
+
         if (object instanceof AccessControlled)
             checkPermission((AccessControlled) object,permission);
         else {
@@ -667,7 +669,8 @@ public class Functions {
     }
 
     public static List<Descriptor<ComputerLauncher>> getComputerLauncherDescriptors() {
-        return Hudson.getInstance().<ComputerLauncher,Descriptor<ComputerLauncher>>getDescriptorList(ComputerLauncher.class);
+        return Hudson.getInstance().<ComputerLauncher,Descriptor<ComputerLauncher>>getDescriptorList(
+            ComputerLauncher.class);
     }
 
     public static List<Descriptor<RetentionStrategy<?>>> getRetentionStrategyDescriptors() {
@@ -688,7 +691,8 @@ public class Functions {
 
     public static List<NodePropertyDescriptor> getNodePropertyDescriptors(Class<? extends Node> clazz) {
         List<NodePropertyDescriptor> result = new ArrayList<NodePropertyDescriptor>();
-        Collection<NodePropertyDescriptor> list = (Collection) Hudson.getInstance().getDescriptorList(NodeProperty.class);
+        Collection<NodePropertyDescriptor> list = (Collection) Hudson.getInstance().getDescriptorList(
+            NodeProperty.class);
         for (NodePropertyDescriptor npd : list) {
             if (npd.isApplicable(clazz)) {
                 result.add(npd);
@@ -1210,7 +1214,7 @@ public class Functions {
         if(Hudson.getInstance()==null)  return Collections.emptyList();
         return PageDecorator.all();
     }
-    
+
     public static List<Descriptor<Cloud>> getCloudDescriptors() {
         return Cloud.all();
     }
@@ -1243,11 +1247,11 @@ public class Functions {
     public static Date getCurrentTime() {
         return new Date();
     }
-    
+
     public static Locale getClientLocale(){
         return Stapler.getCurrentRequest().getLocale();
     }
-    
+
     public static Locale getServerLocale(){
         return Locale.getDefault();
     }
@@ -1305,7 +1309,7 @@ public class Functions {
     public List filterDescriptors(Object context, Iterable descriptors) {
         return DescriptorVisibilityFilter.apply(context,descriptors);
     }
-    
+
     private static final Pattern SCHEME = Pattern.compile("[a-z]+://.+");
 
     /**
@@ -1365,4 +1369,24 @@ public class Functions {
     public static boolean isWipeOutPermissionEnabled() {
         return Boolean.getBoolean("hudson.security.WipeOutPermission");
     }
+
+    /**
+     * Returns item by name from the list.
+     *
+     * @param items for filtering.
+     * @param name the name of the item.
+     * @return template.
+     */
+    public static <T extends Item> T getItemByName(List<T> items, final String name) {
+        if (StringUtils.isBlank(name)) {
+            return null;
+        }
+        Iterable<T> templates = Iterables.filter(items, new Predicate<T>() {
+            public boolean apply(T item) {
+                return name.equalsIgnoreCase(item.getName());
+            }
+        });
+        return templates.iterator().hasNext() ? templates.iterator().next() : null;
+    }
+
 }

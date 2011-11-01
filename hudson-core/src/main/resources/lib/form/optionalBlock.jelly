@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation,, Kohsuke Kawaguchi, Nikita Levyankov, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -52,18 +52,34 @@ THE SOFTWARE.
     <st:attribute name="inline">
       if present, the foldable section will not be grouped into a separate JSON object upon submission
     </st:attribute>
+    <st:attribute name="resetUrl">
+      If present, Redo icon will rendered and Reset will be available.
+    </st:attribute>
+    <st:attribute name="isPropertyOverridden">
+      if present and true - value is overridden
+    </st:attribute>
   </st:documentation>
   <j:if test="${attrs.help==null}">
     <!-- infer the help page from the current descriptor and field if possible -->
     <j:set target="${attrs}" property="help"
            value="${descriptor.getHelpFile(attrs.field)}" />
   </j:if>
+  <j:if test="${attrs.isPropertyOverridden==null}">
+    <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
+  </j:if>
 
   <tr class="optional-block-start ${attrs.inline?'':'row-set-start'}" hasHelp="${attrs.help!=null}"><!-- this ID marks the beginning -->
-    <td colspan="3">
-      <f:checkbox name="${attrs.name}" onclick="javascript:updateOptionalBlock(this,true)"
+      <td colspan="3" class="${attrs.isPropertyOverridden? 'modified': 'original'}">
+        <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
+           <div class="optional-reset">
+           <a href="#" class="reset-button" resetURL="${resetUrl}">
+              <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}" />
+           </a>
+           </div>
+        </j:if>
+        <f:checkbox name="${attrs.name}" onclick="javascript:updateOptionalBlock(this,true)"
                   negative="${attrs.negative}" checked="${attrs.checked}" field="${attrs.field}" title="${title}" />
-    </td>
+      </td>
     <j:if test="${attrs.help!=null}">
       <td>
         <a href="#" class="help-button" helpURL="${rootURL}${attrs.help}"><img src="${imagesURL}/16x16/help.gif" alt="Help for feature: ${title}" /></a>

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Martin Eigenbrodt
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Martin Eigenbrodt, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,7 @@ import static hudson.model.Result.ABORTED;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class Build <P extends Project<P,B>,B extends Build<P,B>>
+public abstract class Build <P extends BaseBuildableProject<P,B>,B extends Build<P,B>>
     extends AbstractBuild<P,B> {
 
     /**

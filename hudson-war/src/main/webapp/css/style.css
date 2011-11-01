@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Daniel Dyer, Stephen Connolly
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Daniel Dyer,
+ * Stephen Connolly, Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +98,7 @@ dt {
 }
 
 #main-panel {
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
 }
 
 #side-panel {
@@ -995,17 +996,54 @@ table.progress-bar.red td.progress-bar-done {
 .tag8 { font-size: 1.80em; }
 .tag9 { font-size: 1.90em; }
 
-/* ========================= "Delete slave" dialog ================== */
-div.deleteSlaveDialog ul {
+/* ========================= "Delete job and slave" dialog ================== */
+div.deleteSlaveDialog ul, div.deleteJobDialog ul {
     text-align:left;
     padding-left:80px;
 }
 
-div.deleteSlaveDialog div.radioButtons {
+div.deleteSlaveDialog div.radioButtons, div.deleteJobDialog div.radioButtons {
     padding-bottom:10px;
 }
 
-div.deleteSlaveDialog h4 {
+div.deleteSlaveDialog h4, div.deleteJobDialog h4 {
     color: #F89938;
 }
+/* ======================== "Cascading project" ==========================*/
+/* --- Optional Block, Entry Block --- */
+td.modified,
+div.modified,
+tr.optional-block-start > td.modified,
+tr.modified > td.setting-name,
+tr.modified > td.setting-description,
+tr.modified > td.setting-main,
+tr.modified > td.setting-leftspace {
+    background-color: #FFE8C9;
+}
 
+.optional-reset {
+    float: left;
+    margin-left: -20px;
+    position: absolute;
+}
+/* --- Reset button container for hetero-list --- */
+.hetero-list-reset{
+    float: left;
+    margin-left: -20px;
+    position: absolute;
+}
+
+.section-reset{
+    float: left;
+    margin-left: -20px;
+    position: absolute;
+}
+
+/* ======================= Job Configuration table ========================== */
+table.configure {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+table.configure > td {
+    padding: 0px;
+}

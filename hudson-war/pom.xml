@@ -2,7 +2,8 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Stephen Connolly, Tom Huybrechts, Yahoo! Inc.
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Stephen Connolly,
+Tom Huybrechts, Yahoo! Inc., Anton Kozak, Nikita Levyankov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -103,7 +104,7 @@ THE SOFTWARE.
             <configuration>
               <tasks>
                 <!-- fix Akuma groupId so it can still be found by pre-split org.jvnet.hudson:executable-war:1.17 -->
-                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke:akuma" value="com.sun.akuma:akuma" />
+                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke:akuma" value="com.sun.akuma:akuma"/>
               </tasks>
             </configuration>
           </execution>
@@ -154,13 +155,13 @@ THE SOFTWARE.
                 
                 <!-- bundled plugins -->
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="2.2.0-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="2.2.0-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="ssh-slaves" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.1.1_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
               </tasks>
             </configuration>
           </execution>

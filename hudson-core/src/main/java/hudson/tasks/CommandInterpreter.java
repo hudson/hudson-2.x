@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Tom Huybrechts
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Tom Huybrechts,
+ * Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +34,7 @@ import hudson.model.TaskListener;
 
 import java.io.IOException;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Common part between {@link Shell} and {@link BatchFile}.
@@ -95,6 +97,24 @@ public abstract class CommandInterpreter extends Builder {
                 e.printStackTrace( listener.fatalError(Messages.CommandInterpreter_UnableToDelete(script)) );
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        CommandInterpreter that = (CommandInterpreter) o;
+        return StringUtils.equalsIgnoreCase(command, that.command);
+    }
+
+    @Override
+    public int hashCode() {
+        return command != null ? command.hashCode() : 0;
     }
 
     /**

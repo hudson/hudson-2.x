@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +51,8 @@ import groovy.lang.GroovyShell;
  * @author Kohsuke Kawaguchi
  */
 public final class Combination extends TreeMap<String,String> implements Comparable<Combination> {
+
+    protected static final String DELIM = ",";
 
     public Combination(AxisList axisList, List<String> values) {
         for(int i=0; i<axisList.size(); i++)
@@ -210,7 +212,7 @@ public final class Combination extends TreeMap<String,String> implements Compara
             return new Combination(Collections.<String,String>emptyMap());
 
         Map<String,String> m = new HashMap<String,String>();
-        StringTokenizer tokens = new StringTokenizer(id, ",");
+        StringTokenizer tokens = new StringTokenizer(id, DELIM);
         while(tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
             int idx = token.indexOf('=');
