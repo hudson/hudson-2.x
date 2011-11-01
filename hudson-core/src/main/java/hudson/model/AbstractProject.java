@@ -1534,7 +1534,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
                         return BUILD_NOW;
                     }
                 } else {
-                    WorkspaceList l = lb.getBuiltOn().toComputer().getWorkspaceList();
+                    Node node = lb.getBuiltOn();
+                    if (node == null || node.toComputer() == null) {
+                        LOGGER.log(Level.FINE, "Node on which this job previously was built is not available now, build is started on an available node");
+                        return isInQueue() ? NO_CHANGES : BUILD_NOW;
+                    }
+                    WorkspaceList l = node.toComputer().getWorkspaceList();
                     // if doing non-concurrent build, acquire a workspace in a way that causes builds to block for this workspace.
                     // this prevents multiple workspaces of the same job --- the behavior of Hudson < 1.319.
                     //
