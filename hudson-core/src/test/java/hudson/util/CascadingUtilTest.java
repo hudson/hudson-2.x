@@ -54,13 +54,26 @@ import static org.powermock.api.easymock.PowerMock.verify;
 public class CascadingUtilTest {
 
     @Test
+    @PrepareForTest(Hudson.class)
     public void testUnlinkProjectFromCascadingParents() {
         //Prepare data
         FreeStyleProject project1 = new FreeStyleProjectMock("project1");
         FreeStyleProjectMock child1 = new FreeStyleProjectMock("child1");
-        child1.setCascadingProject(project1);
         String cascadingName = "newCascadingProject";
+        FreeStyleProjectMock child = new FreeStyleProjectMock(cascadingName);
+        child1.setCascadingProject(project1);
         CascadingUtil.linkCascadingProjectsToChild(child1, cascadingName);
+
+        List<Job> jobs = new ArrayList<Job>();
+        jobs.add(project1);
+        jobs.add(child1);
+        jobs.add(child);
+
+        Hudson hudson = createMock(Hudson.class);
+        mockStatic(Hudson.class);
+        expect(hudson.getAllItems(Job.class)).andReturn(jobs).anyTimes();
+        expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
+        replay(Hudson.class, hudson);
 
         //Can't unlink from null project
         assertFalse(CascadingUtil.unlinkProjectFromCascadingParents(null, cascadingName));
@@ -82,6 +95,33 @@ public class CascadingUtilTest {
         assertTrue(result);
         assertFalse(project1.getCascadingChildrenNames().contains(cascadingName));
 
+    }
+
+    @Test
+    @PrepareForTest(Hudson.class)
+    public void testUnlinkProjectFromCascadingParents2() {
+        FreeStyleProject project1 = new FreeStyleProjectMock("p1");
+        FreeStyleProjectMock project2 = new FreeStyleProjectMock("p2");
+        FreeStyleProjectMock project3 = new FreeStyleProjectMock("p3");
+        project2.setCascadingProject(project1);
+        CascadingUtil.linkCascadingProjectsToChild(project1, "p2");
+        project3.setCascadingProject(project2);
+        CascadingUtil.linkCascadingProjectsToChild(project2, "p3");
+
+        List<Job> jobs = new ArrayList<Job>();
+        jobs.add(project1);
+        jobs.add(project2);
+        jobs.add(project3);
+
+        Hudson hudson = createMock(Hudson.class);
+        mockStatic(Hudson.class);
+        expect(hudson.getAllItems(Job.class)).andReturn(jobs);
+        expect(Hudson.getInstance()).andReturn(hudson);
+        replay(Hudson.class, hudson);
+
+        CascadingUtil.unlinkProjectFromCascadingParents(project1, "p2");
+        //Project3 should disappear from project1's children.
+        assertTrue(project1.getCascadingChildrenNames().isEmpty());
     }
 
     @Test
