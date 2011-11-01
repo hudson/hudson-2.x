@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,9 @@ import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.Util;
 import hudson.model.AbstractDescribableImpl;
-import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.util.QuotedStringTokenizer;
+import org.apache.commons.collections.CollectionUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -219,5 +219,34 @@ public class Axis extends AbstractDescribableImpl<Axis> implements Comparable<Ax
      */
     public void addBuildVariable(String value, Map<String,String> map) {
         map.put(name,value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Axis axis = (Axis) o;
+
+        if (name != null ? !name.equals(axis.name) : axis.name != null) {
+            return false;
+        }
+
+        if (values != null ? !CollectionUtils.isEqualCollection(values, axis.values) : axis.values != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (values != null ? values.hashCode() : 0);
+        return result;
     }
 }

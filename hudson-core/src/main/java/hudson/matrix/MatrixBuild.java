@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Red Hat, Inc., Tom Huybrechts
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Red Hat, Inc., Tom Huybrechts, Anton Kozak
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 package hudson.matrix;
 
 import hudson.Util;
-import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Executor;
 import hudson.model.Fingerprint;
@@ -57,7 +57,7 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * @author Kohsuke Kawaguchi
  */
-public class MatrixBuild extends AbstractBuild<MatrixProject,MatrixBuild> {
+public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
     private AxisList axes;
 
     public MatrixBuild(MatrixProject job) throws IOException {
@@ -200,7 +200,9 @@ public class MatrixBuild extends AbstractBuild<MatrixProject,MatrixBuild> {
             Collection<MatrixConfiguration> touchStoneConfigurations = new HashSet<MatrixConfiguration>();
             Collection<MatrixConfiguration> delayedConfigurations = new HashSet<MatrixConfiguration>();
             for (MatrixConfiguration c: activeConfigurations) {
-                if (touchStoneFilter != null && c.getCombination().evalGroovyExpression(p.getAxes(), p.getTouchStoneCombinationFilter())) {
+                AxisList axes = p.getAxes();
+                String touchStoneCombinationFilter = p.getTouchStoneCombinationFilter();
+                if (touchStoneFilter != null && c.getCombination().evalGroovyExpression(axes, touchStoneCombinationFilter)) {
                     touchStoneConfigurations.add(c);
                 } else {
                     delayedConfigurations.add(c);

@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Jene Jasper, Stephen Connolly, Tom Huybrechts, Yahoo! Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Jene Jasper, Stephen Connolly,
+ * Tom Huybrechts, Yahoo! Inc., Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +56,9 @@ import hudson.util.VariableResolver;
 import hudson.util.FormValidation;
 import hudson.util.XStream2;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
@@ -129,9 +133,9 @@ public class Maven extends Builder {
     public Maven(String targets,String name, String pom, String properties, String jvmOptions, boolean usePrivateRepository) {
         this.targets = targets;
         this.mavenName = name;
-        this.pom = Util.fixEmptyAndTrim(pom);
-        this.properties = Util.fixEmptyAndTrim(properties);
-        this.jvmOptions = Util.fixEmptyAndTrim(jvmOptions);
+        this.pom = StringUtils.trimToNull(pom);
+        this.properties = StringUtils.trimToNull(properties);
+        this.jvmOptions = StringUtils.trimToNull(jvmOptions);
         this.usePrivateRepository = usePrivateRepository;
     }
 
@@ -615,4 +619,35 @@ public class Maven extends Builder {
         MavenInstallation inferMavenInstallation();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Maven that = (Maven) o;
+        return new EqualsBuilder()
+            .append(usePrivateRepository, that.usePrivateRepository)
+            .append(jvmOptions, that.jvmOptions)
+            .append(mavenName, that.mavenName)
+            .append(pom, that.pom)
+            .append(properties, that.properties)
+            .append(targets, that.targets)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .append(targets)
+            .append(mavenName)
+            .append(jvmOptions)
+            .append(pom)
+            .append(properties)
+            .append(usePrivateRepository)
+            .toHashCode();
+    }
 }

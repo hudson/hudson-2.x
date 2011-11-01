@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project>
+  <actions/>
+  <description></description>
+  <logRotator>
+    <daysToKeep>7</daysToKeep>
+    <numToKeep>7</numToKeep>
+    <artifactDaysToKeep>7</artifactDaysToKeep>
+    <artifactNumToKeep>7</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <creationTime>1317889840582</creationTime>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <quietPeriod>7</quietPeriod>
+  <scmCheckoutRetryCount>7</scmCheckoutRetryCount>
+  <advancedAffinityChooser>false</advancedAffinityChooser>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <cleanWorkspaceRequired>false</cleanWorkspaceRequired>
+  <axes>
+    <hudson.matrix.TextAxis>
+      <name>DB</name>
+      <values>
+        <string>oracle</string>
+        <string>mysql</string>
+      </values>
+    </hudson.matrix.TextAxis>
+    <hudson.matrix.LabelAxis>
+      <name>label</name>
+      <values>
+        <string>unix</string>
+        <string>win</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <combinationFilter>!(label==&quot;win&quot; &amp;&amp; DB==&quot;oracle&quot;)</combinationFilter>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+  <runSequentially>true</runSequentially>
+  <touchStoneCombinationFilter>label==&quot;unix&quot; &amp;&amp; DB==&quot;mysql&quot;</touchStoneCombinationFilter>
+  <touchStoneResultCondition>
+    <name>SUCCESS</name>
+    <ordinal>0</ordinal>
+    <color>BLUE</color>
+  </touchStoneResultCondition>
+  <customWorkspace>/tmp/1</customWorkspace>
+</matrix-project>

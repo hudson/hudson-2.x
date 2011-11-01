@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,22 +26,28 @@ package hudson.model;
 import com.thoughtworks.xstream.XStream;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
-import hudson.scm.RepositoryBrowser;
-import hudson.matrix.MatrixProject;
-import hudson.matrix.MatrixConfiguration;
 import hudson.XmlFile;
 import hudson.matrix.Axis;
 import hudson.matrix.MatrixConfiguration;
 import hudson.matrix.MatrixProject;
 import hudson.util.DescriptorList;
 import hudson.util.XStream2;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.hudsonci.model.project.property.AxisListProjectProperty;
+import org.hudsonci.model.project.property.BaseProjectProperty;
+import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.DescribableListProjectProperty;
+import org.hudsonci.model.project.property.ExternalProjectProperty;
+import org.hudsonci.model.project.property.IntegerProjectProperty;
+import org.hudsonci.model.project.property.LogRotatorProjectProperty;
+import org.hudsonci.model.project.property.ResultProjectProperty;
+import org.hudsonci.model.project.property.StringProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 
 /**
  * Convenience methods related to {@link Item}.
@@ -137,5 +143,19 @@ public class Items {
         XSTREAM.alias("matrix-project",MatrixProject.class);
         XSTREAM.alias("axis", Axis.class);
         XSTREAM.alias("matrix-config",MatrixConfiguration.class);
+
+        //aliases for project properties.
+        XSTREAM.alias("base-property", BaseProjectProperty.class);
+        XSTREAM.alias("external-property", ExternalProjectProperty.class);
+        XSTREAM.alias("trigger-property", TriggerProjectProperty.class);
+        XSTREAM.alias("integer-property", IntegerProjectProperty.class);
+        XSTREAM.alias("boolean-property", BooleanProjectProperty.class);
+        XSTREAM.alias("string-property", StringProjectProperty.class);
+        XSTREAM.alias("log-rotator-property", LogRotatorProjectProperty.class);
+        XSTREAM.alias("result-property", ResultProjectProperty.class);
+
+        XSTREAM.alias("axis-list-property", AxisListProjectProperty.class);
+        XSTREAM.alias("describable-list-property", DescribableListProjectProperty.class);
+        XSTREAM.aliasField("project-properties", Job.class, "jobProperties");
     }
 }

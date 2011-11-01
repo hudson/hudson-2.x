@@ -1,7 +1,7 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,36 @@
  */
 package hudson.model;
 
-import junit.framework.TestCase;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URL;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Quick test for {@link UpdateCenter}.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
-public class UpdateCenterTest extends TestCase {
+public class UpdateCenterTest {
+
+    @Test
     public void testData() throws IOException {
         // check if we have the internet connectivity. See HUDSON-2095
         try {
-            new URL("http://hudson-ci.org/").openStream();
+            HttpURLConnection con = (HttpURLConnection) new URL("http://hudson-ci.org/").openConnection();
+            con.setRequestMethod("HEAD");
+            con.setConnectTimeout(10000); //set timeout to 10 seconds
+            if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("Skipping this test. Page doesn't exists");
+                return;
+            }
+        } catch (java.net.SocketTimeoutException e) {
+            System.out.println("Skipping this test. Timeout exception");
+            return;
         } catch (IOException e) {
             System.out.println("Skipping this test. No internet connectivity");
             return;

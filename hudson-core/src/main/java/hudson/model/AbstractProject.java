@@ -1,21 +1,21 @@
 /*
  * The MIT License
- * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi,
+ *
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi,
  * Brian Westrich, Erik Ramfelt, Ertan Deniz, Jean-Baptiste Quenot,
  * Luca Domenico Milanesio, R. Tyler Ballance, Stephen Connolly, Tom Huybrechts,
- * id:cactusman, Yahoo! Inc.
- * 
+ * id:cactusman, Yahoo! Inc., Anton Kozak, Nikita Levyankov
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -71,7 +71,9 @@ import hudson.triggers.SCMTrigger;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import hudson.util.AutoCompleteSeeder;
+import hudson.util.CascadingUtil;
 import hudson.util.DescribableList;
+import hudson.util.DescribableListUtil;
 import hudson.util.EditDistance;
 import hudson.util.FormValidation;
 import hudson.widgets.BuildHistoryWidget;
@@ -96,10 +98,15 @@ import java.util.Vector;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.hudsonci.api.model.IAbstractProject;
+import org.hudsonci.model.project.property.IntegerProjectProperty;
+import org.hudsonci.model.project.property.SCMProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.stapler.ForwardToView;
@@ -123,13 +130,31 @@ import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
  * @author Kohsuke Kawaguchi
  * @see AbstractBuild
  */
-public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends AbstractBuild<P,R>> extends Job<P,R> implements BuildableItem {
+public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends AbstractBuild<P, R>>
+    extends Job<P, R> implements BuildableItem, IAbstractProject {
+    public static final String CONCURRENT_BUILD_PROPERTY_NAME = "concurrentBuild";
+    public static final String CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME = "cleanWorkspaceRequired";
+    public static final String BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME = "blockBuildWhenDownstreamBuilding";
+    public static final String BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME = "blockBuildWhenUpstreamBuilding";
+    public static final String QUIET_PERIOD_PROPERTY_NAME = "quietPeriod";
+    public static final String SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "scmCheckoutRetryCount";
+    public static final String CUSTOM_WORKSPACE_PROPERTY_NAME = "customWorkspace";
+    public static final String JDK_PROPERTY_NAME = "jdk";
+    public static final String SCM_PROPERTY_NAME = "scm";
+    public static final String HAS_QUIET_PERIOD_PROPERTY_NAME = "hasQuietPeriod";
+    public static final String HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "hasScmCheckoutRetryCount";
+    public static final String BUILD_TRIGGER_PROPERTY_NAME = "hudson-tasks-BuildTrigger";
 
     /**
      * {@link SCM} associated with the project.
      * To allow derived classes to link {@link SCM} config to elsewhere,
      * access to this variable should always go through {@link #getScm()}.
+
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile SCM scm = new NullSCM();
 
     /**
@@ -144,12 +169,20 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
     /**
      * The quiet period. Null to delegate to the system default.
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile Integer quietPeriod = null;
 
     /**
      * The retry count. Null to delegate to the system default.
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile Integer scmCheckoutRetryCount = null;
 
     /**
@@ -184,38 +217,56 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     protected volatile boolean disabled;
 
     /**
-     * True to keep builds of this project in queue when downstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when downstream projects are building.
+     *
+     * @deprecated as of 2.1.2.
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
-    protected volatile boolean blockBuildWhenDownstreamBuilding = false;
+    @Deprecated
+    protected volatile boolean blockBuildWhenDownstreamBuilding;
 
     /**
-     * True to keep builds of this project in queue when upstream projects are
-     * building. False by default to keep from breaking existing behavior.
+     * True to keep builds of this project in queue when upstream projects are building.
+     *
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
-    protected volatile boolean blockBuildWhenUpstreamBuilding = false;
+    @Deprecated
+    protected volatile boolean blockBuildWhenUpstreamBuilding;
 
     /**
      * Identifies {@link JDK} to be used.
      * Null if no explicit configuration is required.
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * Can't store {@link JDK} directly because {@link Hudson} and {@link Project}
      * are saved independently.
      *
      * @see Hudson#getJDK(String)
+     * @deprecated 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private volatile String jdk;
 
     /**
      * @deprecated since 2007-01-29.
      */
+    @Deprecated
     private transient boolean enableRemoteTrigger;
 
     private volatile BuildAuthorizationToken authToken = null;
 
     /**
      * List of all {@link Trigger}s for this project.
+     *
+     * @deprecated as of 2.2.0
+     *
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
     protected List<Trigger<?>> triggers = new Vector<Trigger<?>>();
 
@@ -229,17 +280,28 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     @CopyOnWrite
     protected transient volatile List<Action> transientActions = new Vector<Action>();
 
+    /**
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
+    @Deprecated
     private boolean concurrentBuild;
 
     /**
-    * True to clean the workspace prior to each build.
-    */
+     * True to clean the workspace prior to each build.
+     *
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
+    @Deprecated
     private volatile boolean cleanWorkspaceRequired;
 
     protected AbstractProject(ItemGroup parent, String name) {
         super(parent, name);
 
-        if(!Hudson.getInstance().getNodes().isEmpty()) {
+        if (Hudson.getInstance() != null && !Hudson.getInstance().getNodes().isEmpty()) {
             // if a new job is configured with Hudson that already has slave nodes
             // make it roamable by default
             canRoam = true;
@@ -264,7 +326,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         super.onLoad(parent, name);
 
         this.builds = new RunMap<R>();
-        this.builds.load(this,new Constructor<R>() {
+        this.builds.load(this, new Constructor<R>() {
             public R create(File dir) throws IOException {
                 return loadBuild(dir);
             }
@@ -272,19 +334,89 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
         // boolean! Can't tell if xml file contained false..
         if (enableRemoteTrigger) OldDataMonitor.report(this, "1.77");
-        if(triggers==null) {
-            // it didn't exist in < 1.28
-            triggers = new Vector<Trigger<?>>();
-            OldDataMonitor.report(this, "1.28");
-        }
-        for (Trigger t : triggers)
+        for (Trigger t : getTriggerDescribableList()) {
             t.start(this,false);
+        }
         if(scm==null)
             scm = new NullSCM(); // perhaps it was pointing to a plugin that no longer exists.
 
         if(transientActions==null)
             transientActions = new Vector<Action>();    // happens when loaded from disk
         updateTransientActions();
+        getTriggerDescribableList().setOwner(this);
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        convertBlockBuildWhenUpstreamBuildingProperty();
+        convertBlockBuildWhenDownstreamBuildingProperty();
+        convertConcurrentBuildProperty();
+        convertCleanWorkspaceRequiredProperty();
+        convertQuietPeriodProperty();
+        convertScmCheckoutRetryCountProperty();
+        convertJDKProperty();
+        convertTriggerProperties();
+    }
+
+    void convertBlockBuildWhenUpstreamBuildingProperty() throws IOException {
+        if (null == getProperty(BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenUpstreamBuilding(blockBuildWhenUpstreamBuilding);
+            blockBuildWhenUpstreamBuilding = false;
+        }
+    }
+
+    void convertBlockBuildWhenDownstreamBuildingProperty() throws IOException {
+        if (null == getProperty(BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME)) {
+            setBlockBuildWhenDownstreamBuilding(blockBuildWhenDownstreamBuilding);
+            blockBuildWhenDownstreamBuilding = false;
+        }
+    }
+
+    void convertConcurrentBuildProperty() throws IOException {
+        if (null == getProperty(CONCURRENT_BUILD_PROPERTY_NAME)) {
+            setConcurrentBuild(concurrentBuild);
+            concurrentBuild = false;
+        }
+    }
+
+    void convertCleanWorkspaceRequiredProperty() throws IOException {
+        if (null == getProperty(CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME)) {
+            setCleanWorkspaceRequired(cleanWorkspaceRequired);
+            cleanWorkspaceRequired = false;
+        }
+    }
+
+    void convertQuietPeriodProperty() throws IOException {
+        if (null != quietPeriod && null == getProperty(QUIET_PERIOD_PROPERTY_NAME)) {
+            setQuietPeriod(quietPeriod);
+            quietPeriod = null;
+        }
+    }
+
+    void convertScmCheckoutRetryCountProperty() throws IOException {
+        if (null != scmCheckoutRetryCount && null == getProperty(SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)) {
+            setScmCheckoutRetryCount(scmCheckoutRetryCount);
+            scmCheckoutRetryCount = null;
+        }
+    }
+
+    void convertJDKProperty() throws IOException {
+        if (null != jdk && null == getProperty(JDK_PROPERTY_NAME)) {
+            setJDK(jdk);
+            jdk = null;
+        }
+        if (null != scm && null == getProperty(SCM_PROPERTY_NAME)) {
+            setScm(scm);
+            scm = null;
+        }
+    }
+
+    void convertTriggerProperties() {
+        if (triggers != null) {
+            setTriggers(triggers);
+            triggers = null;
+        }
     }
 
     @Override
@@ -307,16 +439,22 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      */
     @Exported
     public boolean isConcurrentBuild() {
-        return Hudson.CONCURRENT_BUILD && concurrentBuild;
+        return Hudson.CONCURRENT_BUILD
+            && CascadingUtil.getBooleanProjectProperty(this, CONCURRENT_BUILD_PROPERTY_NAME).getValue();
     }
 
     public void setConcurrentBuild(boolean b) throws IOException {
-        concurrentBuild = b;
+        CascadingUtil.getBooleanProjectProperty(this, CONCURRENT_BUILD_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean isCleanWorkspaceRequired() {
-        return cleanWorkspaceRequired;
+        return CascadingUtil.getBooleanProjectProperty(this, CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).getValue();
+    }
+
+    public void setCleanWorkspaceRequired(boolean cleanWorkspaceRequired) {
+        CascadingUtil.getBooleanProjectProperty(this,
+            CLEAN_WORKSPACE_REQUIRED_PROPERTY_NAME).setValue(cleanWorkspaceRequired);
     }
 
     /**
@@ -517,28 +655,81 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     public int getQuietPeriod() {
-        return quietPeriod!=null ? quietPeriod : Hudson.getInstance().getQuietPeriod();
-    }
-
-    public int getScmCheckoutRetryCount() {
-        return scmCheckoutRetryCount !=null ? scmCheckoutRetryCount : Hudson.getInstance().getScmCheckoutRetryCount();
-    }
-
-    // ugly name because of EL
-    public boolean getHasCustomQuietPeriod() {
-        return quietPeriod!=null;
+        IntegerProjectProperty property = CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME);
+        Integer value = property.getValue();
+        return property.getDefaultValue().equals(value) ? Hudson.getInstance().getQuietPeriod() : value;
     }
 
     /**
      * Sets the custom quiet period of this project, or revert to the global default if null is given.
+     *
+     * @param seconds quiet period
+     * @throws IOException if any.
      */
     public void setQuietPeriod(Integer seconds) throws IOException {
-        this.quietPeriod = seconds;
+        CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME).setValue(seconds);
         save();
     }
 
+    public int getScmCheckoutRetryCount() {
+        IntegerProjectProperty property = CascadingUtil.getIntegerProjectProperty(this,
+            SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME);
+        Integer value = property.getValue();
+        return property.getDefaultValue().equals(value) ? Hudson.getInstance().getScmCheckoutRetryCount() : value;
+    }
+
+    public void setScmCheckoutRetryCount(Integer retryCount) {
+        CascadingUtil.getIntegerProjectProperty(this, SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).setValue(retryCount);
+    }
+
+    /**
+     * Sets scmCheckoutRetryCount, Uses {@link NumberUtils#isNumber(String)} for checking retryCount param.
+     * If it is not valid number, null will be set.
+     *
+     * @param scmCheckoutRetryCount retry count.
+     * @throws IOException if any.
+     */
+    protected void setScmCheckoutRetryCount(String scmCheckoutRetryCount) throws IOException {
+        Integer retryCount = null;
+        if (NumberUtils.isNumber(scmCheckoutRetryCount)) {
+            retryCount = NumberUtils.createInteger(scmCheckoutRetryCount);
+        }
+        setScmCheckoutRetryCount(retryCount);
+    }
+
+    /**
+     * @return true if quiet period was configured.
+     * @deprecated as of 2.1.2
+     *             This method was used only on UI side. No longer required.
+     */
+    // ugly name because of EL
+    public boolean getHasCustomQuietPeriod() {
+        return null != CascadingUtil.getIntegerProjectProperty(this, QUIET_PERIOD_PROPERTY_NAME).getValue();
+    }
+
+    /**
+     * Sets quietPeriod, Uses {@link NumberUtils#isNumber(String)} for checking seconds param. If seconds is not valid
+     * number, null will be set.
+     *
+     * @param seconds quiet period.
+     * @throws IOException if any.
+     */
+    protected void setQuietPeriod(String seconds) throws IOException {
+        Integer period = null;
+        if (NumberUtils.isNumber(seconds)) {
+            period = NumberUtils.createInteger(seconds);
+        }
+        setQuietPeriod(period);
+    }
+
+    /**
+     * Checks whether scmRetryCount is configured
+     *
+     * @return true if yes, false - otherwise.
+     * @deprecated as of 2.1.2
+     */
     public boolean hasCustomScmCheckoutRetryCount(){
-        return scmCheckoutRetryCount != null;
+        return null != CascadingUtil.getIntegerProjectProperty(this, SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME).getValue();
     }
 
     @Override
@@ -555,20 +746,22 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     public boolean blockBuildWhenDownstreamBuilding() {
-        return blockBuildWhenDownstreamBuilding;
+        return CascadingUtil.getBooleanProjectProperty(this,
+            BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenDownstreamBuilding(boolean b) throws IOException {
-        blockBuildWhenDownstreamBuilding = b;
+        CascadingUtil.getBooleanProjectProperty(this, BLOCK_BUILD_WHEN_DOWNSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
     public boolean blockBuildWhenUpstreamBuilding() {
-        return blockBuildWhenUpstreamBuilding;
+        return CascadingUtil.getBooleanProjectProperty(this,
+            BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).getValue();
     }
 
     public void setBlockBuildWhenUpstreamBuilding(boolean b) throws IOException {
-        blockBuildWhenUpstreamBuilding = b;
+        CascadingUtil.getBooleanProjectProperty(this, BLOCK_BUILD_WHEN_UPSTREAM_BUILDING_PROPERTY_NAME).setValue(b);
         save();
     }
 
@@ -728,6 +921,8 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
                     pl.replace(new BuildTrigger(newChildProjects,
                         existing==null?Result.SUCCESS:existing.getThreshold()));
                 }
+                BuildTrigger buildTrigger = pl.get(BuildTrigger.class);
+                CascadingUtil.getExternalProjectProperty(p, BUILD_TRIGGER_PROPERTY_NAME).setValue(buildTrigger);
             }
         }
 
@@ -794,7 +989,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
      *      For the convenience of the caller, this array can contain null, and those will be silently ignored.
      */
     public Future<R> scheduleBuild2(int quietPeriod, Cause c, Action... actions) {
-        return scheduleBuild2(quietPeriod,c,Arrays.asList(actions));
+        return scheduleBuild2(quietPeriod, c, Arrays.asList(actions));
     }
 
     /**
@@ -891,18 +1086,29 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     }
 
     /**
-     * Gets the JDK that this project is configured with, or null.
+     * @return name of jdk chosen for current project. Could taken from parent
+     */
+    public String getJDKName() {
+        return CascadingUtil.getStringProjectProperty(this, JDK_PROPERTY_NAME).getValue();
+    }
+
+    /**
+     * @return JDK that this project is configured with, or null.
      */
     public JDK getJDK() {
-        return Hudson.getInstance().getJDK(jdk);
+        return Hudson.getInstance().getJDK(getJDKName());
     }
 
     /**
      * Overwrites the JDK setting.
      */
     public void setJDK(JDK jdk) throws IOException {
-        this.jdk = jdk.getName();
+        setJDK(jdk.getName());
         save();
+    }
+
+    public void setJDK(String jdk) {
+        CascadingUtil.getStringProjectProperty(this, JDK_PROPERTY_NAME).setValue(jdk);
     }
 
     public BuildAuthorizationToken getAuthToken() {
@@ -1331,7 +1537,12 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
                         return BUILD_NOW;
                     }
                 } else {
-                    WorkspaceList l = lb.getBuiltOn().toComputer().getWorkspaceList();
+                    Node node = lb.getBuiltOn();
+                    if (node == null || node.toComputer() == null) {
+                        LOGGER.log(Level.FINE, "Node on which this job previously was built is not available now, build is started on an available node");
+                        return isInQueue() ? NO_CHANGES : BUILD_NOW;
+                    }
+                    WorkspaceList l = node.toComputer().getWorkspaceList();
                     // if doing non-concurrent build, acquire a workspace in a way that causes builds to block for this workspace.
                     // this prevents multiple workspaces of the same job --- the behavior of Hudson < 1.319.
                     //
@@ -1389,23 +1600,26 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
 
     @Exported
     public SCM getScm() {
-        return scm;
+        return (SCM) getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).getValue();
     }
 
+    @SuppressWarnings("unchecked")
     public void setScm(SCM scm) throws IOException {
-        this.scm = scm;
+        getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).setValue(scm);
         save();
     }
 
     /**
      * Adds a new {@link Trigger} to this {@link Project} if not active yet.
      */
+    @SuppressWarnings("unchecked")
     public void addTrigger(Trigger<?> trigger) throws IOException {
-        addToList(trigger,triggers);
+        CascadingUtil.getTriggerProjectProperty(this, trigger.getDescriptor().getJsonSafeClassName()).setValue(trigger);
     }
 
+    @SuppressWarnings("unchecked")
     public void removeTrigger(TriggerDescriptor trigger) throws IOException {
-        removeFromList(trigger,triggers);
+        CascadingUtil.getTriggerProjectProperty(this, trigger.getJsonSafeClassName()).setValue(null);
     }
 
     protected final synchronized <T extends Describable<T>>
@@ -1413,7 +1627,7 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         for( int i=0; i<collection.size(); i++ ) {
             if(collection.get(i).getDescriptor()==item.getDescriptor()) {
                 // replace
-                collection.set(i,item);
+                collection.set(i, item);
                 save();
                 return;
             }
@@ -1437,19 +1651,41 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
         }
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized Map<TriggerDescriptor,Trigger> getTriggers() {
-        return (Map)Descriptor.toMap(triggers);
+        return (Map)Descriptor.toMap(getTriggerDescribableList());
+    }
+
+    /**
+     * @return list of {@link Trigger} elements.
+     */
+    public List<Trigger<?>> getTriggersList() {
+        return getTriggerDescribableList().toList();
+    }
+
+    /**
+     * @return describable list of trigger elements.
+     */
+    public DescribableList<Trigger<?>, TriggerDescriptor> getTriggerDescribableList() {
+        return DescribableListUtil.convertToDescribableList(Trigger.for_(this), this, TriggerProjectProperty.class);
     }
 
     /**
      * Gets the specific trigger, or null if the propert is not configured for this job.
      */
     public <T extends Trigger> T getTrigger(Class<T> clazz) {
-        for (Trigger p : triggers) {
+        for (Trigger p : getTriggersList()) {
             if(clazz.isInstance(p))
                 return clazz.cast(p);
         }
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setTriggers(List<Trigger<?>> triggerList) {
+        for (Trigger trigger : triggerList) {
+            CascadingUtil.getTriggerProjectProperty(this, trigger.getDescriptor().getJsonSafeClassName()).setValue(trigger);
+        }
     }
 
 //
@@ -1668,21 +1904,15 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
     protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, FormException {
         super.submit(req,rsp);
 
-        makeDisabled(req.getParameter("disable")!=null);
-
-        jdk = req.getParameter("jdk");
-        if(req.getParameter("hasCustomQuietPeriod")!=null) {
-            quietPeriod = Integer.parseInt(req.getParameter("quiet_period"));
-        } else {
-            quietPeriod = null;
-        }
-        if(req.getParameter("hasCustomScmCheckoutRetryCount")!=null) {
-            scmCheckoutRetryCount = Integer.parseInt(req.getParameter("scmCheckoutRetryCount"));
-        } else {
-            scmCheckoutRetryCount = null;
-        }
-        blockBuildWhenDownstreamBuilding = req.getParameter("blockBuildWhenDownstreamBuilding")!=null;
-        blockBuildWhenUpstreamBuilding = req.getParameter("blockBuildWhenUpstreamBuilding")!=null;
+        makeDisabled(null != req.getParameter("disable"));
+        setCascadingProjectName(StringUtils.trimToNull(req.getParameter("cascadingProjectName")));
+        setJDK(req.getParameter("jdk"));
+        setQuietPeriod(null != req.getParameter(HAS_QUIET_PERIOD_PROPERTY_NAME)
+            ? req.getParameter("quiet_period") : null);
+        setScmCheckoutRetryCount(null != req.getParameter(HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)
+            ? req.getParameter("scmCheckoutRetryCount") : null);
+        setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"));
+        setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"));
 
         if (req.getParameter("hasSlaveAffinity") != null) {
             // New logic for handling whether this choice came from the dropdown or textfield.
@@ -1698,21 +1928,18 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             advancedAffinityChooser = false;
         }
 
-        cleanWorkspaceRequired = null != req.getParameter("cleanWorkspaceRequired");
+
+        setCleanWorkspaceRequired(null != req.getParameter("cleanWorkspaceRequired"));
 
         canRoam = assignedNode==null;
 
-        concurrentBuild = req.getSubmittedForm().has("concurrentBuild");
+        setConcurrentBuild(req.getSubmittedForm().has("concurrentBuild"));
 
         authToken = BuildAuthorizationToken.create(req);
 
         setScm(SCMS.parseSCM(req,this));
 
-        for (Trigger t : triggers)
-            t.stop();
-        triggers = buildDescribable(req, Trigger.for_(this));
-        for (Trigger t : triggers)
-            t.start(this,true);
+        buildTriggers(req, req.getSubmittedForm(), Trigger.for_(this));
     }
 
     /**
@@ -1736,6 +1963,14 @@ public abstract class AbstractProject<P extends AbstractProject<P,R>,R extends A
             }
         }
         return r;
+    }
+
+    protected void buildTriggers(StaplerRequest req, JSONObject json, List<TriggerDescriptor> descriptors)
+        throws FormException {
+        for (TriggerDescriptor d : descriptors) {
+            String propertyName = d.getJsonSafeClassName();
+            CascadingUtil.setChildrenTrigger(this, d, propertyName, req, json);
+        }
     }
 
     /**

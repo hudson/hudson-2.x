@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, Tom Huybrechts, Yahoo! Inc.
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Tom Huybrechts, Yahoo! Inc.,
+ * Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +52,9 @@ import hudson.util.VariableResolver;
 import hudson.util.FormValidation;
 import hudson.util.XStream2;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
@@ -100,9 +104,9 @@ public class Ant extends Builder {
     public Ant(String targets,String antName, String antOpts, String buildFile, String properties) {
         this.targets = targets;
         this.antName = antName;
-        this.antOpts = Util.fixEmptyAndTrim(antOpts);
-        this.buildFile = Util.fixEmptyAndTrim(buildFile);
-        this.properties = Util.fixEmptyAndTrim(properties);
+        this.antOpts = StringUtils.trimToNull(antOpts);
+        this.buildFile = StringUtils.trimToNull(buildFile);
+        this.properties = StringUtils.trimToNull(properties);
     }
 
 	public String getBuildFile() {
@@ -458,5 +462,34 @@ public class Ant extends Builder {
                 return toolType==AntInstallation.class;
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Ant that = (Ant) o;
+        return new EqualsBuilder()
+            .append(antName, that.antName)
+            .append(antOpts, that.antOpts)
+            .append(buildFile, that.buildFile)
+            .append(properties, that.properties)
+            .append(targets, that.targets)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .append(targets)
+            .append(antName)
+            .append(antOpts)
+            .append(buildFile)
+            .append(properties)
+            .toHashCode();
     }
 }

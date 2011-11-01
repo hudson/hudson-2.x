@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Nikita Levyankov, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +51,12 @@ THE SOFTWARE.
       For each item, add a caption from descriptor.getDisplayName().
       This also activates drag&amp;drop (where the header is a grip), and help text support.
     </st:attribute>
+    <st:attribute name="isPropertyOverridden">
+      if present and true - value is overridden
+    </st:attribute>
+    <st:attribute name="resetUrl">
+      If present, Redo icon will rendered and Reset will be available.
+    </st:attribute>
   </st:documentation>
   <d:taglib uri="local">
     <d:tag name="body">
@@ -88,9 +94,18 @@ THE SOFTWARE.
       <input type="hidden" name="kind" value="${descriptor.class.name}" />
     </d:tag>
   </d:taglib>
-
+   <j:if test="${attrs.isPropertyOverridden==null}">
+    <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
+  </j:if>
   <j:set var="targetType" value="${attrs.targetType?:it.class}"/>
-  <div class="hetero-list-container${hasHeader?' with-drag-drop':''}">
+  <j:if test="${attrs.isPropertyOverridden and !empty(attrs.resetUrl)}">
+    <div class="hetero-list-reset">
+      <a href="#" class="reset-button" resetURL="${resetUrl}">
+        <img src="${imagesURL}/16x16/undo.png" alt="Reset ${title}"/>
+      </a>
+    </div>
+  </j:if>
+  <div class="hetero-list-container${hasHeader?' with-drag-drop':''}${attrs.isPropertyOverridden? ' modified' :''}">
     <!-- display existing items -->
     <j:forEach var="i" items="${attrs.items}">
       <j:set var="descriptor" value="${i.descriptor}" />

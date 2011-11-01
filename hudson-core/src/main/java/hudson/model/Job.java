@@ -1,8 +1,9 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov,
- * Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts
+ * Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi,
+ * Martin Eigenbrodt, Matthew R. Harrah, Red Hat, Inc., Stephen Connolly, Tom Huybrechts,
+ * Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +29,7 @@ import com.google.common.collect.Sets;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import hudson.Extension;
 import hudson.ExtensionPoint;
+import hudson.Functions;
 import hudson.PermalinkList;
 import hudson.cli.declarative.CLIResolver;
 import hudson.model.Descriptor.FormException;
@@ -44,6 +46,7 @@ import hudson.security.AuthorizationMatrixProperty;
 import hudson.security.Permission;
 import hudson.security.ProjectMatrixAuthorizationStrategy;
 import hudson.tasks.LogRotator;
+import hudson.util.CascadingUtil;
 import hudson.util.ChartUtil;
 import hudson.util.ColorPalette;
 import hudson.util.CopyOnWriteList;
@@ -73,10 +76,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.IProjectProperty;
+import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -90,6 +100,7 @@ import org.jfree.ui.RectangleInsets;
 import org.jvnet.localizer.Localizable;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerOverridable;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -111,8 +122,12 @@ import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
  * @author Nikita Levyankov
  */
 public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>>
-        extends AbstractItem implements ExtensionPoint, StaplerOverridable {
+        extends AbstractItem implements ExtensionPoint, StaplerOverridable, IJob {
     private static transient final String HUDSON_BUILDS_PROPERTY_KEY = "HUDSON_BUILDS";
+    private static transient final String PROJECT_PROPERTY_KEY_PREFIX = "has";
+    public static final String PROPERTY_NAME_SEPARATOR = ";";
+    public static final String LOG_ROTATOR_PROPERTY_NAME = "logRotator";
+
     /**
      * Next build number. Kept in a separate file because this is the only
      * information that gets updated often. This allows the rest of the
@@ -129,7 +144,14 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     private transient volatile boolean holdOffBuildUntilSave;
 
+    /**
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
+     */
     private volatile LogRotator logRotator;
+
+    private ConcurrentMap<String, IProjectProperty> jobProperties = new ConcurrentHashMap<String, IProjectProperty>();
 
     /**
      * Not all plugins are good at calculating their health report quickly.
@@ -156,21 +178,165 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     protected CopyOnWriteList<JobProperty<? super JobT>> properties = new CopyOnWriteList<JobProperty<? super JobT>>();
 
+    /**
+     * The name of the cascadingProject.
+     */
+    String cascadingProjectName;
+
+    /**
+     * The list with the names of children cascading projects. Required to avoid cyclic references and
+     * to prohibition parent project "delete" action in case it has cascading children projects.
+     */
+    private Set<String> cascadingChildrenNames = new CopyOnWriteArraySet<String>();
+
+    /**
+     * Selected cascadingProject for this job.
+     */
+    protected transient JobT cascadingProject;
+
+    private transient ThreadLocal<Boolean> allowSave = new ThreadLocal<Boolean>() {
+        @Override
+        protected Boolean initialValue() {
+            return true;
+        }
+    };
+
+    /**
+     * Set true if save operation for config is permitted, false - otherwise .
+     *
+     * @param allowSave allow save.
+     */
+    protected void setAllowSave(Boolean allowSave) {
+        if (null == this.allowSave) {
+            initAllowSave();
+        }
+        this.allowSave.set(allowSave);
+    }
+
+    /**
+     * Returns true if save operation for config is permitted.
+     *
+     * @return true if save operation for config is permitted.
+     */
+    protected Boolean isAllowSave() {
+        return allowSave.get();
+    }
+
     protected Job(ItemGroup parent, String name) {
         super(parent, name);
     }
 
-    @Override
-    public synchronized void save() throws IOException {
-        super.save();
-        holdOffBuildUntilSave = false;
+    /**
+     * Put job property to properties map.
+     *
+     * @param key key.
+     * @param property property instance.
+     */
+    public void putProjectProperty(String key, IProjectProperty property) {
+        if (null != key && null != property) {
+            jobProperties.put(key, property);
+        }
+    }
+
+    public Map<String, IProjectProperty> getProjectProperties() {
+        return MapUtils.unmodifiableMap(jobProperties);
+    }
+
+    /**
+     * Put map of job properties to existing ones.
+     *
+     * @param projectProperties new properties map.
+     * @param replace true - to replace current properties, false - add to existing map
+     */
+    protected void putAllProjectProperties(Map<String, ? extends IProjectProperty> projectProperties,
+                                           boolean replace) {
+        if (null != projectProperties) {
+            if (replace) {
+                jobProperties.clear();
+            }
+            jobProperties.putAll(projectProperties);
+        }
+    }
+
+    /**
+     * Returns job property by specified key.
+     *
+     * @param key key.
+     * @return {@link org.hudsonci.api.model.IProjectProperty} instance or null.
+     */
+    public IProjectProperty getProperty(String key){
+        return CascadingUtil.getProjectProperty(this, key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IProjectProperty getProperty(String key, Class clazz) {
+        return CascadingUtil.getProjectProperty(this, key, clazz);
+    }
+
+    /**
+     * Returns list of cascading children project names.
+     *
+     * @return list of cascading children project names.
+     */
+    @Exported
+    public Set<String> getCascadingChildrenNames() {
+        return cascadingChildrenNames;
+    }
+
+    /**
+     * Adds cascading child project name.
+     *
+     * @param cascadingChildName cascading child project name.
+     */
+    public void addCascadingChild(String cascadingChildName) {
+        cascadingChildrenNames.add(cascadingChildName);
+    }
+
+    /**
+     * Remove cascading child project name.
+     *
+     * @param cascadingChildName cascading child project name.
+     */
+    public void removeCascadingChild(String cascadingChildName) {
+        cascadingChildrenNames.remove(cascadingChildName);
+    }
+
+    public boolean hasCascadingChild(String cascadingChildName) {
+        return null != cascadingChildName && cascadingChildrenNames.contains(cascadingChildName);
+    }
+
+    /**
+     * Remove cascading child project name.
+     *
+     * @param oldChildName old child project name.
+     * @param newChildName new child project name.
+     */
+    public synchronized void renameCascadingChildName(String oldChildName, String newChildName) {
+        cascadingChildrenNames.remove(oldChildName);
+        cascadingChildrenNames.add(newChildName);
     }
 
     @Override
+    public synchronized void save() throws IOException {
+        if (null == allowSave) {
+           initAllowSave();
+        }
+        if (isAllowSave()) {
+            super.save();
+            holdOffBuildUntilSave = false;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public void onLoad(ItemGroup<? extends Item> parent, String name)
             throws IOException {
         super.onLoad(parent, name);
-
+        cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+            cascadingProjectName);
+        initAllowSave();
         TextFile f = getNextBuildNumberFile();
         if (f.exists()) {
             // starting 1.28, we store nextBuildNumber in a separate file.
@@ -194,6 +360,70 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
         for (JobProperty p : properties)
             p.setOwner(this);
+
+        if(cascadingChildrenNames == null){
+             cascadingChildrenNames = new CopyOnWriteArraySet<String>();
+        }
+        buildProjectProperties();
+    }
+
+    /**
+     * Resets overridden properties to the values defined in parent.
+     *
+     * @param propertyName the name of the properties. It possible to pass several names
+     * separated with {@link #PROPERTY_NAME_SEPARATOR}.
+     * @throws java.io.IOException exception.
+     */
+    public void doResetProjectProperty(@QueryParameter final String propertyName) throws IOException {
+        checkPermission(CONFIGURE);
+        for (String name : StringUtils.split(propertyName, PROPERTY_NAME_SEPARATOR)) {
+            final IProjectProperty property = getProperty(name);
+            if (null != property) {
+                property.resetValue();
+            }
+        }
+        save();
+    }
+
+    protected void initAllowSave() {
+        allowSave = new ThreadLocal<Boolean>() {
+            @Override
+            protected Boolean initialValue() {
+                return true;
+            }
+        };
+    }
+
+    /**
+     * Initializes and builds project properties. Also converts legacy properties to IProjectProperties.
+     * Subclasses should inherit and override this behavior.
+     *
+     * @throws IOException if any.
+     */
+    protected void buildProjectProperties() throws IOException {
+        initProjectProperties();
+        for (Map.Entry<String, IProjectProperty> entry : jobProperties.entrySet()) {
+            IProjectProperty property = entry.getValue();
+            property.setKey(entry.getKey());
+            property.setJob(this);
+        }
+        convertLogRotatorProperty();
+    }
+
+    void convertLogRotatorProperty() {
+        if (null != logRotator && null == getProperty(LOG_ROTATOR_PROPERTY_NAME)) {
+            setLogRotator(logRotator);
+            logRotator = null;
+        }
+    }
+
+    /**
+     * Initialize project properties if null.
+     */
+    public final void initProjectProperties() {
+        if (null == jobProperties) {
+            jobProperties = new ConcurrentHashMap<String, IProjectProperty>();
+        }
     }
 
     @Override
@@ -244,6 +474,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 // should we block until the build is cancelled?
             }
         }
+        CascadingUtil.unlinkProjectFromCascadingParents(getCascadingProject(), name);
         super.performDelete();
     }
 
@@ -342,11 +573,17 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Returns the log rotator for this job, or null if none.
      */
     public LogRotator getLogRotator() {
-        return logRotator;
+        return CascadingUtil.getLogRotatorProjectProperty(this, LOG_ROTATOR_PROPERTY_NAME).getValue();
     }
 
+    /**
+     * Sets log rotator.
+     *
+     * @param logRotator log rotator.
+     */
+    @SuppressWarnings("unchecked")
     public void setLogRotator(LogRotator logRotator) {
-        this.logRotator = logRotator;
+        CascadingUtil.getLogRotatorProjectProperty(this, LOG_ROTATOR_PROPERTY_NAME).setValue(logRotator);
     }
 
     /**
@@ -435,7 +672,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @SuppressWarnings("unchecked")
     public Map<JobPropertyDescriptor, JobProperty<? super JobT>> getProperties() {
-        return Descriptor.toMap((Iterable) properties);
+        return Descriptor.toMap((Iterable) properties); //TODO should we analyze properties from super psroject?
     }
 
     /**
@@ -508,10 +745,19 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     };
 
     /**
+     * @inheritDoc
+     */
+    @Override
+    protected void performBeforeItemRenaming(String oldName, String newName){
+        CascadingUtil.renameCascadingChildLinks(cascadingProject, oldName, newName);
+        CascadingUtil.renameCascadingParentLinks(oldName, newName);
+    }
+
+    /**
      * Renames a job.
      */
     @Override
-    public void renameTo(String newName) throws IOException {
+    public synchronized void renameTo(String newName) throws IOException {
         super.renameTo(newName);
     }
 
@@ -988,11 +1234,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             properties.clear();
 
             JSONObject json = req.getSubmittedForm();
-
-            if (req.getParameter("logrotate") != null)
-                logRotator = LogRotator.DESCRIPTOR.newInstance(req,json.getJSONObject("logrotate"));
-            else
-                logRotator = null;
+            setLogRotator(req.getParameter("logrotate") != null ? LogRotator.DESCRIPTOR
+                .newInstance(req, json.getJSONObject("logrotate")) : null);
 
             int i = 0;
             for (JobPropertyDescriptor d : JobPropertyDescriptor
@@ -1005,8 +1248,9 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                     properties.add(prop);
                 }
             }
-
+            setAllowSave(false);
             submit(req, rsp);
+            setAllowSave(true);
 
             save();
 
@@ -1253,7 +1497,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private void rss(StaplerRequest req, StaplerResponse rsp, String suffix,
             RunList runs) throws IOException, ServletException {
         RSS.forwardToRss(getDisplayName() + suffix, getUrl(), runs.newBuilds(),
-                Run.FEED_ADAPTER, req, rsp);
+            Run.FEED_ADAPTER, req, rsp);
     }
 
     /**
@@ -1300,6 +1544,105 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
+     * Returns cascading project name.
+     *
+     * @return cascading project name.
+     */
+    public String getCascadingProjectName() {
+        return cascadingProjectName;
+    }
+
+    public synchronized void doUpdateCascadingProject(@QueryParameter(fixEmpty = true) String projectName) {
+        setCascadingProjectName(projectName);
+    }
+
+    public synchronized void doModifyCascadingProperty(@QueryParameter(fixEmpty = true) String propertyName) {
+        if (null != propertyName) {
+            if (StringUtils.startsWith(propertyName, PROJECT_PROPERTY_KEY_PREFIX)) {
+                propertyName = StringUtils.substring(propertyName, 3);
+                propertyName = new StringBuilder(propertyName.length())
+                    .append(Character.toLowerCase((propertyName.charAt(0))))
+                    .append(propertyName.substring(1))
+                    .toString();
+            }
+            IProjectProperty property = getProperty(propertyName);
+            if (null != property && property instanceof ExternalProjectProperty) {
+                ((ExternalProjectProperty) property).setModified(true);
+            }
+        }
+    }
+
+    /**
+     * Sets cascadingProject name.
+     *
+     * @param cascadingProjectName cascadingProject name.
+     */
+    @SuppressWarnings("unchecked")
+    public synchronized void setCascadingProjectName(String cascadingProjectName) {
+        if (StringUtils.isBlank(cascadingProjectName)) {
+            clearCascadingProject();
+        } else if (!StringUtils.equalsIgnoreCase(this.cascadingProjectName, cascadingProjectName)) {
+            CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, name);
+            this.cascadingProjectName = cascadingProjectName;
+            cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+                cascadingProjectName);
+            CascadingUtil.linkCascadingProjectsToChild(cascadingProject, name);
+            for (IProjectProperty property : jobProperties.values()) {
+                if (property instanceof ExternalProjectProperty) {
+                    property.setOverridden(((ExternalProjectProperty) property).isModified());
+                } else {
+                    property.setOverridden(
+                        property.allowOverrideValue(property.getCascadingValue(), property.getValue()));
+                }
+            }
+        }
+    }
+
+    /**
+     * Renames cascading project name. For the properties prcessing and children links updating
+     * please use {@link #setCascadingProjectName} instead.
+     *
+     * @param cascadingProjectName new project name.
+     */
+    public void renameCascadingProjectNameTo(String cascadingProjectName) {
+        this.cascadingProjectName = cascadingProjectName;
+    }
+
+    /**
+     * Returns selected ccascading project.
+     *
+     * @return cascading project.
+     */
+    @SuppressWarnings({"unchecked"})
+    public synchronized JobT getCascadingProject() {
+        if (StringUtils.isNotBlank(cascadingProjectName) && cascadingProject == null) {
+            cascadingProject = (JobT) Functions.getItemByName(Hudson.getInstance().getAllItems(this.getClass()),
+                cascadingProjectName);
+        }
+        return cascadingProject;
+    }
+
+    /**
+     * Checks whether current job is inherited from other project.
+     * @return boolean.
+     */
+    public boolean hasCascadingProject() {
+        return null != getCascadingProject();
+    }
+
+    /**
+     * Remove cascading project data and mark all project properties as non-overridden
+     */
+    private void clearCascadingProject() {
+        CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, name);
+        this.cascadingProject = null;
+        this.cascadingProjectName = null;
+        for (IProjectProperty property : jobProperties.values()) {
+            property.setOverridden(false);
+        }
+    }
+
+    /**
      * Sets time when the job was created.
      *
      * @param creationTime time when the job was created.
@@ -1307,6 +1650,4 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     protected void setCreationTime(long creationTime) {
         this.creationTime = creationTime;
     }
-
-
 }

@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Anton Kozak, Nikita Levyankov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,17 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <st:documentation>
     Renders a row that shows description text below an input field.
+      <st:attribute name="isPropertyOverridden">
+          if present and true - value is overridden
+      </st:attribute>
   </st:documentation>
-	<tr>
-    <td colspan="2"/>
+    <j:if test="${attrs.isPropertyOverridden==null}">
+      <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
+    </j:if>
+	<tr class="${attrs.isPropertyOverridden? 'modified': 'original'}">
+    <td colspan="2" class="setting-description"/>
     <td class="setting-description">
 	    <d:invokeBody />
-	  </td>
+    </td>
 	</tr>
 </j:jelly>

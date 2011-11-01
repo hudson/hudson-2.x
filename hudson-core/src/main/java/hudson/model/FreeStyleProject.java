@@ -1,7 +1,8 @@
 /*
  * The MIT License
  * 
- * Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+ * Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi,
+  * id:cactusman, Anton Kozak, Nikita Levyankov
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +25,31 @@
 package hudson.model;
 
 import hudson.Extension;
-
+import hudson.util.CascadingUtil;
 import java.io.File;
 import java.io.IOException;
-
+import javax.servlet.ServletException;
+import org.hudsonci.api.model.IFreeStyleProject;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-
-import javax.servlet.ServletException;
 
 /**
  * Free-style software project.
  * 
  * @author Kohsuke Kawaguchi
  */
-public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem {
+public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> implements TopLevelItem,
+    IFreeStyleProject {
+
     /**
      * See {@link #setCustomWorkspace(String)}.
      *
      * @since 1.216
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to {@link org.hudsonci.api.model.IProjectProperty}.
+     *             Use getter/setter for accessing to this field.
      */
+    @Deprecated
     private String customWorkspace;
 
     /**
@@ -62,8 +68,8 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
         return FreeStyleBuild.class;
     }
 
-    public String getCustomWorkspace() {
-        return customWorkspace;
+    public String getCustomWorkspace() throws IOException {
+        return CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -81,22 +87,39 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
      * <p>
      * If this path is relative, it's resolved against {@link Node#getRootPath()} on the node where this workspace
      * is prepared. 
-     *
+     * @param customWorkspace new custom workspace to set
      * @since 1.320
+     * @throws IOException if any.
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
-        this.customWorkspace= customWorkspace;
+        CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);
         save();
     }
 
     @Override
-    protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, Descriptor.FormException {
-        if(req.hasParameter("customWorkspace"))
-            customWorkspace = req.getParameter("customWorkspace.directory");
-        else
-            customWorkspace = null;
-
+    protected void submit(StaplerRequest req, StaplerResponse rsp)
+        throws IOException, ServletException, Descriptor.FormException {
         super.submit(req, rsp);
+        setCustomWorkspace(
+            req.hasParameter("customWorkspace") ? req.getParameter("customWorkspace.directory") : null);
+    }
+
+    @Override
+    protected void buildProjectProperties() throws IOException {
+        super.buildProjectProperties();
+        convertCustomWorkspaceProperty();
+    }
+
+    /**
+     * Converts customWorkspace property to ProjectProperty.
+     *
+     * @throws IOException if any.
+     */
+    void convertCustomWorkspaceProperty() throws IOException {
+        if (null != customWorkspace && null == getProperty(CUSTOM_WORKSPACE_PROPERTY_NAME)) {
+            setCustomWorkspace(customWorkspace);
+            customWorkspace = null;//Reset to null. No longer needed.
+        }
     }
 
     public DescriptorImpl getDescriptor() {
