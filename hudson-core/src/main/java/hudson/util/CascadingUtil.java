@@ -33,6 +33,7 @@ import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.sf.json.JSONObject;
@@ -280,9 +281,28 @@ public class CascadingUtil {
      */
     public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink) {
         if (null != cascadingProject && null != projectToUnlink) {
-            cascadingProject.removeCascadingChild(projectToUnlink);
+            Job job = Functions.getItemByName(Hudson.getInstance().getAllItems(Job.class), projectToUnlink);
+            Set<String> set = new HashSet<String>(job.getCascadingChildrenNames());
+            set.add(projectToUnlink);
+            return unlinkProjectFromCascadingParents(cascadingProject, set);
+        }
+        return false;
+    }
+
+    /**
+     * Recursively unlink set of projects from cascading hierarchy.
+     *
+     * @param cascadingProject cascading project to start from.
+     * @param projectsToUnlink projects that should be unlinked.
+     * @return if project was unlinked
+     */
+    private static boolean unlinkProjectFromCascadingParents(Job cascadingProject, Set<String> projectsToUnlink) {
+        if (null != cascadingProject && null != projectsToUnlink) {
+            for (String toUnlink : projectsToUnlink) {
+                cascadingProject.removeCascadingChild(toUnlink);
+            }
             if (cascadingProject.hasCascadingProject()) {
-                unlinkProjectFromCascadingParents(cascadingProject.getCascadingProject(), projectToUnlink);
+                unlinkProjectFromCascadingParents(cascadingProject.getCascadingProject(), projectsToUnlink);
             }
             return true;
         }

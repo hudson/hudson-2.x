@@ -143,6 +143,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String SCM_PROPERTY_NAME = "scm";
     public static final String HAS_QUIET_PERIOD_PROPERTY_NAME = "hasQuietPeriod";
     public static final String HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "hasScmCheckoutRetryCount";
+    public static final String BUILD_TRIGGER_PROPERTY_NAME = "hudson-tasks-BuildTrigger";
 
     /**
      * {@link SCM} associated with the project.
@@ -920,7 +921,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
                     pl.replace(new BuildTrigger(newChildProjects,
                         existing==null?Result.SUCCESS:existing.getThreshold()));
                 }
-                p.putAllProjectProperties(DescribableListUtil.convertToProjectProperties(pl, p), false);
+                BuildTrigger buildTrigger = pl.get(BuildTrigger.class);
+                CascadingUtil.getExternalProjectProperty(p, BUILD_TRIGGER_PROPERTY_NAME).setValue(buildTrigger);
             }
         }
 

@@ -47,6 +47,7 @@ import hudson.model.listeners.ItemListener;
 import hudson.util.AutoCompleteSeeder;
 import hudson.util.FormValidation;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.AncestorInPath;
@@ -199,14 +200,17 @@ public class BuildTrigger extends Recorder implements DependecyDeclarer {
     }
 
     public void buildDependencyGraph(AbstractProject owner, DependencyGraph graph) {
-        for (AbstractProject p : getChildProjects())
-            graph.addDependency(new Dependency(owner, p) {
-                @Override
-                public boolean shouldTriggerBuild(AbstractBuild build, TaskListener listener,
-                                                  List<Action> actions) {
-                    return build.getResult().isBetterOrEqualTo(threshold);
-                }
-            });
+        for (AbstractProject p : getChildProjects()) {
+            if (!StringUtils.equals(p.getName(), owner.getName())) {
+                graph.addDependency(new Dependency(owner, p) {
+                    @Override
+                    public boolean shouldTriggerBuild(AbstractBuild build, TaskListener listener,
+                                                      List<Action> actions) {
+                        return build.getResult().isBetterOrEqualTo(threshold);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -287,7 +291,8 @@ public class BuildTrigger extends Recorder implements DependecyDeclarer {
         /**
          * Form validation method.
          */
-        public FormValidation doCheck(@AncestorInPath AccessControlled subject, @QueryParameter String value ) {
+        public FormValidation doCheck(@AncestorInPath AccessControlled subject, @AncestorInPath AbstractProject current,
+                                      @QueryParameter String value ) {
             // Require CONFIGURE permission on this project
             if(!subject.hasPermission(Item.CONFIGURE))      return FormValidation.ok();
 
@@ -299,6 +304,9 @@ public class BuildTrigger extends Recorder implements DependecyDeclarer {
                     return FormValidation.error(Messages.BuildTrigger_NoSuchProject(projectName,AbstractProject.findNearest(projectName).getName()));
                 if(!(item instanceof AbstractProject))
                     return FormValidation.error(Messages.BuildTrigger_NotBuildable(projectName));
+                if (StringUtils.equals(projectName, current.getName())) {
+                    return FormValidation.error(Messages.BuildTrigger_FailedUsingCurrentProject());
+                }
             }
 
             return FormValidation.ok();
