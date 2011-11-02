@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Nikita Levyankov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,5 @@ THE SOFTWARE.
   Publisher config pane
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:p="/lib/hudson/project">
-  <f:descriptorList title="${%Post-build Actions}"
-                    descriptors="${h.getPublisherDescriptors(it)}"
-                    instances="${it.publishers}" />
+    <t:cascadingDescriptorList title="${%Post-build Actions}" descriptors="${h.getPublisherDescriptors(it)}"/>
 </j:jelly>

@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2010, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov, id:cactusman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,11 @@ THE SOFTWARE.
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
   <l:layout title="${it.displayName} Config" norefresh="true" permission="${it.EXTENDED_READ}">
+    <j:set var="jobUrl" value="${h.getNearestAncestorUrl(request,it)}"/>
     <st:include page="sidepanel.jelly" />
     <l:main-panel>
       <div class="behavior-loading">${%LOADING}</div>
-      <f:form method="post" action="configSubmit" name="config">
+      <f:form method="post" action="configSubmit" name="config" tableClass="configure">
         <j:set var="descriptor" value="${it.descriptor}" />
         <j:set var="instance" value="${it}" />
 
@@ -39,15 +40,30 @@ THE SOFTWARE.
             <f:textbox name="name" value="${it.name}" />
           </f:entry>
         </j:if>
+        <j:set var="cascadingCandidates" value="${cu.getCascadingParents(it.class, it)}"/>
+        <j:if test="${cascadingCandidates.size() gt 0}">
+          <f:entry title="${%cascadingProjectName}">
+            <select class="setting-input" name="cascadingProjectName">
+              <f:option value="">${%emptyCascadingProjectName}</f:option>
+              <j:forEach var="job" items="${cascadingCandidates}">
+                <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
+              </j:forEach>
+            </select>
+          </f:entry>
+        </j:if>
         <f:entry title="${%Description}" help="/help/project-config/description.html">
           <f:textarea name="description" value="${it.description}"/>
         </f:entry>
 
         <j:if test="${it.supportsLogRotator()}">
           <!-- log rotator -->
+          <j:set var="logRotatorProperty" value="${cu.getLogRotatorProjectProperty(it, it.LOG_ROTATOR_PROPERTY_NAME)}"/>
+          <j:set var="logRotator" value="${logRotatorProperty.getValue()}"/>
           <f:optionalBlock name="logrotate"
             help="/help/project-config/log-rotation.html"
-            title="${%Discard Old Builds}" checked="${it.logRotator!=null}">
+            title="${%Discard Old Builds}" checked="${logRotator!=null}"
+            resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.LOG_ROTATOR_PROPERTY_NAME}"
+            isPropertyOverridden="${logRotatorProperty.isOverridden()}">
             <st:include page="/hudson/tasks/LogRotator/config.jelly"/>
           </f:optionalBlock>
         </j:if>

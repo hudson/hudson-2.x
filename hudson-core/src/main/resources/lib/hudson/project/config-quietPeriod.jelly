@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+Copyright (c) 2004-2011, Oracle Corporation, Inc., Kohsuke Kawaguchi, Nikita Levyankov, id:cactusman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,16 @@ THE SOFTWARE.
 
 <!-- custom quiet period -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:optionalBlock name="hasCustomQuietPeriod" title="${%Quiet period}" checked="${it.hasCustomQuietPeriod}"
-      help="/help/project-config/quietPeriod.html">
+  <j:set var="quietPeriodProperty" value="${cu.getIntegerProjectProperty(it, it.QUIET_PERIOD_PROPERTY_NAME)}"/>
+  <j:set var="quietPeriod" value="${quietPeriodProperty.getValue()}"/>
+  <f:optionalBlock name="hasQuietPeriod" title="${%Quiet period}"
+                   checked="${quietPeriod!=null and quietPeriod!=quietPeriodProperty.getDefaultValue()}"
+                   isPropertyOverridden="${quietPeriodProperty.isOverridden()}"
+                   resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.QUIET_PERIOD_PROPERTY_NAME}"
+                   help="/help/project-config/quietPeriod.html">
     <f:entry title="${%Quiet period}"
-      description="${%Number of seconds}">
-      <f:textbox clazz="number" name="quiet_period" value="${it.quietPeriod}"/>
+      description="${%Number of seconds}" isPropertyOverridden="${quietPeriodProperty.isOverridden()}">
+      <f:textbox clazz="number" name="quiet_period" value="${quietPeriod}"/>
     </f:entry>
   </f:optionalBlock>
 </j:jelly>
