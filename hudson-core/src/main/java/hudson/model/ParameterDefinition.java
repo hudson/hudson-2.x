@@ -23,18 +23,16 @@
  */
 package hudson.model;
 
+import hudson.AbortException;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.ExtensionPoint;
-import hudson.AbortException;
 import hudson.cli.CLICommand;
 import hudson.util.DescriptorList;
-
-import java.io.Serializable;
 import java.io.IOException;
-
+import java.io.Serializable;
 import net.sf.json.JSONObject;
-
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -225,5 +223,31 @@ public abstract class ParameterDefinition implements
         public String getDisplayName() {
             return "Parameter";
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ParameterDefinition that = (ParameterDefinition) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .append(getName())
+            .append(getClass())
+            .toHashCode();
     }
 }
