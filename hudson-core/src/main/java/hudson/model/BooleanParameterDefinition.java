@@ -23,10 +23,12 @@
  */
 package hudson.model;
 
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.DataBoundConstructor;
-import net.sf.json.JSONObject;
 import hudson.Extension;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
 
 /**
  * {@link ParameterDefinition} that is either 'true' or 'false'.
@@ -54,7 +56,7 @@ public class BooleanParameterDefinition extends SimpleParameterDefinition {
     }
 
     public ParameterValue createValue(String value) {
-        return new BooleanParameterValue(getName(),Boolean.valueOf(value),getDescription());
+        return new BooleanParameterValue(getName(), Boolean.valueOf(value), getDescription());
     }
 
     @Override
@@ -75,4 +77,18 @@ public class BooleanParameterDefinition extends SimpleParameterDefinition {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && new EqualsBuilder()
+            .append(isDefaultValue(), ((BooleanParameterDefinition) o).isDefaultValue())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(isDefaultValue())
+            .toHashCode();
+    }
 }
