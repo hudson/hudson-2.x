@@ -23,15 +23,13 @@
  */
 package hudson.model;
 
+import hudson.Extension;
 import net.sf.json.JSONObject;
-
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
-import hudson.Extension;
-import hudson.cli.CLICommand;
-
-import java.io.IOException;
 
 public class RunParameterDefinition extends SimpleParameterDefinition {
 
@@ -91,4 +89,18 @@ public class RunParameterDefinition extends SimpleParameterDefinition {
         return new RunParameterValue(getName(), value, getDescription());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && new EqualsBuilder()
+            .append(getProjectName(), ((RunParameterDefinition) o).getProjectName())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(getProjectName())
+            .toHashCode();
+    }
 }
