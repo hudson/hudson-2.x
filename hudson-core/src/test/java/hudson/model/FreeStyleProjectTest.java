@@ -65,7 +65,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratch() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         AuthorizationStrategy authorizationStrategy = createMock(ProjectMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -91,7 +90,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratchGlobalMatrixAuthorizationStrategy() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         AuthorizationStrategy authorizationStrategy = createMock(GlobalMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -113,7 +111,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCreatedFromScratchAnonymousAuthentication() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList());
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         mockStatic(User.class);
@@ -131,7 +128,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCopiedFrom() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
         AuthorizationStrategy authorizationStrategy = createMock(ProjectMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -160,7 +156,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCopiedFromGlobalMatrixAuthorizationStrategy() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
         AuthorizationStrategy authorizationStrategy = createMock(GlobalMatrixAuthorizationStrategy.class);
         expect(hudson.getAuthorizationStrategy()).andReturn(authorizationStrategy);
         mockStatic(Hudson.class);
@@ -184,7 +179,6 @@ public class FreeStyleProjectTest {
     @Test
     public void testOnCopiedFromAnonymousAuthentication() {
         Hudson hudson = createMock(Hudson.class);
-        expect(hudson.getNodes()).andReturn(Lists.<Node>newArrayList()).times(2);
         mockStatic(Hudson.class);
         expect(Hudson.getInstance()).andReturn(hudson).anyTimes();
         mockStatic(User.class);
