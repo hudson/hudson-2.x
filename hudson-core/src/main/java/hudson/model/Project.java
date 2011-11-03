@@ -70,30 +70,6 @@ public abstract class Project<P extends Project<P,B>,B extends Build<P,B>>
         return activities;
     }
 
-    /**
-     * Adds a new {@link BuildStep} to this {@link Project} and saves the configuration.
-     *
-     * @deprecated as of 1.290
-     *      Use {@code getPublishersList().add(x)}
-     */
-    //TODO investigate, whether we can move this method to parent or completer remove it
-    public void addPublisher(Publisher buildStep) throws IOException {
-        CascadingUtil.getExternalProjectProperty(this,
-            buildStep.getDescriptor().getJsonSafeClassName()).setValue(buildStep);
-    }
-
-    /**
-     * Removes a publisher from this project, if it's active.
-     *
-     * @deprecated as of 1.290
-     *      Use {@code getPublishersList().remove(x)}
-     */
-    //TODO investigate, whether we can move this method to parent or completer remove it
-    public void removePublisher(Descriptor<Publisher> descriptor) throws IOException {
-        getPublishersList().remove(descriptor);
-    }
-
-
     @Override
     public boolean isFingerprintConfigured() {
         return getPublishersList().get(Fingerprinter.class)!=null;

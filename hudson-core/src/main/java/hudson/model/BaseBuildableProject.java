@@ -130,6 +130,7 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected List<Action> createTransientActions() {
         List<Action> r = super.createTransientActions();
 
@@ -141,7 +142,6 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
             r.addAll(step.getProjectActions(this));
         for (Trigger trigger : getTriggersList())
             r.addAll(trigger.getProjectActions());
-
         return r;
     }
 
@@ -184,6 +184,31 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
      */
     public DescribableList<Publisher, Descriptor<Publisher>> getPublishersList() {
         return DescribableListUtil.convertToDescribableList(Functions.getPublisherDescriptors(this), this);
+    }
+
+    /**
+     * Adds a new {@link BuildStep} to this {@link Project} and saves the configuration.
+     *
+     * @param publisher publisher.
+     * @throws java.io.IOException exception.
+     */
+    @SuppressWarnings("unchecked")
+    public void addPublisher(Publisher publisher) throws IOException {
+        CascadingUtil.getExternalProjectProperty(this,
+            publisher.getDescriptor().getJsonSafeClassName()).setValue(publisher);
+    }
+
+    /**
+     * Removes a publisher from this project, if it's active.
+     *
+     * @deprecated as of 1.290
+     *      Use {@code getPublishersList().remove(x)}
+     * @param publisher publisher.
+     * @throws java.io.IOException exception.
+     */
+    //TODO investigate, whether we can move this method to parent or completer remove it
+    public void removePublisher(Descriptor<Publisher> publisher) throws IOException {
+        getPublishersList().remove(publisher);
     }
 
     /**
