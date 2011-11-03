@@ -25,8 +25,11 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+  <j:set var="instancesProperty" value="${cu.getCopyOnWriteListProjectProperty(it, it.PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)}"/>
   <f:optionalBlock name="parameterized" title="${%This build is parameterized}"
-          checked="${instance!=null}" help="/help/project-config/parameterized-build.html">
+                   isPropertyOverridden="${instancesProperty.isOverridden()}"
+                   resetUrl="${jobUrl}/resetProjectProperty?propertyName=${instancesProperty.key}"
+                   checked="${instance!=null}" help="/help/project-config/parameterized-build.html">
     <f:nested>
       <f:hetero-list name="parameter" hasHeader="true"
         descriptors="${h.getParameterDescriptors()}" items="${instance.parameterDefinitions}"
