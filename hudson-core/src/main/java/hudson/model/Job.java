@@ -82,6 +82,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import javax.servlet.ServletException;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
@@ -127,6 +128,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     private static transient final String PROJECT_PROPERTY_KEY_PREFIX = "has";
     public static final String PROPERTY_NAME_SEPARATOR = ";";
     public static final String LOG_ROTATOR_PROPERTY_NAME = "logRotator";
+    public static final String PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME = "parametersDefinitionProperties";
 
     /**
      * Next build number. Kept in a separate file because this is the only
@@ -175,6 +177,12 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
 
     /**
      * List of {@link UserProperty}s configured for this project.
+     * According to new implementation {@link ParametersDefinitionProperty} were moved from this collection. So, this
+     * field was left protected for backward compatibility. Don't use this field directly for adding or removing
+     * values. Use {@link #addProperty(JobProperty)}, {@link #removeProperty(JobProperty)},
+     * {@link #removeProperty(Class)} instead.
+     *
+     * @since 2.2.0
      */
     protected CopyOnWriteList<JobProperty<? super JobT>> properties = new CopyOnWriteList<JobProperty<? super JobT>>();
 
@@ -408,12 +416,20 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
             property.setJob(this);
         }
         convertLogRotatorProperty();
+        convertJobProperty();
     }
 
     void convertLogRotatorProperty() {
         if (null != logRotator && null == getProperty(LOG_ROTATOR_PROPERTY_NAME)) {
             setLogRotator(logRotator);
             logRotator = null;
+        }
+    }
+
+    void convertJobProperty() {
+        if (null != properties && null == getProperty(PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)) {
+            setParameterDefinitionProperties(properties);
+            properties = null;
         }
     }
 
@@ -602,6 +618,22 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         return true;
     }
 
+    public void setParameterDefinitionProperties(CopyOnWriteList<JobProperty<? super JobT>> properties) {
+        CopyOnWriteList parameterDefinitionProperties = new CopyOnWriteList();
+        for (JobProperty property : properties) {
+            if (property instanceof ParametersDefinitionProperty) {
+                parameterDefinitionProperties.add(property);
+            }
+        }
+        CascadingUtil.setParameterDefinitionProperties(this, PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME,
+            parameterDefinitionProperties);
+    }
+
+    public CopyOnWriteList<ParametersDefinitionProperty> getParameterDefinitionProperties() {
+        return CascadingUtil.getCopyOnWriteListProjectProperty(this, PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)
+            .getValue();
+    }
+
     @Override
     protected SearchIndexBuilder makeSearchIndex() {
         return super.makeSearchIndex().add(new SearchIndex() {
@@ -635,8 +667,17 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @since 1.188
      */
     public void addProperty(JobProperty<? super JobT> jobProp) throws IOException {
-        ((JobProperty)jobProp).setOwner(this);
-        properties.add(jobProp);
+        ((JobProperty) jobProp).setOwner(this);
+        if (((JobProperty) jobProp) instanceof ParametersDefinitionProperty) {
+            CopyOnWriteList list = CascadingUtil.getCopyOnWriteListProjectProperty(this,
+                PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)
+                .getOriginalValue();
+            if (null != list) {
+                list.add(jobProp);
+            }
+        } else {
+            properties.add(jobProp);
+        }
         save();
     }
 
@@ -646,22 +687,39 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @since 1.279
      */
     public void removeProperty(JobProperty<? super JobT> jobProp) throws IOException {
-        properties.remove(jobProp);
+        if (((JobProperty) jobProp) instanceof ParametersDefinitionProperty) {
+            CopyOnWriteList list = CascadingUtil.getCopyOnWriteListProjectProperty(this,
+                PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)
+                .getOriginalValue();
+            if (null != list) {
+                list.remove(jobProp);
+            }
+        } else {
+            properties.remove(jobProp);
+        }
         save();
     }
 
     /**
      * Removes the property of the given type.
      *
-     * @return
-     *      The property that was just removed.
+     * @return The property that was just removed.
      * @since 1.279
      */
     public <T extends JobProperty> T removeProperty(Class<T> clazz) throws IOException {
-        for (JobProperty<? super JobT> p : properties) {
-            if (clazz.isInstance(p)) {
-                removeProperty(p);
-                return clazz.cast(p);
+        CopyOnWriteList<JobProperty<? super JobT>> sourceProperties;
+        if (clazz.equals(ParametersDefinitionProperty.class)) {
+            sourceProperties = CascadingUtil.getCopyOnWriteListProjectProperty(this,
+                PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME).getOriginalValue();
+        } else {
+            sourceProperties = properties;
+        }
+        if (null != sourceProperties) {
+            for (JobProperty<? super JobT> p : sourceProperties) {
+                if (clazz.isInstance(p)) {
+                    removeProperty(p);
+                    return clazz.cast(p);
+                }
             }
         }
         return null;
@@ -672,16 +730,21 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     @SuppressWarnings("unchecked")
     public Map<JobPropertyDescriptor, JobProperty<? super JobT>> getProperties() {
-        return Descriptor.toMap((Iterable) properties); //TODO should we analyze properties from super psroject?
+        return Descriptor.toMap((Iterable) getAllProperties());
     }
 
     /**
      * List of all {@link JobProperty} exposed primarily for the remoting API.
      * @since 1.282
      */
-    @Exported(name="property",inline=true)
+    @Exported(name = "property", inline = true)
     public List<JobProperty<? super JobT>> getAllProperties() {
-        return properties.getView();
+        CopyOnWriteList<ParametersDefinitionProperty> definitionProperties = getParameterDefinitionProperties();
+        List<JobProperty<? super JobT>> result = properties.getView();
+        if (null != definitionProperties) {
+            result = Collections.unmodifiableList(ListUtils.union(result, definitionProperties.getView()));
+        }
+        return result;
     }
 
     /**
@@ -689,9 +752,19 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * this job.
      */
     public <T extends JobProperty> T getProperty(Class<T> clazz) {
-        for (JobProperty p : properties) {
-            if (clazz.isInstance(p))
-                return clazz.cast(p);
+        CopyOnWriteList<JobProperty<? super JobT>> sourceProperties;
+        if (clazz.equals(ParametersDefinitionProperty.class)) {
+            sourceProperties = CascadingUtil.getCopyOnWriteListProjectProperty(this,
+                PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME).getOriginalValue();
+        } else {
+            sourceProperties = properties;
+        }
+        if (null != sourceProperties) {
+            for (JobProperty p : sourceProperties) {
+                if (clazz.isInstance(p)) {
+                    return clazz.cast(p);
+                }
+            }
         }
         return null;
     }
@@ -701,7 +774,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      */
     public Collection<?> getOverrides() {
         List<Object> r = new ArrayList<Object>();
-        for (JobProperty<? super JobT> p : properties)
+        for (JobProperty<? super JobT> p : getAllProperties())
             r.addAll(p.getJobOverrides());
         return r;
     }
@@ -1225,29 +1298,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public synchronized void doConfigSubmit(StaplerRequest req,
             StaplerResponse rsp) throws IOException, ServletException, FormException {
         checkPermission(CONFIGURE);
-
-        description = req.getParameter("description");
-
-        keepDependencies = req.getParameter("keepDependencies") != null;
-
         try {
-            properties.clear();
-
-            JSONObject json = req.getSubmittedForm();
-            setLogRotator(req.getParameter("logrotate") != null ? LogRotator.DESCRIPTOR
-                .newInstance(req, json.getJSONObject("logrotate")) : null);
-
-            int i = 0;
-            for (JobPropertyDescriptor d : JobPropertyDescriptor
-                    .getPropertyDescriptors(Job.this.getClass())) {
-                String name = "jobProperty" + (i++);
-                JSONObject config = json.getJSONObject(name);
-                JobProperty prop = d.newInstance(req, config);
-                if (prop != null) {
-                    prop.setOwner(this);
-                    properties.add(prop);
-                }
-            }
             setAllowSave(false);
             submit(req, rsp);
             setAllowSave(true);
@@ -1279,8 +1330,33 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * Derived class can override this to perform additional config submission
      * work.
      */
-    protected void submit(StaplerRequest req, StaplerResponse rsp)
-            throws IOException, ServletException, FormException {
+    protected void submit(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException, FormException {
+        JSONObject json = req.getSubmittedForm();
+        description = req.getParameter("description");
+        keepDependencies = req.getParameter("keepDependencies") != null;
+        properties.clear();
+        CopyOnWriteList parameterDefinitionProperties = new CopyOnWriteList();
+        int i = 0;
+        for (JobPropertyDescriptor d : JobPropertyDescriptor
+            .getPropertyDescriptors(Job.this.getClass())) {
+            String name = "jobProperty" + (i++);
+            JSONObject config = json.getJSONObject(name);
+            JobProperty prop = d.newInstance(req, config);
+
+            if (prop instanceof ParametersDefinitionProperty) {
+                prop.setOwner(this);
+                parameterDefinitionProperties.add(prop);
+            } else if (null != prop) {
+                prop.setOwner(this);
+                properties.add(prop);
+            }
+        }
+        setParameterDefinitionProperties(parameterDefinitionProperties);
+        LogRotator logRotator = null;
+        if (null != req.getParameter("logrotate")) {
+            logRotator = LogRotator.DESCRIPTOR.newInstance(req, json.getJSONObject("logrotate"));
+        }
+        setLogRotator(logRotator);
     }
 
     /**

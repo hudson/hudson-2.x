@@ -24,25 +24,21 @@
  */
 package hudson.model;
 
+import hudson.Extension;
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.AbstractList;
-
 import javax.servlet.ServletException;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
-
-import hudson.Extension;
 
 /**
  * Keeps a list of the parameters defined for a project.
@@ -63,6 +59,16 @@ public class ParametersDefinitionProperty extends JobProperty<AbstractProject<?,
 
     public ParametersDefinitionProperty(ParameterDefinition... parameterDefinitions) {
         this.parameterDefinitions = Arrays.asList(parameterDefinitions);
+    }
+
+    /**
+     * This method is called for cascading update of owners.
+     *
+     * @param owner new owner.
+     * @since 2.2.0
+     */
+    public void setOwner(AbstractProject<?, ?> owner) {
+        super.setOwner(owner);
     }
     
     public AbstractProject<?,?> getOwner() {
@@ -206,5 +212,28 @@ public class ParametersDefinitionProperty extends JobProperty<AbstractProject<?,
 
     public String getUrlName() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ParametersDefinitionProperty that = (ParametersDefinitionProperty) o;
+        if (parameterDefinitions != null ? !this.parameterDefinitions.equals(that.parameterDefinitions)
+            : that.parameterDefinitions != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return parameterDefinitions != null ? parameterDefinitions.hashCode() : 0;
     }
 }

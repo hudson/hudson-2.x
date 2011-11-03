@@ -41,6 +41,7 @@ import java.util.StringTokenizer;
 import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.CopyOnWriteListProjectProperty;
 import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
@@ -154,6 +155,7 @@ public class Items {
         XSTREAM.alias("log-rotator-property", LogRotatorProjectProperty.class);
         XSTREAM.alias("result-property", ResultProjectProperty.class);
 
+        XSTREAM.alias("copy-write-list-property", CopyOnWriteListProjectProperty.class);
         XSTREAM.alias("axis-list-property", AxisListProjectProperty.class);
         XSTREAM.alias("describable-list-property", DescribableListProjectProperty.class);
         XSTREAM.aliasField("project-properties", Job.class, "jobProperties");

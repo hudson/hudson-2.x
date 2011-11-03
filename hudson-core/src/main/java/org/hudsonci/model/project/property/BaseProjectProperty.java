@@ -64,6 +64,13 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     /**
      * {@inheritDoc}
      */
+    public String getKey() {
+        return propertyKey;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setJob(IJob job) {
         if (null == job) {
             throw new IllegalArgumentException(INVALID_JOB_EXCEPTION);
@@ -90,7 +97,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     @SuppressWarnings("unchecked")
     public T getCascadingValue() {
-        if (null == propertyKey) {
+        if (null == getKey()) {
             throw new IllegalArgumentException(INVALID_PROPERTY_KEY_EXCEPTION);
         }
         return getJob().hasCascadingProject() ?
@@ -135,7 +142,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      */
     @SuppressWarnings("unchecked")
     public void setValue(T value) {
-        if (null == propertyKey) {
+        if (null == getKey()) {
             throw new IllegalArgumentException(INVALID_PROPERTY_KEY_EXCEPTION);
         }
         value = prepareValue(value);
