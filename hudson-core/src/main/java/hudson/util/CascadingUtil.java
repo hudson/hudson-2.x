@@ -24,11 +24,14 @@
 package hudson.util;
 
 import hudson.Functions;
+import hudson.model.AbstractProject;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.Item;
 import hudson.model.Job;
+import hudson.model.ParameterDefinition;
+import hudson.model.ParametersDefinitionProperty;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,6 +47,7 @@ import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.AxisListProjectProperty;
 import org.hudsonci.model.project.property.BaseProjectProperty;
 import org.hudsonci.model.project.property.BooleanProjectProperty;
+import org.hudsonci.model.project.property.CopyOnWriteListProjectProperty;
 import org.hudsonci.model.project.property.DescribableListProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
@@ -112,6 +116,19 @@ public class CascadingUtil {
      */
     public static ExternalProjectProperty getExternalProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, ExternalProjectProperty.class);
+    }
+
+    /**
+     * Returns CopyOnWriteListProjectProperty by specified key. If property doesn't exists,
+     * it will be initialized and added to current job.
+     *
+     * @param currentJob job that should be analyzed.
+     * @param key key.
+     * @return {@link org.hudsonci.model.project.property.CopyOnWriteListProjectProperty} instance.
+     * @throws NullPointerException if currentJob is null.
+     */
+    public static CopyOnWriteListProjectProperty getCopyOnWriteListProjectProperty(Job currentJob, String key) {
+        return getProjectProperty(currentJob, key, CopyOnWriteListProjectProperty.class);
     }
 
     /**
@@ -409,7 +426,7 @@ public class CascadingUtil {
         }
     }
 
- /**
+    /**
      * Sets trigger for job and all its children if necessary.
      *
      * @param job parentJob
@@ -434,13 +451,54 @@ public class CascadingUtil {
         property.setValue(trigger);
         Set<String> cascadingChildrenNames = job.getCascadingChildrenNames();
         for (String childName : cascadingChildrenNames) {
-            Job childJob = (Job)Hudson.getInstance().getItem(childName);
+            Job childJob = (Job) Hudson.getInstance().getItem(childName);
             if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
                 TriggerProjectProperty childProperty = CascadingUtil.getTriggerProjectProperty(childJob, key);
                 if (!childProperty.isOverridden()) {
                     setChildrenTrigger(childJob, descriptor, key, req, json);
                 } else if (!childProperty.allowOverrideValue(trigger, childProperty.getValue())) {
                     childProperty.setOverridden(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets parameterDefinitionProperties for current job. This method is recursively executed for cascading children
+     * for setting valid {@link ParametersDefinitionProperty#owner} value.
+     *
+     * @param job job.
+     * @param key parameter key,
+     * @param parameterDefinitionProperties new properties to set.
+     */
+    @SuppressWarnings("unchecked")
+    public static void setParameterDefinitionProperties(Job job,
+                                                        String key,
+                                                        CopyOnWriteList<ParametersDefinitionProperty> parameterDefinitionProperties) {
+        CopyOnWriteListProjectProperty projectProperty = getCopyOnWriteListProjectProperty(job, key);
+        CopyOnWriteList<ParametersDefinitionProperty> pdProperties
+            = new CopyOnWriteList<ParametersDefinitionProperty>();
+        //Create new instance for each parameter in order to set owner and use in cascading children.
+        for (ParametersDefinitionProperty pdp : parameterDefinitionProperties) {
+            ParametersDefinitionProperty copiedDefinitionProperty = new ParametersDefinitionProperty(
+                new ArrayList<ParameterDefinition>(pdp.getParameterDefinitions()));
+            copiedDefinitionProperty.setOwner((AbstractProject) job);
+            pdProperties.add(copiedDefinitionProperty);
+        }
+        projectProperty.setValue(pdProperties);
+        Set<String> cascadingChildrenNames = job.getCascadingChildrenNames();
+        //Iterate through cascading children and recursively update property for each child.
+        for (String childName : cascadingChildrenNames) {
+            AbstractProject childJob = (AbstractProject) Hudson.getInstance().getItem(childName);
+            //Check only direct children in order to avoid deep checking for properties overridden properties.
+            if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                CopyOnWriteListProjectProperty childProperty = getCopyOnWriteListProjectProperty(childJob, key);
+                //If child value is equal to parent - mark this value as unmodified.
+                if (!projectProperty.allowOverrideValue(childProperty.getValue(), pdProperties)) {
+                    projectProperty.setOverridden(false);
+                } else if (!childProperty.isOverridden()) {
+                    //If child property was not overridden, update this property and cascading children if any.
+                    setParameterDefinitionProperties(childJob, key, parameterDefinitionProperties);
                 }
             }
         }

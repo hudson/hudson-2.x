@@ -823,7 +823,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected List<Action> createTransientActions() {
         Vector<Action> ta = new Vector<Action>();
 
-        for (JobProperty<? super P> p : properties)
+        for (JobProperty<? super P> p : getAllProperties())
             ta.addAll(p.getJobActions((P)this));
 
         for (TransientProjectActionFactory tpaf : TransientProjectActionFactory.all())
@@ -1366,7 +1366,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         r.add(this);
         for (SubTaskContributor euc : SubTaskContributor.all())
             r.addAll(euc.forProject(this));
-        for (JobProperty<? super P> p : properties)
+        for (JobProperty<? super P> p : getAllProperties())
             r.addAll(p.getSubTasks());
         return r;
     }
