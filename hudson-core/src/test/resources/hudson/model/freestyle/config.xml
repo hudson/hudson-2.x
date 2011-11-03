@@ -12,8 +12,9 @@
   <creationTime>1316762043103</creationTime>
   <quietPeriod>5</quietPeriod>
   <scmCheckoutRetryCount>5</scmCheckoutRetryCount>
-  <advancedAffinityChooser>false</advancedAffinityChooser>
-  <canRoam>true</canRoam>
+  <assignedNode>node-name</assignedNode>
+  <advancedAffinityChooser>true</advancedAffinityChooser>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>

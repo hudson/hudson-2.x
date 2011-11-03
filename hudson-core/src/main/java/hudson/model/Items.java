@@ -157,5 +157,7 @@ public class Items {
         XSTREAM.alias("axis-list-property", AxisListProjectProperty.class);
         XSTREAM.alias("describable-list-property", DescribableListProjectProperty.class);
         XSTREAM.aliasField("project-properties", Job.class, "jobProperties");
+        //TODO: think about migrating to xstream's annotations.
+        XSTREAM.alias("appointed-node-property", AppointedNode.class);
     }
 }
