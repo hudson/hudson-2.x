@@ -429,7 +429,6 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     void convertJobProperty() {
         if (null != properties && null == getProperty(PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)) {
             setParameterDefinitionProperties(properties);
-            properties = null;
         }
     }
 
