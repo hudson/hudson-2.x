@@ -56,14 +56,19 @@ THE SOFTWARE.
     </j:if>
 
     <!-- master/slave -->
+    <j:set var="nodeChooserProperty" value="${cu.getBaseProjectProperty(it, it.APPOINTED_NODE_PROPERTY_NAME)}"/>
+    <j:set var="isNodeOverridden" value="${nodeChooserProperty.isOverridden()}" />
     <j:if test="${app.labels.size() gt 1 || app.clouds.size() gt 0 || (it.assignedLabel!=null and it.assignedLabel!=app.selfLabel)}">
-        <f:optionalBlock name="hasSlaveAffinity" title="${%Restrict where this project can be run}"
+        <f:optionalBlock name="${it.APPOINTED_NODE_PROPERTY_NAME}" title="${%Restrict where this project can be run}"
                          checked="${it.assignedLabel!=null}"
+                         isPropertyOverridden="${isNodeOverridden}"
+                         resetUrl="${jobUrl}/resetProjectProperty?propertyName=${it.APPOINTED_NODE_PROPERTY_NAME}"
                          help="/help/project-config/slave.html">
-            <f:radioBlock name="affinityChooser" value="basic" title="${%Node and label menu}"
-                          checked="${!it.advancedAffinityChooser and it.assignedLabel!=null}">
-                <f:entry title="${%Node}">
-                    <select class="setting-input" name="slave">
+            <f:radioBlock name="${it.AFFINITY_CHO0SER_KEY}" value="${it.BASIC_KEY}" title="${%Node and label menu}"
+                          checked="${!it.advancedAffinityChooser and it.assignedLabel!=null}"
+                          isPropertyOverridden="${isNodeOverridden}">
+                <f:entry title="${%Node}" isPropertyOverridden="${isNodeOverridden}">
+                    <select class="setting-input" name="${it.SLAVE_KEY}">
                         <j:forEach var="s" items="${app.labels}">
                             <j:if test="${s.isAssignable()}">
                                 <f:option selected="${s==it.assignedLabel}" value="${s.name}">${s.name}
@@ -74,9 +79,11 @@ THE SOFTWARE.
                     </select>
                 </f:entry>
             </f:radioBlock>
-            <f:radioBlock name="affinityChooser" value="advanced" title="${%Advanced Node and Label expressions}"
-                          checked="${it.advancedAffinityChooser and it.assignedLabel!=null}">
-                <f:entry title="${%Label Expression}" field="assignedLabelString">
+            <f:radioBlock name="${it.AFFINITY_CHO0SER_KEY}" value="advanced" title="${%Advanced Node and Label expressions}"
+                          checked="${it.advancedAffinityChooser and it.assignedLabel!=null}"
+                          isPropertyOverridden="${isNodeOverridden}">
+                <f:entry title="${%Label Expression}" field="assignedLabelString"
+                         isPropertyOverridden="${isNodeOverridden}">
                     <f:textbox/>
                 </f:entry>
             </f:radioBlock>

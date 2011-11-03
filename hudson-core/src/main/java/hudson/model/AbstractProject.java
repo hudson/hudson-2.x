@@ -46,8 +46,6 @@ import hudson.model.Queue.Executable;
 import hudson.model.Queue.Task;
 import hudson.model.Queue.WaitingItem;
 import hudson.model.RunMap.Constructor;
-import hudson.model.labels.LabelAtom;
-import hudson.model.labels.LabelExpression;
 import hudson.model.queue.CauseOfBlockage;
 import hudson.model.queue.SubTask;
 import hudson.model.queue.SubTaskContributor;
@@ -144,6 +142,11 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public static final String HAS_QUIET_PERIOD_PROPERTY_NAME = "hasQuietPeriod";
     public static final String HAS_SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME = "hasScmCheckoutRetryCount";
     public static final String BUILD_TRIGGER_PROPERTY_NAME = "hudson-tasks-BuildTrigger";
+    public static final String APPOINTED_NODE_PROPERTY_NAME = "appointedNode";
+    public static final String BASIC_KEY = "basic";
+    public static final String AFFINITY_CHO0SER_KEY = "affinityChooser";
+    public static final String SLAVE_KEY = "slave";
+    public static final String ASSIGNED_LABEL_KEY = "_.assignedLabelString";
 
     /**
      * {@link SCM} associated with the project.
@@ -194,12 +197,22 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * with the master node.
      *
      * @see #canRoam
+     *
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to
+     *             {@link hudson.model.AbstractProject#getAppointedNode()#getName()}.
      */
+    @Deprecated
     private String assignedNode;
 
     /**
      * Node list is dropdown or textfield
+     *
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to
+     *             {@link hudson.model.AbstractProject#getAppointedNode()#isAdvancedAffinityChooser()}.
      */
+    @Deprecated
     private Boolean advancedAffinityChooser;
 
     /**
@@ -208,7 +221,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * <p>
      * This somewhat ugly flag combination is so that we can migrate
      * existing Hudson installations nicely.
+     *
+     * @deprecated as of 2.2.0
+     *             don't use this field directly, logic was moved to
+     *             {@link hudson.model.AbstractProject#getAppointedNode()#getCanRoam}.
      */
+    @Deprecated
     private volatile boolean canRoam;
 
     /**
@@ -301,11 +319,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     protected AbstractProject(ItemGroup parent, String name) {
         super(parent, name);
 
-        if (Hudson.getInstance() != null && !Hudson.getInstance().getNodes().isEmpty()) {
+        //TODO: Investigate when this case happens.
+        //if (Hudson.getInstance() != null && !Hudson.getInstance().getNodes().isEmpty()) {
             // if a new job is configured with Hudson that already has slave nodes
             // make it roamable by default
-            canRoam = true;
-        }
+           // canRoam = true;
+        //}
     }
 
     @Override
@@ -357,6 +376,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         convertScmCheckoutRetryCountProperty();
         convertJDKProperty();
         convertTriggerProperties();
+        convertAppointedNode();
     }
 
     void convertBlockBuildWhenUpstreamBuildingProperty() throws IOException {
@@ -419,6 +439,14 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         }
     }
 
+    void convertAppointedNode() {
+        if (assignedNode != null && getProperty(APPOINTED_NODE_PROPERTY_NAME) == null) {
+            setAppointedNode(new AppointedNode(assignedNode, advancedAffinityChooser));
+            assignedNode = null;
+            advancedAffinityChooser = null;
+        }
+    }
+
     @Override
     protected void performDelete() throws IOException, InterruptedException {
         // prevent a new build while a delete operation is in progress
@@ -462,40 +490,21 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * return that {@link Node}. Otherwise null.
      */
     public Label getAssignedLabel() {
-        if(canRoam)
-            return null;
-
-        if(assignedNode==null)
-            return Hudson.getInstance().getSelfLabel();
-        return Hudson.getInstance().getLabel(assignedNode);
+        return getAppointedNode() == null ? null : getAppointedNode().getAssignedLabel();
     }
 
     /**
      * Gets the textual representation of the assigned label as it was entered by the user.
      */
     public String getAssignedLabelString() {
-        if (canRoam || assignedNode==null)    return null;
-        try {
-            LabelExpression.parseExpression(assignedNode);
-            return assignedNode;
-        } catch (ANTLRException e) {
-            // must be old label or host name that includes whitespace or other unsafe chars
-            return LabelAtom.escape(assignedNode);
-        }
+        return getAppointedNode() == null ? null : getAppointedNode().getAssignedLabelString();
     }
 
     /**
      * Sets the assigned label.
      */
     public void setAssignedLabel(Label l) throws IOException {
-        if(l==null) {
-            canRoam = true;
-            assignedNode = null;
-        } else {
-            canRoam = false;
-            if(l==Hudson.getInstance().getSelfLabel())  assignedNode = null;
-            else                                        assignedNode = l.getExpression();
-        }
+        getAppointedNode().setAssignedLabel(l);
         save();
     }
 
@@ -514,10 +523,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     public boolean isAdvancedAffinityChooser() {
         //For newly created project advanced chooser is not used.
         //Set value to false in order to avoid NullPointerException
-        if (null == advancedAffinityChooser) {
-            advancedAffinityChooser = false;
-        }
-        return advancedAffinityChooser;
+        return getAppointedNode() != null && getAppointedNode().getAdvancedAffinityChooser();
     }
 
     /**
@@ -526,8 +532,27 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      * @param b true - advanced chooser, false - otherwise
      */
     public void setAdvancedAffinityChooser(boolean b) throws IOException {
-        advancedAffinityChooser = b;
+        getAppointedNode().setAdvancedAffinityChooser(b);
         save();
+    }
+
+    /**
+     * Sets {@link AppointedNode}.
+     *
+     * @param appointedNode {@link AppointedNode}.
+     */
+    @SuppressWarnings("unchecked")
+    public void setAppointedNode(AppointedNode appointedNode) {
+        CascadingUtil.getBaseProjectProperty(this, APPOINTED_NODE_PROPERTY_NAME).setValue(appointedNode);
+    }
+
+    /**
+     * Returns {@link AppointedNode}. Returned value is not null.
+     *
+     * @return appointedNode {@link AppointedNode}.
+     */
+    public AppointedNode getAppointedNode() {
+        return (AppointedNode)CascadingUtil.getBaseProjectProperty(this, APPOINTED_NODE_PROPERTY_NAME).getValue();
     }
 
     /**
@@ -1914,24 +1939,21 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         setBlockBuildWhenDownstreamBuilding(null != req.getParameter("blockBuildWhenDownstreamBuilding"));
         setBlockBuildWhenUpstreamBuilding(null != req.getParameter("blockBuildWhenUpstreamBuilding"));
 
-        if (req.getParameter("hasSlaveAffinity") != null) {
+        if (req.getParameter(APPOINTED_NODE_PROPERTY_NAME) != null) {
             // New logic for handling whether this choice came from the dropdown or textfield.
-            if ("basic".equals(req.getParameter("affinityChooser"))) {
-                assignedNode = Util.fixEmptyAndTrim(req.getParameter("slave"));
-                advancedAffinityChooser = false;
+            if (BASIC_KEY.equals(req.getParameter(AFFINITY_CHO0SER_KEY))) {
+                setAppointedNode(
+                    new AppointedNode(Util.fixEmptyAndTrim(req.getParameter(SLAVE_KEY)), false));
             } else {
-                assignedNode = Util.fixEmptyAndTrim(req.getParameter("_.assignedLabelString"));
-                advancedAffinityChooser = true;
+                setAppointedNode(
+                    new AppointedNode(Util.fixEmptyAndTrim(req.getParameter(ASSIGNED_LABEL_KEY)), true));
             }
+
         } else {
-            assignedNode = null;
-            advancedAffinityChooser = false;
+            setAppointedNode(null);
         }
 
-
         setCleanWorkspaceRequired(null != req.getParameter("cleanWorkspaceRequired"));
-
-        canRoam = assignedNode==null;
 
         setConcurrentBuild(req.getSubmittedForm().has("concurrentBuild"));
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2011, Oracle Corporation, Inc., Nikita Levyankov
+ * Copyright (c) 2011, Oracle Corporation, Nikita Levyankov, Anton Kozak
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ import hudson.triggers.TimerTrigger;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -333,5 +334,22 @@ public class LegacyProjectTest {
         trigger = (Trigger) project.getProperty(timerTriggerPropertyKey).getValue();
         assertEquals("*/10 * * * *", trigger.getSpec());
         verifyAll();
+    }
+
+    /**
+     * Tests unmarshalling FreeStyleProject configuration and checks whether assignedNode and advancedAffinityChooser
+     * properties from AbstractProject are configured.
+     *
+     * @throws java.io.IOException if any
+     */
+    @Test
+    public void testConvertLegacyNodePropertes() throws IOException {
+        AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        assertNull(project.getProperty(AbstractProject.APPOINTED_NODE_PROPERTY_NAME));
+        project.convertAppointedNode();
+        assertNotNull(project.getProperty(AbstractProject.APPOINTED_NODE_PROPERTY_NAME));
+        assertTrue(project.isAdvancedAffinityChooser());
     }
 }
