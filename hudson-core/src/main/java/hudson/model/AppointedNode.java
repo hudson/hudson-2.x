@@ -53,6 +53,9 @@ public class AppointedNode implements Serializable {
      */
     private volatile boolean canRoam;
 
+    public AppointedNode() {
+    }
+
     public AppointedNode(String nodeName, Boolean advancedAffinityChooser) {
         this.nodeName = nodeName;
         this.advancedAffinityChooser = advancedAffinityChooser;
