@@ -23,13 +23,14 @@
  */
 package org.hudsonci.model.project.property;
 
+import hudson.triggers.Trigger;
 import org.hudsonci.api.model.IJob;
 
 /**
  * Property for triggers in case of we should use child project trigger
  * instead of parent project if they are equals.
  */
-public class TriggerProjectProperty<T> extends ExternalProjectProperty<T> {
+public class TriggerProjectProperty extends BaseProjectProperty<Trigger> {
     public TriggerProjectProperty(IJob job) {
         super(job);
     }
@@ -38,7 +39,7 @@ public class TriggerProjectProperty<T> extends ExternalProjectProperty<T> {
      * {@inheritDoc}
      */
     @Override
-    protected void clearOriginalValue(T originalValue) {
+    protected void clearOriginalValue(Trigger originalValue) {
         setOriginalValue(originalValue, false);
     }
 }
