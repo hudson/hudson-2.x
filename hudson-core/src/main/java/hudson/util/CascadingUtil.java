@@ -422,7 +422,7 @@ public class CascadingUtil {
     @SuppressWarnings("unchecked")
     public static void setChildrenTrigger(Job job, TriggerDescriptor descriptor, String key, StaplerRequest req,
                                       JSONObject json) throws Descriptor.FormException {
-        TriggerProjectProperty<Trigger<?>> property = CascadingUtil.getTriggerProjectProperty(job, key);
+        TriggerProjectProperty property = CascadingUtil.getTriggerProjectProperty(job, key);
         if (property.getValue() != null) {
             property.getValue().stop();
         }

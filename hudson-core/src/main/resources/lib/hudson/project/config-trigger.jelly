@@ -30,7 +30,8 @@ THE SOFTWARE.
   <j:invokeStatic var="triggers" className="hudson.triggers.Trigger" method="for_">
     <j:arg value="${it}" type="hudson.model.Item" />
   </j:invokeStatic>
-  <t:cascadingDescriptorList title="${%Build Triggers}" descriptors="${triggers}">
+  <t:cascadingDescriptorList title="${%Build Triggers}" descriptors="${triggers}"
+                             propertyClass="${org.hudsonci.model.project.property.BaseProjectProperty.class}">
     <d:invokeBody />
     <!-- pseudo-trigger to configure URL to trigger builds remotely. -->
     <st:include page="/hudson/model/BuildAuthorizationToken/config.jelly" />

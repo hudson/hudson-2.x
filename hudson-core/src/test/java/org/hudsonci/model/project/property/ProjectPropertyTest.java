@@ -720,7 +720,6 @@ public class ProjectPropertyTest {
         TriggerProjectProperty property = new TriggerProjectProperty(project);
         Trigger originalTrigger = new TimerTrigger("* * * * *");
         Trigger cascadingTrigger = new TimerTrigger("* * * * *");
-        property.setModified(true);
         property.updateOriginalValue(originalTrigger, cascadingTrigger);
         //Property isn't overridden because of values equal.
         assertFalse(property.isOverridden());

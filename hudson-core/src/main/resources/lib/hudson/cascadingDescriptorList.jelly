@@ -23,30 +23,40 @@ THE SOFTWARE.
 -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:f="/lib/form">
-  <st:documentation>
-    Generates config pages from a list of Descriptors into a section. Tag is based on cascading functionality.
-    <st:attribute name="title">
-      Human readable title of the section to be rendered in HTML.
-    </st:attribute>
-    <st:attribute name="descriptors" use="required">
-      hudson.model.Descriptor collection whose configuration page is rendered.
-    </st:attribute>
-  </st:documentation>
+    <st:documentation>
+        Generates config pages from a list of Descriptors into a section. Tag is based on cascading functionality.
+        <st:attribute name="title">
+            Human readable title of the section to be rendered in HTML.
+        </st:attribute>
+        <st:attribute name="descriptors" use="required">
+            hudson.model.Descriptor collection whose configuration page is rendered.
+        </st:attribute>
+        <st:attribute name="projectPropertyClass">
+            ProjectProperty class that will be used for creating project property instance
+            based on hudson.util.CascadingUtil.getProjectProperty method. Default value is
+            org.hudsonci.model.project.property.ExternalProjectProperty.class.
+        </st:attribute>
+    </st:documentation>
 
-  <j:set var="targetType" value="${it.class}"/>
-  <j:if test="${!empty(descriptors) or context['org.apache.commons.jelly.body']!=null}">
-    <f:section title="${attrs.title}" name="${attrs.name}">
-      <d:invokeBody/>
-      <j:forEach var="descriptor" items="${descriptors}">
-        <j:set var="instanceProperty" value="${cu.getExternalProjectProperty(it, descriptor.jsonSafeClassName)}"/>
-        <j:set var="instance" value="${instanceProperty.getValue()}"/>
-        <f:optionalBlock name="${descriptor.jsonSafeClassName}" help="${descriptor.helpFile}"
-                         title="${descriptor.displayName}" checked="${instance!=null}"
-                         resetUrl="${jobUrl}/resetProjectProperty?propertyName=${descriptor.jsonSafeClassName}"
-                         isPropertyOverridden="${instanceProperty.isOverridden()}">
-          <st:include from="${descriptor}" page="${descriptor.configPage}" optional="true"/>
-        </f:optionalBlock>
-      </j:forEach>
-    </f:section>
-  </j:if>
+    <j:set var="targetType" value="${it.class}"/>
+    <j:if test="${attrs.projectPropertyClass==null}">
+        <j:set var="attrs.projectPropertyClass"
+               value="${org.hudsonci.model.project.property.ExternalProjectProperty.class}"/>
+    </j:if>
+    <j:if test="${!empty(descriptors) or context['org.apache.commons.jelly.body']!=null}">
+        <f:section title="${attrs.title}" name="${attrs.name}">
+            <d:invokeBody/>
+            <j:forEach var="descriptor" items="${descriptors}">
+                <j:set var="instanceProperty"
+                       value="${cu.getProjectProperty(it, descriptor.jsonSafeClassName, attrs.projectPropertyClass)}"/>
+                <j:set var="instance" value="${instanceProperty.getValue()}"/>
+                <f:optionalBlock name="${descriptor.jsonSafeClassName}" help="${descriptor.helpFile}"
+                                 title="${descriptor.displayName}" checked="${instance!=null}"
+                                 resetUrl="${jobUrl}/resetProjectProperty?propertyName=${descriptor.jsonSafeClassName}"
+                                 isPropertyOverridden="${instanceProperty.isOverridden()}">
+                    <st:include from="${descriptor}" page="${descriptor.configPage}" optional="true"/>
+                </f:optionalBlock>
+            </j:forEach>
+        </f:section>
+    </j:if>
 </j:jelly>
