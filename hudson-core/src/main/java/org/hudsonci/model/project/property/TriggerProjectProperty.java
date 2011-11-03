@@ -34,14 +34,11 @@ public class TriggerProjectProperty<T> extends ExternalProjectProperty<T> {
         super(job);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected boolean updateOriginalValue(T value, T cascadingValue) {
-        T candidateValue = null == value ? getDefaultValue() : value;
-        if (allowOverrideValue(cascadingValue, candidateValue)) {
-            setOriginalValue(value, true);
-        } else {
-            setOriginalValue(value, false);
-        }
-        return  true;
+    protected void clearOriginalValue(T originalValue) {
+        setOriginalValue(originalValue, false);
     }
 }
