@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Equals and hashCode test for {@link BooleanParameterDefinition} object
@@ -58,8 +59,23 @@ public class BooleanParameterDefinitionEqualsHashCodeTest {
             new BooleanParameterDefinition(null, false, null));
     }
 
-    //TODO implement hashcode test
+    @Test
     public void testHashCode() {
+        BooleanParameterDefinition o1 = new BooleanParameterDefinition("name1", false, "description");
+        assertEquals(o1, o1);
+        assertFalse(o1.hashCode() == new StringParameterDefinition("test1", "value", "description").hashCode());
+        assertFalse(new BooleanParameterDefinition("name1", false, null).hashCode() ==
+            new BooleanParameterDefinition(null, false, null).hashCode());
+        assertFalse(new BooleanParameterDefinition(null, true, null).hashCode() ==
+            new BooleanParameterDefinition(null, false, null).hashCode());
+        assertFalse(o1.hashCode() == new BooleanParameterDefinition(null, true, null).hashCode());
+        assertFalse(o1.hashCode() == new BooleanParameterDefinition("name1", true, "description").hashCode());
 
+        assertTrue(o1.hashCode() == new BooleanParameterDefinition("name1", false, "description").hashCode());
+        assertTrue(o1.hashCode() == new BooleanParameterDefinition("name1", false, "description1").hashCode());
+        assertTrue(new BooleanParameterDefinition(null, false, "d1").hashCode() ==
+            new BooleanParameterDefinition(null, false, "d1").hashCode());
+        assertTrue(new BooleanParameterDefinition(null, false, null).hashCode() ==
+            new BooleanParameterDefinition(null, false, null).hashCode());
     }
 }

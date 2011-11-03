@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Equals and hashCode test for {@link ChoiceParameterDefinition} object
@@ -58,8 +59,23 @@ public class ChoiceParameterDefinitionEqualsHashCodeTest {
             new ChoiceParameterDefinition(null, "value\nvalue2", null));
     }
 
-    //TODO implement hashcode test
+    @Test
     public void testHashCode() {
+        ChoiceParameterDefinition o1 = new ChoiceParameterDefinition("name1", "value\nvalue2", "description");
+        assertTrue(o1.hashCode() == o1.hashCode());
+        assertFalse(o1.hashCode() == new StringParameterDefinition("test1", "value\nvalue2", "description").hashCode());
+        assertFalse(new ChoiceParameterDefinition("name1", "value\nvalue2", null).hashCode() ==
+            new ChoiceParameterDefinition(null, "value\nvalue2", null).hashCode());
+        assertFalse(new ChoiceParameterDefinition(null, "value1", null).hashCode() ==
+            new ChoiceParameterDefinition(null, "value\nvalue2", null).hashCode());
+        assertFalse(o1.hashCode() == new ChoiceParameterDefinition(null, "value1", null).hashCode());
+        assertFalse(o1.hashCode() == new ChoiceParameterDefinition("name1", "value1", "description").hashCode());
 
+        assertTrue(o1.hashCode() == new ChoiceParameterDefinition("name1", "value\nvalue2", "description").hashCode());
+        assertTrue(o1.hashCode() == new ChoiceParameterDefinition("name1", "value\nvalue2", "description1").hashCode());
+        assertTrue(new ChoiceParameterDefinition(null, "value\nvalue2", "d1").hashCode() ==
+            new ChoiceParameterDefinition(null, "value\nvalue2", "d1").hashCode());
+        assertTrue(new ChoiceParameterDefinition(null, "value\nvalue2", null).hashCode() ==
+            new ChoiceParameterDefinition(null, "value\nvalue2", null).hashCode());
     }
 }

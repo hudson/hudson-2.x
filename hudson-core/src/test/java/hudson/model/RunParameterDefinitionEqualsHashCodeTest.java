@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Equals and hashCode test for {@link RunParameterDefinition} object
@@ -58,8 +59,23 @@ public class RunParameterDefinitionEqualsHashCodeTest {
             new RunParameterDefinition(null, "value", null));
     }
 
-    //TODO implement hashcode test
+    @Test
     public void testHashCode() {
+        RunParameterDefinition o1 = new RunParameterDefinition("name1", "value", "description");
+        assertTrue(o1.hashCode() == o1.hashCode());
+        assertFalse(o1.equals(new StringParameterDefinition("test1", "value", "description")));
+        assertFalse(new RunParameterDefinition("name1", "value", null).hashCode() ==
+            new RunParameterDefinition(null, "value", null).hashCode());
+        assertFalse(new RunParameterDefinition(null, "value1", null).hashCode() ==
+            new RunParameterDefinition(null, "value", null).hashCode());
+        assertFalse(o1.hashCode() == new RunParameterDefinition(null, "value1", null).hashCode());
+        assertFalse(o1.hashCode() == new RunParameterDefinition("name1", "value1", "description").hashCode());
 
+        assertTrue(o1.hashCode() == new RunParameterDefinition("name1", "value", "description").hashCode());
+        assertTrue(o1.hashCode() == new RunParameterDefinition("name1", "value", "description1").hashCode());
+        assertTrue(new RunParameterDefinition(null, "value", "d1").hashCode() ==
+            new RunParameterDefinition(null, "value", "d1").hashCode());
+        assertTrue(new RunParameterDefinition(null, "value", null).hashCode() ==
+            new RunParameterDefinition(null, "value", null).hashCode());
     }
 }
