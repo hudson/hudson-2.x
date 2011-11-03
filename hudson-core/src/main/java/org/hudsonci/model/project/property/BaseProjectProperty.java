@@ -148,8 +148,8 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
 
     /**
      * Update value for cascading property. Before setting new value it will be checked for equality with cascading
-     * value. If two values are equals - current value will be reset and will retrieved from parent. If not - value will
-     * be set directly.
+     * value. If two values are equals - current value will be cleared via {@link #clearOriginalValue(Object)}
+     * and will retrieved from parent. If not - value will be set directly.
      *
      * @param value new value to be set.
      * @param cascadingValue current cascading value.
@@ -160,7 +160,7 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
         if (allowOverrideValue(cascadingValue, candidateValue)) {
             setOriginalValue(value, true);
         } else {
-            resetValue();
+            clearOriginalValue(value);
         }
         return true;
     }
@@ -175,6 +175,16 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     protected void setOriginalValue(T originalValue, boolean overridden) {
         this.originalValue = originalValue;
         setOverridden(overridden);
+    }
+
+    /**
+     * Method that clears original value and marks it as overridden if needed.
+     * Default implementation uses {@link #resetValue()}. Subclasses can override this method.
+     *
+     * @param originalValue value to set.
+     */
+    protected void clearOriginalValue(T originalValue) {
+        resetValue();
     }
 
     /**
