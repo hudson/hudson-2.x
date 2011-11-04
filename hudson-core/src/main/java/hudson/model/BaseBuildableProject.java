@@ -49,7 +49,7 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * @author Anton Kozak.
  */
-public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B extends Build<P,B>>
+public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B extends AbstractBuild<P,B>>
     extends AbstractProject<P, B>
     implements Saveable, BuildableItemWithBuildWrappers, IProject {
 
