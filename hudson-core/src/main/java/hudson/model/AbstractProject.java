@@ -375,6 +375,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         convertQuietPeriodProperty();
         convertScmCheckoutRetryCountProperty();
         convertJDKProperty();
+        convertScmProperty();
         convertTriggerProperties();
         convertAppointedNode();
     }
@@ -426,6 +427,9 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             setJDK(jdk);
             jdk = null;
         }
+    }
+
+    void convertScmProperty() throws IOException {
         if (null != scm && null == getProperty(SCM_PROPERTY_NAME)) {
             setScm(scm);
             scm = null;
