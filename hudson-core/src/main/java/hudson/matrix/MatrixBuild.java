@@ -24,8 +24,8 @@
 package hudson.matrix;
 
 import hudson.Util;
+import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.Executor;
@@ -55,7 +55,7 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * @author Kohsuke Kawaguchi
  */
-public class MatrixBuild extends Build<MatrixProject, MatrixBuild> {
+public class MatrixBuild extends AbstractBuild<MatrixProject, MatrixBuild> {
     private AxisList axes;
 
     public MatrixBuild(MatrixProject job) throws IOException {
