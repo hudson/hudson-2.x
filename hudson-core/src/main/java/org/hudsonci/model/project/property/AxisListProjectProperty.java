@@ -47,10 +47,4 @@ public class AxisListProjectProperty extends BaseProjectProperty<AxisList> {
     public AxisList getDefaultValue() {
         return new AxisList();
     }
-    /**
-     * {@inheritDoc}
-     */
-    public boolean allowOverrideValue(AxisList cascadingValue, AxisList candidateValue) {
-        return ObjectUtils.notEqual(cascadingValue, candidateValue);
-    }
 }
