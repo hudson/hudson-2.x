@@ -434,11 +434,11 @@ public class CascadingUtil {
      * @param key trigger property key
      * @param req stapler request
      * @param json submited json
-     * @throws hudson.model.Descriptor.FormException if incorrect parameters
+     * @throws Descriptor.FormException if incorrect parameters
      */
     @SuppressWarnings("unchecked")
     public static void setChildrenTrigger(Job job, TriggerDescriptor descriptor, String key, StaplerRequest req,
-                                      JSONObject json) throws Descriptor.FormException {
+                                          JSONObject json) throws Descriptor.FormException {
         TriggerProjectProperty property = CascadingUtil.getTriggerProjectProperty(job, key);
         if (property.getValue() != null) {
             property.getValue().stop();
@@ -450,14 +450,16 @@ public class CascadingUtil {
         }
         property.setValue(trigger);
         Set<String> cascadingChildrenNames = job.getCascadingChildrenNames();
-        for (String childName : cascadingChildrenNames) {
-            Job childJob = (Job) Hudson.getInstance().getItem(childName);
-            if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
-                TriggerProjectProperty childProperty = CascadingUtil.getTriggerProjectProperty(childJob, key);
-                if (!childProperty.isOverridden()) {
-                    setChildrenTrigger(childJob, descriptor, key, req, json);
-                } else if (!childProperty.allowOverrideValue(trigger, childProperty.getValue())) {
-                    childProperty.setOverridden(false);
+        if (null != cascadingChildrenNames) {
+            for (String childName : cascadingChildrenNames) {
+                Job childJob = (Job) Hudson.getInstance().getItem(childName);
+                if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                    TriggerProjectProperty childProperty = CascadingUtil.getTriggerProjectProperty(childJob, key);
+                    if (!childProperty.isOverridden()) {
+                        setChildrenTrigger(childJob, descriptor, key, req, json);
+                    } else if (!childProperty.allowOverrideValue(trigger, childProperty.getValue())) {
+                        childProperty.setOverridden(false);
+                    }
                 }
             }
         }
@@ -488,17 +490,19 @@ public class CascadingUtil {
         projectProperty.setValue(pdProperties);
         Set<String> cascadingChildrenNames = job.getCascadingChildrenNames();
         //Iterate through cascading children and recursively update property for each child.
-        for (String childName : cascadingChildrenNames) {
-            AbstractProject childJob = (AbstractProject) Hudson.getInstance().getItem(childName);
-            //Check only direct children in order to avoid deep checking for properties overridden properties.
-            if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
-                CopyOnWriteListProjectProperty childProperty = getCopyOnWriteListProjectProperty(childJob, key);
-                //If child value is equal to parent - mark this value as unmodified.
-                if (!projectProperty.allowOverrideValue(childProperty.getValue(), pdProperties)) {
-                    projectProperty.setOverridden(false);
-                } else if (!childProperty.isOverridden()) {
-                    //If child property was not overridden, update this property and cascading children if any.
-                    setParameterDefinitionProperties(childJob, key, parameterDefinitionProperties);
+        if (null != cascadingChildrenNames) {
+            for (String childName : cascadingChildrenNames) {
+                AbstractProject childJob = (AbstractProject) Hudson.getInstance().getItem(childName);
+                //Check only direct children in order to avoid deep checking for properties overridden properties.
+                if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                    CopyOnWriteListProjectProperty childProperty = getCopyOnWriteListProjectProperty(childJob, key);
+                    //If child value is equal to parent - mark this value as unmodified.
+                    if (!projectProperty.allowOverrideValue(childProperty.getValue(), pdProperties)) {
+                        projectProperty.setOverridden(false);
+                    } else if (!childProperty.isOverridden()) {
+                        //If child property was not overridden, update this property and cascading children if any.
+                        setParameterDefinitionProperties(childJob, key, parameterDefinitionProperties);
+                    }
                 }
             }
         }
