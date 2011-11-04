@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Tom Huybrechts
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, Tom Huybrechts, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,14 @@ THE SOFTWARE.
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
   <j:set var="instancesProperty" value="${cu.getCopyOnWriteListProjectProperty(it, it.PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME)}"/>
+  <j:set var="isParametersOverridden" value="${instancesProperty.isOverridden()}"/>
   <f:optionalBlock name="parameterized" title="${%This build is parameterized}"
-                   isPropertyOverridden="${instancesProperty.isOverridden()}"
+                   isPropertyOverridden="${isParametersOverridden}"
                    resetUrl="${jobUrl}/resetProjectProperty?propertyName=${instancesProperty.key}"
                    checked="${instance!=null}" help="/help/project-config/parameterized-build.html">
-    <f:nested>
+    <f:nested isPropertyOverridden="${isParametersOverridden}">
       <f:hetero-list name="parameter" hasHeader="true"
+        isPropertyOverridden="${isParametersOverridden}"
         descriptors="${h.getParameterDescriptors()}" items="${instance.parameterDefinitions}"
         addCaption="${%Add Parameter}" />
     </f:nested>
