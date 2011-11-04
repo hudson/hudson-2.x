@@ -453,7 +453,7 @@ public class CascadingUtil {
         if (null != cascadingChildrenNames) {
             for (String childName : cascadingChildrenNames) {
                 Job childJob = (Job) Hudson.getInstance().getItem(childName);
-                if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                if (null != childJob && StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
                     TriggerProjectProperty childProperty = CascadingUtil.getTriggerProjectProperty(childJob, key);
                     if (!childProperty.isOverridden()) {
                         setChildrenTrigger(childJob, descriptor, key, req, json);
@@ -494,7 +494,7 @@ public class CascadingUtil {
             for (String childName : cascadingChildrenNames) {
                 AbstractProject childJob = (AbstractProject) Hudson.getInstance().getItem(childName);
                 //Check only direct children in order to avoid deep checking for properties overridden properties.
-                if (StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
+                if (null != childJob && StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
                     CopyOnWriteListProjectProperty childProperty = getCopyOnWriteListProjectProperty(childJob, key);
                     //If child value is equal to parent - mark this value as unmodified.
                     if (!projectProperty.allowOverrideValue(childProperty.getValue(), pdProperties)) {
