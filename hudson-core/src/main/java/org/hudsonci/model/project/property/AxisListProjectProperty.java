@@ -24,6 +24,10 @@
 package org.hudsonci.model.project.property;
 
 import hudson.matrix.AxisList;
+import hudson.util.DescribableList;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hudsonci.api.model.IJob;
 
 /**
@@ -42,5 +46,11 @@ public class AxisListProjectProperty extends BaseProjectProperty<AxisList> {
     @Override
     public AxisList getDefaultValue() {
         return new AxisList();
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public boolean allowOverrideValue(AxisList cascadingValue, AxisList candidateValue) {
+        return ObjectUtils.notEqual(cascadingValue, candidateValue);
     }
 }

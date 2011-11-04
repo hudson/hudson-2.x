@@ -390,6 +390,10 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(new AxisList(), null));
         assertTrue(property.allowOverrideValue(null, new AxisList()));
         assertTrue(property.allowOverrideValue(new AxisList().add(new Axis("DB", "mysql")), new AxisList()));
+        assertTrue(property.allowOverrideValue(new AxisList().add(new Axis("DB", "mysql")),
+            new AxisList().add(new Axis("DB", "mysql", "mssql"))));
+        assertTrue(property.allowOverrideValue(new AxisList().add(new Axis("DB", "mysql")),
+            new AxisList().add(new Axis("DB", "mssql"))));
     }
 
     @Test
@@ -400,7 +404,6 @@ public class ProjectPropertyTest {
         assertTrue(property.allowOverrideValue(null, new NullSCM()));
         assertTrue(property.allowOverrideValue(new NullSCM(), new FakeSCM()));
     }
-
 
     /**
      * Verify getCascadingValue method.
