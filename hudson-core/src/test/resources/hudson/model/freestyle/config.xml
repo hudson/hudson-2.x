@@ -50,4 +50,21 @@
     </hudson.tasks.Maven>
   </builders>
   <customWorkspace>/tmp</customWorkspace>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>test1</name>
+          <description>string value description</description>
+          <defaultValue>df1</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>test2</name>
+          <description>boolean value description</description>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+
 </project>

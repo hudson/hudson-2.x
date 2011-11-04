@@ -31,9 +31,12 @@ import hudson.triggers.SCMTrigger;
 import hudson.triggers.TimerTrigger;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
+import hudson.util.CopyOnWriteList;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
+import org.hudsonci.model.project.property.CopyOnWriteListProjectProperty;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -351,5 +354,44 @@ public class LegacyProjectTest {
         project.convertAppointedNode();
         assertNotNull(project.getProperty(AbstractProject.APPOINTED_NODE_PROPERTY_NAME));
         assertTrue(project.isAdvancedAffinityChooser());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testConvertLegacyParameterDefinitionProperties() throws IOException {
+        Job project = (Job) Items.getConfigFile(config).read();
+        project.setAllowSave(false);
+        project.initProjectProperties();
+        assertNull(project.getProperty(Job.PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME));
+        project.convertJobProperty();
+        //Properties should be initialized
+        assertNotNull(project.properties);
+        CopyOnWriteListProjectProperty property = (CopyOnWriteListProjectProperty) project.getProperty(
+            Job.PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME);
+        assertNotNull(property);
+        CopyOnWriteList<ParametersDefinitionProperty> propertyValue = property.getValue();
+        assertFalse(propertyValue.isEmpty());
+        assertEquals(1, propertyValue.size());
+        ParametersDefinitionProperty pdp = propertyValue.get(0);
+        List<ParameterDefinition> parameterDefinitions = pdp.getParameterDefinitions();
+        assertNotNull(parameterDefinitions);
+        assertFalse(parameterDefinitions.isEmpty());
+        String parameterName1 = "test1";
+        String parameterName2 = "test2";
+        assertTrue(pdp.getParameterDefinitionNames().contains(parameterName1));
+        assertTrue(pdp.getParameterDefinitionNames().contains(parameterName2));
+        ParameterDefinition parameterDefinition = pdp.getParameterDefinition(parameterName1);
+        assertNotNull(parameterDefinition);
+        assertTrue(parameterDefinition instanceof StringParameterDefinition);
+        assertEquals(parameterName1, parameterDefinition.getName());
+        assertEquals("df1", ((StringParameterDefinition) parameterDefinition).getDefaultValue());
+        assertEquals("string value description", parameterDefinition.getDescription());
+
+        parameterDefinition = pdp.getParameterDefinition(parameterName2);
+        assertNotNull(parameterDefinition);
+        assertTrue(parameterDefinition instanceof BooleanParameterDefinition);
+        assertEquals(parameterName2, parameterDefinition.getName());
+        assertEquals(true, ((BooleanParameterDefinition) parameterDefinition).isDefaultValue());
+        assertEquals("boolean value description", parameterDefinition.getDescription());
     }
 }
