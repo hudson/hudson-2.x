@@ -27,6 +27,7 @@ import hudson.Util;
 import hudson.model.AbstractProject;
 import hudson.model.Build;
 import hudson.model.BuildListener;
+import hudson.model.Cause.UpstreamCause;
 import hudson.model.Executor;
 import hudson.model.Fingerprint;
 import hudson.model.Hudson;
@@ -35,11 +36,9 @@ import hudson.model.Node;
 import hudson.model.ParametersAction;
 import hudson.model.Queue;
 import hudson.model.Result;
-import hudson.model.Cause.UpstreamCause;
 import hudson.slaves.WorkspaceList;
 import hudson.slaves.WorkspaceList.Lease;
 import hudson.tasks.Publisher;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -48,7 +47,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -57,7 +55,7 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * @author Kohsuke Kawaguchi
  */
-public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
+public class MatrixBuild extends Build<MatrixProject, MatrixBuild> {
     private AxisList axes;
 
     public MatrixBuild(MatrixProject job) throws IOException {
@@ -74,8 +72,9 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
 
     public Object readResolve() {
         // MatrixBuild.axes added in 1.285; default to parent axes for old data
-        if (axes==null)
+        if (axes == null) {
             axes = getParent().getAxes();
+        }
         return this;
     }
 
@@ -85,7 +84,10 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
     public final class RunPtr {
         //TODO: review and check whether we can do it private
         public final Combination combination;
-        private RunPtr(Combination c) { this.combination=c; }
+
+        private RunPtr(Combination c) {
+            this.combination = c;
+        }
 
         public MatrixRun getRun() {
             return MatrixBuild.this.getRun(combination);
@@ -97,10 +99,13 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
 
         public String getTooltip() {
             MatrixRun r = getRun();
-            if(r!=null) return r.getIconColor().getDescription();
+            if (r != null) {
+                return r.getIconColor().getDescription();
+            }
             Queue.Item item = Hudson.getInstance().getQueue().getItem(getParent().getItem(combination));
-            if(item!=null)
+            if (item != null) {
                 return item.getWhy();
+            }
             return null;    // fall back
         }
 
@@ -124,7 +129,9 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
      */
     public MatrixRun getRun(Combination c) {
         MatrixConfiguration config = getParent().getItem(c);
-        if(config==null)    return null;
+        if (config == null) {
+            return null;
+        }
         return config.getBuildByNumber(getNumber());
     }
 
@@ -133,9 +140,11 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
      */
     public List<MatrixRun> getRuns() {
         List<MatrixRun> r = new ArrayList<MatrixRun>();
-        for(MatrixConfiguration c : getParent().getItems()) {
+        for (MatrixConfiguration c : getParent().getItems()) {
             MatrixRun b = c.getBuildByNumber(getNumber());
-            if (b != null) r.add(b);
+            if (b != null) {
+                r.add(b);
+            }
         }
         return r;
     }
@@ -144,12 +153,13 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
     public Object getDynamic(String token, StaplerRequest req, StaplerResponse rsp) {
         try {
             MatrixRun item = getRun(Combination.fromString(token));
-            if(item!=null)
+            if (item != null) {
                 return item;
+            }
         } catch (IllegalArgumentException _) {
             // failed to parse the token as Combination. Must be something else
         }
-        return super.getDynamic(token,req,rsp);
+        return super.getDynamic(token, req, rsp);
     }
 
     @Override
@@ -160,8 +170,9 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
     @Override
     public Fingerprint.RangeSet getDownstreamRelationship(AbstractProject that) {
         Fingerprint.RangeSet rs = super.getDownstreamRelationship(that);
-        for(MatrixRun run : getRuns())
+        for (MatrixRun run : getRuns()) {
             rs.add(run.getDownstreamRelationship(that));
+        }
         return rs;
     }
 
@@ -177,8 +188,9 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
                 if (pub instanceof MatrixAggregatable) {
                     MatrixAggregatable ma = (MatrixAggregatable) pub;
                     MatrixAggregator a = ma.createAggregator(MatrixBuild.this, launcher, listener);
-                    if(a!=null)
+                    if (a != null) {
                         aggregators.add(a);
+                    }
                 }
             }
 
@@ -187,79 +199,89 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
                 if (prop instanceof MatrixAggregatable) {
                     MatrixAggregatable ma = (MatrixAggregatable) prop;
                     MatrixAggregator a = ma.createAggregator(MatrixBuild.this, launcher, listener);
-                    if(a!=null)
+                    if (a != null) {
                         aggregators.add(a);
+                    }
                 }
             }
 
             axes = p.getAxes();
             Collection<MatrixConfiguration> activeConfigurations = p.getActiveConfigurations();
             final int n = getNumber();
-            
+
             String touchStoneFilter = p.getTouchStoneCombinationFilter();
             Collection<MatrixConfiguration> touchStoneConfigurations = new HashSet<MatrixConfiguration>();
             Collection<MatrixConfiguration> delayedConfigurations = new HashSet<MatrixConfiguration>();
-            for (MatrixConfiguration c: activeConfigurations) {
+            for (MatrixConfiguration c : activeConfigurations) {
                 AxisList axes = p.getAxes();
                 String touchStoneCombinationFilter = p.getTouchStoneCombinationFilter();
-                if (touchStoneFilter != null && c.getCombination().evalGroovyExpression(axes, touchStoneCombinationFilter)) {
+                if (touchStoneFilter != null && c.getCombination()
+                    .evalGroovyExpression(axes, touchStoneCombinationFilter)) {
                     touchStoneConfigurations.add(c);
                 } else {
                     delayedConfigurations.add(c);
                 }
             }
 
-            for (MatrixAggregator a : aggregators)
-                if(!a.startBuild())
+            for (MatrixAggregator a : aggregators) {
+                if (!a.startBuild()) {
                     return Result.FAILURE;
+                }
+            }
 
             try {
-                if(!p.isRunSequentially())
-                    for(MatrixConfiguration c : touchStoneConfigurations)
+                if (!p.isRunSequentially()) {
+                    for (MatrixConfiguration c : touchStoneConfigurations) {
                         scheduleConfigurationBuild(logger, c);
+                    }
+                }
 
                 Result r = Result.SUCCESS;
                 for (MatrixConfiguration c : touchStoneConfigurations) {
-                    if(p.isRunSequentially())
+                    if (p.isRunSequentially()) {
                         scheduleConfigurationBuild(logger, c);
+                    }
                     Result buildResult = waitForCompletion(listener, c);
                     r = r.combine(buildResult);
                 }
-                
+
                 if (p.getTouchStoneResultCondition() != null && r.isWorseThan(p.getTouchStoneResultCondition())) {
                     logger.printf("Touchstone configurations resulted in %s, so aborting...\n", r);
                     return r;
                 }
-                
-                if(!p.isRunSequentially())
-                    for(MatrixConfiguration c : delayedConfigurations)
+
+                if (!p.isRunSequentially()) {
+                    for (MatrixConfiguration c : delayedConfigurations) {
                         scheduleConfigurationBuild(logger, c);
+                    }
+                }
 
                 for (MatrixConfiguration c : delayedConfigurations) {
-                    if(p.isRunSequentially())
+                    if (p.isRunSequentially()) {
                         scheduleConfigurationBuild(logger, c);
+                    }
                     Result buildResult = waitForCompletion(listener, c);
                     r = r.combine(buildResult);
                 }
 
                 return r;
-            } catch( InterruptedException e ) {
+            } catch (InterruptedException e) {
                 logger.println("Aborted");
                 return Result.ABORTED;
             } catch (AggregatorFailureException e) {
                 return Result.FAILURE;
-            }
-            finally {
+            } finally {
                 // if the build was aborted in the middle. Cancel all the configuration builds.
                 Queue q = Hudson.getInstance().getQueue();
-                synchronized(q) {// avoid micro-locking in q.cancel.
+                synchronized (q) {// avoid micro-locking in q.cancel.
                     for (MatrixConfiguration c : activeConfigurations) {
-                        if(q.cancel(c))
+                        if (q.cancel(c)) {
                             logger.println(Messages.MatrixBuild_Cancelled(c.getDisplayName()));
+                        }
                         MatrixRun b = c.getBuildByNumber(n);
-                        if(b!=null) {
+                        if (b != null) {
                             Executor exe = b.getExecutor();
-                            if(exe!=null) {
+                            if (exe != null) {
                                 logger.println(Messages.MatrixBuild_Interrupting(b.getDisplayName()));
                                 exe.interrupt();
                             }
@@ -268,28 +290,31 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
                 }
             }
         }
-        
-        private Result waitForCompletion(BuildListener listener, MatrixConfiguration c) throws InterruptedException, IOException, AggregatorFailureException {
+
+        private Result waitForCompletion(BuildListener listener, MatrixConfiguration c)
+            throws InterruptedException, IOException, AggregatorFailureException {
             String whyInQueue = "";
             long startTime = System.currentTimeMillis();
 
             // wait for the completion
             int appearsCancelledCount = 0;
-            while(true) {
+            while (true) {
                 MatrixRun b = c.getBuildByNumber(getNumber());
 
                 // two ways to get beyond this. one is that the build starts and gets done,
                 // or the build gets cancelled before it even started.
                 Result buildResult = null;
-                if(b!=null && !b.isBuilding())
+                if (b != null && !b.isBuilding()) {
                     buildResult = b.getResult();
+                }
                 Queue.Item qi = c.getQueueItem();
-                if(b==null && qi==null)
+                if (b == null && qi == null) {
                     appearsCancelledCount++;
-                else
+                } else {
                     appearsCancelledCount = 0;
+                }
 
-                if(appearsCancelledCount>=5) {
+                if (appearsCancelledCount >= 5) {
                     // there's conceivably a race condition in computating b and qi, as their computation
                     // are not synchronized. There are indeed several reports of Hudson incorrectly assuming
                     // builds being cancelled. See
@@ -301,22 +326,24 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
                     buildResult = Result.ABORTED;
                 }
 
-                if(buildResult!=null) {
-                    for (MatrixAggregator a : aggregators)
-                        if(!a.endRun(b))
+                if (buildResult != null) {
+                    for (MatrixAggregator a : aggregators) {
+                        if (!a.endRun(b)) {
                             throw new AggregatorFailureException();
+                        }
+                    }
                     return buildResult;
-                } 
+                }
 
-                if(qi!=null) {
+                if (qi != null) {
                     // if the build seems to be stuck in the queue, display why
                     String why = qi.getWhy();
-                    if(!why.equals(whyInQueue) && System.currentTimeMillis()-startTime>5000) {
-                        listener.getLogger().println(c.getDisplayName()+" is still in the queue: "+why);
+                    if (!why.equals(whyInQueue) && System.currentTimeMillis() - startTime > 5000) {
+                        listener.getLogger().println(c.getDisplayName() + " is still in the queue: " + why);
                         whyInQueue = why;
                     }
                 }
-                
+
                 Thread.sleep(1000);
             }
         }
@@ -327,10 +354,11 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
         }
 
         public void post2(BuildListener listener) throws Exception {
-            for (MatrixAggregator a : aggregators)
+            for (MatrixAggregator a : aggregators) {
                 a.endBuild();
+            }
         }
-        
+
         @Override
         protected Lease decideWorkspace(Node n, WorkspaceList wsl) throws IOException, InterruptedException {
             String customWorkspace = getProject().getCustomWorkspace();
@@ -338,14 +366,15 @@ public class MatrixBuild extends Build<MatrixProject,MatrixBuild> {
                 // we allow custom workspaces to be concurrently used between jobs.
                 return Lease.createDummyLease(n.getRootPath().child(getEnvironment(listener).expand(customWorkspace)));
             }
-            return super.decideWorkspace(n,wsl);
+            return super.decideWorkspace(n, wsl);
         }
-      
+
     }
 
     /**
      * A private exception to help maintain the correct control flow after extracting the 'waitForCompletion' method
      */
-    private static class AggregatorFailureException extends Exception {}
+    private static class AggregatorFailureException extends Exception {
+    }
 
 }
