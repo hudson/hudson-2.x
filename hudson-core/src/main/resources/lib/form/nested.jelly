@@ -32,7 +32,7 @@ THE SOFTWARE.
         </st:attribute>
     </st:documentation>
     <tr>
-        <td colspan="2" class="${attrs.isPropertyOverridden? 'modified' :''}"/>
+        <td colspan="2" class="${attrs.isPropertyOverridden? 'modified' :'original'}"/>
         <td colspan="2">
             <d:invokeBody />
         </td>
