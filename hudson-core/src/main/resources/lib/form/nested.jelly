@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi
+Copyright (c) 2011, Oracle Corporation, Kohsuke Kawaguchi, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,15 @@ THE SOFTWARE.
   Used to display indented nested portion of the form
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<tr>
-    <td colspan="2"/>
-    <td colspan="2">
-	    <d:invokeBody />
-	  </td>
-	</tr>
+    <st:documentation>
+        <st:attribute name="isPropertyOverridden">
+          if present and true - the column will be highlight as overridden cascading property.
+        </st:attribute>
+    </st:documentation>
+    <tr>
+        <td colspan="2" class="${attrs.isPropertyOverridden? 'modified' :''}"/>
+        <td colspan="2">
+            <d:invokeBody />
+        </td>
+    </tr>
 </j:jelly>
