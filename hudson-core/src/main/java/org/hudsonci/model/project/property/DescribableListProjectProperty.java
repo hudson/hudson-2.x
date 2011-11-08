@@ -55,7 +55,7 @@ public class DescribableListProjectProperty extends BaseProjectProperty<Describa
 
     @Override
     protected boolean returnOriginalValue() {
-        return isOverridden() || (null != getOriginalValue() && !getOriginalValue().isEmpty());
+        return isOverridden() || !getOriginalValue().isEmpty();
     }
 
     @Override
