@@ -492,7 +492,7 @@ public class CascadingUtil {
         //Iterate through cascading children and recursively update property for each child.
         if (null != cascadingChildrenNames) {
             for (String childName : cascadingChildrenNames) {
-                AbstractProject childJob = (AbstractProject) Hudson.getInstance().getItem(childName);
+                Job childJob = (Job) Hudson.getInstance().getItem(childName);
                 //Check only direct children in order to avoid deep checking for properties overridden properties.
                 if (null != childJob && StringUtils.equals(job.getName(), childJob.getCascadingProjectName())) {
                     CopyOnWriteListProjectProperty childProperty = getCopyOnWriteListProjectProperty(childJob, key);
