@@ -1,14 +1,9 @@
 package hudson.scm;
 
-import hudson.model.AbstractProject;
-import hudson.model.TaskListener;
-import hudson.Launcher;
-import hudson.FilePath;
-
 import java.io.Serializable;
 
 /**
- * Immutable object that represents the result of {@linkplain SCM#poll(AbstractProject, Launcher, FilePath, TaskListener, SCMRevisionState) SCM polling}.
+ * Immutable object that represents the result of {@linkplain SCM#poll(hudson.model.AbstractProject, hudson.Launcher, hudson.FilePath, hudson.model.TaskListener, SCMRevisionState) SCM polling}.
  *
  * <p>
  * This object is marked serializable just to be remoting friendly &mdash; Hudson by itself

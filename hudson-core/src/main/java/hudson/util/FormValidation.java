@@ -25,13 +25,9 @@ package hudson.util;
 
 import hudson.EnvVars;
 import hudson.Functions;
-import hudson.Launcher;
 import hudson.ProxyConfiguration;
 import hudson.Util;
 import hudson.FilePath;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
-import hudson.tasks.Builder;
 import static hudson.Util.fixEmpty;
 import hudson.model.Hudson;
 import org.kohsuke.stapler.HttpResponse;
@@ -89,7 +85,7 @@ import java.util.Locale;
  *
  * ...
  *
- * public void {@linkplain Builder#perform(AbstractBuild, Launcher, BuildListener) perform}(...) {
+ * public void {@linkplain hudson.tasks.Builder#perform(hudson.model.AbstractBuild, hudson.Launcher, hudson.model.BuildListener) perform}(...) {
  *     String version = getAntVersion(antHome);
  *     ...
  * }

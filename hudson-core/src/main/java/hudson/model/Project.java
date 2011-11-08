@@ -26,14 +26,10 @@ package hudson.model;
 
 import hudson.Util;
 import hudson.diagnosis.OldDataMonitor;
-import hudson.tasks.BuildStep;
 import hudson.tasks.Fingerprinter;
 import hudson.tasks.Maven;
 import hudson.tasks.Maven.MavenInstallation;
 import hudson.tasks.Maven.ProjectWithMaven;
-import hudson.tasks.Publisher;
-import hudson.util.CascadingUtil;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import org.hudsonci.api.model.IProject;

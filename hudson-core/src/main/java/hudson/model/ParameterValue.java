@@ -26,7 +26,6 @@ package hudson.model;
 
 import hudson.EnvVars;
 import hudson.Util;
-import hudson.slaves.OfflineCause;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.Builder;
 import hudson.util.VariableResolver;
@@ -34,16 +33,13 @@ import hudson.util.VariableResolver;
 import java.io.Serializable;
 import java.util.Map;
 
-import net.sf.json.JSONObject;
-
-import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * A value for a parameter in a build.
  *
- * Created by {@link ParameterDefinition#createValue(StaplerRequest, JSONObject)} for
+ * Created by {@link ParameterDefinition#createValue(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject)} for
  * a particular build (although this 'owner' build object is passed in for every method
  * call as a parameter so that the parameter won't have to persist it.)
  *
@@ -156,7 +152,7 @@ public abstract class ParameterValue implements Serializable {
     }
 
     /**
-     * Called at the beginning of a build (but after {@link SCM} operations
+     * Called at the beginning of a build (but after {@link hudson.scm.SCM} operations
      * have taken place) to let a {@link ParameterValue} contributes a
      * {@link BuildWrapper} to the build.
      *
@@ -197,7 +193,7 @@ public abstract class ParameterValue implements Serializable {
      * @deprecated since 2008-09-20.
      *    parameter definition may change any time. So if you find yourself
      *    in need of accessing the information from {@link ParameterDefinition},
-     *    instead copy them in {@link ParameterDefinition#createValue(StaplerRequest, JSONObject)}
+     *    instead copy them in {@link ParameterDefinition#createValue(org.kohsuke.stapler.StaplerRequest, net.sf.json.JSONObject)}
      *    into {@link ParameterValue}.
      */
     public ParameterDefinition getDefinition() {

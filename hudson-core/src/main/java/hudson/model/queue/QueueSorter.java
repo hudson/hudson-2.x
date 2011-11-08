@@ -4,7 +4,6 @@ import hudson.ExtensionList;
 import hudson.ExtensionPoint;
 import hudson.init.Initializer;
 import hudson.model.Hudson;
-import hudson.model.LoadBalancer;
 import hudson.model.Queue;
 import hudson.model.Queue.BuildableItem;
 
@@ -39,7 +38,7 @@ public abstract class QueueSorter implements ExtensionPoint {
     /**
      * Installs the default queue sorter.
      *
-     * {@link Queue#Queue(LoadBalancer)} is too early to do this
+     * {@link Queue#Queue(hudson.model.LoadBalancer)} is too early to do this
      */
     @Initializer(after=JOB_LOADED)
     public static void installDefaultQueueSorter() {

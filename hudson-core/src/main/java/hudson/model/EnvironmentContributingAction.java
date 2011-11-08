@@ -24,24 +24,21 @@
 package hudson.model;
 
 import hudson.EnvVars;
-import hudson.model.Queue.Task;
-import hudson.tasks.Builder;
-import hudson.tasks.BuildWrapper;
 
 /**
  * {@link Action} that contributes environment variables during a build.
  *
  * <p>
- * For example, your {@link Builder} can add an {@link EnvironmentContributingAction} so that
+ * For example, your {@link hudson.tasks.Builder} can add an {@link EnvironmentContributingAction} so that
  * the rest of the builders or publishers see some behavior changes.
  *
- * Another use case is for you to {@linkplain Queue#schedule(Task, int, Action...) submit a job} with
+ * Another use case is for you to {@linkplain Queue#schedule(hudson.model.Queue.Task, int, Action...) submit a job} with
  * {@link EnvironmentContributingAction}s.
  *
  * @author Kohsuke Kawaguchi
  * @since 1.318
  * @see AbstractBuild#getEnvironment(TaskListener)
- * @see BuildWrapper
+ * @see hudson.tasks.BuildWrapper
  */
 public interface EnvironmentContributingAction extends Action {
     /**
