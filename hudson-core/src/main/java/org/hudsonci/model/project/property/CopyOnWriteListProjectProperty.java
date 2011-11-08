@@ -27,7 +27,7 @@ import hudson.util.CopyOnWriteList;
 import org.hudsonci.api.model.IJob;
 
 /**
- * Project property for CopyOnWriteList
+ * Project property for {@link CopyOnWriteList}
  * <p/>
  * Date: 11/1/11
  *

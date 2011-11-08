@@ -160,16 +160,17 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
      *
      * @param value new value to be set.
      * @param cascadingValue current cascading value.
-     * @return true - if property was updated, false - otherwise.
+     * @return true - if property was updated, false - otherwise if value was cleared.
      */
     protected boolean updateOriginalValue(T value, T cascadingValue) {
         T candidateValue = null == value ? getDefaultValue() : value;
         if (allowOverrideValue(cascadingValue, candidateValue)) {
             setOriginalValue(value, true);
+            return true;
         } else {
             clearOriginalValue(value);
+            return false;
         }
-        return true;
     }
 
     /**
