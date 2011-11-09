@@ -23,14 +23,12 @@
  */
 package hudson.tasks.test;
 
-import hudson.AbortException;
 import hudson.ExtensionList;
 import hudson.ExtensionPoint;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
 import hudson.model.TaskListener;
-import hudson.tasks.Publisher;
 
 import java.io.IOException;
 
@@ -40,7 +38,7 @@ import java.io.IOException;
  * <p>
  * This extension point encapsulates the knowledge of a particular test report format and its parsing process,
  * thereby improving the pluggability of test result parsing; integration with a new test tool can be done
- * by just writing a parser, without writing a custom {@link Publisher}, and the test reports are displayed
+ * by just writing a parser, without writing a custom {@link hudson.tasks.Publisher}, and the test reports are displayed
  * with the default UI and recognized by the rest of Hudson as test reports.
  *
  * <p>
@@ -48,7 +46,7 @@ import java.io.IOException;
  * which handles a set of default error checks on user inputs. 
  *
  * <p>
- * Parsers are stateless, and the {@link #parse(String, AbstractBuild, Launcher, TaskListener)} method
+ * Parsers are stateless, and the {@link #parse(String, hudson.model.AbstractBuild, hudson.Launcher, hudson.model.TaskListener)} method
  * can be concurrently invoked by multiple threads for different builds.
  *
  * @since 1.343
@@ -96,7 +94,7 @@ public abstract class TestResultParser implements ExtensionPoint {
      * </ul>
      *
      * @param testResultLocations
-     *      GLOB pattern relative to the {@linkplain AbstractBuild#getWorkspace() workspace} that
+     *      GLOB pattern relative to the {@linkplain hudson.model.AbstractBuild#getWorkspace() workspace} that
      *      specifies the locations of the test result files. Never null.
      * @param build
      *      Build for which these tests are parsed. Never null.
@@ -111,7 +109,7 @@ public abstract class TestResultParser implements ExtensionPoint {
      * @throws IOException
      *      If you don't care about handling exceptions gracefully, you can just throw IOException
      *      and let the default exception handling in Hudson takes care of it.
-     * @throws AbortException
+     * @throws hudson.AbortException
      *      If you encounter an error that you handled gracefully, throw this exception and Hudson
      *      will not show a stack trace.
      */

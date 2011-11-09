@@ -25,11 +25,8 @@ package hudson.security;
 
 import hudson.model.Hudson;
 import hudson.util.Scrambler;
-import org.acegisecurity.Authentication;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -63,7 +60,7 @@ import java.net.URLEncoder;
  * This causes the container to perform authentication, but there's no way
  * to find out whether the user has been successfully authenticated or not.
  * So to find this out, we then redirect the user to
- * {@link Hudson#doSecured(StaplerRequest, StaplerResponse) <tt>/secured/...</tt> page}.
+ * {@link Hudson#doSecured(org.kohsuke.stapler.StaplerRequest, org.kohsuke.stapler.StaplerResponse) <tt>/secured/...</tt> page}.
  *
  * <p>
  * The handler of the above URL checks if the user is authenticated,

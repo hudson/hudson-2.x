@@ -41,8 +41,6 @@ import com.thoughtworks.xstream.XStream;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 import org.apache.commons.codec.binary.Base64;

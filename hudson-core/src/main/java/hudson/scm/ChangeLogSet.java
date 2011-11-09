@@ -26,7 +26,6 @@ package hudson.scm;
 import hudson.MarkupText;
 import hudson.Util;
 import hudson.model.AbstractBuild;
-import hudson.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

@@ -26,8 +26,6 @@
 package hudson.model;
 
 import antlr.ANTLRException;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.thoughtworks.xstream.XStream;
 import hudson.BulkChange;
 import hudson.DNSMultiCast;
@@ -228,14 +226,6 @@ import org.kohsuke.stapler.framework.adjunct.AdjunctManager;
 import org.kohsuke.stapler.jelly.JellyClassLoaderTearOff;
 import org.kohsuke.stapler.jelly.JellyRequestDispatcher;
 import org.xml.sax.InputSource;
-
-import static hudson.Util.fixEmpty;
-import static hudson.Util.fixNull;
-import static hudson.init.InitMilestone.EXTENSIONS_AUGMENTED;
-import static hudson.init.InitMilestone.JOB_LOADED;
-import static java.util.logging.Level.SEVERE;
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 /**
  * Root object of the system.
@@ -615,7 +605,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
             try {
                 proxy = ProxyConfiguration.load();
             } catch (IOException e) {
-                LOGGER.log(SEVERE, "Failed to load proxy configuration", e);
+                LOGGER.log(Level.SEVERE, "Failed to load proxy configuration", e);
             }
 
             if (pluginManager == null) {
@@ -753,7 +743,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
             }
 
             public void onTaskFailed(Task t, Throwable err, boolean fatal) {
-                LOGGER.log(SEVERE, "Failed " + t.getDisplayName(), err);
+                LOGGER.log(Level.SEVERE, "Failed " + t.getDisplayName(), err);
             }
 
             public void onAttained(Milestone milestone) {
@@ -2319,7 +2309,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     }
 
     public String getLabelString() {
-        return fixNull(label).trim();
+        return Util.fixNull(label).trim();
     }
 
     @Override
@@ -2347,7 +2337,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         });
 
         TaskGraphBuilder g = new TaskGraphBuilder();
-        Handle loadHudson = g.requires(EXTENSIONS_AUGMENTED).attains(JOB_LOADED).add("Loading global config", new Executable() {
+        Handle loadHudson = g.requires(InitMilestone.EXTENSIONS_AUGMENTED).attains(InitMilestone.JOB_LOADED).add("Loading global config", new Executable() {
 
             public void run(Reactor session) throws Exception {
                 XmlFile cfg = getConfigFile();
@@ -2372,7 +2362,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         });
 
         for (final File subdir : subdirs) {
-            g.requires(loadHudson).attains(JOB_LOADED).notFatal().add("Loading job " + subdir.getName(), new Executable() {
+            g.requires(loadHudson).attains(InitMilestone.JOB_LOADED).notFatal().add("Loading job " + subdir.getName(), new Executable() {
 
                 public void run(Reactor session) throws Exception {
                     TopLevelItem item = (TopLevelItem) Items.load(Hudson.this, subdir);
@@ -2381,7 +2371,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
             });
         }
 
-        g.requires(JOB_LOADED).add("Finalizing set up", new Executable() {
+        g.requires(InitMilestone.JOB_LOADED).add("Finalizing set up", new Executable() {
 
             public void run(Reactor session) throws Exception {
                 rebuildDependencyGraph();
@@ -2962,11 +2952,11 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
                     SecurityContextHolder.getContext().setAuthentication(ACL.SYSTEM);
                     reload();
                 } catch (IOException e) {
-                    LOGGER.log(SEVERE, "Failed to reload Hudson config", e);
+                    LOGGER.log(Level.SEVERE, "Failed to reload Hudson config", e);
                 } catch (ReactorException e) {
-                    LOGGER.log(SEVERE, "Failed to reload Hudson config", e);
+                    LOGGER.log(Level.SEVERE, "Failed to reload Hudson config", e);
                 } catch (InterruptedException e) {
-                    LOGGER.log(SEVERE, "Failed to reload Hudson config", e);
+                    LOGGER.log(Level.SEVERE, "Failed to reload Hudson config", e);
                 }
             }
         }.start();
@@ -3387,7 +3377,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         // so it should be protected.
         checkPermission(Item.CREATE);
 
-        if (fixEmpty(value) == null) {
+        if (Util.fixEmpty(value) == null) {
             return FormValidation.ok();
         }
 
@@ -3405,7 +3395,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     public FormValidation doViewExistsCheck(@QueryParameter String value) {
         checkPermission(View.CREATE);
 
-        String view = fixEmpty(value);
+        String view = Util.fixEmpty(value);
         if (view == null) {
             return FormValidation.ok();
         }
@@ -3423,10 +3413,10 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
      */
     public void doFieldCheck(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
         doFieldCheck(
-                fixEmpty(req.getParameter("value")),
-                fixEmpty(req.getParameter("type")),
-                fixEmpty(req.getParameter("errorText")),
-                fixEmpty(req.getParameter("warningText"))).generateResponse(req, rsp, this);
+                Util.fixEmpty(req.getParameter("value")),
+                Util.fixEmpty(req.getParameter("type")),
+                Util.fixEmpty(req.getParameter("errorText")),
+                Util.fixEmpty(req.getParameter("warningText"))).generateResponse(req, rsp, this);
     }
 
     /**
@@ -3518,7 +3508,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
     public FormValidation doCheckURIEncoding(StaplerRequest request) throws IOException {
         // expected is non-ASCII String
         final String expected = "\u57f7\u4e8b";
-        final String value = fixEmpty(request.getParameter("value"));
+        final String value = Util.fixEmpty(request.getParameter("value"));
         if (!expected.equals(value)) {
             return FormValidation.warningWithMarkup(Messages.Hudson_NotUsesUTF8ToDecodeURL());
         }
@@ -3662,7 +3652,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
          */
         @Override
         public HttpResponse doDoDelete() throws IOException {
-            throw HttpResponses.status(SC_BAD_REQUEST);
+            throw HttpResponses.status(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         @Override
@@ -3699,7 +3689,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
         public void doLaunchSlaveAgent(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
             // this computer never returns null from channel, so
             // this method shall never be invoked.
-            rsp.sendError(SC_NOT_FOUND);
+            rsp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
 
         /**

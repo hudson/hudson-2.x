@@ -23,15 +23,13 @@
  */
 package hudson.model;
 
-import hudson.BulkChange;
-import hudson.model.listeners.SaveableListener;
 import java.io.IOException;
 
 /**
  * Object whose state is persisted to XML.
  *
  * @author Kohsuke Kawaguchi
- * @see BulkChange
+ * @see hudson.BulkChange
  * @since 1.249
  */
 public interface Saveable {
@@ -39,10 +37,10 @@ public interface Saveable {
      * Persists the state of this object into XML.
      *
      * <p>
-     * For making a bulk change efficiently, see {@link BulkChange}.
+     * For making a bulk change efficiently, see {@link hudson.BulkChange}.
      *
      * <p>
-     * To support listeners monitoring changes to this object, call {@link SaveableListener.fireOnChange}
+     * To support listeners monitoring changes to this object, call {@link hudson.model.listeners.SaveableListener#fireOnChange(Saveable, hudson.XmlFile)}
      * @throws IOException
      *      if the persistence failed.
      */

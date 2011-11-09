@@ -23,7 +23,6 @@
  */
 package hudson.security;
 
-import org.acegisecurity.AccessDeniedException;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.acls.sid.PrincipalSid;
@@ -44,7 +43,7 @@ public abstract class ACL {
      * <p>
      * This is just a convenience function.
      *
-     * @throws AccessDeniedException
+     * @throws org.acegisecurity.AccessDeniedException
      *      if the user doesn't have the permission.
      */
     public final void checkPermission(Permission p) {

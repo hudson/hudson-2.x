@@ -48,7 +48,7 @@ public class CopyOnWriteListProjectProperty extends BaseProjectProperty<CopyOnWr
 
     @Override
     protected boolean returnOriginalValue() {
-        return isOverridden() || (null != getOriginalValue() && !getOriginalValue().isEmpty());
+        return isOverridden() || !getOriginalValue().isEmpty();
     }
 
     @Override
