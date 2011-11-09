@@ -26,13 +26,10 @@ package hudson.slaves;
 import hudson.ExtensionPoint;
 import hudson.Extension;
 import hudson.model.*;
-import hudson.remoting.Channel;
 import hudson.util.DescriptorList;
 import hudson.util.StreamTaskListener;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Extension point to allow control over how {@link Computer}s are "launched",
@@ -63,7 +60,7 @@ public abstract class ComputerLauncher extends AbstractDescribableImpl<ComputerL
      * Launches the slave agent for the given {@link Computer}.
      *
      * <p>
-     * If the slave agent is launched successfully, {@link SlaveComputer#setChannel(InputStream, OutputStream, TaskListener, Channel.Listener)}
+     * If the slave agent is launched successfully, {@link SlaveComputer#setChannel(java.io.InputStream, java.io.OutputStream, TaskListener, hudson.remoting.Channel.Listener)}
      * should be invoked in the end to notify Hudson of the established connection.
      * The operation could also fail, in which case there's no need to make any callback notification,
      * (except to notify the user of the failure through {@link StreamTaskListener}.)
@@ -97,7 +94,7 @@ public abstract class ComputerLauncher extends AbstractDescribableImpl<ComputerL
      * Allows the {@link ComputerLauncher} to tidy-up after a disconnect.
      *
      * <p>
-     * This method is invoked after the {@link Channel} to this computer is terminated.
+     * This method is invoked after the {@link hudson.remoting.Channel} to this computer is terminated.
      *
      * <p>
      * Disconnect operation is performed asynchronously, so there's no guarantee
@@ -120,7 +117,7 @@ public abstract class ComputerLauncher extends AbstractDescribableImpl<ComputerL
      * Allows the {@link ComputerLauncher} to prepare for a disconnect.
      *
      * <p>
-     * This method is invoked before the {@link Channel} to this computer is terminated,
+     * This method is invoked before the {@link hudson.remoting.Channel} to this computer is terminated,
      * thus the channel is still accessible from {@link SlaveComputer#getChannel()}.
      * If the channel is terminated unexpectedly, this method will not be invoked,
      * as the channel is already gone.

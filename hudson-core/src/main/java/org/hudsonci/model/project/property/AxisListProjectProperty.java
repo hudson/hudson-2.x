@@ -24,10 +24,6 @@
 package org.hudsonci.model.project.property;
 
 import hudson.matrix.AxisList;
-import hudson.util.DescribableList;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hudsonci.api.model.IJob;
 
 /**

@@ -336,6 +336,49 @@ THE SOFTWARE.
         </plugins>
       </reporting>
     </profile>
+    <profile>
+      <id>pmd</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <configuration>
+              <verbose>true</verbose>
+              <targetJdk>1.5</targetJdk>
+              <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+              <targetDirectory>${project.build.directory}</targetDirectory>
+              <excludeRoots>
+                <excludeRoot>${basedir}/target/generated-sources/</excludeRoot>
+              </excludeRoots>
+              <rulesets>
+                <!--http://pmd.sourceforge.net/rules/index.html#Basic_Rules-->
+                <!--<ruleset>/rulesets/basic.xml</ruleset>-->
+                <!--http://pmd.sourceforge.net/rules/index.html#Unused_Code_Rules-->
+                <!--<ruleset>/rulesets/unusedcode.xml</ruleset>-->
+                <ruleset>/rulesets/imports.xml</ruleset>
+                <!--http://pmd.sourceforge.net/rules/index.html#Braces_Rules-->
+                <!--<ruleset>/rulesets/braces.xml</ruleset>-->
+                <!--http://pmd.sourceforge.net/rules/index.html#Naming_Rules-->
+                <!--<ruleset>/rulesets/naming.xml</ruleset>-->
+              </rulesets>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <goals>
+                  <goal>check</goal>
+                  <!--<goal>cpd-check</goal>-->
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <dependencies>

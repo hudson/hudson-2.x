@@ -1,16 +1,11 @@
 package hudson.scm;
 
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Action;
-import hudson.model.TaskListener;
 
 /**
  * Immutable object that represents revisions of the files in the repository,
  * used to represent the result of
- * {@linkplain SCM#poll(AbstractProject, Launcher, FilePath, TaskListener, SCMRevisionState) a SCM polling}.
+ * {@linkplain SCM#poll(hudson.model.AbstractProject, hudson.Launcher, hudson.FilePath, hudson.model.TaskListener, SCMRevisionState) a SCM polling}.
  *
  * <p>
  * This object is used so that the successive polling can compare the tip of the repository now vs
@@ -18,7 +13,7 @@ import hudson.model.TaskListener;
  * of the repository vs the state of the workspace, which resulted in a problem like HUDSON-2180.
  *
  * <p>
- * {@link SCMRevisionState} is persisted as an action to {@link AbstractBuild}.
+ * {@link SCMRevisionState} is persisted as an action to {@link hudson.model.AbstractBuild}.
  *
  * @author Kohsuke Kawaguchi
  * @since 1.345
