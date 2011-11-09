@@ -81,8 +81,8 @@ import hudson.security.AccessControlled;
 import hudson.security.AuthorizationStrategy;
 import hudson.security.BasicAuthenticationFilter;
 import hudson.security.FederatedLoginService;
+import hudson.security.FullControlOnceLoggedInAuthorizationStrategy;
 import hudson.security.HudsonFilter;
-import hudson.security.LegacyAuthorizationStrategy;
 import hudson.security.LegacySecurityRealm;
 import hudson.security.Permission;
 import hudson.security.PermissionGroup;
@@ -2398,7 +2398,7 @@ public final class Hudson extends Node implements ItemGroup<TopLevelItem>, Stapl
                     if (useSecurity == null || !useSecurity) {
                         authorizationStrategy = AuthorizationStrategy.UNSECURED;
                     } else {
-                        authorizationStrategy = new LegacyAuthorizationStrategy();
+                        authorizationStrategy = new FullControlOnceLoggedInAuthorizationStrategy();
                     }
                 }
                 if (securityRealm == null) {
