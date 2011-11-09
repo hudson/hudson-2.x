@@ -85,10 +85,10 @@ public class RobustCollectionConverter extends CollectionConverter {
                 Object item = readItem(reader, context, collection);
                 collection.add(item);
             } catch (CannotResolveClassException e) {
-                LOGGER.log(WARNING,"Failed to resolve class",e);
+                LOGGER.log(WARNING, "Failed to resolve class " + e.getMessage());
                 RobustReflectionConverter.addErrorInContext(context, e);
             } catch (LinkageError e) {
-                LOGGER.log(WARNING,"Failed to resolve class",e);
+                LOGGER.log(WARNING, "Failed to resolve class " + e.getMessage());
                 RobustReflectionConverter.addErrorInContext(context, e);
             }
             reader.moveUp();

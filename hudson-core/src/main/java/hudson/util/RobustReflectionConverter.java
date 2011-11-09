@@ -252,13 +252,13 @@ public class RobustReflectionConverter implements Converter {
                     }
                 }
             } catch (NonExistentFieldException e) {
-                LOGGER.log(WARNING,"Skipping a non-existent field "+e.getFieldName(),e);
+                LOGGER.log(WARNING, "Skipping a non-existent field " + e.getFieldName());
                 addErrorInContext(context, e);
             } catch (CannotResolveClassException e) {
-                LOGGER.log(WARNING,"Skipping a non-existent type",e);
+                LOGGER.log(WARNING, "Skipping a non-existent type " + e.getMessage());
                 addErrorInContext(context, e);
             } catch (LinkageError e) {
-                LOGGER.log(WARNING,"Failed to resolve a type",e);
+                LOGGER.log(WARNING, "Failed to resolve a type " + e.getMessage());
                 addErrorInContext(context, e);
             }
 
