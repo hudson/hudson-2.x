@@ -23,46 +23,18 @@
  */
 package hudson.security;
 
-import hudson.model.Descriptor;
-import hudson.model.Hudson;
-import hudson.Extension;
-import org.acegisecurity.acls.sid.GrantedAuthoritySid;
-import org.kohsuke.stapler.StaplerRequest;
-import net.sf.json.JSONObject;
-
-import java.util.Collection;
-import java.util.Collections;
+import hudson.RestrictedSince;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.DoNotUse;
 
 /**
  * {@link AuthorizationStrategy} implementation that emulates the legacy behavior.
+ *
  * @author Kohsuke Kawaguchi
+ * @deprecated as of 2.2.0
+ *             This strategy was removed due to <a href='http://issues.hudson-ci.org/browse/HUDSON-8944'>HUDSON-8944</a>
  */
-public final class LegacyAuthorizationStrategy extends AuthorizationStrategy {
-    private static final ACL LEGACY_ACL = new SparseACL(null) {{
-        add(EVERYONE,Permission.READ,true);
-        add(new GrantedAuthoritySid("admin"), Hudson.ADMINISTER,true);
-    }};
-
-    public ACL getRootACL() {
-        return LEGACY_ACL;
-    }
-
-    public Collection<String> getGroups() {
-        return Collections.singleton("admin");
-    }
-
-    @Extension
-    public static final class DescriptorImpl extends Descriptor<AuthorizationStrategy> {
-        public String getDisplayName() {
-            return Messages.LegacyAuthorizationStrategy_DisplayName();
-        }
-
-        public String getHelpFile() {
-            return "/help/security/legacy-auth-strategy.html";
-        }
-
-        public LegacyAuthorizationStrategy newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            return new LegacyAuthorizationStrategy();
-        }
-    }
+@Restricted(DoNotUse.class)
+@RestrictedSince("2.2.0")
+public final class LegacyAuthorizationStrategy extends FullControlOnceLoggedInAuthorizationStrategy {
 }
