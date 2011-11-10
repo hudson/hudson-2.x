@@ -28,5 +28,7 @@ THE SOFTWARE.
                     title="${%Allow users to sign up}"/>
         <f:checkbox name="privateRealm.enableCaptcha" checked="${h.defaultToTrue(instance.isEnableCaptcha())}"
                     title="${%Enable captcha on sign up}"/>
+        <f:checkbox name="privateRealm.notifyUser" checked="${h.defaultToTrue(instance.isNotifyUser())}"
+                    title="${%Notify user of Hudson account creation}"/>
     </f:entry>
 </j:jelly>
