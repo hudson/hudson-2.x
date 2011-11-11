@@ -60,7 +60,7 @@ function onCascadingProjectUpdated() {
 
 function onProjectPropertyChanged() {
     if(isRunAsTest) return;
-    jQuery('input').change(function() {
+    jQuery('form[name=config] input').change(function() {
         var ref = jQuery(this).attr('id');
         var cascadingProperty = '';
         if (ref != '') {

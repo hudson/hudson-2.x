@@ -23,7 +23,7 @@ THE SOFTWARE.
 -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <j:set var="instanceProperty" value="${cu.getBaseProjectProperty(it, descriptor.jsonSafeClassName)}"/>
+  <j:set var="instanceProperty" value="${cu.getTriggerProjectProperty(it, descriptor.jsonSafeClassName)}"/>
   <j:set var="instance" value="${instanceProperty.getValue()}"/>
 
   <f:entry title="${%Schedule}" help="/descriptor/hudson.triggers.TimerTrigger/help/spec" isPropertyOverridden="${instanceProperty.isOverridden()}">
