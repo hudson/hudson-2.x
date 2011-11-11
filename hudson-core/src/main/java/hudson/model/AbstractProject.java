@@ -1363,7 +1363,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
             AbstractProject<?,?> bup = getBuildingDownstream();
             if (bup!=null)
                 return new BecauseOfDownstreamBuildInProgress(bup);
-        } else if (blockBuildWhenUpstreamBuilding()) {
+        }
+        if (blockBuildWhenUpstreamBuilding()) {
             AbstractProject<?,?> bup = getBuildingUpstream();
             if (bup!=null)
                 return new BecauseOfUpstreamBuildInProgress(bup);
