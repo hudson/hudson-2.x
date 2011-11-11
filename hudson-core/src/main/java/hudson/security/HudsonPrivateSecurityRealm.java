@@ -27,6 +27,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import hudson.Extension;
 import hudson.Util;
 import hudson.diagnosis.OldDataMonitor;
+import hudson.mail.BaseMailSender;
 import hudson.model.*;
 import hudson.security.FederatedLoginService.FederatedIdentity;
 import hudson.tasks.Mailer;
@@ -45,6 +46,7 @@ import org.acegisecurity.providers.encoding.PasswordEncoder;
 import org.acegisecurity.providers.encoding.ShaPasswordEncoder;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.*;
 import org.springframework.dao.DataAccessException;
 
@@ -82,6 +84,11 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
     private final boolean enableCaptcha;
 
     /**
+     * If true, user will be notified of Hudson account creation.
+     */
+    private final boolean notifyUser;
+
+    /**
      * @deprecated as of 2.0.1
      */
     @Deprecated
@@ -89,10 +96,19 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
         this(allowsSignup, true);
     }
 
-    @DataBoundConstructor
+    /**
+     * @deprecated as of 2.2.0
+     */
+    @Deprecated
     public HudsonPrivateSecurityRealm(boolean allowsSignup, boolean enableCaptcha) {
+        this(allowsSignup, true, false);
+    }
+
+    @DataBoundConstructor
+    public HudsonPrivateSecurityRealm(boolean allowsSignup, boolean enableCaptcha, boolean notifyUser) {
         this.disableSignup = !allowsSignup;
         this.enableCaptcha = enableCaptcha;
+        this.notifyUser = notifyUser;
 
         if(!allowsSignup && !hasSomeUser()) {
             // if Hudson is newly set up with the security realm and there's no user account created yet,
@@ -117,6 +133,15 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
      */
     public boolean isEnableCaptcha() {
         return enableCaptcha;
+    }
+
+    /**
+     * Returns true if Hudson should notify user of account creation.
+     *
+     * @return true if Hudson should notify user of account creation.
+     */
+    public boolean isNotifyUser() {
+        return notifyUser;
     }
 
     /**
@@ -307,11 +332,31 @@ public class HudsonPrivateSecurityRealm extends AbstractPasswordBasedSecurityRea
         }
 
         // register the user
-        User user = createAccount(si.username,si.password1);
+        final User user = createAccount(si.username,si.password1);
         user.addProperty(new Mailer.UserProperty(si.email));
         user.setFullName(si.fullname);
         user.save();
+        if (notifyUser && StringUtils.isNotEmpty(si.email)) {
+            notifyUser(si.username, si.email, si.fullname, si.password1);
+        }
         return user;
+    }
+
+    private void notifyUser(final String username, final String email, final String fullname, final String passwd) {
+        new BaseMailSender(email) {
+            @Override
+            protected String getText() {
+                String baseUrl = Mailer.descriptor().getUrl();
+                return hudson.mail.Messages
+                    .account_creation_email_text(fullname != null ? fullname : "", baseUrl, email, username,
+                        passwd);
+            }
+
+            @Override
+            protected String getSubject() {
+                return hudson.mail.Messages.account_creation_email_subject();
+            }
+        }.execute();
     }
 
     /**
