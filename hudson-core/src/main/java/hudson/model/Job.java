@@ -214,7 +214,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      *
      * @param allowSave allow save.
      */
-    protected void setAllowSave(Boolean allowSave) {
+    public void setAllowSave(Boolean allowSave) {
         if (null == this.allowSave) {
             initAllowSave();
         }
