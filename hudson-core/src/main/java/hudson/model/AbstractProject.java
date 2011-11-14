@@ -1662,11 +1662,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
     @SuppressWarnings("unchecked")
     public void addTrigger(Trigger<?> trigger) throws IOException {
         CascadingUtil.getTriggerProjectProperty(this, trigger.getDescriptor().getJsonSafeClassName()).setValue(trigger);
+        save();
+        updateTransientActions();
     }
 
     @SuppressWarnings("unchecked")
     public void removeTrigger(TriggerDescriptor trigger) throws IOException {
         CascadingUtil.getTriggerProjectProperty(this, trigger.getJsonSafeClassName()).setValue(null);
+        save();
+        updateTransientActions();
     }
 
     protected final synchronized <T extends Describable<T>>
