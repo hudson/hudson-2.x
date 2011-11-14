@@ -73,7 +73,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.api.model.IProjectProperty} instance or null.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static IProjectProperty getProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, null);
@@ -86,7 +86,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.StringProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static StringProjectProperty getStringProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, StringProjectProperty.class);
@@ -99,7 +99,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.BaseProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static BaseProjectProperty getBaseProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, BaseProjectProperty.class);
@@ -112,7 +112,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.ExternalProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static ExternalProjectProperty getExternalProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, ExternalProjectProperty.class);
@@ -125,7 +125,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.CopyOnWriteListProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static CopyOnWriteListProjectProperty getCopyOnWriteListProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, CopyOnWriteListProjectProperty.class);
@@ -138,7 +138,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.ResultProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static ResultProjectProperty getResultProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, ResultProjectProperty.class);
@@ -151,7 +151,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.BooleanProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static BooleanProjectProperty getBooleanProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, BooleanProjectProperty.class);
@@ -164,7 +164,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.IntegerProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static IntegerProjectProperty getIntegerProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, IntegerProjectProperty.class);
@@ -177,7 +177,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.LogRotatorProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static LogRotatorProjectProperty getLogRotatorProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, LogRotatorProjectProperty.class);
@@ -190,7 +190,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.DescribableListProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static DescribableListProjectProperty getDescribableListProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, DescribableListProjectProperty.class);
@@ -203,7 +203,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.AxisListProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static AxisListProjectProperty getAxesListProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, AxisListProjectProperty.class);
@@ -216,7 +216,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.SCMProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static SCMProjectProperty getScmProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, SCMProjectProperty.class);
@@ -229,7 +229,7 @@ public class CascadingUtil {
      * @param currentJob job that should be analyzed.
      * @param key key.
      * @return {@link org.hudsonci.model.project.property.TriggerProjectProperty} instance.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     public static TriggerProjectProperty getTriggerProjectProperty(Job currentJob, String key) {
         return getProjectProperty(currentJob, key, TriggerProjectProperty.class);
@@ -243,10 +243,13 @@ public class CascadingUtil {
      * @param clazz required property class.
      * If class is not null and property was not found, property of given class will be created.
      * @return {@link org.hudsonci.api.model.IProjectProperty} instance or null.
-     * @throws NullPointerException if currentJob is null.
+     * @throws IllegalArgumentException if currentJob is null.
      */
     @SuppressWarnings("unchecked")
     public static <T extends IProjectProperty> T getProjectProperty(Job currentJob, String key, Class<T> clazz) {
+        if(currentJob == null){
+            throw new IllegalArgumentException("Job cannot be null");
+        }
         IProjectProperty t = (IProjectProperty) currentJob.getProjectProperties().get(key);
         if (null == t && null != clazz) {
             try {

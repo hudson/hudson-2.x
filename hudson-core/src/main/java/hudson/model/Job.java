@@ -246,8 +246,23 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         }
     }
 
+    /**
+     * Returns project properties.
+     *
+     * @return project properties.
+     */
+    @SuppressWarnings({"unchecked"})
     public Map<String, IProjectProperty> getProjectProperties() {
         return MapUtils.unmodifiableMap(jobProperties);
+    }
+
+    /**
+     * Removes project property.
+     *
+     * @param key property key.
+     */
+    public void removeProjectProperty(String key){
+        jobProperties.remove(key);
     }
 
     /**

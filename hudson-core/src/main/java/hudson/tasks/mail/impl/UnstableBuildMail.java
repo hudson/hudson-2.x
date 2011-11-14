@@ -33,6 +33,9 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * Class used for the mail preparation if build is unstable.
+ */
 public class UnstableBuildMail extends BaseBuildResultMail {
 
     public UnstableBuildMail(String recipients, boolean sendToIndividuals,

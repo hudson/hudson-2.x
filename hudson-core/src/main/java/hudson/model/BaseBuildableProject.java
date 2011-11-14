@@ -202,14 +202,12 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
     /**
      * Removes a publisher from this project, if it's active.
      *
-     * @deprecated as of 1.290
-     *      Use {@code getPublishersList().remove(x)}
      * @param publisher publisher.
      * @throws java.io.IOException exception.
      */
-    //TODO investigate, whether we can move this method to parent or completer remove it
     public void removePublisher(Descriptor<Publisher> publisher) throws IOException {
-        getPublishersList().remove(publisher);
+        removeProjectProperty(publisher.getJsonSafeClassName());
+        save();
     }
 
     /**

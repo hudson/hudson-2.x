@@ -43,7 +43,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
 /**
- * Class used for the mail preparation if build was returned to normal state.
+ * Class used for the mail preparation if build was broken.
  */
 public class FailureBuildMail extends BaseBuildResultMail {
 
