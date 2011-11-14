@@ -170,7 +170,9 @@ public final class DescribableListUtil {
             }
         }
         try {
+            owner.setAllowSave(false);
             result.addAll(describableList);
+            owner.setAllowSave(true);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to add list of describable elements", e);
         }
