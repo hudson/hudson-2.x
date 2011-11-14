@@ -196,6 +196,7 @@ public abstract class BaseBuildableProject<P extends BaseBuildableProject<P,B>,B
     public void addPublisher(Publisher publisher) throws IOException {
         CascadingUtil.getExternalProjectProperty(this,
             publisher.getDescriptor().getJsonSafeClassName()).setValue(publisher);
+        save();
     }
 
     /**

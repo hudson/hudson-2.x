@@ -661,13 +661,6 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
         this.cascadingProject = cascadingProject;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected void setAllowSave(Boolean allowSave) {
-        super.setAllowSave(allowSave);
-    }
-
     @Override
     public void setCascadingProjectName(String cascadingProjectName) {
         super.setCascadingProjectName(cascadingProjectName);
