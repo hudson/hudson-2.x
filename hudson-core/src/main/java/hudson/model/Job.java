@@ -88,6 +88,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
+import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -1728,6 +1729,10 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         this.cascadingProject = null;
         this.cascadingProjectName = null;
         for (IProjectProperty property : jobProperties.values()) {
+            if (property instanceof TriggerProjectProperty && !property.isOverridden() && property.getValue() != null) {
+                ((TriggerProjectProperty) property).getValue().stop();
+                property.resetValue();
+            }
             property.setOverridden(false);
         }
     }
