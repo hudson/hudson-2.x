@@ -29,6 +29,8 @@ import org.aspectj.weaver.loadtime.WeavingURLClassLoader;
 
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -46,6 +48,9 @@ public class PluginClassLoader
 
     public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
         super(urls.toArray(new URL[urls.size()]), parent);
+
+        // Some optional classes might not exist, so want to avoid excessive tracing
+        Logger.getLogger(WeavingURLClassLoader.class.getName()).setLevel(Level.OFF);
     }
 
     public PluginWrapper getPlugin() {
