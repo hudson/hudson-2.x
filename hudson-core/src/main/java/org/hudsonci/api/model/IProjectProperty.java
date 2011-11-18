@@ -118,4 +118,9 @@ public interface IProjectProperty<T> extends Serializable {
      */
     void setOverridden(boolean overridden);
 
+    /**
+     * Method that is called while changing cascading parent. Update property internal states.l
+     */
+    void onCascadingProjectChanged();
+
 }

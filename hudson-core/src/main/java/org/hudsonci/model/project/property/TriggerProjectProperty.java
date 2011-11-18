@@ -42,4 +42,15 @@ public class TriggerProjectProperty extends BaseProjectProperty<Trigger> {
     protected void clearOriginalValue(Trigger originalValue) {
         setOriginalValue(originalValue, false);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onCascadingProjectRemoved() {
+        if (isOverridden() && null != getValue()) {
+            getValue().stop();
+            resetValue();
+        }
+    }
 }
