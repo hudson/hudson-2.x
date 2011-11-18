@@ -60,7 +60,7 @@ public class CascadingParameterDefinitionPropertiesTest {
     private CopyOnWriteList<ParametersDefinitionProperty> copyOnWriteList;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         p1 = new FreeStyleProjectMock("p1");
         p2 = new FreeStyleProjectMock("p2");
         p3 = new FreeStyleProjectMock("p3");

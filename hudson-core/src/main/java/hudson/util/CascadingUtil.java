@@ -34,6 +34,7 @@ import hudson.model.ParameterDefinition;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -298,8 +299,10 @@ public class CascadingUtil {
      * @param cascadingProject cascading project to start from.
      * @param projectToUnlink project that should be unlinked.
      * @return true if project was unlinked, false - if cascadingProject or projectToUnlink is Null
+     * @throws java.io.IOException if cascading project couldn't be saved.
      */
-    public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink) {
+    public static boolean unlinkProjectFromCascadingParents(Job cascadingProject, String projectToUnlink)
+        throws IOException {
         if (null != cascadingProject && null != projectToUnlink) {
             Job job = Functions.getItemByName(Hudson.getInstance().getAllItems(Job.class), projectToUnlink);
             Set<String> set = new HashSet<String>(job.getCascadingChildrenNames());
@@ -315,8 +318,10 @@ public class CascadingUtil {
      * @param cascadingProject cascading project to start from.
      * @param projectsToUnlink projects that should be unlinked.
      * @return if project was unlinked
+     * @throws java.io.IOException if cascading project couldn't be saved.
      */
-    private static boolean unlinkProjectFromCascadingParents(Job cascadingProject, Set<String> projectsToUnlink) {
+    private static boolean unlinkProjectFromCascadingParents(Job cascadingProject, Set<String> projectsToUnlink)
+        throws IOException {
         if (null != cascadingProject && null != projectsToUnlink) {
             for (String toUnlink : projectsToUnlink) {
                 cascadingProject.removeCascadingChild(toUnlink);
@@ -335,8 +340,9 @@ public class CascadingUtil {
      *
      * @param cascadingProject cascadingProject.
      * @param childProjectName the name of child project name.
+     * @throws java.io.IOException if cascading project couldn't be saved.
      */
-    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName) {
+    public static void linkCascadingProjectsToChild(Job cascadingProject, String childProjectName) throws IOException {
         if (cascadingProject != null) {
             cascadingProject.addCascadingChild(childProjectName);
             if (cascadingProject.hasCascadingProject()) {
@@ -353,8 +359,10 @@ public class CascadingUtil {
      * @param cascadingProject cascading project.
      * @param oldName old project name.
      * @param newName new project name.
+     * @throws java.io.IOException if cascading project couldn't be saved.
      */
-    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName) {
+    public static void renameCascadingChildLinks(Job cascadingProject, String oldName, String newName)
+        throws IOException {
         if (cascadingProject != null) {
             cascadingProject.renameCascadingChildName(oldName, newName);
             if (cascadingProject.hasCascadingProject()) {

@@ -103,7 +103,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
-import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -116,8 +115,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 
-import static hudson.scm.PollingResult.BUILD_NOW;
-import static hudson.scm.PollingResult.NO_CHANGES;
+import static hudson.scm.PollingResult.*;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 /**
@@ -1647,12 +1645,12 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
 
     @Exported
     public SCM getScm() {
-        return (SCM) getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).getValue();
+        return CascadingUtil.getScmProjectProperty(this, SCM_PROPERTY_NAME).getValue();
     }
 
     @SuppressWarnings("unchecked")
     public void setScm(SCM scm) throws IOException {
-        getProperty(SCM_PROPERTY_NAME, SCMProjectProperty.class).setValue(scm);
+        CascadingUtil.getScmProjectProperty(this, SCM_PROPERTY_NAME).setValue(scm);
         save();
     }
 

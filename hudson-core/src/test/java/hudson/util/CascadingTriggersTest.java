@@ -23,7 +23,6 @@
  */
 package hudson.util;
 
-import antlr.ANTLRException;
 import hudson.model.FreeStyleProjectMock;
 import hudson.model.Hudson;
 import hudson.triggers.TimerTrigger;
@@ -63,7 +62,7 @@ public class CascadingTriggersTest {
     private StaplerRequest req;
 
     @Before
-    public void setUp() throws ANTLRException {
+    public void setUp() throws Exception {
         p1 = new FreeStyleProjectMock("p1");
         p2 = new FreeStyleProjectMock("p2");
         p3 = new FreeStyleProjectMock("p3");
