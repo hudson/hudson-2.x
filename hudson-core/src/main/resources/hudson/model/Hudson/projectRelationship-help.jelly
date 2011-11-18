@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, id:cactusman
+Copyright (c) 2004-2011, Oracle Corporation, Kohsuke Kawaguchi, id:cactusman, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,9 @@ THE SOFTWARE.
       </ol>
       <p>
         ${%This allows Hudson to correlate two projects.}
+      </p>
+      <p>
+        ${%Upstream note}
       </p>
     </l:main-panel>
   </l:layout>
