@@ -308,21 +308,25 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
-     * Adds cascading child project name.
+     * Adds cascading child project name and saves configuration.
      *
      * @param cascadingChildName cascading child project name.
+     * @throws java.io.IOException if configuration couldn't be saved.
      */
-    public void addCascadingChild(String cascadingChildName) {
+    public void addCascadingChild(String cascadingChildName) throws IOException {
         cascadingChildrenNames.add(cascadingChildName);
+        save();
     }
 
     /**
-     * Remove cascading child project name.
+     * Remove cascading child project name and saves job configuration
      *
      * @param cascadingChildName cascading child project name.
+     * @throws java.io.IOException if configuration couldn't be saved.
      */
-    public void removeCascadingChild(String cascadingChildName) {
+    public void removeCascadingChild(String cascadingChildName) throws IOException {
         cascadingChildrenNames.remove(cascadingChildName);
+        save();
     }
 
     public boolean hasCascadingChild(String cascadingChildName) {
@@ -330,14 +334,16 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
-     * Remove cascading child project name.
+     * Remove cascading child project name and saves job configuration
      *
      * @param oldChildName old child project name.
      * @param newChildName new child project name.
+     * @throws java.io.IOException if configuration couldn't be saved.
      */
-    public synchronized void renameCascadingChildName(String oldChildName, String newChildName) {
+    public synchronized void renameCascadingChildName(String oldChildName, String newChildName) throws IOException {
         cascadingChildrenNames.remove(oldChildName);
         cascadingChildrenNames.add(newChildName);
+        save();
     }
 
     @Override
@@ -834,7 +840,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
      * @inheritDoc
      */
     @Override
-    protected void performBeforeItemRenaming(String oldName, String newName){
+    protected void performBeforeItemRenaming(String oldName, String newName) throws IOException {
         CascadingUtil.renameCascadingChildLinks(cascadingProject, oldName, newName);
         CascadingUtil.renameCascadingParentLinks(oldName, newName);
     }
@@ -1641,7 +1647,8 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         return cascadingProjectName;
     }
 
-    public synchronized void doUpdateCascadingProject(@QueryParameter(fixEmpty = true) String projectName) {
+    public synchronized void doUpdateCascadingProject(@QueryParameter(fixEmpty = true) String projectName)
+        throws IOException {
         setCascadingProjectName(projectName);
     }
 
@@ -1662,12 +1669,13 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
-     * Sets cascadingProject name.
+     * Sets cascadingProject name and saves project configuration.
      *
      * @param cascadingProjectName cascadingProject name.
+     * @throws java.io.IOException if configuration couldn't be saved.
      */
     @SuppressWarnings("unchecked")
-    public synchronized void setCascadingProjectName(String cascadingProjectName) {
+    public synchronized void setCascadingProjectName(String cascadingProjectName) throws IOException {
         if (StringUtils.isBlank(cascadingProjectName)) {
             clearCascadingProject();
         } else if (!StringUtils.equalsIgnoreCase(this.cascadingProjectName, cascadingProjectName)) {
@@ -1715,9 +1723,11 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     }
 
     /**
-     * Remove cascading project data and mark all project properties as non-overridden
+     * Removes cascading project data, marks all project properties as non-overridden and saves configuration
+     *
+     * @throws java.io.IOException if configuration couldn't be saved.
      */
-    private void clearCascadingProject() {
+    private void clearCascadingProject() throws IOException {
         CascadingUtil.unlinkProjectFromCascadingParents(cascadingProject, name);
         this.cascadingProject = null;
         this.cascadingProjectName = null;
