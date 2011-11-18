@@ -662,7 +662,7 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
     }
 
     @Override
-    public void setCascadingProjectName(String cascadingProjectName) {
+    public void setCascadingProjectName(String cascadingProjectName) throws IOException {
         super.setCascadingProjectName(cascadingProjectName);
         try {
             rebuildConfigurations();

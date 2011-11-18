@@ -155,8 +155,9 @@ public abstract class AbstractItem extends Actionable implements Item, HttpDelet
      *
      * @param oldName old item name.
      * @param newName new item name.
+     * @throws java.io.IOException if item couldn't be saved.
      */
-    protected void performBeforeItemRenaming(String oldName, String newName){
+    protected void performBeforeItemRenaming(String oldName, String newName) throws IOException {
     }
 
     /**
