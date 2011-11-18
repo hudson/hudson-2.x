@@ -27,10 +27,7 @@ import hudson.model.FreeStyleProjectMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 
 /**
  * Contains test-cases for {@link ExternalProjectProperty}.
@@ -81,6 +78,22 @@ public class ExternalProjectPropertyTest {
         assertTrue(property.isModified());
         assertFalse(property.updateOriginalValue(new Object(), new Object()));
         assertTrue(property.updateOriginalValue(new Object(), project));
+    }
 
+    /**
+     * Verify {@link ExternalProjectProperty#onCascadingProjectSet()} method.
+     */
+    @Test
+    public void testOnCascadingProjectSet() {
+        assertFalse(property.isModified());
+        assertFalse(property.isOverridden());
+        //When cascading project was set, isModified should equal to isOverridden
+        property.onCascadingProjectSet();
+        assertEquals(property.isModified(), property.isOverridden());
+
+        property.setModified(Boolean.TRUE);
+        property.onCascadingProjectSet();
+        assertTrue(property.isModified());
+        assertEquals(property.isModified(), property.isOverridden());
     }
 }

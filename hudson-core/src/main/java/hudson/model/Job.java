@@ -88,7 +88,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hudsonci.api.model.IJob;
 import org.hudsonci.api.model.IProjectProperty;
 import org.hudsonci.model.project.property.ExternalProjectProperty;
-import org.hudsonci.model.project.property.TriggerProjectProperty;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -108,8 +107,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
+import static javax.servlet.http.HttpServletResponse.*;
 
 /**
  * A job is an runnable entity under the monitoring of Hudson.
@@ -1679,12 +1677,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
                 cascadingProjectName);
             CascadingUtil.linkCascadingProjectsToChild(cascadingProject, name);
             for (IProjectProperty property : jobProperties.values()) {
-                if (property instanceof ExternalProjectProperty) {
-                    property.setOverridden(((ExternalProjectProperty) property).isModified());
-                } else {
-                    property.setOverridden(
-                        property.allowOverrideValue(property.getCascadingValue(), property.getValue()));
-                }
+                property.onCascadingProjectChanged();
             }
         }
     }
@@ -1729,11 +1722,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         this.cascadingProject = null;
         this.cascadingProjectName = null;
         for (IProjectProperty property : jobProperties.values()) {
-            if (property instanceof TriggerProjectProperty && !property.isOverridden() && property.getValue() != null) {
-                ((TriggerProjectProperty) property).getValue().stop();
-                property.resetValue();
-            }
-            property.setOverridden(false);
+            property.onCascadingProjectChanged();
         }
     }
 

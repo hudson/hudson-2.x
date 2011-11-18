@@ -30,12 +30,7 @@ import hudson.tasks.JavadocArchiver;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 
 /**
  * Contains test-cases for {@link BaseProjectProperty}.
@@ -49,8 +44,10 @@ public class BaseProjectPropertyTest {
     private final String propertyKey = "propertyKey";
 
     private BaseProjectProperty property;
+    private BaseProjectProperty parentProperty;
     private FreeStyleProjectMock project;
     private FreeStyleProjectMock parent;
+    private String parentPropertyValue = "parentValue";
 
     @Before
     public void setUp() {
@@ -59,6 +56,10 @@ public class BaseProjectPropertyTest {
 
         property = new BaseProjectProperty(project);
         property.setKey(propertyKey);
+        parentProperty = new BaseProjectProperty(parent);
+        parentProperty.setKey(propertyKey);
+        parentProperty.setValue(parentPropertyValue);
+        parent.putProjectProperty(propertyKey, parentProperty);
     }
 
     /**
@@ -135,7 +136,7 @@ public class BaseProjectPropertyTest {
      */
     @Test
     public void testGetCascadingValue() {
-        String parentValue = "parentValue";
+        parentProperty.setValue(null);
         //If project doesn't have cascading project - default value is used as cascading value.
         assertEquals(property.getDefaultValue(), property.getCascadingValue());
 
@@ -145,14 +146,10 @@ public class BaseProjectPropertyTest {
         //If project has cascading project and cascading value is not set - default value is used.
         assertEquals(property.getDefaultValue(), property.getCascadingValue());
 
-        BaseProjectProperty parentProperty = new BaseProjectProperty(parent);
-        parentProperty.setKey(propertyKey);
-        parentProperty.setValue(parentValue);
-        parent.putProjectProperty(propertyKey, parentProperty);
         project.setCascadingProject(parent);
         property = new BaseProjectProperty(project);
         property.setKey(propertyKey);
-        property.setValue(parentValue);
+        property.setValue(parentPropertyValue);
         //If project has cascading project and cascading value is set - property value will be used.
         assertEquals(parentProperty.getOriginalValue(), property.getCascadingValue());
     }
@@ -255,9 +252,6 @@ public class BaseProjectPropertyTest {
      */
     @Test
     public void testSetValue() {
-        BaseProjectProperty property = new BaseProjectProperty(project);
-        property.setKey(propertyKey);
-        property.setValue(null);
         //If project doesn't have cascading - default boolean value is used for propertyOverridden flag
         assertFalse(property.isOverridden());
         assertNull(property.getOriginalValue());
@@ -268,11 +262,6 @@ public class BaseProjectPropertyTest {
         assertFalse(property.isOverridden());
         assertEquals(value, property.getOriginalValue());
 
-        String parentValue = "equalValue";
-        BaseProjectProperty parentProperty = new BaseProjectProperty(parent);
-        parentProperty.setKey(propertyKey);
-        parentProperty.setValue(parentValue);
-        parent.putProjectProperty(propertyKey, parentProperty);
         project.setCascadingProject(parent);
 
         //If value set to null, need to check whether default value is equals to cascading
@@ -285,7 +274,7 @@ public class BaseProjectPropertyTest {
         //Check whether current value is not null, after setting equal-to-cascading value current will be null
         assertNotNull(property.getOriginalValue());
         assertTrue(property.isOverridden());
-        property.setValue(parentValue);
+        property.setValue(parentPropertyValue);
         //Reset current property to null
         assertNull(property.getOriginalValue());
         //Cascading value is equal to current - reset flag to false.
@@ -356,28 +345,74 @@ public class BaseProjectPropertyTest {
      */
     @Test
     public void testGetValue() {
-        Integer propertyValue = 10;
-        property.setValue(propertyValue);
+        property.setValue(parentPropertyValue);
         //if value is not null - return it
-        assertEquals(propertyValue, property.getValue());
+        assertEquals(parentPropertyValue, property.getValue());
         property.setValue(null);
         assertNull(property.getValue());
 
-        BaseProjectProperty parentProperty = new BaseProjectProperty(parent);
-        parentProperty.setKey(propertyKey);
-        parentProperty.setValue(propertyValue);
-        parent.putProjectProperty(propertyKey, parentProperty);
-
+        parentProperty.setValue(parentPropertyValue);
         project.setCascadingProject(parent);
         property = new BaseProjectProperty(project);
         property.setKey(propertyKey);
         //if current value is null and is not overridden value, take from cascading
         assertNull(property.getOriginalValue());
-        assertEquals(propertyValue, property.getValue());
+        assertEquals(parentPropertyValue, property.getValue());
 
         property.setOverridden(true);
         //Property is overridden - return current value even if it is null.
         assertNull(property.getOriginalValue());
         assertNull(property.getValue());
+    }
+
+    /**
+     * Verify {@link BaseProjectProperty#onCascadingProjectRemoved()} method.
+     */
+    @Test
+    public void testOnCascadingProjectRemoved() {
+        //Overridden flag should be set to false when cascading project was removed
+        property.setOverridden(true);
+        property.onCascadingProjectRemoved();
+        assertFalse(property.isOverridden());
+    }
+
+    /**
+     * Verify {@link BaseProjectProperty#onCascadingProjectRemoved()} method.
+     */
+    @Test
+    public void testOnCascadingProjectSet() {
+        property.setValue(parentPropertyValue);
+        project.setCascadingProject(parent);
+        //If parent value equals to current value - isOverridden flag should be set to false.
+        property.setOverridden(true);
+        assertTrue(property.isOverridden());
+        assertFalse(property.allowOverrideValue(parentProperty.getOriginalValue(), property.getValue()));
+        property.onCascadingProjectSet();
+        assertFalse(property.isOverridden());
+
+        property.setValue("newValue");
+        assertTrue(property.allowOverrideValue(parentProperty.getOriginalValue(), property.getValue()));
+        property.onCascadingProjectSet();
+        assertTrue(property.isOverridden());
+    }
+
+    /**
+     * Verify {@link BaseProjectProperty#onCascadingProjectChanged()} method.
+     */
+    @Test
+    public void testOnCascadingProjectChanged() {
+        //Overridden flag should be set to false when cascading project was removed
+        property.setOverridden(true);
+        property.onCascadingProjectChanged();
+        assertFalse(property.isOverridden());
+
+        property.setValue(parentPropertyValue);
+        project.setCascadingProject(parent);
+        //If parent value equals to current value - isOverridden flag should be set to false.
+        property.setOverridden(true);
+        assertTrue(property.isOverridden());
+        assertFalse(property.allowOverrideValue(parentProperty.getOriginalValue(), property.getValue()));
+        property.onCascadingProjectChanged();
+        assertFalse(property.isOverridden());
     }
 }

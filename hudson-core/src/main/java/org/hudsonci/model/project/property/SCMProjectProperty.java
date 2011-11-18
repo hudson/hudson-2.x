@@ -40,8 +40,19 @@ public class SCMProjectProperty extends BaseProjectProperty<SCM> {
         super(job);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SCM getDefaultValue() {
         return new NullSCM();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean returnOriginalValue() {
+        return isOverridden() || (null != getOriginalValue() && !getDefaultValue().equals(getOriginalValue()));
     }
 }

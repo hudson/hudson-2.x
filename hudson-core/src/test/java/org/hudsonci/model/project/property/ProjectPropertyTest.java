@@ -23,32 +23,12 @@
  */
 package org.hudsonci.model.project.property;
 
-import antlr.ANTLRException;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.model.FreeStyleProjectMock;
-import hudson.model.TaskListener;
-import hudson.scm.ChangeLogParser;
-import hudson.scm.NullSCM;
-import hudson.scm.PollingResult;
-import hudson.scm.SCM;
-import hudson.scm.SCMRevisionState;
 import hudson.tasks.LogRotator;
-import hudson.triggers.TimerTrigger;
-import hudson.triggers.Trigger;
-import java.io.File;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 
 /**
  * Contains test-cases for IProjectProperty and its' implementations.
@@ -108,26 +88,6 @@ public class ProjectPropertyTest {
     }
 
     @Test
-    public void testSCMProjectPropertyConstructor() {
-        try {
-            new SCMProjectProperty(null);
-            fail("Null should be handled by SCMProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-    }
-
-    @Test
-    public void testTriggerProjectPropertyConstructor() {
-        try {
-            new TriggerProjectProperty(null);
-            fail("Null should be handled by TriggerProjectProperty constructor.");
-        } catch (Exception e) {
-            assertEquals(BaseProjectProperty.INVALID_JOB_EXCEPTION, e.getMessage());
-        }
-    }
-
-    @Test
     public void testBooleanProjectPropertyPrepareValue() {
         //Boolean property acts as BaseProperty
         BaseProjectProperty property = new BooleanProjectProperty(project);
@@ -166,15 +126,6 @@ public class ProjectPropertyTest {
     }
 
     @Test
-    public void testSCMProjectPropertyPrepareValue() {
-        //Boolean property acts as BaseProperty
-        BaseProjectProperty property = new SCMProjectProperty(project);
-        assertNull(property.prepareValue(null));
-        SCM value = new NullSCM();
-        assertEquals(value, property.prepareValue(value));
-    }
-
-    @Test
     public void testStringProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new StringProjectProperty(project);
         assertNull(property.getDefaultValue());
@@ -196,12 +147,6 @@ public class ProjectPropertyTest {
     public void testLogRotatorProjectPropertyGetDefaultValue() {
         BaseProjectProperty property = new LogRotatorProjectProperty(project);
         assertNull(property.getDefaultValue());
-    }
-
-    @Test
-    public void testScmProjectPropertyGetDefaultValue() {
-        BaseProjectProperty property = new SCMProjectProperty(project);
-        assertEquals(new NullSCM(), property.getDefaultValue());
     }
 
     @Test
@@ -245,15 +190,6 @@ public class ProjectPropertyTest {
     }
 
     @Test
-    public void testSCMProjectPropertyAllowOverrideValue() {
-        BaseProjectProperty property = new SCMProjectProperty(project);
-        assertFalse(property.allowOverrideValue(null, null));
-        assertTrue(property.allowOverrideValue(new NullSCM(), null));
-        assertTrue(property.allowOverrideValue(null, new NullSCM()));
-        assertTrue(property.allowOverrideValue(new NullSCM(), new FakeSCM()));
-    }
-
-    @Test
     public void testIntegerProjectPropertyGetOriginalValue() {
         int value = 10;
         BaseProjectProperty property = new IntegerProjectProperty(project);
@@ -290,65 +226,4 @@ public class ProjectPropertyTest {
         property.setValue(value);
         assertEquals(value, property.getOriginalValue());
     }
-
-    @Test
-    public void testScmProjectPropertyGetOriginalValue() {
-        SCM value = new NullSCM();
-        BaseProjectProperty property = new SCMProjectProperty(project);
-        property.setKey(propertyKey);
-        property.setValue(value);
-        assertEquals(value, property.getOriginalValue());
-    }
-
-    /**
-     * Test 1updateOriginalValue method for TriggerProjectProperty.
-     *
-     * @throws ANTLRException if any
-     */
-    @Test
-    public void testTriggerProjectPropertyUpdateOriginalValue() throws ANTLRException {
-        TriggerProjectProperty property = new TriggerProjectProperty(project);
-        Trigger originalTrigger = new TimerTrigger("* * * * *");
-        Trigger cascadingTrigger = new TimerTrigger("* * * * *");
-        property.updateOriginalValue(originalTrigger, cascadingTrigger);
-        //Property isn't overridden because of values equal.
-        assertFalse(property.isOverridden());
-        //If trigger property value equals to cascading be sure that sets original value instead of cascading.
-        assertEquals(property.getOriginalValue(), originalTrigger);
-
-        cascadingTrigger = new TimerTrigger("*/2 * * * *");
-        property.updateOriginalValue(originalTrigger, cascadingTrigger);
-        assertTrue(property.isOverridden());
-        assertEquals(property.getOriginalValue(), originalTrigger);
-    }
-
-    private class FakeSCM extends SCM {
-        @Override
-        public SCMRevisionState calcRevisionsFromBuild(AbstractBuild<?, ?> build, Launcher launcher,
-                                                       TaskListener listener)
-            throws IOException, InterruptedException {
-            return null;
-        }
-
-        @Override
-        protected PollingResult compareRemoteRevisionWith(AbstractProject<?, ?> project, Launcher launcher,
-                                                          FilePath workspace, TaskListener listener,
-                                                          SCMRevisionState baseline)
-            throws IOException, InterruptedException {
-            return null;
-        }
-
-        @Override
-        public boolean checkout(AbstractBuild<?, ?> build, Launcher launcher, FilePath workspace,
-                                BuildListener listener,
-                                File changelogFile) throws IOException, InterruptedException {
-            return false;
-        }
-
-        @Override
-        public ChangeLogParser createChangeLogParser() {
-            return null;
-        }
-    }
-
 }
