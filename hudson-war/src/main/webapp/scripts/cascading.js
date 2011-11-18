@@ -60,22 +60,28 @@ function onCascadingProjectUpdated() {
 
 function onProjectPropertyChanged() {
     if(isRunAsTest) return;
-    jQuery('form[name=config] input').change(function() {
+    var modify = function() {
         var ref = jQuery(this).attr('id');
         var cascadingProperty = '';
         if (ref != '') {
             cascadingProperty = jQuery(this).attr('name');
         } else {
-            var childRef = jQuery(this).parents('tr').attr('nameref');
+            var parent = jQuery(this).parents('tr');
+            while (parent.attr("nameref") == undefined && parent.size() !== 0) {
+                parent = jQuery(parent).parents('tr');
+            }
+            var childRef = parent.attr("nameref");
             cascadingProperty = jQuery('#'+childRef).attr('name');
         }
-        if(cascadingProperty !== undefined){
+        if(cascadingProperty !== undefined) {
             var jobUrl = getJobUrl()+'/modifyCascadingProperty?propertyName='+cascadingProperty;
             new Ajax.Request(jobUrl, {
                 method : 'get'
             });
         }
-    });
+    };
+    jQuery('form[name=config] input, form[name=config] .setting-input').live("change", modify);
+    jQuery('form[name=config] button').live("click", modify);
 }
 
 jQuery(document).ready(function(){
