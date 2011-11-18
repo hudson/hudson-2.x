@@ -226,4 +226,30 @@ public class BaseProjectProperty<T> implements IProjectProperty<T> {
     public T getOriginalValue() {
         return originalValue;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final void onCascadingProjectChanged() {
+        if (getJob().hasCascadingProject()) {
+            onCascadingProjectSet();
+        } else {
+            onCascadingProjectRemoved();
+        }
+    }
+
+    /**
+     * Executes when cascading parent is cleared. Default implementation marks property as not overridden.
+     */
+    protected void onCascadingProjectRemoved() {
+        setOverridden(false);
+    }
+
+    /**
+     * Executes when cascading project is set. Default implementation compares cascading and current value.
+     * If values are not equal - mark property as overridden.
+     */
+    protected void onCascadingProjectSet() {
+        setOverridden(allowOverrideValue(getCascadingValue(), getValue()));
+    }
 }

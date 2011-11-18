@@ -47,6 +47,7 @@ import org.hudsonci.model.project.property.ExternalProjectProperty;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
 import org.hudsonci.model.project.property.LogRotatorProjectProperty;
 import org.hudsonci.model.project.property.ResultProjectProperty;
+import org.hudsonci.model.project.property.SCMProjectProperty;
 import org.hudsonci.model.project.property.StringProjectProperty;
 import org.hudsonci.model.project.property.TriggerProjectProperty;
 
@@ -146,6 +147,7 @@ public class Items {
         XSTREAM.alias("matrix-config",MatrixConfiguration.class);
 
         //aliases for project properties.
+        //TODO: think about migrating to xstream's annotations.
         XSTREAM.alias("base-property", BaseProjectProperty.class);
         XSTREAM.alias("external-property", ExternalProjectProperty.class);
         XSTREAM.alias("trigger-property", TriggerProjectProperty.class);
@@ -154,12 +156,12 @@ public class Items {
         XSTREAM.alias("string-property", StringProjectProperty.class);
         XSTREAM.alias("log-rotator-property", LogRotatorProjectProperty.class);
         XSTREAM.alias("result-property", ResultProjectProperty.class);
+        XSTREAM.alias("scm-property", SCMProjectProperty.class);
 
         XSTREAM.alias("copy-write-list-property", CopyOnWriteListProjectProperty.class);
         XSTREAM.alias("axis-list-property", AxisListProjectProperty.class);
         XSTREAM.alias("describable-list-property", DescribableListProjectProperty.class);
         XSTREAM.aliasField("project-properties", Job.class, "jobProperties");
-        //TODO: think about migrating to xstream's annotations.
         XSTREAM.alias("appointed-node-property", AppointedNode.class);
     }
 }
