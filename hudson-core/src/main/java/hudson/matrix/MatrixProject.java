@@ -403,6 +403,8 @@ public class MatrixProject extends BaseBuildableProject<MatrixProject, MatrixBui
                 return child.isDirectory() && !child.getName().startsWith("axis-");
             }
         });
+
+        //TODO seems oldDir is always null and old matrix configuration is not cleared.
         if (oldDirs != null) {
             // rename the old directory to the new one
             for (File dir : oldDirs) {

@@ -183,13 +183,39 @@ public final class Combination extends TreeMap<String,String> implements Compara
      *      The separator between axis name and value.
      */
     public String toString(char sep1, char sep2) {
-        StringBuilder buf = new StringBuilder();
-        for (Map.Entry<String,String> e : entrySet()) {
-            if(buf.length()>0) buf.append(sep1);
-            buf.append(e.getKey()).append(sep2).append(e.getValue());
+        return toString(sep1, sep2, false);
+    }
+
+    /**
+     * Converts to the ID string representation:
+     * <tt>axisName=value,axisName=value,...</tt>
+     *
+     * @param sep1 The separator between multiple axes.
+     * @param sep2 The separator between axis name and value.
+     * @param encodeValue true to encode value {@link Util#rawEncode(String)}
+     * @return string representation.
+     */
+    public String toString(char sep1, char sep2, boolean encodeValue) {
+        StringBuilder builder = new StringBuilder();
+        if (encodeValue) {
+            for (Map.Entry<String, String> e : entrySet()) {
+                if (builder.length() > 0) {
+                    builder.append(sep1);
+                }
+                builder.append(e.getKey()).append(sep2).append(Util.rawEncode(e.getValue()));
+            }
+        } else {
+            for (Map.Entry<String, String> e : entrySet()) {
+                if (builder.length() > 0) {
+                    builder.append(sep1);
+                }
+                builder.append(e.getKey()).append(sep2).append(e.getValue());
+            }
         }
-        if(buf.length()==0) buf.append("default"); // special case to avoid 0-length name.
-        return buf.toString();
+        if (builder.length() == 0) {
+            builder.append("default"); // special case to avoid 0-length name.
+        }
+        return builder.toString();
     }
 
     @Override
