@@ -346,7 +346,7 @@ public class LegacyProjectTest {
      * @throws java.io.IOException if any
      */
     @Test
-    public void testConvertLegacyNodePropertes() throws IOException {
+    public void testConvertLegacyNodeProperties() throws IOException {
         AbstractProject project = (AbstractProject) Items.getConfigFile(config).read();
         project.setAllowSave(false);
         project.initProjectProperties();
@@ -363,7 +363,7 @@ public class LegacyProjectTest {
         project.setAllowSave(false);
         project.initProjectProperties();
         assertNull(project.getProperty(Job.PARAMETERS_DEFINITION_JOB_PROPERTY_PROPERTY_NAME));
-        project.convertJobProperty();
+        project.convertJobProperties();
         //Properties should be initialized
         assertNotNull(project.properties);
         CopyOnWriteListProjectProperty property = (CopyOnWriteListProjectProperty) project.getProperty(

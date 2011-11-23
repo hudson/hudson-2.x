@@ -34,15 +34,21 @@ THE SOFTWARE.
     <st:attribute name="ref">
       id of the thing that serves as the group head, if that's available separately
     </st:attribute>
+    <st:attribute name="isPropertyOverridden">
+      if present and true - value is overridden
+    </st:attribute>
   </st:documentation>
 
+  <j:if test="${attrs.isPropertyOverridden==null}">
+    <j:set target="${attrs}" property="isPropertyOverridden" value="false"/>
+  </j:if>
   <j:choose>
     <j:when test="${attrs.ref==null and attrs.name==null}">
       <!-- noop -->
       <d:invokeBody />
     </j:when>
     <j:otherwise>
-      <tr ref="${attrs.ref}" class="row-set-start" style="display:none" name="${attrs.name}" />
+      <tr ref="${attrs.ref}" class="row-set-start ${attrs.isPropertyOverridden? 'modified': 'original'}" style="display:none" name="${attrs.name}" />
       <d:invokeBody />
       <tr class="row-set-end" />
     </j:otherwise>
