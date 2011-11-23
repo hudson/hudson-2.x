@@ -535,8 +535,8 @@ var hudsonRules = {
                 if(nameRef!=null && row.getAttribute("nameref")==null){
                     row.setAttribute("nameref",nameRef); // to handle inner rowSets, don't override existing values
                 }
-                if(Element.hasClassName(link,"modified")){
-                    Element.addClassName(row,"modified");
+                if(Element.hasClassName(tr,"modified")){
+                    addModifiedClass(row);
                 }
                 tr.parentNode.insertBefore(row, tr.nextSibling);
             }
@@ -889,11 +889,6 @@ var hudsonRules = {
             g.updateSingleButton(r,s,e);
         };
         applyNameRef(s,e,r.id);
-        if (Element.hasClassName(r.parentNode,'modified')){
-           jQuery('[nameref='+ r.id +']').children().addClass('modified');
-           //required for the advanced sections (hudson generates content inside div).
-           jQuery('[nameref='+ r.id +'] div.advancedLink').addClass('modified');
-        }
         g.buttons.push(u);
 
         // apply the initial visibility
@@ -1084,10 +1079,26 @@ function replaceDescription() {
 function applyNameRef(s,e,id) {
     $(id).groupingNode = true;
     // s contains the node itself
+    var modified = Element.hasClassName(s, "modified") || Element.hasClassName(s.firstChild, "modified");
     for(var x=s.nextSibling; x!=e; x=x.nextSibling) {
         // to handle nested <f:rowSet> correctly, don't overwrite the existing value
         if(x.getAttribute("nameRef")==null)
             x.setAttribute("nameRef",id);
+        if (modified) {
+            addModifiedClass(x);
+        }
+    }
+}
+
+// Remove 'original' class from elements and its children and
+// add 'modified' class to it.
+function addModifiedClass(element) {
+    Element.removeClassName(element, "original");
+    Element.addClassName(element, "modified");
+    var elements = Element.childElements(element)
+    for (var key = 0; key < elements.size(); key++) {
+        Element.removeClassName(elements[key], "original");
+        Element.addClassName(elements[key], "modified");
     }
 }
 

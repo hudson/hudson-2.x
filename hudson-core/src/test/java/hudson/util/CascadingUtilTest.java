@@ -28,6 +28,8 @@ import hudson.model.FreeStyleProject;
 import hudson.model.FreeStyleProjectMock;
 import hudson.model.Hudson;
 import hudson.model.Job;
+import hudson.model.ParametersDefinitionProperty;
+import hudson.security.AuthorizationMatrixProperty;
 import hudson.tasks.JavadocArchiver;
 import hudson.tasks.Publisher;
 import java.util.ArrayList;
@@ -354,5 +356,13 @@ public class CascadingUtilTest {
         CascadingUtil.buildExternalProperties(req, json, descriptors, job);
         assertNotNull(CascadingUtil.getExternalProjectProperty(job, javadocArchiverKey).getValue());
         verifyAll();
+    }
+
+    /**
+     * Verify {@link CascadingUtil#isCascadableJobProperty(hudson.model.JobPropertyDescriptor)} method.
+     */
+    public void testIsCascadableJobProperty() {
+        assertFalse(CascadingUtil.isCascadableJobProperty(new AuthorizationMatrixProperty.DescriptorImpl()));
+        assertFalse(CascadingUtil.isCascadableJobProperty(new ParametersDefinitionProperty.DescriptorImpl()));
     }
 }

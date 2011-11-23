@@ -72,10 +72,29 @@ THE SOFTWARE.
         <j:set var="instances" value="${it.properties}" />
         <j:forEach var="d" items="${h.getJobPropertyDescriptors(it.getClass())}" varStatus="loop">
           <j:scope>
-            <j:set var="descriptor" value="${d}" />
-            <j:set var="instance" value="${instances[d]}" />
-
-            <f:rowSet name="jobProperty${loop.index}">
+            <j:set var="descriptor" value="${d}"/>
+            <j:set var="instance" value="${instances[d]}"/>
+            <j:set var="rowSetName" value="${'jobProperty'+loop.index}"/>
+            <j:set var="propertyOverridden" value="false"/>
+            <j:if test="${cu.isCascadableJobProperty(descriptor)}">
+              <j:set var="rowSetName" value="${descriptor.jsonSafeClassName}"/>
+              <j:set var="cascadingProperty" value="${cu.getBaseProjectProperty(it, descriptor.jsonSafeClassName)}"/>
+              <j:set var="instance" value="${cascadingProperty.value}"/>
+              <j:set var="propertyOverridden" value="${cascadingProperty.isOverridden()}"/>
+            </j:if>
+            <f:rowSet name="${rowSetName}" isPropertyOverridden='${propertyOverridden}'>
+              <j:if test="${propertyOverridden}">
+                <tr>
+                  <td>
+                    <div class="optional-reset">
+                      <a href="#" class="reset-button"
+                         resetURL="${jobUrl}/resetProjectProperty?propertyName=${cascadingProperty.key}">
+                        <img src="${imagesURL}/16x16/undo.png"/>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </j:if>
               <st:include from="${d}" page="${d.configPage}" optional="true"/>
             </f:rowSet>
           </j:scope>
