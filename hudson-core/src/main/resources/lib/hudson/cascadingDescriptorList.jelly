@@ -56,6 +56,7 @@ THE SOFTWARE.
                                  isPropertyOverridden="${instanceProperty.isOverridden()}">
                     <st:include from="${descriptor}" page="${descriptor.configPage}" optional="true"/>
                 </f:optionalBlock>
+                <tr class="descriptor-separator"><td colspan="4"/></tr>
             </j:forEach>
         </f:section>
     </j:if>

@@ -80,8 +80,10 @@ function onProjectPropertyChanged() {
             });
         }
     };
-    jQuery('form[name=config] input, form[name=config] .setting-input').live("change", modify);
-    jQuery('form[name=config] button').live("click", modify);
+    jQuery("form[action=configSubmit] input[type=checkbox]").live('click', modify);
+    jQuery("form[action=configSubmit] input[type!=checkbox]").live('change', modify);    
+    jQuery("form[action=configSubmit] .setting-input").live('change', modify);
+    jQuery("form[action=configSubmit] button").live('click', modify);
 }
 
 jQuery(document).ready(function(){
