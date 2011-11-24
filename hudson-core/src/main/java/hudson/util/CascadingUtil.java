@@ -528,7 +528,7 @@ public class CascadingUtil {
      * As for {@link ParametersDefinitionProperty} single instance doesn't support cascading, so, classes are
      * grouped into list of {@link ParametersDefinitionProperty} and whole list could be inherited or overridden.
 
-     * * @param d property descriptor.
+     * @param d property descriptor.
      * @return true - if JobProperty could be used for cascading, false - otherwise.
      * @see #setParameterDefinitionProperties(hudson.model.Job, String, CopyOnWriteList)
      * @see hudson.model.Job#getParameterDefinitionProperties()
