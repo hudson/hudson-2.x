@@ -767,8 +767,10 @@ public abstract class Descriptor<T extends Describable<T>> implements Saveable {
     public static <T extends Describable<T>>
     Map<Descriptor<T>,T> toMap(Iterable<T> describables) {
         Map<Descriptor<T>,T> m = new LinkedHashMap<Descriptor<T>,T>();
-        for (T d : describables) {
-            m.put(d.getDescriptor(),d);
+        if (null != describables) {
+            for (T d : describables) {
+                m.put(d.getDescriptor(), d);
+            }
         }
         return m;
     }
