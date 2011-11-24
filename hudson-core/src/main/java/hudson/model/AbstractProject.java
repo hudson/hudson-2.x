@@ -99,7 +99,6 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hudsonci.api.model.IAbstractProject;
 import org.hudsonci.model.project.property.IntegerProjectProperty;
@@ -1954,7 +1953,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
         super.submit(req,rsp);
 
         makeDisabled(null != req.getParameter("disable"));
-        setCascadingProjectName(StringUtils.trimToNull(req.getParameter("cascadingProjectName")));
         setJDK(req.getParameter("jdk"));
         setQuietPeriod(null != req.getParameter(HAS_QUIET_PERIOD_PROPERTY_NAME)
             ? req.getParameter("quiet_period") : null);
