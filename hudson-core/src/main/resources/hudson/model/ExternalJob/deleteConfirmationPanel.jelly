@@ -22,10 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<div>
-   <form method="post" action="doDelete">
-       <h4>Are you sure you want to delete the Job?.</h4>
-       <input type="submit" class="yes" value="Yes" />
-       <input type="button" class="no" value="No" />
-   </form>
-</div>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+    <l:jobDeleteForm />
+</j:jelly>
