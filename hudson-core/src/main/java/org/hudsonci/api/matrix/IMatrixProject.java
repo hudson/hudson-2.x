@@ -24,22 +24,23 @@
 package org.hudsonci.api.matrix;
 
 import hudson.matrix.AxisList;
-import hudson.model.Descriptor;
-import org.hudsonci.api.model.IAbstractProject;
+import hudson.matrix.Combination;
+import hudson.matrix.MatrixConfiguration;
+import hudson.model.JDK;
+import hudson.model.Label;
 import hudson.model.Result;
-import hudson.tasks.BuildWrapper;
-import hudson.tasks.Builder;
-import hudson.tasks.Publisher;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Set;
+import org.hudsonci.api.model.IBaseBuildableProject;
 
 /**
  * Matrix Project Interface.
  *
  * @author Anton Kozak
  */
-public interface IMatrixProject extends IAbstractProject {
+public interface IMatrixProject extends IBaseBuildableProject {
 
     /**
      * Returns {@link hudson.matrix.AxisList} of configured axes.
@@ -150,24 +151,31 @@ public interface IMatrixProject extends IAbstractProject {
     void setCustomWorkspace(String customWorkspace) throws IOException;
 
     /**
-     * Returns list of active {@link Builder}s configured for this project.
+     * Gets the {@link hudson.model.JDK}s where the builds will be run.
      *
-     * @return list of active {@link Builder}s configured for this project.
+     * @return never null but can be empty
      */
-    List<Builder> getBuilders();
+    Set<JDK> getJDKs();
 
     /**
-     * Returns map of  active {@link Publisher} configured for this project.
+     * Gets the {@link hudson.model.Label}s where the builds will be run.
      *
-     * @return map of active {@link Publisher} configured for this project.
+     * @return never null
      */
-    Map<Descriptor<Publisher>, Publisher> getPublishers();
+    Set<Label> getLabels();
+
+    File getRootDirFor(Combination combination);
 
     /**
-     * Returns map of  active {@link BuildWrapper} configured for this project.
+     * Gets all active configurations.
+     * <p/>
+     * In contract, inactive configurations are those that are left for archival purpose
+     * and no longer built when a new {@link hudson.matrix.MatrixBuild} is executed.
      *
-     * @return map of  active {@link BuildWrapper} configured for this project.
+     * @return collection of active configurations
      */
-    Map<Descriptor<BuildWrapper>,BuildWrapper> getBuildWrappers();
+    Collection<MatrixConfiguration> getActiveConfigurations();
+
+    MatrixConfiguration getItem(Combination c);
 
 }

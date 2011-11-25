@@ -24,7 +24,7 @@
 package org.hudsonci.model.project.property;
 
 import hudson.tasks.LogRotator;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents LogRotator property.
@@ -34,7 +34,7 @@ import org.hudsonci.api.model.IJob;
  * @author Nikita Levyankov
  */
 public class LogRotatorProjectProperty extends BaseProjectProperty<LogRotator> {
-    public LogRotatorProjectProperty(IJob job) {
+    public LogRotatorProjectProperty(ICascadingJob job) {
         super(job);
     }
 }

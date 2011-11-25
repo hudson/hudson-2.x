@@ -24,7 +24,7 @@
 package org.hudsonci.model.project.property;
 
 import hudson.matrix.AxisList;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents {@link hudson.matrix.AxisList} property.
@@ -35,7 +35,7 @@ import org.hudsonci.api.model.IJob;
  */
 public class AxisListProjectProperty extends BaseProjectProperty<AxisList> {
 
-    public AxisListProjectProperty(IJob job) {
+    public AxisListProjectProperty(ICascadingJob job) {
         super(job);
     }
 

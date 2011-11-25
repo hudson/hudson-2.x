@@ -41,4 +41,25 @@ public interface IFreeStyleProject extends IProject {
      * @throws IOException if any.
      */
     String getCustomWorkspace() throws IOException;
+
+    /**
+     * User-specified workspace directory, or null if it's up to Hudson.
+     *
+     * <p>
+     * Normally a free-style project uses the workspace location assigned by its parent container,
+     * but sometimes people have builds that have hard-coded paths (which can be only built in
+     * certain locations. see http://www.nabble.com/Customize-Workspace-directory-tt17194310.html for
+     * one such discussion.)
+     *
+     * <p>
+     * This is not {@link java.io.File} because it may have to hold a path representation on another OS.
+     *
+     * <p>
+     * If this path is relative, it's resolved against {@link hudson.model.Node#getRootPath()} on the node where
+     * this workspace is prepared.
+     * @param customWorkspace new custom workspace to set
+     * @since 1.320
+     * @throws IOException if any.
+     */
+    void setCustomWorkspace(String customWorkspace) throws IOException;
 }

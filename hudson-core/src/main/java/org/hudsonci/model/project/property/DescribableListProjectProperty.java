@@ -25,7 +25,7 @@ package org.hudsonci.model.project.property;
 
 import hudson.util.DescribableList;
 import org.apache.commons.collections.CollectionUtils;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Property represents DescribableList object.
@@ -35,7 +35,7 @@ import org.hudsonci.api.model.IJob;
  * @author Nikita Levyankov
  */
 public class DescribableListProjectProperty extends BaseProjectProperty<DescribableList> {
-    public DescribableListProjectProperty(IJob job) {
+    public DescribableListProjectProperty(ICascadingJob job) {
         super(job);
     }
 
