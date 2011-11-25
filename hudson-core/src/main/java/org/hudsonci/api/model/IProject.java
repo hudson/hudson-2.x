@@ -23,13 +23,6 @@
  */
 package org.hudsonci.api.model;
 
-import hudson.model.Descriptor;
-import hudson.tasks.BuildWrapper;
-import hudson.tasks.Builder;
-import hudson.tasks.Publisher;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Project interface
  * <p/>
@@ -37,19 +30,6 @@ import java.util.Map;
  *
  * @author Nikita Levyankov
  */
-public interface IProject extends IAbstractProject {
-    /**
-     * @return list of project {@link Builder}
-     */
-    List<Builder> getBuilders();
+public interface IProject extends IBaseBuildableProject {
 
-    /**
-     * @return map of project {@link BuildWrapper}
-     */
-    Map<Descriptor<BuildWrapper>, BuildWrapper> getBuildWrappers();
-
-    /**
-     * @return map of project {@link Publisher}
-     */
-    Map<Descriptor<Publisher>, Publisher> getPublishers();
 }

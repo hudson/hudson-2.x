@@ -26,7 +26,6 @@ package hudson.model;
 
 import hudson.Extension;
 import hudson.util.CascadingUtil;
-import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import org.hudsonci.api.model.IFreeStyleProject;
@@ -73,23 +72,7 @@ public class FreeStyleProject extends Project<FreeStyleProject,FreeStyleBuild> i
     }
 
     /**
-     * User-specified workspace directory, or null if it's up to Hudson.
-     *
-     * <p>
-     * Normally a free-style project uses the workspace location assigned by its parent container,
-     * but sometimes people have builds that have hard-coded paths (which can be only built in
-     * certain locations. see http://www.nabble.com/Customize-Workspace-directory-tt17194310.html for
-     * one such discussion.)
-     *
-     * <p>
-     * This is not {@link File} because it may have to hold a path representation on another OS.
-     *
-     * <p>
-     * If this path is relative, it's resolved against {@link Node#getRootPath()} on the node where this workspace
-     * is prepared. 
-     * @param customWorkspace new custom workspace to set
-     * @since 1.320
-     * @throws IOException if any.
+     * {@inheritDoc}
      */
     public void setCustomWorkspace(String customWorkspace) throws IOException {
         CascadingUtil.getStringProjectProperty(this, CUSTOM_WORKSPACE_PROPERTY_NAME).setValue(customWorkspace);

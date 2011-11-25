@@ -25,7 +25,7 @@ package org.hudsonci.model.project.property;
 
 import hudson.scm.NullSCM;
 import hudson.scm.SCM;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents {@link SCM} property.
@@ -36,7 +36,7 @@ import org.hudsonci.api.model.IJob;
  */
 public class SCMProjectProperty extends BaseProjectProperty<SCM> {
 
-    public SCMProjectProperty(IJob job) {
+    public SCMProjectProperty(ICascadingJob job) {
         super(job);
     }
 

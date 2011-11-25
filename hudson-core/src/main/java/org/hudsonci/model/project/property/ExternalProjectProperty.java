@@ -23,7 +23,7 @@
  */
 package org.hudsonci.model.project.property;
 
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Class property is intended to be used for ProjectProperties without correct equals and hashCode methods, such as
@@ -41,7 +41,7 @@ public class ExternalProjectProperty<T> extends BaseProjectProperty<T> {
 
     private boolean modified;
 
-    public ExternalProjectProperty(IJob job) {
+    public ExternalProjectProperty(ICascadingJob job) {
         super(job);
     }
 

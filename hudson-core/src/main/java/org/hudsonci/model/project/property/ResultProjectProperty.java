@@ -24,7 +24,7 @@
 package org.hudsonci.model.project.property;
 
 import hudson.model.Result;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents {@link Result} property.
@@ -35,7 +35,7 @@ import org.hudsonci.api.model.IJob;
  */
 public class ResultProjectProperty extends BaseProjectProperty<Result> {
 
-    public ResultProjectProperty(IJob job) {
+    public ResultProjectProperty(ICascadingJob job) {
         super(job);
     }
 }
