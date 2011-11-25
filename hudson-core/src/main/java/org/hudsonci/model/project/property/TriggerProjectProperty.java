@@ -24,14 +24,14 @@
 package org.hudsonci.model.project.property;
 
 import hudson.triggers.Trigger;
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Property for triggers in case of we should use child project trigger
  * instead of parent project if they are equals.
  */
 public class TriggerProjectProperty extends BaseProjectProperty<Trigger> {
-    public TriggerProjectProperty(IJob job) {
+    public TriggerProjectProperty(ICascadingJob job) {
         super(job);
     }
 

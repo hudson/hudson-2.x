@@ -23,7 +23,7 @@
  */
 package org.hudsonci.model.project.property;
 
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents boolean property.
@@ -34,7 +34,7 @@ import org.hudsonci.api.model.IJob;
  */
 public class BooleanProjectProperty extends BaseProjectProperty<Boolean> {
 
-    public BooleanProjectProperty(IJob job) {
+    public BooleanProjectProperty(ICascadingJob job) {
         super(job);
     }
 

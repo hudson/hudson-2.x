@@ -49,9 +49,9 @@ public interface IProjectProperty<T> extends Serializable {
     /**
      * Sets the job, which is owner of current property.
      *
-     * @param job {@link IJob}
+     * @param job {@link ICascadingJob}
      */
-    void setJob(IJob job);
+    void setJob(ICascadingJob job);
 
     /**
      * Sets property value.

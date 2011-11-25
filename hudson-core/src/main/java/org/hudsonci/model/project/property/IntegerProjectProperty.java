@@ -23,7 +23,7 @@
  */
 package org.hudsonci.model.project.property;
 
-import org.hudsonci.api.model.IJob;
+import org.hudsonci.api.model.ICascadingJob;
 
 /**
  * Represents integer property for project.
@@ -34,7 +34,7 @@ import org.hudsonci.api.model.IJob;
  */
 public class IntegerProjectProperty extends BaseProjectProperty<Integer> {
 
-    public IntegerProjectProperty(IJob job) {
+    public IntegerProjectProperty(ICascadingJob job) {
         super(job);
     }
 
