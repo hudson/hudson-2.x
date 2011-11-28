@@ -377,13 +377,13 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
         if (properties == null) // didn't exist < 1.72
             properties = new CopyOnWriteList<JobProperty<? super JobT>>();
 
-        for (JobProperty p : properties)
-            p.setOwner(this);
-
         if(cascadingChildrenNames == null){
              cascadingChildrenNames = new CopyOnWriteArraySet<String>();
         }
         buildProjectProperties();
+        for (JobProperty p : getAllProperties()) {
+            p.setOwner(this);
+        }
     }
 
     /**
@@ -447,7 +447,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     /**
      * Adds cascading JobProperty.
      *
-     * @param cascadingJobProperty BaseProjectProperty wrapper for JobProperty.
+     * @param projectProperty BaseProjectProperty wrapper for JobProperty.
      */
     private void addCascadingJobProperty(BaseProjectProperty projectProperty) {
         if (null != projectProperty) {
