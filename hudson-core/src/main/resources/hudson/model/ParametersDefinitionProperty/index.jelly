@@ -38,12 +38,9 @@ THE SOFTWARE.
     <l:main-panel>
       <h1>${it.owner.pronoun} ${it.owner.displayName}</h1>
       <j:if test="${!empty(it.owner.description)}">
-        <p>
-          <j:invokeStatic var="escapedValue" className="hudson.Util" method="escape">
-            <j:arg value="${it.owner.description}"/>
-          </j:invokeStatic>
-          ${escapedValue}
-        </p>
+          <div id="description">
+              ${app.markupFormatter.translate(it.owner.description)}
+          </div>
       </j:if>
       <p>${%description}</p>
       <j:set var="delay" value="${request.getParameter('delay')}" />
