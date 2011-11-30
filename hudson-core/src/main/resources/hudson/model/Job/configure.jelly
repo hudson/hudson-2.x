@@ -42,7 +42,7 @@ THE SOFTWARE.
         </j:if>
         <j:set var="cascadingCandidates" value="${cu.getCascadingParents(it.class, it)}"/>
         <j:if test="${cascadingCandidates.size() gt 0}">
-          <f:entry title="${%cascadingProjectName}">
+          <f:entry title="${%cascadingProjectName}" help="/help/project-config/cascadingProject.html">
             <select class="setting-input" name="cascadingProjectName">
               <f:option value="">${%emptyCascadingProjectName}</f:option>
               <j:forEach var="job" items="${cascadingCandidates}">
