@@ -159,7 +159,7 @@ THE SOFTWARE.
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="2.2.0-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven-plugin" version="2.2.0-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="ssh-slaves" version="2.1.1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/ssh-slaves.hpi" />
-                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
+                <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="subversion" version="2.2.0_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/subversion.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="cvs" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/cvs.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="git" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/git.hpi" />
               </tasks>
