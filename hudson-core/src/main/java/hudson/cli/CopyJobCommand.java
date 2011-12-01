@@ -24,10 +24,12 @@
 package hudson.cli;
 
 import hudson.model.Hudson;
+import hudson.model.Job;
 import hudson.model.TopLevelItem;
 import hudson.Extension;
 import hudson.model.Item;
 import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.Option;
 
 
 /**
@@ -48,6 +50,9 @@ public class CopyJobCommand extends CLICommand {
     @Argument(metaVar="DST",usage="Name of the new job to be created.",index=1,required=true)
     public String dst;
 
+    @Option(name = "-fs", aliases = {"--force-save"}, usage = "Force saving the destination job in order to enable build functionality.")
+    public boolean forceSave;
+
     protected int run() throws Exception {
         Hudson h = Hudson.getInstance();
         h.checkPermission(Item.CREATE);
@@ -58,6 +63,10 @@ public class CopyJobCommand extends CLICommand {
         }
         
         h.copy(src,dst);
+        Job newJob = (Job)Hudson.getInstance().getItem(dst);
+        if (forceSave && null != newJob) {
+            newJob.save();
+        }
         return 0;
     }
 }
