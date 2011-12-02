@@ -136,6 +136,10 @@ public class DescribableListProjectPropertyTest {
         DescribableList describableList3 = new DescribableList(parent, describableList2.toList());
         assertFalse(property.allowOverrideValue(describableList1, describableList3));
 
+        describableList1 = new DescribableList(project, Arrays.asList(new Object()));
+        describableList2 = new DescribableList(project, Arrays.asList(new Object()));
+        assertFalse(property.allowOverrideValue(describableList1, describableList2));
+
         //Allow override if cascading or candidate are null
         assertTrue(property.allowOverrideValue(null, new DescribableList(project)));
         assertTrue(property.allowOverrideValue(new DescribableList(project), null));
