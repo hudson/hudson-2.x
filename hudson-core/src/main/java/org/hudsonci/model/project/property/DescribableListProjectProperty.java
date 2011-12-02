@@ -23,8 +23,8 @@
  */
 package org.hudsonci.model.project.property;
 
+import hudson.util.DeepEquals;
 import hudson.util.DescribableList;
-import org.apache.commons.collections.CollectionUtils;
 import org.hudsonci.api.model.ICascadingJob;
 
 /**
@@ -50,7 +50,7 @@ public class DescribableListProjectProperty extends BaseProjectProperty<Describa
     public boolean allowOverrideValue(DescribableList cascadingValue, DescribableList candidateValue) {
         return (null != candidateValue || null != cascadingValue)
             && ((null == cascadingValue || null == candidateValue)
-            || !CollectionUtils.isEqualCollection(cascadingValue.toList(), candidateValue.toList()));
+            || !DeepEquals.deepEquals(cascadingValue.toList(), candidateValue.toList()));
     }
 
     @Override
