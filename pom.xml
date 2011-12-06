@@ -220,7 +220,7 @@ THE SOFTWARE.
                   <plugin>
                     <groupId>org.jvnet.hudson.main</groupId>
                     <artifactId>hudson-jaxb-xjc</artifactId>
-                    <version>${project.version}</version>
+                    <version>2.1.2</version>
                   </plugin>
                 </plugins>
               </configuration>
