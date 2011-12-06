@@ -43,7 +43,7 @@ THE SOFTWARE.
     <java.net.id>${user.name}</java.net.id>
 
     <rest-plugin.version>2.1.2</rest-plugin.version>
-    <maven-plugin.version>2.2.0-SNAPSHOT</maven-plugin.version>
+    <maven-plugin.version>2.2.0</maven-plugin.version>
     <hudson-war.version>2.2.0-SNAPSHOT</hudson-war.version>
     <hudson-core.version>2.2.0-SNAPSHOT</hudson-core.version>
     <hudson-test-framework.version>2.2.0-SNAPSHOT</hudson-test-framework.version>
