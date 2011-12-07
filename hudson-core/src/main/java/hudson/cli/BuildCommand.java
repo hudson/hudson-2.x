@@ -85,7 +85,11 @@ public class BuildCommand extends CLICommand {
                             name, EditDistance.findNearest(name, pdp.getParameterDefinitionNames())));
                 values.add(pd.createValue(this,e.getValue()));
             }
-            
+            for (ParameterDefinition pd : pdp.getParameterDefinitions()) {
+                if (parameters.get(pd.getName()) == null) {
+                    values.add(pd.getDefaultParameterValue());
+                }
+            }
             a = new ParametersAction(values);
         }
 
