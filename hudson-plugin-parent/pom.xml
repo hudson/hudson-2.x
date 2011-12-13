@@ -42,11 +42,11 @@ THE SOFTWARE.
     <!-- if your java.net user name is different from local user name, specify it here -->
     <java.net.id>${user.name}</java.net.id>
 
-    <rest-plugin.version>2.1.2</rest-plugin.version>
-    <maven-plugin.version>2.2.0</maven-plugin.version>
-    <hudson-war.version>2.2.0</hudson-war.version>
-    <hudson-core.version>2.2.0</hudson-core.version>
-    <hudson-test-framework.version>2.2.0</hudson-test-framework.version>
+    <rest-plugin.version>2.2.0-SNAPSHOT</rest-plugin.version>
+    <maven-plugin.version>2.2.1-SNAPSHOT</maven-plugin.version>
+    <hudson-war.version>2.2.1-SNAPSHOT</hudson-war.version>
+    <hudson-core.version>2.2.1-SNAPSHOT</hudson-core.version>
+    <hudson-test-framework.version>2.2.1-SNAPSHOT</hudson-test-framework.version>
     <servlet-api.version>2.4</servlet-api.version>
   </properties>
 
