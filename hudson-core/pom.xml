@@ -28,7 +28,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>hudson-core</artifactId>
@@ -195,8 +195,8 @@ THE SOFTWARE.
                         <phase>generate-resources</phase>
                         <configuration>
                             <tasks>
-                                <mkdir dir="target/classes/windows-service"/>
-                                <resolveArtifact artifactId="winsw" tofile="target/classes/windows-service/hudson.exe"/>
+                                <mkdir dir="target/classes/windows-service" />
+                                <resolveArtifact artifactId="winsw" tofile="target/classes/windows-service/hudson.exe" />
                             </tasks>
                         </configuration>
                         <goals>
@@ -212,7 +212,7 @@ THE SOFTWARE.
                         <manifest>
                             <mainClass>hudson.Main</mainClass>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix/>
+                            <classpathPrefix />
                         </manifest>
                     </archive>
                 </configuration>

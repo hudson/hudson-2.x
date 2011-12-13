@@ -29,7 +29,7 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson.main</groupId>
     <artifactId>hudson</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   
@@ -104,7 +104,7 @@ THE SOFTWARE.
             <configuration>
               <tasks>
                 <!-- fix Akuma groupId so it can still be found by pre-split org.jvnet.hudson:executable-war:1.17 -->
-                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke:akuma" value="com.sun.akuma:akuma"/>
+                <replace file="${basedir}/target/classes/dependencies.txt" token="org.kohsuke:akuma" value="com.sun.akuma:akuma" />
               </tasks>
             </configuration>
           </execution>

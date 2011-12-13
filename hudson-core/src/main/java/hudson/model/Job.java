@@ -1738,6 +1738,7 @@ public abstract class Job<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, R
     public synchronized void doUpdateCascadingProject(@QueryParameter(fixEmpty = true) String projectName)
         throws IOException {
         setCascadingProjectName(projectName);
+        save();
     }
 
     public synchronized void doModifyCascadingProperty(@QueryParameter(fixEmpty = true) String propertyName) {

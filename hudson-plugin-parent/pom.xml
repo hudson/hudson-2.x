@@ -28,14 +28,14 @@ THE SOFTWARE.
   <parent>
     <groupId>org.jvnet.hudson</groupId>
     <artifactId>hudson-parent</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.1-SNAPSHOT</version>
     <relativePath>../hudson-parent/pom.xml</relativePath>
   </parent>
 
   <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>hudson-plugin-parent</artifactId>
   <name>Hudson :: Plugin Parent POM</name>
-  <version>2.2.0-SNAPSHOT </version>
+  <version>2.2.1-SNAPSHOT </version>
   <packaging>pom</packaging>
 
   <properties>
@@ -44,9 +44,9 @@ THE SOFTWARE.
 
     <rest-plugin.version>2.1.2</rest-plugin.version>
     <maven-plugin.version>2.2.0</maven-plugin.version>
-    <hudson-war.version>2.2.0-SNAPSHOT</hudson-war.version>
-    <hudson-core.version>2.2.0-SNAPSHOT</hudson-core.version>
-    <hudson-test-framework.version>2.2.0-SNAPSHOT</hudson-test-framework.version>
+    <hudson-war.version>2.2.0</hudson-war.version>
+    <hudson-core.version>2.2.0</hudson-core.version>
+    <hudson-test-framework.version>2.2.0</hudson-test-framework.version>
     <servlet-api.version>2.4</servlet-api.version>
   </properties>
 
