@@ -46,7 +46,7 @@ THE SOFTWARE.
             var dataString = jQuery("#deleteForm").serialize();
             jQuery.ajax({
                 type: 'POST',
-                url: "${rootUrl}/${it.url}deleteWithParam",
+                url: "${rootURL}/${it.url}deleteWithParam",
                 data: dataString,
                 success: deletingSlave,
                 dataType: "html"
@@ -55,7 +55,7 @@ THE SOFTWARE.
 
         function onDeleteClick() {
             jQuery.ajax({
-                url: "${rootUrl}/${it.url}api/json",
+                url: "${rootURL}/${it.url}api/json",
                 dataType: 'json',
                 success: function(data) {
                     jQuery('#slaveStatus').hide();
