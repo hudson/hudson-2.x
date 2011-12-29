@@ -1,7 +1,7 @@
 <!--
 The MIT License
 
-Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Ullrich Hafner
+Copyright (c) 2004-2009, Sun Microsystems, Inc., Kohsuke Kawaguchi, Ullrich Hafner, Anton Kozak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,37 @@ THE SOFTWARE.
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
   <j:if test="${!it.keepLog and !it.building}">
     <form method="get" action="confirmDelete" style="margin-top:1em">
-      <f:submit value="${%Delete this build}" />
+      <input type="button" id="deleteBuild" value="${%Delete this build}" onclick="onDeleteClick()"/>
     </form>
   </j:if>
+
+    <script type="text/javascript">
+         function onDeleteClick() {
+            jQuery.ajax({
+                url: "${rootURL}/${it.url}api/json",
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    var keepLog = data.keepLog;
+                    if(keepLog){
+                        onLinkClick('cannotDeleteBuildDialog');
+                    } else {
+                        onLinkClick('deleteBuildConfirmationDialog');
+                    }
+                }
+            });
+        }
+    </script>
+
+    <div id="deleteBuildConfirmationDialog" style="display:none">
+       <form method="post" action="doDelete" id="deleteForm">
+            <h4>${%Are you sure about deleting the build?}</h4>
+            <input type="submit" class="yes" value="${%Yes}"/>
+            <input type="button" class="no" value="${%No}"/>
+       </form>
+    </div>
+    <div id="cannotDeleteBuildDialog" style="display:none">
+       <h4>${%cannotMsg} ${%reasonMsg}</h4>
+       <input type="button" class="no" value="${%Ok}" />
+    </div>
 </j:jelly>
