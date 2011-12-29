@@ -26,7 +26,9 @@ THE SOFTWARE.
   <st:statusCode value="400" /><!-- clearly indicate that this page is an error page --> 
   <l:layout title="Hudson">
     <l:header />
-    <l:side-panel />
+    <l:side-panel>
+      <st:include page="sidepanel.jelly" />
+    </l:side-panel>
     <l:main-panel>
       <h1>${%Error}</h1>
       <j:choose>
