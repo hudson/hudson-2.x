@@ -2038,10 +2038,18 @@ public abstract class AbstractProject<P extends AbstractProject<P, R>, R extends
      */
     public HttpResponse doDoWipeOutWorkspace() throws IOException, ServletException, InterruptedException {
         checkPermission(Functions.isWipeOutPermissionEnabled() ? WIPEOUT : BUILD);
-        if (cleanWorkspace()){
-            return new HttpRedirect(".");
-        }else{
-            return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
+        try {
+            if (cleanWorkspace()) {
+                return new HttpRedirect(".");
+            } else {
+                return new ForwardToView(this,"wipeOutWorkspaceBlocked.jelly");
+            }
+        } catch (IOException e) {
+            ForwardToView resp = new ForwardToView(this, "error.jelly");
+            resp.with("message", Messages._AbstractProject_UnableWipeOut());
+            resp.with("pre", false);
+            resp.with("exception", e);
+            return resp;
         }
     }
 
