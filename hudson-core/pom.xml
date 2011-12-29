@@ -44,7 +44,7 @@ THE SOFTWARE.
     <jtidy.version>r938</jtidy.version>
     <jna-posix.version>1.0.3</jna-posix.version>
     <trilead-putty-extension.version>1.0</trilead-putty-extension.version>
-    <stapler.version>1.174</stapler.version>
+    <stapler.version>1.176</stapler.version>
     <bridge-method-annotation.version>1.4</bridge-method-annotation.version>
     <json-lib.version>2.4</json-lib.version>
     <annotation-indexer.version>1.2</annotation-indexer.version>
