@@ -35,7 +35,8 @@ THE SOFTWARE.
 <div id="noJobDiv">
   ${%description_1}
   <j:if test="${it.hasPermission(it.CONFIGURE)}">
-      ${%description_2}
+      <j:set var="configLink" value="${rootURL}/${it.viewUrl}configure"/>
+      ${%description_2(configLink)}
   </j:if>
 </div>
 </j:jelly>
