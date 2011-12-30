@@ -30,7 +30,8 @@ THE SOFTWARE.
                 cache: false,
                 success: function(data) {
                     jQuery('#confirmDialog').show();
-                    jQuery('#childrenList').hide();
+                    jQuery('#buildInProgressDialog').hide();
+                    jQuery('#cascadingChildrenPresentDiald').hide();
                     var cascadingChildren = data.cascadingChildrenNames;
                     if (cascadingChildren.length != 0) {
                         var jobList = jQuery("#jobList");
@@ -40,7 +41,24 @@ THE SOFTWARE.
                             jobList.append("<li>" + cascadingChildren[i] + "</li>");
                         }
                         jQuery('#confirmDialog').hide();
-                        jQuery('#childrenList').show();
+                        jQuery('#buildInProgressDialog').hide();
+                        jQuery('#cascadingChildrenPresentDiald').show();
+                    } else{
+                        if(data.lastBuild.length != 0){
+                           var lastBuildUrl = data.lastBuild.url + "api/json";
+                           jQuery.ajax({
+                               url: lastBuildUrl,
+                               dataType: 'json',
+                               cache: false,
+                               success: function(buildData) {
+                                   if(buildData.building){
+                                      jQuery('#confirmDialog').hide();
+                                      jQuery('#cascadingChildrenPresentDiald').hide();
+                                      jQuery('#buildInProgressDialog').show();
+                                   }
+                               }
+                           });
+                        }
                     }
                 }
             });
@@ -54,10 +72,14 @@ THE SOFTWARE.
                 <input type="submit" class="yes" value="${%Yes}"/>
                 <input type="button" class="no" value="${%No}"/>
             </div>
-            <div id="childrenList" class="deleteJobDialog" style="display:none">
+            <div id="cascadingChildrenPresentDiald" class="deleteJobDialog" style="display:none">
                 <h4>${%cannotDeleteBecauseOfChildrenMsg}</h4>
                 <ul id="jobList">
                 </ul>
+                <input type="button" class="no" value="${%Ok}" />
+            </div>
+            <div id="buildInProgressDialog" class="deleteJobDialog" style="display:none">
+                <h4>${%cannotDeleteBecauseBuildInProgressMsg}</h4>
                 <input type="button" class="no" value="${%Ok}" />
             </div>
         </form>
