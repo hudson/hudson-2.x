@@ -50,12 +50,12 @@ THE SOFTWARE.
     <div>
         <form method="post" action="doDelete" id="deleteForm">
             <div id="confirmDialog">
-                <h4>Are you sure you want to delete the Job?.</h4>
+                <h4>${%deleteMsg}</h4>
                 <input type="submit" class="yes" value="${%Yes}"/>
                 <input type="button" class="no" value="${%No}"/>
             </div>
             <div id="childrenList" class="deleteJobDialog" style="display:none">
-                <h4>${%You can't delete this job because it has cascading children:}</h4>
+                <h4>${%cannotDeleteBecauseOfChildrenMsg}</h4>
                 <ul id="jobList">
                 </ul>
                 <input type="button" class="no" value="${%Ok}" />
