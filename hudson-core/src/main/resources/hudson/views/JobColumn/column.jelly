@@ -23,7 +23,28 @@ THE SOFTWARE.
 -->
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-    <td style="${indenter.getCss(job)}">
-        <a href="${jobBaseUrl}${job.shortUrl}" title="${job.description!=null? job.description :''}"> ${job.displayName}</a>
+    <td class="jobDescription"
+        style="${indenter.getCss(job)}"
+        onmouseover="this.className='jobDescription hover';return true;"
+        onmouseout="this.className='jobDescription';return true;">
+        <a href="${jobBaseUrl}${job.shortUrl}">${job.displayName}</a>
+        <j:if test="${!empty(job.description)}">
+            <div class="jobDescriptionDetails">
+                <table border="0">
+                    <thead>
+                        <tr>
+                            <th>${%Description}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                ${app.markupFormatter.translate(job.description)}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </j:if>
     </td>
 </j:jelly>
