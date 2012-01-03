@@ -1050,3 +1050,26 @@ table.configure {
 table.configure > td {
     padding: 0px;
 }
+
+/* ======================= Job Description Hover ============================ */
+.jobDescription a {
+    text-decoration: none;
+}
+.jobDescription div.jobDescriptionDetails {
+    display: none;
+}
+.jobDescription:hover, .jobDescription.hover {
+    background: transparent;
+}
+.jobDescription:hover div.jobDescriptionDetails, .jobDescription.hover div.jobDescriptionDetails {
+    display: block;
+    position: absolute;
+    border: 1px solid #bbb;
+    background-color: white;
+    margin-left: 32px;
+    z-index: 26;
+}
+.jobDescription div.jobDescriptionDetails table {
+    border-collapse: collapse;
+    width: 450px;
+}
