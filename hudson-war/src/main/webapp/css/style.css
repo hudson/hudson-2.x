@@ -1073,3 +1073,16 @@ table.configure > td {
     border-collapse: collapse;
     width: 450px;
 }
+/* === Login Dialog ==== */
+#loginError, #loginMsg {
+    text-align:center;
+    font-weight:bold;
+}
+#loginError {
+    color: red;
+    display: none;
+}
+#loginMsg {
+    color: black;
+    display: none;
+}

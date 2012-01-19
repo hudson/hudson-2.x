@@ -45,11 +45,13 @@ THE SOFTWARE.
               title:  'Confirmation'
             });
             jQuery('j_username').focus();
+            jQuery('#loginMsg').hide();
+            jQuery('#loginError').hide();
         }
         
         function submitForm(){
-            jQuery('#loginMsg').css({ opacity: 1.0 });
-            jQuery('#loginError').css({ opacity: 0.0 });
+            jQuery('#loginMsg').show();
+            jQuery('#loginError').hide();
             var dataString = jQuery("#loginForm").serialize();
             jQuery.ajax({
               type: 'POST',
@@ -59,8 +61,8 @@ THE SOFTWARE.
                 window.location.href="${from}";
               },
               error: function(){
-                jQuery('#loginError').css({ opacity: 1.0 });
-                jQuery('#loginMsg').css({ opacity: 0.0 });
+                jQuery('#loginError').show();
+                jQuery('#loginMsg').hide();
               },
               dataType: "html"
             }); 
@@ -90,8 +92,8 @@ THE SOFTWARE.
                 jQuery.unblockUI();
                 jQuery('#j_username').attr({value:""});
                 jQuery('#j_password').attr({value:""});
-                jQuery('#loginError').css({ opacity: 0.0 });
-                jQuery('#loginMsg').css({ opacity: 0.0 });
+                jQuery('#loginError').hide();
+                jQuery('#loginMsg').hide();
                 return false;
             });
 
