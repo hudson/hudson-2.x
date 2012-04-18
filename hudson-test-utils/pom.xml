@@ -39,7 +39,6 @@ THE SOFTWARE.
   </description>
 
   <properties>
-    <junit-ext.version>1.0-RC3</junit-ext.version>
     <hamcrest-library.version>1.2</hamcrest-library.version>
     <hamcrest-core.version>1.2</hamcrest-core.version>
   </properties>
@@ -53,13 +52,6 @@ THE SOFTWARE.
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.googlecode.junit-ext</groupId>
-      <artifactId>junit-ext</artifactId>
-      <classifier>junit45</classifier>
-      <version>${junit-ext.version}</version>
     </dependency>
 
     <dependency>
