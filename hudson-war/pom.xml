@@ -154,7 +154,7 @@ THE SOFTWARE.
                 <resolveArtifact groupId="org.jvnet.hudson.winstone" artifactId="winstone" version="0.9.10-hudson-24" type="jar" tofile="${basedir}/target/generated-resources/winstone.jar" />
                 
                 <!-- bundled plugins -->
-                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="2.2.0-SNAPSHOT" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
+                <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="rest-plugin" version="2.1.2" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/rest-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-plugin" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-plugin.hpi" />
                 <resolveArtifact type="hpi" groupId="${project.groupId}" artifactId="maven3-snapshots" version="2.2.0" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven3-snapshots.hpi" />
                 <resolveArtifact type="hpi" groupId="org.hudsonci.plugins" artifactId="maven-plugin" version="2.2.0_1" tofile="${basedir}/target/generated-resources/WEB-INF/plugins/maven-plugin.hpi" />
