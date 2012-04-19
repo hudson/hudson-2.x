@@ -23,6 +23,7 @@ THE SOFTWARE.
 -->
 
 <!-- custom retry count -->
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <j:set var="scmCheckoutRetryCountProperty" value="${cu.getIntegerProjectProperty(it, it.SCM_CHECKOUT_RETRY_COUNT_PROPERTY_NAME)}"/>
   <j:set var="scmCheckoutRetryCount" value="${scmCheckoutRetryCountProperty.getValue()}"/>

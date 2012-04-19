@@ -22,10 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
-	<f:entry title="${it.name}" description="${it.description}">
+	<f:entry title="${it.name!=null ? app.markupFormatter.translate(it.name) : ''}"
+	   description="${it.description!=null ? app.markupFormatter.translate(it.description) : ''}">
 		<div name="parameter" description="${it.description}">
 			<input type="hidden" name="name" value="${it.name}" />
             <select name="runId">

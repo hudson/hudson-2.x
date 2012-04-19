@@ -27,5 +27,6 @@ THE SOFTWARE.
 
 	Note that safari doesn't support onchange.
 -->
+<?jelly escape-by-default='true'?>
 <input type="radio" name="${attrs.name}" onclick="${attrs.onclick}" id="${attrs.id}" value="${attrs.value}"
         checked="${attrs.checked?'true':null}"/>

@@ -128,6 +128,7 @@ import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerProxy;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.jelly.InternationalizedStringExpression;
 
 /**
  * Utility functions used in views.
@@ -541,6 +542,10 @@ public class Functions {
 
     public static String xmlEscape(String s) {
         return Util.xmlEscape(s);
+    }
+
+    public static String xmlUnescape(String s) {
+        return s.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&");
     }
 
     public static void checkPermission(Permission permission) throws IOException, ServletException {
@@ -1389,4 +1394,7 @@ public class Functions {
         return templates.iterator().hasNext() ? templates.iterator().next() : null;
     }
 
+    public static Object rawHtml(Object o) {
+        return InternationalizedStringExpression.rawHtml(o);
+    }
 }

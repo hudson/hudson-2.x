@@ -23,6 +23,7 @@ THE SOFTWARE.
 -->
 
 <!-- custom quiet period -->
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <j:set var="quietPeriodProperty" value="${cu.getIntegerProjectProperty(it, it.QUIET_PERIOD_PROPERTY_NAME)}"/>
   <j:set var="quietPeriod" value="${quietPeriodProperty.getValue()}"/>
