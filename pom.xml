@@ -148,7 +148,7 @@ THE SOFTWARE.
             To test if you can remove this work around, do a rebuild from main and see if the test harness
             is installed with the right extension into the local repository.
           -->
-          <groupId>org.kohsuke.stapler</groupId>
+          <groupId>org.hudsonci.stapler</groupId>
           <artifactId>maven-stapler-plugin</artifactId>
           <extensions>true</extensions>
           <dependencies>

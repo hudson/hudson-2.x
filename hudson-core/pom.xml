@@ -44,7 +44,7 @@ THE SOFTWARE.
     <jtidy.version>r938</jtidy.version>
     <jna-posix.version>1.0.3</jna-posix.version>
     <trilead-putty-extension.version>1.0</trilead-putty-extension.version>
-    <stapler.version>1.176</stapler.version>
+    <stapler.version>3.0.1-SNAPSHOT</stapler.version>
     <bridge-method-annotation.version>1.4</bridge-method-annotation.version>
     <json-lib.version>2.4</json-lib.version>
     <annotation-indexer.version>1.2</annotation-indexer.version>
@@ -128,7 +128,7 @@ THE SOFTWARE.
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.kohsuke.stapler</groupId>
+                <groupId>org.hudsonci.stapler</groupId>
                 <artifactId>maven-stapler-plugin</artifactId>
                 <configuration>
                     <fork>${staplerFork}</fork>
@@ -299,7 +299,7 @@ THE SOFTWARE.
               this is necessary in addition to the <reporting> configuration
               to get the results deployed.
             -->
-            <groupId>org.kohsuke.stapler</groupId>
+            <groupId>org.hudsonci.stapler</groupId>
             <artifactId>maven-stapler-plugin</artifactId>
             <executions>
               <execution>
@@ -412,8 +412,8 @@ THE SOFTWARE.
       <version>${trilead-putty-extension.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.kohsuke.stapler</groupId>
-      <artifactId>stapler-groovy</artifactId>
+      <groupId>org.hudsonci.stapler</groupId>
+      <artifactId>stapler-jelly</artifactId>
       <version>${stapler.version}</version>
       <exclusions>
         <exclusion>
@@ -923,7 +923,7 @@ THE SOFTWARE.
   <reporting>
     <plugins>
       <plugin><!-- generate Jelly tag lib documentation -->
-        <groupId>org.kohsuke.stapler</groupId>
+        <groupId>org.hudsonci.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
         <version>${maven-stapler-plugin.version}</version>
         <configuration>

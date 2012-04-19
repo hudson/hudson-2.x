@@ -143,7 +143,7 @@ THE SOFTWARE.
     <defaultGoal>package</defaultGoal>
     <plugins>
       <plugin>
-        <groupId>org.kohsuke.stapler</groupId>
+        <groupId>org.hudsonci.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
         <extensions>true</extensions>
       </plugin>
