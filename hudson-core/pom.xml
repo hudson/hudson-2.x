@@ -77,7 +77,7 @@ THE SOFTWARE.
     <jcaptcha-all.version>1.0-RC6</jcaptcha-all.version>
     <wstx-asl.version>3.2.7</wstx-asl.version>
     <jmdns.version>3.4.0</jmdns.version>
-    <winsw.version>1.10</winsw.version>
+    <winsw.version>1.9</winsw.version>
     <jna.version>3.3.0</jna.version>
     <akuma.version>1.6</akuma.version>
     <libpam4j.version>1.4</libpam4j.version>
