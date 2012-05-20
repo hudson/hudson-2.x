@@ -59,7 +59,7 @@ THE SOFTWARE.
               url: "${rootURL}/${app.securityRealm.authenticationGatewayUrl}",
               data: dataString,
               success: function(){
-                window.location.href="${from}";
+                window.location.href="${h.jsStringEscape(from)}";
               },
               error: function(){
                 jQuery('#loginError').show();
