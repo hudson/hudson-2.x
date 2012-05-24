@@ -288,7 +288,7 @@ public class CascadingUtil {
             }
             for (String childName : cascadingChildren) {
                 Job job = Functions.getItemByName(Hudson.getInstance().getAllItems(Job.class), childName);
-                if (hasCyclicCascadingLink(cascadingCandidate, job.getCascadingChildrenNames())) {
+                if (null != job && hasCyclicCascadingLink(cascadingCandidate, job.getCascadingChildrenNames())) {
                     return true;
                 }
             }
@@ -308,9 +308,11 @@ public class CascadingUtil {
         throws IOException {
         if (null != cascadingProject && null != projectToUnlink) {
             Job job = Functions.getItemByName(Hudson.getInstance().getAllItems(Job.class), projectToUnlink);
-            Set<String> set = new HashSet<String>(job.getCascadingChildrenNames());
-            set.add(projectToUnlink);
-            return unlinkProjectFromCascadingParents(cascadingProject, set);
+            if (null != job) {
+                Set<String> set = new HashSet<String>(job.getCascadingChildrenNames());
+                set.add(projectToUnlink);
+                return unlinkProjectFromCascadingParents(cascadingProject, set);
+            }
         }
         return false;
     }
