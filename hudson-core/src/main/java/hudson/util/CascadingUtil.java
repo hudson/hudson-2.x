@@ -39,6 +39,7 @@ import hudson.triggers.TriggerDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -402,6 +403,10 @@ public class CascadingUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Item> List<Job> getCascadingParents(Class<T> type, Job currentJob) {
+        Job currentParent = currentJob.getCascadingProject();
+        if (type.isInstance(currentParent) && !currentParent.hasPermission(Item.READ)) {
+            return Collections.EMPTY_LIST; // user can't see parent so don't let them change it
+        }
         List<T> allItems = Hudson.getInstance().getAllItems(type);
         List<Job> result = new ArrayList<Job>(allItems.size());
         for (T item : allItems) {
