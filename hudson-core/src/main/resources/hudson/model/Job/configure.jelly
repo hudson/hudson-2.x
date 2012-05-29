@@ -42,16 +42,23 @@ THE SOFTWARE.
           </f:entry>
         </j:if>
         <j:set var="cascadingCandidates" value="${cu.getCascadingParents(it.class, it)}"/>
-        <j:if test="${cascadingCandidates.size() gt 0}">
-          <f:entry title="${%cascadingProjectName}" help="/help/project-config/cascadingProject.html">
-            <select class="setting-input" name="cascadingProjectName">
-              <f:option value="">${%emptyCascadingProjectName}</f:option>
-              <j:forEach var="job" items="${cascadingCandidates}">
-                <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
-              </j:forEach>
-            </select>
-          </f:entry>
-        </j:if>
+        <j:choose>
+          <j:when test="${cascadingCandidates.size() gt 0}">
+            <f:entry title="${%cascadingProjectName}" help="/help/project-config/cascadingProject.html">
+              <select class="setting-input" name="cascadingProjectName">
+                <f:option value="">${%emptyCascadingProjectName}</f:option>
+                <j:forEach var="job" items="${cascadingCandidates}">
+                  <f:option selected="${job.name==it.cascadingProjectName}" value="${job.name}">${job.name}</f:option>
+                </j:forEach>
+              </select>
+            </f:entry>
+          </j:when>
+          <j:otherwise>
+            <f:invisibleEntry>
+              <input type="hidden" name="cascadingProjectName" value="${it.cascadingProjectName}" />
+            </f:invisibleEntry>
+          </j:otherwise>
+        </j:choose>
         <f:entry title="${%Description}" help="/help/project-config/description.html">
           <f:textarea name="description" value="${it.description}"/>
         </f:entry>
