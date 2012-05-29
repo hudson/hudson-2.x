@@ -23,6 +23,8 @@
  */
 package hudson.model;
 
+import hudson.security.Permission;
+
 /**
  * Mock class for FreeStyleProject
  * <p/>
@@ -39,6 +41,11 @@ public class FreeStyleProjectMock extends FreeStyleProject {
 
     @Override
     protected void updateTransientActions() {
+    }
+
+    @Override
+    public boolean hasPermission(Permission p) {
+        return true; // bypass non-existent ACL
     }
 
     /**
