@@ -26,7 +26,9 @@ package org.hudsonci.inject.internal.plugin;
 
 import hudson.PluginWrapper;
 import org.aspectj.weaver.loadtime.WeavingURLClassLoader;
+import org.aspectj.weaver.tools.DefaultTrace;
 
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,6 +46,17 @@ import static com.google.common.base.Preconditions.checkState;
 public class PluginClassLoader
     extends WeavingURLClassLoader
 {
+    static {
+        try {
+            // Some optional classes might not exist, so avoid excessive tracing
+            Field trace = WeavingURLClassLoader.class.getDeclaredField("trace");
+            trace.setAccessible(true);
+            trace.set(null, new NoTrace());
+        } catch (Throwable e) {
+            // ignore...
+        }
+    }
+    
     private PluginWrapper plugin;
 
     public PluginClassLoader(final List<URL> urls, final ClassLoader parent) {
@@ -68,5 +81,36 @@ public class PluginClassLoader
         return "PluginClassLoader{" +
             (plugin != null ? plugin.getShortName() : "???") +
             '}';
+    }
+
+    /*
+     * Discards all AspectJ tracing
+     */
+    static class NoTrace
+        extends DefaultTrace {
+
+        NoTrace() {
+            super(null);
+        }
+
+        @Override
+        protected void println(String s) {
+            // ... > /dev/null
+        }
+        
+        @Override
+        public void warn(String message, Throwable th) {
+            // ... > /dev/null
+        }
+
+        @Override
+        public void error(String message, Throwable th) {
+            // ... > /dev/null
+        }
+
+        @Override
+        public void fatal(String message, Throwable th) {
+            // ... > /dev/null
+        }
     }
 }
