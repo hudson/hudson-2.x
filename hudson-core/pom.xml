@@ -53,7 +53,7 @@ THE SOFTWARE.
     <antlr.version>2.7.6</antlr.version>
     <jfreechart.version>1.0.9</jfreechart.version>
     <commons-digester.version>3.0</commons-digester.version>
-    <commons-beanutils.version>1.8.0</commons-beanutils.version>
+    <commons-beanutils.version>1.9.2</commons-beanutils.version>
     <commons-jelly-tags-fmt.version>1.0</commons-jelly-tags-fmt.version>
     <commons-jelly-tags-xml.version>1.1</commons-jelly-tags-xml.version>
     <commons-jelly-tags-define.version>1.0.1-hudson-20071021</commons-jelly-tags-define.version>
