@@ -59,7 +59,7 @@ THE SOFTWARE.
     <commons-jelly-tags-define.version>1.0.1-hudson-20071021</commons-jelly-tags-define.version>
     <commons-jexl.version>2.0.1</commons-jexl.version>
     <commons-logging.version>1.1.1</commons-logging.version>
-    <commons-collections.version>3.2</commons-collections.version>
+    <commons-collections.version>3.2.2</commons-collections.version>
     <javax-mail.version>1.4</javax-mail.version>
     <activation.version>1.1.1-hudson-1</activation.version>
     <jaxen.version>1.1-beta-11</jaxen.version>
