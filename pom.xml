@@ -78,7 +78,7 @@ THE SOFTWARE.
     <jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
     <slf4j-jdk14.version>1.6.1</slf4j-jdk14.version>
     <jul-to-slf4j.version>1.6.1</jul-to-slf4j.version>
-    <logback-classic.version>0.9.28</logback-classic.version>
+    <logback-classic.version>1.2.0</logback-classic.version>
     <guava.version>10.0.1</guava.version>
     <ant.version>1.8.2</ant.version>
     <xstream.version>1.4.1-hudson-2</xstream.version>
