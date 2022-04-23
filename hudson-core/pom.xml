@@ -64,7 +64,7 @@ THE SOFTWARE.
     <activation.version>1.1.1-hudson-1</activation.version>
     <jaxen.version>1.1-beta-11</jaxen.version>
     <acegi-security.version>1.0.5</acegi-security.version>
-    <spring.version>2.5</spring.version>
+    <spring.version>5.3.19</spring.version>
     <spring-dao.version>2.0.8</spring-dao.version>
     <xpp3.version>1.1.4c</xpp3.version>
     <jstl.version>1.1.0</jstl.version>
